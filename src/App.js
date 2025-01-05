@@ -69,6 +69,8 @@ function App() {
     localStorage.removeItem("userName");
     localStorage.removeItem("loginUserId");
     localStorage.removeItem("centerId");
+    localStorage.removeItem("selectedCenterId");
+    localStorage.removeItem("email");
   };
 
   return (

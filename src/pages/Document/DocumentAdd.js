@@ -91,8 +91,8 @@ function DocumentAdd() {
           folderCategory: folderCategory,
           batchTime: values.batchTime,
           date: values.date,
-          expiredDate: values.expiredDate, 
-          createdBy: userName, 
+          expiredDate: values.expiredDate,
+          createdBy: userName,
         };
 
         if (folderCategory === "group") {
@@ -115,7 +115,11 @@ function DocumentAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("Error submitting form data:", error.message);
+        if (error?.response?.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
+          toast.error("Error deleting data:", error);
+        }
       } finally {
         setLoadIndicator(false);
       }

@@ -33,6 +33,8 @@ function Calendar() {
     userId: "",
     date: "",
   });
+  console.log("filters:",filters.centerId);
+  
   // Process event data for calendar rendering
   const processEventData = (apiData) => {
     const filteredEvents = apiData.map((item) => ({
@@ -84,17 +86,6 @@ function Calendar() {
     }
   };
 
-  const fetchListData = async (centerId) => {
-    try {
-      const courseDatas = await fetchAllCoursesWithIdsC(centerId);
-      const teacherDatas = await fetchAllTeacherListByCenter(centerId);
-      setTeachereData(teacherDatas);
-      setCourseData(courseDatas);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -116,6 +107,19 @@ function Calendar() {
       toast.error(error);
     }
   };
+
+  const fetchListData = async (centerId) => {
+    try {
+      const courseDatas = await fetchAllCoursesWithIdsC(centerId);
+      const teacherDatas = await fetchAllTeacherListByCenter(centerId);
+      setTeachereData(teacherDatas);
+      setCourseData(courseDatas);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+ 
 
   useEffect(() => {
     SearchShedule();
@@ -203,7 +207,7 @@ function Calendar() {
           >
             <option value="">Select a Center</option>
             {centerData?.map((center) => (
-              <option key={center.id} value={center.id} selected>
+              <option key={center.id} value={center.id}>
                 {center.centerNames}
               </option>
             ))}

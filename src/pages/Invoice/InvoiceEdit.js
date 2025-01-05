@@ -346,40 +346,40 @@ export default function InvoiceEdit() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   // Calculate total Item Amounts
-  //   const totalItemAmount = formik.values.invoiceItems?.reduce(
-  //     (total, item) => {
-  //       // Ensure the item is defined and has an itemAmount property
-  //       if (item && item.itemAmount) {
-  //         return total + parseFloat(item.itemAmount || 0);
-  //       }
-  //       return total;
-  //     },
-  //     0
-  //   );
-  //   formik.setFieldValue("creditAdviceOffset", totalItemAmount.toFixed(2));
+  useEffect(() => {
+    // Calculate total Item Amounts
+    const totalItemAmount = formik.values.invoiceItems?.reduce(
+      (total, item) => {
+        // Ensure the item is defined and has an itemAmount property
+        if (item && item.itemAmount) {
+          return total + parseFloat(item.itemAmount || 0);
+        }
+        return total;
+      },
+      0
+    );
+    // formik.setFieldValue("creditAdviceOffset", totalItemAmount.toFixed(2));
 
-  //   // Calculate total GST
-  //   const totalGst = formik.values.invoiceItems?.reduce((total, item) => {
-  //     // Ensure the item is defined and has a gstAmount property
-  //     if (item && item.gstAmount) {
-  //       return total + parseFloat(item.gstAmount || 0);
-  //     }
-  //     return total;
-  //   }, 0);
-  //   formik.setFieldValue("gst", totalGst.toFixed(2));
+    // Calculate total GST
+    const totalGst = formik.values.invoiceItems?.reduce((total, item) => {
+      // Ensure the item is defined and has a gstAmount property
+      if (item && item.gstAmount) {
+        return total + parseFloat(item.gstAmount || 0);
+      }
+      return total;
+    }, 0);
+    formik.setFieldValue("gst", totalGst.toFixed(2));
 
-  //   // Calculate total Amount
-  //   const totalAmount = formik.values.invoiceItems?.reduce((total, item) => {
-  //     // Ensure the item is defined and has a totalAmount property
-  //     if (item && item.totalAmount) {
-  //       return total + parseFloat(item.totalAmount || 0);
-  //     }
-  //     return total;
-  //   }, 0);
-  //   formik.setFieldValue("totalAmount", totalAmount.toFixed(2));
-  // }, [formik.values.invoiceItems]);
+    // Calculate total Amount
+    const totalAmount = formik.values.invoiceItems?.reduce((total, item) => {
+      // Ensure the item is defined and has a totalAmount property
+      if (item && item.totalAmount) {
+        return total + parseFloat(item.totalAmount || 0);
+      }
+      return total;
+    }, 0);
+    formik.setFieldValue("totalAmount", totalAmount.toFixed(2));
+  }, [formik.values.invoiceItems]);
 
   const handleRowDelete = (index) => {
     const selectedItem = formik.values.invoiceItems[index];
@@ -611,14 +611,6 @@ export default function InvoiceEdit() {
                     }`}
                     readOnly
                   />
-                    {/* <option value=""></option>
-                    <option value="2:30 pm">2:30 pm</option>
-                    <option value="3:30 pm">3:30 pm</option>
-                    <option value="5:00 pm">5:00 pm</option>
-                    <option value="7:00 pm">7:00 pm</option>
-                    <option value="12:00 pm">12:00 pm</option>
-                    <option value="1:00 pm">1:00 pm</option> */}
-                  {/* </input> */}
                   {formik.touched.schedule && formik.errors.schedule && (
                     <div className="invalid-feedback">
                       {formik.errors.schedule}
@@ -846,130 +838,142 @@ export default function InvoiceEdit() {
                       </tr>
                     </thead>
                     <tbody>
-                      {rows.map((row, index) => (
-                        <tr key={index}>
-                          <td>
-                            <input
-                              {...formik.getFieldProps(
-                                `invoiceItems[${index}].item`
-                              )}
-                              className={`form-control ${
-                                formik.touched.invoiceItems?.[index]?.item &&
-                                formik.errors.invoiceItems?.[index]?.item
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
-                              type="text"
-                              style={{ width: "80%" }}
-                            />
-                            {formik.touched.invoiceItems?.[index]?.item &&
-                              formik.errors.invoiceItems?.[index]?.item && (
-                                <div className="invalid-feedback">
-                                  {formik.errors.invoiceItems[index].item}
-                                </div>
-                              )}
-                          </td>
-                          <td>
-                            <input
-                              {...formik.getFieldProps(
-                                `invoiceItems[${index}].itemAmount`
-                              )}
-                              className={`form-control ${
-                                formik.touched.invoiceItems?.[index]
-                                  ?.itemAmount &&
-                                formik.errors.invoiceItems?.[index]?.itemAmount
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
-                              type="number"
-                              min={0}
-                              style={{ width: "80%" }}
-                              onChange={formik.handleChange}
-                              readOnly
-                            />
-                            {formik.touched.invoiceItems?.[index]?.itemAmount &&
-                              formik.errors.invoiceItems?.[index]
-                                ?.itemAmount && (
-                                <div className="invalid-feedback">
-                                  {formik.errors.invoiceItems[index].itemAmount}
-                                </div>
-                              )}
-                          </td>
-                          <td>
-                            <select
-                              className={`form-select ${
-                                formik.touched.invoiceItems?.[index]?.taxType &&
-                                formik.errors.invoiceItems?.[index]?.taxType
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
-                              {...formik.getFieldProps(
-                                `invoiceItems[${index}].taxType`
-                              )}
-                              style={{ width: "100%" }}
-                              onChange={(e) =>
-                                handleSelectChange(index, e.target.value)
-                              }
-                            >
-                              <option value=""></option>
-                              {taxData &&
-                                taxData.map((tax) => (
-                                  <option key={tax.id} value={tax.id}>
-                                    {`${tax.taxType} ${tax.rate}%`}
-                                  </option>
-                                ))}
-                            </select>
-                            {formik.touched.invoiceItems?.[index]?.taxType &&
-                              formik.errors.invoiceItems?.[index]?.taxType && (
-                                <div className="invalid-feedback">
-                                  {formik.errors.invoiceItems[index].taxType}
-                                </div>
-                              )}
-                          </td>
-                          <td>
-                            <input
-                              {...formik.getFieldProps(
-                                `invoiceItems[${index}].gstAmount`
-                              )}
-                              className="form-control"
-                              type="text"
-                              style={{ width: "80%" }}
-                              readOnly
-                              onChange={formik.handleChange}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              onInput={(event) => {
-                                event.target.value = event.target.value.replace(
-                                  /[^0-9]/g,
-                                  ""
-                                );
-                              }}
-                              {...formik.getFieldProps(
-                                `invoiceItems[${index}].totalAmount`
-                              )}
-                              className="form-control"
-                              type="text"
-                              style={{ width: "80%" }}
-                              onChange={(e) =>
-                                handelTotalAmountChange(index, e.target.value)
-                              }
-                            />
-                          </td>
-                          <td className="text-center">
-                            {index >= 3 && (
-                              <button
-                                type="button"
-                                className="btn btn-white border-white"
-                                onClick={() => handleRowDelete(index)}
+                      {rows.map((row, index) => {
+                        const isNonDeletable =
+                          row.item === "Registration Fee" ||
+                          row.item === "Course Fee" ||
+                          row.item === "Deposit Fee";
+
+                        return (
+                          <tr key={index}>
+                            <td>
+                              <input
+                                {...formik.getFieldProps(
+                                  `invoiceItems[${index}].item`
+                                )}
+                                className={`form-control ${
+                                  formik.touched.invoiceItems?.[index]?.item &&
+                                  formik.errors.invoiceItems?.[index]?.item
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                                type="text"
+                                style={{ width: "80%" }}
+                              />
+                              {formik.touched.invoiceItems?.[index]?.item &&
+                                formik.errors.invoiceItems?.[index]?.item && (
+                                  <div className="invalid-feedback">
+                                    {formik.errors.invoiceItems[index].item}
+                                  </div>
+                                )}
+                            </td>
+                            <td>
+                              <input
+                                {...formik.getFieldProps(
+                                  `invoiceItems[${index}].itemAmount`
+                                )}
+                                className={`form-control ${
+                                  formik.touched.invoiceItems?.[index]
+                                    ?.itemAmount &&
+                                  formik.errors.invoiceItems?.[index]
+                                    ?.itemAmount
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                                type="number"
+                                min={0}
+                                style={{ width: "80%" }}
+                                onChange={formik.handleChange}
+                                readOnly
+                              />
+                              {formik.touched.invoiceItems?.[index]
+                                ?.itemAmount &&
+                                formik.errors.invoiceItems?.[index]
+                                  ?.itemAmount && (
+                                  <div className="invalid-feedback">
+                                    {
+                                      formik.errors.invoiceItems[index]
+                                        .itemAmount
+                                    }
+                                  </div>
+                                )}
+                            </td>
+                            <td>
+                              <select
+                                className={`form-select ${
+                                  formik.touched.invoiceItems?.[index]
+                                    ?.taxType &&
+                                  formik.errors.invoiceItems?.[index]?.taxType
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                                {...formik.getFieldProps(
+                                  `invoiceItems[${index}].taxType`
+                                )}
+                                style={{ width: "100%" }}
+                                onChange={(e) =>
+                                  handleSelectChange(index, e.target.value)
+                                }
                               >
-                                <ImCancelCircle className="fs-6 fw-mideum text-danger" />
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
+                                <option value=""></option>
+                                {taxData &&
+                                  taxData.map((tax) => (
+                                    <option key={tax.id} value={tax.id}>
+                                      {`${tax.taxType} ${tax.rate}%`}
+                                    </option>
+                                  ))}
+                              </select>
+                              {formik.touched.invoiceItems?.[index]?.taxType &&
+                                formik.errors.invoiceItems?.[index]
+                                  ?.taxType && (
+                                  <div className="invalid-feedback">
+                                    {formik.errors.invoiceItems[index].taxType}
+                                  </div>
+                                )}
+                            </td>
+                            <td>
+                              <input
+                                {...formik.getFieldProps(
+                                  `invoiceItems[${index}].gstAmount`
+                                )}
+                                className="form-control"
+                                type="text"
+                                style={{ width: "80%" }}
+                                readOnly
+                                onChange={formik.handleChange}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                onInput={(event) => {
+                                  event.target.value =
+                                    event.target.value.replace(/[^0-9]/g, "");
+                                }}
+                                {...formik.getFieldProps(
+                                  `invoiceItems[${index}].totalAmount`
+                                )}
+                                className="form-control"
+                                type="text"
+                                style={{ width: "80%" }}
+                                onChange={(e) =>
+                                  handelTotalAmountChange(index, e.target.value)
+                                }
+                              />
+                            </td>
+                            <td>
+                              {!isNonDeletable && (
+                                <button
+                                  type="button"
+                                  className="btn btn-white border-white"
+                                  onClick={() => handleRowDelete(index)}
+                                >
+                                  <ImCancelCircle className="fs-6 fw-medium text-danger" />
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -979,8 +983,12 @@ export default function InvoiceEdit() {
             <div className="row mt-3">
               <div className="col-12 text-end mt-3">
                 <button
-                  className="btn btn-sm btn-danger me-2"
+                  className="btn btn-sm text-white"
                   type="button"
+                  style={{
+                    fontWeight: "600px !important",
+                    background: "#eb862a",
+                  }}
                   onClick={handleAddRow}
                 >
                   Add Row

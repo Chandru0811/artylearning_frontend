@@ -210,22 +210,22 @@ function Payslip() {
                             <strong>Bonus</strong>
                             <p>{data.bonus || "--"}</p>
                           </p>
-                          <p className="d-flex justify-content-between">
+                          {/* <p className="d-flex justify-content-between">
                             <strong>EMPLOYER CPF</strong>
                             <p>
                               {data.cpfContribution !== undefined
                                 ? data.cpfContribution.toFixed(2)
                                 : "--"}
                             </p>
-                          </p>
-                          {/* <div className="row ">
+                          </p> */}
+                          <div className="row ">
                             <dvi className="col-4">
-                              <p>EMPLOYER CPF </p>
+                              {/* <p>EMPLOYER CPF </p> */}
                             </dvi>
                             <dvi className="col-8 text-center">
-                              <p> {data.cpfContribution || "--"}</p>
+                              {/* <p> {data.cpfContribution || "--"}</p> */}
                             </dvi>
-                          </div> */}
+                          </div>
                         </div>
                         <div
                           className="col-6 d-flex flex-column justify-content-evenly"
@@ -320,6 +320,19 @@ function Payslip() {
                               :{" "}
                               {data.cpfContribution !== undefined
                                 ? data.cpfContribution.toFixed(2)
+                                : "--"}
+                            </p>
+                          </dvi>
+                        </div>
+                        <div className="row">
+                          <dvi className="col-4">
+                            <p>SHG Wages</p>
+                          </dvi>
+                          <dvi className="col-8">
+                            <p>
+                              :{" "}
+                              {data.shgContribution !== undefined
+                                ? data.shgContribution.toFixed(2)
                                 : "--"}
                             </p>
                           </dvi>

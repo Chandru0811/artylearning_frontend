@@ -6,6 +6,8 @@ import api from "../../config/URL";
 const fetchAllCentersWithIds = async () => {
   try {
     const response = await api.get("getAllCentersWithIds");
+    console.log("response:::::",response.data);
+    
     return response.data;
   } catch (error) {
     toast.error("Error fetching center data:", error);

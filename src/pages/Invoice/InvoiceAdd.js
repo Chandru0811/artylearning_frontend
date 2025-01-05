@@ -62,6 +62,7 @@ export default function InvoiceAdd() {
   const [taxData, setTaxData] = useState([]);
   const [packageData, setPackageData] = useState(null);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [selectedPackageId, setSelectedPackageId] = useState(null);
   const [schedulesData, setSchedulesData] = useState([]);
 
   const [selectedPackage, setSelectedPackage] = useState(null);
@@ -87,7 +88,7 @@ export default function InvoiceAdd() {
       creditAdviceOffset: "" || 0.0,
       gst: "",
       totalAmount: "",
-      invoiceStatus:"PENDING",
+      invoiceStatus: "PENDING",
       createdBy: userName,
       referralId: "",
       invoiceItems: [
@@ -123,7 +124,7 @@ export default function InvoiceAdd() {
             creditAdviceOffset: parseFloat(values.creditAdviceOffset || 0.0), // Ensure numerical values are parsed correctly
             totalAmount: parseFloat(values.totalAmount), // Ensure numerical values are parsed correctly
             remark: values.remark,
-            invoiceStatus:"PENDING",
+            invoiceStatus: "PENDING",
             createdBy: userName,
             receiptAmount: parseFloat(values.receiptAmount), // Ensure numerical values are parsed correctly
           },
@@ -253,146 +254,332 @@ export default function InvoiceAdd() {
   //     // Capture the selected packageId from the dropdown change event
   //     const packageId = event.target.value;
   //     console.log("Selected Package ID:", packageId);
-  
+  //     setSelectedPackageId(packageId);
+
   //     // Update formik value for packageId
   //     formik.setFieldValue("packageId", packageId);
-  
+
   //     // Fetch student details to retrieve courseId
-  //     const response1 = await api.get(`/getAllStudentById/${formik.values.student}`);
+  //     const response1 = await api.get(
+  //       `/getAllStudentById/${formik.values.student}`
+  //     );
   //     const studentCourseDetails = response1.data.studentCourseDetailModels[0];
   //     const courseId = studentCourseDetails.courseId;
-  
+  //     let invoiceItems = [];
   //     if (!courseId) {
   //       console.error("Course ID is missing!");
   //       return;
   //     }
-  
-  //     // Fetch fees data for the selected packageId and courseId
-  //     const response = await api.get(
-  //       `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId}&courseId=${courseId}`
-  //     );
-  //     const data = response.data;
+  //     if ((courseId && packageId) || selectedPackageId) {
+  //       try {
+  //         const response2 = await api.get(
+  //           `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${
+  //             packageId || selectedPackageId
+  //           }&courseId=${courseId}`
+  //         );
 
-  //     // Identify tax data for calculation
-  //     const selectedTax = taxData.find((tax) => parseInt(data.taxType) === tax.id);
-  
-  //     // Determine fees based on day type
-  //     const isWeekend =
-  //       formik.values.days?.includes("SATURDAY") || formik.values.days?.includes("SUNDAY");
-  //     const fee = isWeekend ? data.weekendFee : data.weekdayFee || 0;
-  
-  //     // Calculate GST and pre-GST amounts
-  //     const gstRate = selectedTax ? selectedTax.rate : 0;
-  //     const gstAmount = (fee * gstRate) / 100 || 0;
-  //     const amountBeforeGST = fee - gstAmount || 0;
-  
-  //     // Update only the "Course Fee" item in invoiceItems
-  //     const updatedInvoiceItems = formik.values.invoiceItems.map((item) => {
-  //       if (item.item === "Course Fee") {
-  //         return {
-  //           ...item,
-  //           itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-  //           taxType: data.taxType || "",
-  //           gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
-  //           totalAmount: isNaN(fee) ? 0 : fee,
-  //         };
+  //         const selectedTax = taxData.find(
+  //           (tax) => parseInt(response2.data?.taxType) === tax.id
+  //         );
+  //         const selectedCourse = courseData.find(
+  //           (course) => parseInt(response2.data?.courseId) === course.id
+  //         );
+  //         const weekdayFee = response2.data?.weekdayFee || 0;
+  //         const weekendFee = response2.data?.weekendFee || 0;
+  //         const days = studentCourseDetails.days;
+  //         const isWeekend = days === "SATURDAY" || days === "SUNDAY";
+  //         const gstRate = selectedTax ? selectedTax.rate : 0;
+  //         const amount = isWeekend ? weekendFee : weekdayFee || 0;
+  //         const gstAmount = (amount * gstRate) / 100 || 0;
+  //         const amountBeforeGST = amount - gstAmount || 0;
+
+  //         if (!response2.data) {
+  //           invoiceItems.push({
+  //             item: "Course Fee",
+  //             itemAmount: 0,
+  //             taxType: "",
+  //             gstAmount: 0,
+  //             totalAmount: 0,
+  //           });
+  //         } else {
+  //           invoiceItems.push({
+  //             item: "Course Fee",
+  //             itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+  //             taxType: response2.data.taxTypeId || "",
+  //             gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+  //             totalAmount: isNaN(amount) ? 0 : amount,
+  //           });
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching course fees:", error);
   //       }
-  //       return item; // Leave other items unchanged
-  //     });
-  
-  //     console.log("Updated Invoice Items:", updatedInvoiceItems);
-  
-  //     // Set the updated invoice items
-  //     formik.setFieldValue("invoiceItems", updatedInvoiceItems);
+  //     } else {
+  //       console.error("Course ID and Package ID not found");
+  //     }
   //   } catch (error) {
   //     console.error("Error processing package change:", error);
   //   }
   // };
+
+  // useEffect(() => {
+  //   const fetchStudentData = async () => {
+  //     if (!formik.values.student) return;
+  //     try {
+  //       const response = await api.get(
+  //         `/getAllStudentById/${formik.values.student}`
+  //       );
+  //       const studentCourseDetails = response.data.studentCourseDetailModels[0];
+  //       const centerId = studentCourseDetails?.centerId;
+  //       const courseId = studentCourseDetails?.courseId;
+  //       const packageId = studentCourseDetails?.packageName;
+  //       const studentData = response.data;
+  //       let invoiceItems = [];
+  //       formik.setFieldValue(
+  //         "invoicePeriodFrom",
+  //         studentCourseDetails.startDate
+  //       );
+  //       formik.setFieldValue("invoicePeriodTo", studentCourseDetails.endDate);
+
+  //       if (centerId) {
+  //         try {
+  //           const response1 = await api.get(
+  //             `/getLatestCenterRegistrationByCenterId/${centerId}`
+  //           );
+  //           // console.log("Response 1:", response1.data);
+
+  //           const selectedTax = taxData.find(
+  //             (tax) => parseInt(response1.data.taxId) === tax.id
+  //           );
+  //           const gstRate = selectedTax ? selectedTax.rate : 0;
+  //           const amount = response1.data.amount || 0;
+  //           const gstAmount = (amount * gstRate) / 100 || 0;
+  //           const amountBeforeGST = amount - gstAmount || 0;
+
+  //           invoiceItems.push({
+  //             item: "Registration Fee",
+  //             itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+  //             taxType: response1.data.taxId || "",
+  //             gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+  //             totalAmount: isNaN(amount) ? 0 : amount,
+  //           });
+  //         } catch (error) {
+  //           console.error("Error fetching center registration:", error);
+  //         }
+  //       } else {
+  //         console.error("Center ID not found");
+  //       }
+
+  //       if (courseId && packageId || selectedPackageId) {
+  //         try {
+  //           const response2 = await api.get(
+  //             `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId || selectedPackageId}&courseId=${courseId}`
+  //           );
+  //           console.log("Response 2:", response2.data);
+  //           const selectedTax = taxData.find(
+  //             (tax) => parseInt(response2.data.taxType) === tax.id
+  //           );
+  //           const selectedCourse = courseData.find(
+  //             (course) => parseInt(response2.data.courseId) === course.id
+  //           );
+  //           const weekdayFee = response2.data.weekdayFee || 0;
+  //           const weekendFee = response2.data.weekendFee || 0;
+  //           const days = studentCourseDetails.days;
+  //           const isWeekend = days === "SATURDAY" || days === "SUNDAY";
+  //           const itemsName = selectedCourse ? selectedCourse.courseNames : "";
+  //           const gstRate = selectedTax ? selectedTax.rate : 0;
+  //           const amount = isWeekend ? weekendFee : weekdayFee || 0;
+  //           const gstAmount = (amount * gstRate) / 100 || 0;
+  //           const amountBeforeGST = amount - gstAmount || 0;
+
+  //           if(response2.data === null ){
+  //             invoiceItems.push({
+  //               item: "Course Fee",
+  //               itemAmount: 0 || isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+  //               taxType: 0,
+  //               gstAmount: 0,
+  //               totalAmount: 0,
+  //             });
+  //           }else{
+  //             invoiceItems.push({
+  //               item: "Course Fee",
+  //               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+  //               taxType: response2.data.taxTypeId,
+  //               gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+  //               totalAmount: isNaN(amount) ? 0 : amount,
+  //             });
+  //           }
+
+  //           // invoiceItems.push({
+  //           //   item: "Course Fee",
+  //           //   itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+  //           //   taxType: response2.data.taxTypeId,
+  //           //   gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+  //           //   totalAmount: isNaN(amount) ? 0 : amount,
+  //           // });
+  //         } catch (error) {
+  //           console.error("Error fetching course fees:", error);
+  //         }
+  //       } else {
+  //         console.error("Course ID and Package Id not found");
+  //       }
+
+  //       if (courseId) {
+  //         try {
+  //           const response3 = await api.get(
+  //             `/getLatestCourseDepositFeesByCourseId/${courseId}`
+  //           );
+  //           // console.log("Response 3:", response3.data);
+
+  //           const selectedTax = taxData.find(
+  //             (tax) => parseInt(response3.data.taxType) === tax.id
+  //           );
+  //           const gstRate = selectedTax ? selectedTax.rate : 0;
+  //           const amount = response3.data.depositFees || 0;
+  //           const gstAmount = (amount * gstRate) / 100 || 0;
+  //           const amountBeforeGST = amount - gstAmount || 0;
+
+  //           invoiceItems.push({
+  //             item: "Deposit Fee",
+  //             itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+  //             taxType: response3.data.taxTypeId,
+  //             gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+  //             totalAmount: isNaN(amount) ? 0 : amount,
+  //           });
+  //         } catch (error) {
+  //           console.error("Error fetching course deposit fees:", error);
+  //         }
+  //       } else {
+  //         console.error("Course ID not found");
+  //       }
+
+  //       const selectedPackage = packageData.find(
+  //         (pkg) => pkg.id === parseInt(packageId)
+  //       );
+  //       const noOfLessons = selectedPackage ? selectedPackage.noOfLesson : "";
+  //       setSchedulesData(studentData.schedules);
+  //       formik.setValues({
+  //         center: studentData.centerId || "",
+  //         parent: studentData?.studentParentsDetails[0]?.parentName || "",
+  //         student: formik.values.student,
+  //         course: studentData.studentCourseDetailModels[0].courseId,
+  //         packageId: studentData.studentCourseDetailModels[0].packageName,
+  //         schedule: studentData?.schedules[0] || "",
+  //         noOfLessons: noOfLessons,
+  //         remark: studentData.remark,
+  //         invoiceDate:
+  //           formik.values.invoiceDate || new Date().toISOString().split("T")[0],
+  //         dueDate:
+  //           formik.values.dueDate ||
+  //           new Date(new Date().setMonth(new Date().getMonth() + 1))
+  //             .toISOString()
+  //             .split("T")[0],
+  //         invoicePeriodTo: studentCourseDetails.endDate,
+  //         invoicePeriodFrom: studentCourseDetails.startDate,
+  //         receiptAmount: formik.values.receiptAmount,
+  //         creditAdviceOffset: formik.values.creditAdviceOffset,
+  //         gst: formik.values.gst,
+  //         totalAmount: formik.values.totalAmount || "",
+  //       });
+  //       formik.setFieldValue("invoiceItems", invoiceItems);
+  //       setRows(invoiceItems);
+  //       // setRows((prevRows) => [...prevRows, ...invoiceItems]);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   if (courseData && taxData && formik.values.student) {
+  //     fetchStudentData();
+  //   }
+  // }, [courseData, taxData, formik.values.student, packageData]);
 
   const handlePackageChange = async (event) => {
     try {
       // Capture the selected packageId from the dropdown change event
       const packageId = event.target.value;
       console.log("Selected Package ID:", packageId);
+      setSelectedPackageId(packageId);
   
       // Update formik value for packageId
       formik.setFieldValue("packageId", packageId);
   
       // Fetch student details to retrieve courseId
       const response1 = await api.get(`/getAllStudentById/${formik.values.student}`);
-      const studentCourseDetails = response1.data.studentCourseDetailModels[0];
-      const courseId = studentCourseDetails?.courseId;
+      const studentCourseDetails = response1?.data?.studentCourseDetailModels?.[0];
+  
+      if (!studentCourseDetails) {
+        console.error("Student course details not found!");
+        return;
+      }
+  
+      const courseId = studentCourseDetails.courseId;
+      let invoiceItems = [1]; // Initial invoiceItems array with placeholder value
   
       if (!courseId) {
         console.error("Course ID is missing!");
         return;
       }
   
-      // Fetch fees data for the selected packageId and courseId
-      const response = await api.get(
-        `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId}&courseId=${courseId}`
-      );
-      const data = response.data;
+      // Fetch course fees by packageId and courseId
+      if (packageId || selectedPackageId) {
+        try {
+          const response2 = await api.get(
+            `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId || selectedPackageId}&courseId=${courseId}`
+          );
   
-      let updatedInvoiceItems = [...formik.values.invoiceItems];
+          const feeData = response2?.data || null;
   
-      if (data === null) {
-        // Add a new row for "Course Fee" when data is null
-        const newRow = formik.values.invoiceItems.map((item) => {
-          if (item.item === "") {
-            return {
-              item:"Course Fee",
+          // Handle cases when response data is null
+          if (!feeData) {
+            console.warn("No fee data found for the selected course and package.");
+            invoiceItems[1] = {
+              item: "Course Fee",
               itemAmount: 0,
               taxType: "",
               gstAmount: 0,
               totalAmount: 0,
             };
-          }
-          return item; // Leave other items unchanged
-        });
-        updatedInvoiceItems = [...updatedInvoiceItems, newRow];
-        // console.log("New Invoice Items with Course Fee added:", updatedInvoiceItems);
-      } else {
-        // Identify tax data for calculation
-        const selectedTax = taxData.find((tax) => parseInt(data.taxType) === tax.id);
+          } else {
+            // Process the fee data if available
+            const selectedTax = taxData.find(
+              (tax) => parseInt(feeData.taxType) === tax.id
+            );
   
-        // Determine fees based on day type
-        const isWeekend =
-          formik.values.days?.includes("SATURDAY") || formik.values.days?.includes("SUNDAY");
-        const fee = isWeekend ? data.weekendFee : data.weekdayFee || 0;
+            const weekdayFee = feeData.weekdayFee || 0;
+            const weekendFee = feeData.weekendFee || 0;
+            const days = studentCourseDetails.days;
+            const isWeekend = days === "SATURDAY" || days === "SUNDAY";
+            const gstRate = selectedTax ? selectedTax.rate : 0;
+            const amount = isWeekend ? weekendFee : weekdayFee || 0;
+            const gstAmount = (amount * gstRate) / 100 || 0;
+            const amountBeforeGST = amount - gstAmount || 0;
   
-        // Calculate GST and pre-GST amounts
-        const gstRate = selectedTax ? selectedTax.rate : 0;
-        const gstAmount = (fee * gstRate) / 100 || 0;
-        const amountBeforeGST = fee - gstAmount || 0;
-  
-        // Update the existing "Course Fee" row in invoiceItems
-        updatedInvoiceItems = formik.values.invoiceItems.map((item) => {
-          if (item.item === "Course Fee") {
-            return {
-              ...item,
+            invoiceItems[1] = {
+              item: "Course Fee",
               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-              taxType: data.taxType || "",
+              taxType: feeData.taxTypeId || "",
               gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
-              totalAmount: isNaN(fee) ? 0 : fee,
+              totalAmount: isNaN(amount) ? 0 : amount,
             };
           }
-          return item; // Leave other items unchanged
-        });
-        // console.log("Updated Invoice Items:", updatedInvoiceItems);
+        } catch (error) {
+          console.error("Error fetching course fees:", error);
+        }
+      } else {
+        console.error("Package ID or selected package is missing!");
       }
   
-      // Set the updated invoice items
-      formik.setFieldValue("invoiceItems", updatedInvoiceItems);
+      // Update formik field with the updated invoice items
+      formik.setFieldValue("invoiceItems", invoiceItems);
     } catch (error) {
       console.error("Error processing package change:", error);
     }
   };
-
   
   useEffect(() => {
     const fetchStudentData = async () => {
       if (!formik.values.student) return;
+  
       try {
         const response = await api.get(
           `/getAllStudentById/${formik.values.student}`
@@ -403,19 +590,17 @@ export default function InvoiceAdd() {
         const packageId = studentCourseDetails?.packageName;
         const studentData = response.data;
         let invoiceItems = [];
-        formik.setFieldValue(
-          "invoicePeriodFrom",
-          studentCourseDetails.startDate
-        );
+        
+        formik.setFieldValue("invoicePeriodFrom", studentCourseDetails.startDate);
         formik.setFieldValue("invoicePeriodTo", studentCourseDetails.endDate);
-
+  
+        // Fetch Registration Fee
         if (centerId) {
           try {
             const response1 = await api.get(
               `/getLatestCenterRegistrationByCenterId/${centerId}`
             );
-            // console.log("Response 1:", response1.data);
-
+  
             const selectedTax = taxData.find(
               (tax) => parseInt(response1.data.taxId) === tax.id
             );
@@ -423,7 +608,7 @@ export default function InvoiceAdd() {
             const amount = response1.data.amount || 0;
             const gstAmount = (amount * gstRate) / 100 || 0;
             const amountBeforeGST = amount - gstAmount || 0;
-
+  
             invoiceItems.push({
               item: "Registration Fee",
               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
@@ -437,63 +622,75 @@ export default function InvoiceAdd() {
         } else {
           console.error("Center ID not found");
         }
-
-        if (courseId && packageId) {
+  
+        // Fetch Course Fee
+        if ((courseId && packageId) || selectedPackageId) {
           try {
             const response2 = await api.get(
-              `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId}&courseId=${courseId}`
+              `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${
+                packageId || selectedPackageId
+              }&courseId=${courseId}`
             );
-            // console.log("Response 2:", response2.data.taxType);
-
+  
             const selectedTax = taxData.find(
-              (tax) => parseInt(response2.data.taxType) === tax.id
+              (tax) => parseInt(response2.data?.taxType) === tax.id
             );
             const selectedCourse = courseData.find(
-              (course) => parseInt(response2.data.courseId) === course.id
+              (course) => parseInt(response2.data?.courseId) === course.id
             );
-            const weekdayFee = response2.data.weekdayFee || 0;
-            const weekendFee = response2.data.weekendFee || 0;
+            const weekdayFee = response2.data?.weekdayFee || 0;
+            const weekendFee = response2.data?.weekendFee || 0;
             const days = studentCourseDetails.days;
             const isWeekend = days === "SATURDAY" || days === "SUNDAY";
-            const itemsName = selectedCourse ? selectedCourse.courseNames : "";
+            // const itemsName = selectedCourse?.courseNames || "Course Fee";
             const gstRate = selectedTax ? selectedTax.rate : 0;
             const amount = isWeekend ? weekendFee : weekdayFee || 0;
             const gstAmount = (amount * gstRate) / 100 || 0;
             const amountBeforeGST = amount - gstAmount || 0;
-
-            invoiceItems.push({
-              item: "Course Fee",
-              itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-              taxType: response2.data.taxTypeId,
-              gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
-              totalAmount: isNaN(amount) ? 0 : amount,
-            });
+  
+            if (!response2.data) {
+              invoiceItems.push({
+                item:"Course Fee",
+                itemAmount: 0,
+                taxType: "",
+                gstAmount: 0,
+                totalAmount: 0,
+              });
+            } else {
+              invoiceItems.push({
+                item:"Course Fee",
+                itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+                taxType: response2.data.taxTypeId || "",
+                gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+                totalAmount: isNaN(amount) ? 0 : amount,
+              });
+            }
           } catch (error) {
             console.error("Error fetching course fees:", error);
           }
         } else {
-          console.error("Course ID and Package Id not found");
+          console.error("Course ID and Package ID not found");
         }
-
+  
+        // Fetch Deposit Fee
         if (courseId) {
           try {
             const response3 = await api.get(
               `/getLatestCourseDepositFeesByCourseId/${courseId}`
             );
-            // console.log("Response 3:", response3.data);
-
+  
             const selectedTax = taxData.find(
               (tax) => parseInt(response3.data.taxType) === tax.id
             );
             const gstRate = selectedTax ? selectedTax.rate : 0;
-            const amount = response3.data.depositFees || 0;
+            const amount = response3.data?.depositFees || 0;
             const gstAmount = (amount * gstRate) / 100 || 0;
             const amountBeforeGST = amount - gstAmount || 0;
-
+  
             invoiceItems.push({
               item: "Deposit Fee",
               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-              taxType: response3.data.taxTypeId,
+              taxType: response3.data.taxTypeId || "",
               gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
               totalAmount: isNaN(amount) ? 0 : amount,
             });
@@ -503,20 +700,18 @@ export default function InvoiceAdd() {
         } else {
           console.error("Course ID not found");
         }
-
-        const selectedPackage = packageData.find(
-          (pkg) => pkg.id === parseInt(packageId)
-        );
-        const noOfLessons = selectedPackage ? selectedPackage.noOfLesson : "";
+  
+        // Set Final Values
         setSchedulesData(studentData.schedules);
         formik.setValues({
+          ...formik.values,
           center: studentData.centerId || "",
           parent: studentData?.studentParentsDetails[0]?.parentName || "",
           student: formik.values.student,
           course: studentData.studentCourseDetailModels[0].courseId,
           packageId: studentData.studentCourseDetailModels[0].packageName,
           schedule: studentData?.schedules[0] || "",
-          noOfLessons: noOfLessons,
+          noOfLessons: selectedPackage?.noOfLesson || "",
           remark: studentData.remark,
           invoiceDate:
             formik.values.invoiceDate || new Date().toISOString().split("T")[0],
@@ -525,26 +720,23 @@ export default function InvoiceAdd() {
             new Date(new Date().setMonth(new Date().getMonth() + 1))
               .toISOString()
               .split("T")[0],
-          invoicePeriodTo: studentCourseDetails.endDate,
           invoicePeriodFrom: studentCourseDetails.startDate,
-          receiptAmount: formik.values.receiptAmount,
-          creditAdviceOffset: formik.values.creditAdviceOffset,
-          gst: formik.values.gst,
+          invoicePeriodTo: studentCourseDetails.endDate,
           totalAmount: formik.values.totalAmount || "",
+          invoiceItems,
         });
-        formik.setFieldValue("invoiceItems", invoiceItems);
-        // setRows(invoiceItems);
-        setRows((prevRows) => [...prevRows, ...invoiceItems]); 
+        setRows(invoiceItems);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching student data:", error);
       }
     };
-
+  
     if (courseData && taxData && formik.values.student) {
       fetchStudentData();
     }
   }, [courseData, taxData, formik.values.student, packageData]);
 
+  
   useEffect(() => {
     if (studentID) {
       handleStudentChange(studentID);
@@ -701,15 +893,27 @@ export default function InvoiceAdd() {
     getData();
   }, [studentID]);
 
-  const handleRowDelete = (index) => {
-    const updatedInvoiceItems = formik.values.invoiceItems.filter(
-      (_, i) => i !== index
+  const handleRowDelete = (indexToDelete) => {
+    // Filter out the item at the specified index
+    const updatedRows = rows.filter((_, index) => index !== indexToDelete);
+    
+    // Update the rows state
+    setRows(updatedRows);
+  
+    // Update Formik values for invoiceItems
+    formik.setFieldValue(
+      "invoiceItems",
+      updatedRows.map((row, index) => ({
+        item: row.item || "",
+        itemAmount: row.itemAmount || 0,
+        taxType: row.taxType || "",
+        gstAmount: row.gstAmount || 0,
+        totalAmount: row.totalAmount || 0,
+      }))
     );
-    // Update the rows and formik values
-    setRows(updatedInvoiceItems);
-    formik.setFieldValue("invoiceItems", updatedInvoiceItems);
   };
 
+  
   useEffect(() => {
     const fetchReferralDetails = async () => {
       let overAllAmount = 0; // Default fallback value
@@ -1231,131 +1435,146 @@ export default function InvoiceAdd() {
                       </tr>
                     </thead>
                     <tbody>
-                      {rows.map((row, index) => (
-                        <tr key={index}>
-                          <td>
-                            <input
-                              {...formik.getFieldProps(
-                                `invoiceItems[${index}].item`
-                              )}
-                              className={`form-control ${
-                                formik.touched.invoiceItems?.[index]?.item &&
-                                formik.errors.invoiceItems?.[index]?.item
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
-                              type="text"
-                              style={{ width: "80%" }}
-                              readOnly={index < 3 && formik.values.invoiceItems[index]?.item}
-                            />
-                            {formik.touched.invoiceItems?.[index]?.item &&
-                              formik.errors.invoiceItems?.[index]?.item && (
-                                <div className="invalid-feedback">
-                                  {formik.errors.invoiceItems[index].item}
-                                </div>
-                              )}
-                          </td>
-                          <td>
-                            <input
-                              {...formik.getFieldProps(
-                                `invoiceItems[${index}].itemAmount`
-                              )}
-                              className={`form-control ${
-                                formik.touched.invoiceItems?.[index]
-                                  ?.itemAmount &&
-                                formik.errors.invoiceItems?.[index]?.itemAmount
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
-                              type="number"
-                              min={0}
-                              style={{ width: "80%" }}
-                              onChange={formik.handleChange}
-                              readOnly
-                            />
-                            {formik.touched.invoiceItems?.[index]?.itemAmount &&
-                              formik.errors.invoiceItems?.[index]
-                                ?.itemAmount && (
-                                <div className="invalid-feedback">
-                                  {formik.errors.invoiceItems[index].itemAmount}
-                                </div>
-                              )}
-                          </td>
-                          <td>
-                            <select
-                              className={`form-select ${
-                                formik.touched.invoiceItems?.[index]?.taxType &&
-                                formik.errors.invoiceItems?.[index]?.taxType
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
-                              {...formik.getFieldProps(
-                                `invoiceItems[${index}].taxType`
-                              )}
-                              style={{ width: "100%" }}
-                              onChange={(e) =>
-                                handleSelectChange(index, e.target.value)
-                              }
-                            >
-                              <option value=""></option>
-                              {taxData &&
-                                taxData.map((tax) => (
-                                  <option key={tax.id} value={tax.id}>
-                                    {`${tax.taxType} ${tax.rate}%`}
-                                  </option>
-                                ))}
-                            </select>
-                            {formik.touched.invoiceItems?.[index]?.taxType &&
-                              formik.errors.invoiceItems?.[index]?.taxType && (
-                                <div className="invalid-feedback">
-                                  {formik.errors.invoiceItems[index].taxType}
-                                </div>
-                              )}
-                          </td>
-                          <td>
-                            <input
-                              {...formik.getFieldProps(
-                                `invoiceItems[${index}].gstAmount`
-                              )}
-                              className="form-control"
-                              type="text"
-                              style={{ width: "80%" }}
-                              readOnly
-                              onChange={formik.handleChange}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              onInput={(event) => {
-                                event.target.value = event.target.value.replace(
-                                  /[^0-9]/g,
-                                  ""
-                                );
-                              }}
-                              {...formik.getFieldProps(
-                                `invoiceItems[${index}].totalAmount`
-                              )}
-                              className="form-control"
-                              type="text"
-                              style={{ width: "80%" }}
-                              onChange={(e) =>
-                                handelTotalAmountChange(index, e.target.value)
-                              }
-                            />
-                          </td>
-                          <td>
-                          {index >=3 &&(
-                              <button
-                                type="button"
-                                className="btn btn-white border-white"
-                                onClick={() => handleRowDelete(index)}
+                      {rows.map((row, index) => {
+                        const isNonDeletable =
+                          row.item === "Registration Fee" ||
+                          row.item === "Course Fee" ||
+                          row.item === "Deposit Fee";
+
+                        return (
+                          <tr key={index}>
+                            <td>
+                              <input
+                                {...formik.getFieldProps(
+                                  `invoiceItems[${index}].item`
+                                )}
+                                className={`form-control ${
+                                  formik.touched.invoiceItems?.[index]?.item &&
+                                  formik.errors.invoiceItems?.[index]?.item
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                                type="text"
+                                style={{ width: "80%" }}
+                                readOnly={
+                                  index < 3 &&
+                                  formik.values.invoiceItems[index]?.item
+                                }
+                              />
+                              {formik.touched.invoiceItems?.[index]?.item &&
+                                formik.errors.invoiceItems?.[index]?.item && (
+                                  <div className="invalid-feedback">
+                                    {formik.errors.invoiceItems[index].item}
+                                  </div>
+                                )}
+                            </td>
+                            <td>
+                              <input
+                                {...formik.getFieldProps(
+                                  `invoiceItems[${index}].itemAmount`
+                                )}
+                                className={`form-control ${
+                                  formik.touched.invoiceItems?.[index]
+                                    ?.itemAmount &&
+                                  formik.errors.invoiceItems?.[index]
+                                    ?.itemAmount
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                                type="number"
+                                min={0}
+                                style={{ width: "80%" }}
+                                onChange={formik.handleChange}
+                                readOnly
+                              />
+                              {formik.touched.invoiceItems?.[index]
+                                ?.itemAmount &&
+                                formik.errors.invoiceItems?.[index]
+                                  ?.itemAmount && (
+                                  <div className="invalid-feedback">
+                                    {
+                                      formik.errors.invoiceItems[index]
+                                        .itemAmount
+                                    }
+                                  </div>
+                                )}
+                            </td>
+                            <td>
+                              <select
+                                className={`form-select ${
+                                  formik.touched.invoiceItems?.[index]
+                                    ?.taxType &&
+                                  formik.errors.invoiceItems?.[index]?.taxType
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                                {...formik.getFieldProps(
+                                  `invoiceItems[${index}].taxType`
+                                )}
+                                style={{ width: "100%" }}
+                                onChange={(e) =>
+                                  handleSelectChange(index, e.target.value)
+                                }
                               >
-                                <ImCancelCircle className="fs-6 fw-mideum text-danger" />
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
+                                <option value=""></option>
+                                {taxData &&
+                                  taxData.map((tax) => (
+                                    <option key={tax.id} value={tax.id}>
+                                      {`${tax.taxType} ${tax.rate}%`}
+                                    </option>
+                                  ))}
+                              </select>
+                              {formik.touched.invoiceItems?.[index]?.taxType &&
+                                formik.errors.invoiceItems?.[index]
+                                  ?.taxType && (
+                                  <div className="invalid-feedback">
+                                    {formik.errors.invoiceItems[index].taxType}
+                                  </div>
+                                )}
+                            </td>
+                            <td>
+                              <input
+                                {...formik.getFieldProps(
+                                  `invoiceItems[${index}].gstAmount`
+                                )}
+                                className="form-control"
+                                type="text"
+                                style={{ width: "80%" }}
+                                readOnly
+                                onChange={formik.handleChange}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                onInput={(event) => {
+                                  event.target.value =
+                                    event.target.value.replace(/[^0-9]/g, "");
+                                }}
+                                {...formik.getFieldProps(
+                                  `invoiceItems[${index}].totalAmount`
+                                )}
+                                className="form-control"
+                                type="text"
+                                style={{ width: "80%" }}
+                                onChange={(e) =>
+                                  handelTotalAmountChange(index, e.target.value)
+                                }
+                              />
+                            </td>
+                            <td>
+                              {!isNonDeletable && (
+                                <button
+                                  type="button"
+                                  className="btn btn-white border-white"
+                                  onClick={() => handleRowDelete(index)}
+                                >
+                                  <ImCancelCircle className="fs-6 fw-medium text-danger" />
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>

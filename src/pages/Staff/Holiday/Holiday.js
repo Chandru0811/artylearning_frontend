@@ -18,7 +18,8 @@ const Holiday = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   console.log("Leave Data:", data);
-  const id = localStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
+  const role = localStorage.getItem("userName");
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
@@ -103,8 +104,13 @@ const Holiday = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get("/getAllUserHoliday");
-      setData(response.data);
+      if(role !== "SMS_ADMIN"){
+        const response = await api.get(`/getAllHolidayListByUserId/${userId}`);
+        setData(response.data);
+      }else{
+        const response = await api.get("/getAllUserHoliday");
+        setData(response.data);
+      }
       setLoading(false);
     } catch (error) {
       toast.error("Error Fetching Data : ", error);
