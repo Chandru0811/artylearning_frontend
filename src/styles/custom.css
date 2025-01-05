@@ -966,7 +966,7 @@ input.searchInputG:hover {
   color: #757575 !important;
 }
 
-.fc .fc-daygrid-event-harness{
+.fc .fc-daygrid-event-harness {
   cursor: pointer !important;
 }
 
@@ -978,7 +978,7 @@ input.searchInputG:hover {
   margin-bottom: 5px;
 }
 
-.fc .fc-daygrid-more-link{
+.fc .fc-daygrid-more-link {
   border-radius: 7px !important;
 }
 
@@ -1081,7 +1081,7 @@ table.dataTable.display > tbody > tr > th {
   padding: 15px 20px !important;
 }
 
-.css-aixiz9-MuiButtonBase-root-MuiIconButton-root{
+.css-aixiz9-MuiButtonBase-root-MuiIconButton-root {
   color: #a09f9ff6 !important;
 }
 
@@ -1108,7 +1108,7 @@ table.dataTable.display > tbody > tr > th {
   background-color: #eb862a !important;
   color: #fff !important;
 }
-.MuiSvgIcon-root{
+.MuiSvgIcon-root {
   color: #9f9e9e !important;
 }
 
@@ -1143,6 +1143,11 @@ table.dataTable.display > tbody > tr > th {
   font-weight: 400;
   border-radius: 3px;
 }
+.badges-Gray {
+  background-color: gray !important;
+  font-weight: 400;
+  border-radius: 3px;
+}
 
 .badges-purple {
   background-color: #ee1891da !important;
@@ -1150,29 +1155,26 @@ table.dataTable.display > tbody > tr > th {
   border-radius: 3px;
 }
 
-.css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root.Mui-active{
+.css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
   color: #287f71 !important;
 }
-.css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed{
+.css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
   color: #287f71 !important;
 }
-.css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root{
+.css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root {
   color: #329181c3 !important;
 }
-.menuitem-style{
+.menuitem-style {
   padding: 6px 16px !important;
 }
 #action-menu .MuiMenuItem-root {
-  padding: 0px ;
+  padding: 0px;
 }
 
-.cms-header{
+.cms-header {
   background: #287f71 !important;
   color: #fff !important;
 }
 .orange-background {
   background-color: #eb862a !important;
 }
-
-
-

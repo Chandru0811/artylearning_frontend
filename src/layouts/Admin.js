@@ -245,7 +245,7 @@ import LeadNewView from "../pages/Lead/LeadNewView";
 import TimeTable from "../pages/TimeTable";
 
 function Admin({ handleLogout }) {
-  const [centerChange, setCenterChange] = useState();
+  const [centerChange, setCenterChange] = useState(0);
   useEffect(() => {
     let sidebar = document.querySelector(".sidebar");
     let sidebarBtn = document.querySelector(".sidebarBtn");
@@ -257,8 +257,8 @@ function Admin({ handleLogout }) {
     };
   }, []);
   const handleCenterChanged = () => {
-    setCenterChange("CenterChanged");
-    // console.log("Center Changed")
+    setCenterChange((prevCount) => prevCount + 1);
+    console.log("centerChange",centerChange)
   };
 
   return (
