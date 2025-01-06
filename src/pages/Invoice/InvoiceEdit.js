@@ -793,7 +793,7 @@ export default function InvoiceEdit() {
                       </div>
                     )}
                 </div>
-                <div className="text-start mt-3">
+                {/* <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
                     Number of Lesson
                   </label>
@@ -807,6 +807,24 @@ export default function InvoiceEdit() {
                     <option value="" selected></option>
                     {lessonOptions}
                   </select>
+                </div> */}
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Number of Lesson
+                  </label>
+                  <br />
+                  <input
+                    id="noOfLessons"
+                    name="noOfLessons"
+                    type="text"
+                    className="form-control"
+                    {...formik.getFieldProps("noOfLessons")}
+                    value={formik.values.noOfLessons || ""}
+                    onChange={(e) => {
+                      formik.setFieldValue("noOfLessons", e.target.value);
+                    }}
+                    readOnly
+                  />
                 </div>
               </div>
             </div>

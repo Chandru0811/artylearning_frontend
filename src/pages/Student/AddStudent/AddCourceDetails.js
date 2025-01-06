@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 
 const validationSchema = Yup.object().shape({
-  packageName: Yup.string().required("*Package Name is required"),
+  packageId: Yup.string().required("*Package Name is required"),
   lessonName: Yup.string().required("*Lesson Date is required"),
 });
 
@@ -204,7 +204,7 @@ const AddcourseDetail = forwardRef(
     const formik = useFormik({
       initialValues: {
         lessonName: formData?.lessonName,
-        packageName: formData?.packageName,
+        packageId: formData?.packageId,
         selectedRow: formData?.selectedRow,
       },
       validationSchema: validationSchema,
@@ -229,7 +229,7 @@ const AddcourseDetail = forwardRef(
           days: selectedRowData.days,
           classRoom: selectedRowData.classRoom,
           // startDate: selectedRowData.startDate,
-          packageName: data.packageName,
+          packageId: data.packageId,
           startDate: data.lessonName,
           endDate: selectedRowData.endDate,
           studentCount: selectedRowData.studentCount,
@@ -395,7 +395,7 @@ const AddcourseDetail = forwardRef(
       formik.resetForm({
         values: {
           lessonName: "",
-          packageName: "",
+          packageId: "",
           courseId: "",
           days: "",
           batch: "",
@@ -490,8 +490,8 @@ const AddcourseDetail = forwardRef(
           endDate: studentCourseDetail?.endDate || prevValues.endDate,
           teacher: studentCourseDetail?.teacher || prevValues.teacher,
           lessonName: studentCourseDetail?.lessonName || prevValues.lessonName,
-          packageName:
-            studentCourseDetail?.packageName || prevValues.packageName,
+          packageId:
+            studentCourseDetail?.packageId || prevValues.packageId,
         }));
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -645,14 +645,14 @@ const AddcourseDetail = forwardRef(
                 <div className="row mt-2">
                   <div className="col-md-4">
                     <select
-                      {...formik.getFieldProps("packageName")}
+                      {...formik.getFieldProps("packageId")}
                       class={`form-select  ${
-                        formik.touched.packageName && formik.errors.packageName
+                        formik.touched.packageId && formik.errors.packageId
                           ? "is-invalid"
                           : ""
                       }`}
-                      id="packageName"
-                      name="packageName"
+                      id="packageId"
+                      name="packageId"
                     >
                       <option value="" disabled selected>
                         Select Package
@@ -664,10 +664,10 @@ const AddcourseDetail = forwardRef(
                           </option>
                         ))}
                     </select>
-                    {formik.touched.packageName &&
-                      formik.errors.packageName && (
+                    {formik.touched.packageId &&
+                      formik.errors.packageId && (
                         <div className="invalid-feedback">
-                          {formik.errors.packageName}
+                          {formik.errors.packageId}
                         </div>
                       )}
                   </div>

@@ -24,7 +24,7 @@ import {
 } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 const validationSchema = Yup.object().shape({
-  packageName: Yup.string().required("Package Name is required"),
+  packageId: Yup.string().required("Package Name is required"),
   lessonName: Yup.string().required("Lesson Name is required"),
 });
 
@@ -201,7 +201,7 @@ function StudentRegisterCourse() {
   const formik = useFormik({
     initialValues: {
       lessonName: "",
-      packageName: "",
+      packageId: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -228,7 +228,7 @@ function StudentRegisterCourse() {
         studentCount: selectedRowData.studentCount,
         teacher: selectedRowData.teacher,
         userId: selectedRowData.userId,
-        packageName: data.packageName,
+        packageId: data.packageId,
       };
       console.log("Payload Data:", payload);
       try {
@@ -338,7 +338,7 @@ function StudentRegisterCourse() {
           // ...studentCourseDetail,
           studentCourseDetailsId: studentCourseDetail.id,
           // courseId : courseId,
-          // packageName : packageName,
+          // packageId : packageId,
         });
 
         console.log("Student Course Detail Id:", studentCourseDetail.id);
@@ -551,7 +551,7 @@ function StudentRegisterCourse() {
                       <td>{stdCourse.course || "--"}</td>
                       <td>{stdCourse.batch || "--"}</td>
                       <td>{stdCourse.days || "--"}</td>
-                      <td>{stdCourse.packageName || "--"}</td>
+                      <td>{stdCourse.packageId || "--"}</td>
                       <td>{stdCourse.lessonName || "--"}</td>
                     </tr>
                   ))}
@@ -637,7 +637,7 @@ function StudentRegisterCourse() {
                     formik.resetForm({
                       values: {
                         lessonName: "",
-                        packageName: "",
+                        packageId: "",
                         courseId: "",
                         days: "",
                         batchs: "",
@@ -687,14 +687,14 @@ function StudentRegisterCourse() {
             <div className="row mt-2">
               <div className="col-md-4">
                 <select
-                  {...formik.getFieldProps("packageName")}
+                  {...formik.getFieldProps("packageId")}
                   class={`form-select  ${
-                    formik.touched.packageName && formik.errors.packageName
+                    formik.touched.packageId && formik.errors.packageId
                       ? "is-invalid"
                       : ""
                   }`}
-                  id="packageName"
-                  name="packageName"
+                  id="packageId"
+                  name="packageId"
                 >
                   <option value="" disabled selected>
                     Select Package
@@ -706,9 +706,9 @@ function StudentRegisterCourse() {
                       </option>
                     ))}
                 </select>
-                {formik.touched.packageName && formik.errors.packageName && (
+                {formik.touched.packageId && formik.errors.packageId && (
                   <div className="invalid-feedback">
-                    {formik.errors.packageName}
+                    {formik.errors.packageId}
                   </div>
                 )}
               </div>
