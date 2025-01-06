@@ -23,7 +23,7 @@ const invoiceItemSchema = Yup.object().shape({
 
   totalAmount: Yup.number()
     .required("Total amount is required")
-    .positive("Total amount must be a positive number"),
+    .min(0, "Total amount must be a positive number or zero"),
 });
 
 const validationSchema = Yup.object({
@@ -64,9 +64,8 @@ export default function InvoiceAdd() {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedPackageId, setSelectedPackageId] = useState(null);
   const [schedulesData, setSchedulesData] = useState([]);
-
-  const [selectedPackage, setSelectedPackage] = useState(null);
-  const [lessonsOptions, setLessonsOptions] = useState([]);
+  console.log("packageData : ", packageData);
+  console.log("selectedPackageId : ", selectedPackageId);
 
   const formik = useFormik({
     initialValues: {
@@ -249,289 +248,66 @@ export default function InvoiceAdd() {
     formik.setFieldValue("student", studentId); // Update Formik field value
   };
 
-  // const handlePackageChange = async (event) => {
-  //   try {
-  //     // Capture the selected packageId from the dropdown change event
-  //     const packageId = event.target.value;
-  //     console.log("Selected Package ID:", packageId);
-  //     setSelectedPackageId(packageId);
-
-  //     // Update formik value for packageId
-  //     formik.setFieldValue("packageId", packageId);
-
-  //     // Fetch student details to retrieve courseId
-  //     const response1 = await api.get(
-  //       `/getAllStudentById/${formik.values.student}`
-  //     );
-  //     const studentCourseDetails = response1.data.studentCourseDetailModels[0];
-  //     const courseId = studentCourseDetails.courseId;
-  //     let invoiceItems = [];
-  //     if (!courseId) {
-  //       console.error("Course ID is missing!");
-  //       return;
-  //     }
-  //     if ((courseId && packageId) || selectedPackageId) {
-  //       try {
-  //         const response2 = await api.get(
-  //           `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${
-  //             packageId || selectedPackageId
-  //           }&courseId=${courseId}`
-  //         );
-
-  //         const selectedTax = taxData.find(
-  //           (tax) => parseInt(response2.data?.taxType) === tax.id
-  //         );
-  //         const selectedCourse = courseData.find(
-  //           (course) => parseInt(response2.data?.courseId) === course.id
-  //         );
-  //         const weekdayFee = response2.data?.weekdayFee || 0;
-  //         const weekendFee = response2.data?.weekendFee || 0;
-  //         const days = studentCourseDetails.days;
-  //         const isWeekend = days === "SATURDAY" || days === "SUNDAY";
-  //         const gstRate = selectedTax ? selectedTax.rate : 0;
-  //         const amount = isWeekend ? weekendFee : weekdayFee || 0;
-  //         const gstAmount = (amount * gstRate) / 100 || 0;
-  //         const amountBeforeGST = amount - gstAmount || 0;
-
-  //         if (!response2.data) {
-  //           invoiceItems.push({
-  //             item: "Course Fee",
-  //             itemAmount: 0,
-  //             taxType: "",
-  //             gstAmount: 0,
-  //             totalAmount: 0,
-  //           });
-  //         } else {
-  //           invoiceItems.push({
-  //             item: "Course Fee",
-  //             itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-  //             taxType: response2.data.taxTypeId || "",
-  //             gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
-  //             totalAmount: isNaN(amount) ? 0 : amount,
-  //           });
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching course fees:", error);
-  //       }
-  //     } else {
-  //       console.error("Course ID and Package ID not found");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error processing package change:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const fetchStudentData = async () => {
-  //     if (!formik.values.student) return;
-  //     try {
-  //       const response = await api.get(
-  //         `/getAllStudentById/${formik.values.student}`
-  //       );
-  //       const studentCourseDetails = response.data.studentCourseDetailModels[0];
-  //       const centerId = studentCourseDetails?.centerId;
-  //       const courseId = studentCourseDetails?.courseId;
-  //       const packageId = studentCourseDetails?.packageName;
-  //       const studentData = response.data;
-  //       let invoiceItems = [];
-  //       formik.setFieldValue(
-  //         "invoicePeriodFrom",
-  //         studentCourseDetails.startDate
-  //       );
-  //       formik.setFieldValue("invoicePeriodTo", studentCourseDetails.endDate);
-
-  //       if (centerId) {
-  //         try {
-  //           const response1 = await api.get(
-  //             `/getLatestCenterRegistrationByCenterId/${centerId}`
-  //           );
-  //           // console.log("Response 1:", response1.data);
-
-  //           const selectedTax = taxData.find(
-  //             (tax) => parseInt(response1.data.taxId) === tax.id
-  //           );
-  //           const gstRate = selectedTax ? selectedTax.rate : 0;
-  //           const amount = response1.data.amount || 0;
-  //           const gstAmount = (amount * gstRate) / 100 || 0;
-  //           const amountBeforeGST = amount - gstAmount || 0;
-
-  //           invoiceItems.push({
-  //             item: "Registration Fee",
-  //             itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-  //             taxType: response1.data.taxId || "",
-  //             gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
-  //             totalAmount: isNaN(amount) ? 0 : amount,
-  //           });
-  //         } catch (error) {
-  //           console.error("Error fetching center registration:", error);
-  //         }
-  //       } else {
-  //         console.error("Center ID not found");
-  //       }
-
-  //       if (courseId && packageId || selectedPackageId) {
-  //         try {
-  //           const response2 = await api.get(
-  //             `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId || selectedPackageId}&courseId=${courseId}`
-  //           );
-  //           console.log("Response 2:", response2.data);
-  //           const selectedTax = taxData.find(
-  //             (tax) => parseInt(response2.data.taxType) === tax.id
-  //           );
-  //           const selectedCourse = courseData.find(
-  //             (course) => parseInt(response2.data.courseId) === course.id
-  //           );
-  //           const weekdayFee = response2.data.weekdayFee || 0;
-  //           const weekendFee = response2.data.weekendFee || 0;
-  //           const days = studentCourseDetails.days;
-  //           const isWeekend = days === "SATURDAY" || days === "SUNDAY";
-  //           const itemsName = selectedCourse ? selectedCourse.courseNames : "";
-  //           const gstRate = selectedTax ? selectedTax.rate : 0;
-  //           const amount = isWeekend ? weekendFee : weekdayFee || 0;
-  //           const gstAmount = (amount * gstRate) / 100 || 0;
-  //           const amountBeforeGST = amount - gstAmount || 0;
-
-  //           if(response2.data === null ){
-  //             invoiceItems.push({
-  //               item: "Course Fee",
-  //               itemAmount: 0 || isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-  //               taxType: 0,
-  //               gstAmount: 0,
-  //               totalAmount: 0,
-  //             });
-  //           }else{
-  //             invoiceItems.push({
-  //               item: "Course Fee",
-  //               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-  //               taxType: response2.data.taxTypeId,
-  //               gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
-  //               totalAmount: isNaN(amount) ? 0 : amount,
-  //             });
-  //           }
-
-  //           // invoiceItems.push({
-  //           //   item: "Course Fee",
-  //           //   itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-  //           //   taxType: response2.data.taxTypeId,
-  //           //   gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
-  //           //   totalAmount: isNaN(amount) ? 0 : amount,
-  //           // });
-  //         } catch (error) {
-  //           console.error("Error fetching course fees:", error);
-  //         }
-  //       } else {
-  //         console.error("Course ID and Package Id not found");
-  //       }
-
-  //       if (courseId) {
-  //         try {
-  //           const response3 = await api.get(
-  //             `/getLatestCourseDepositFeesByCourseId/${courseId}`
-  //           );
-  //           // console.log("Response 3:", response3.data);
-
-  //           const selectedTax = taxData.find(
-  //             (tax) => parseInt(response3.data.taxType) === tax.id
-  //           );
-  //           const gstRate = selectedTax ? selectedTax.rate : 0;
-  //           const amount = response3.data.depositFees || 0;
-  //           const gstAmount = (amount * gstRate) / 100 || 0;
-  //           const amountBeforeGST = amount - gstAmount || 0;
-
-  //           invoiceItems.push({
-  //             item: "Deposit Fee",
-  //             itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-  //             taxType: response3.data.taxTypeId,
-  //             gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
-  //             totalAmount: isNaN(amount) ? 0 : amount,
-  //           });
-  //         } catch (error) {
-  //           console.error("Error fetching course deposit fees:", error);
-  //         }
-  //       } else {
-  //         console.error("Course ID not found");
-  //       }
-
-  //       const selectedPackage = packageData.find(
-  //         (pkg) => pkg.id === parseInt(packageId)
-  //       );
-  //       const noOfLessons = selectedPackage ? selectedPackage.noOfLesson : "";
-  //       setSchedulesData(studentData.schedules);
-  //       formik.setValues({
-  //         center: studentData.centerId || "",
-  //         parent: studentData?.studentParentsDetails[0]?.parentName || "",
-  //         student: formik.values.student,
-  //         course: studentData.studentCourseDetailModels[0].courseId,
-  //         packageId: studentData.studentCourseDetailModels[0].packageName,
-  //         schedule: studentData?.schedules[0] || "",
-  //         noOfLessons: noOfLessons,
-  //         remark: studentData.remark,
-  //         invoiceDate:
-  //           formik.values.invoiceDate || new Date().toISOString().split("T")[0],
-  //         dueDate:
-  //           formik.values.dueDate ||
-  //           new Date(new Date().setMonth(new Date().getMonth() + 1))
-  //             .toISOString()
-  //             .split("T")[0],
-  //         invoicePeriodTo: studentCourseDetails.endDate,
-  //         invoicePeriodFrom: studentCourseDetails.startDate,
-  //         receiptAmount: formik.values.receiptAmount,
-  //         creditAdviceOffset: formik.values.creditAdviceOffset,
-  //         gst: formik.values.gst,
-  //         totalAmount: formik.values.totalAmount || "",
-  //       });
-  //       formik.setFieldValue("invoiceItems", invoiceItems);
-  //       setRows(invoiceItems);
-  //       // setRows((prevRows) => [...prevRows, ...invoiceItems]);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   if (courseData && taxData && formik.values.student) {
-  //     fetchStudentData();
-  //   }
-  // }, [courseData, taxData, formik.values.student, packageData]);
-
   const handlePackageChange = async (event) => {
     try {
       // Capture the selected packageId from the dropdown change event
       const packageId = event.target.value;
       console.log("Selected Package ID:", packageId);
       setSelectedPackageId(packageId);
-  
+
       // Update formik value for packageId
       formik.setFieldValue("packageId", packageId);
-  
+
+      // Find the matching package data to set noOfLessons
+      const selectedPackage = packageData?.find(
+        (pkg) => pkg.id === parseInt(packageId)
+      );
+
+      if (selectedPackage) {
+        const { noOfLesson } = selectedPackage;
+        console.log("Setting noOfLessons to:", noOfLesson);
+        formik.setFieldValue("noOfLessons", noOfLesson);
+      } else {
+        console.warn("No package matched the selected packageId!");
+        formik.setFieldValue("noOfLessons", "");
+      }
+
       // Fetch student details to retrieve courseId
-      const response1 = await api.get(`/getAllStudentById/${formik.values.student}`);
-      const studentCourseDetails = response1?.data?.studentCourseDetailModels?.[0];
-  
+      const response1 = await api.get(
+        `/getAllStudentById/${formik.values.student}`
+      );
+      const studentCourseDetails =
+        response1?.data?.studentCourseDetailModels?.[0];
+
       if (!studentCourseDetails) {
         console.error("Student course details not found!");
         return;
       }
-  
+
       const courseId = studentCourseDetails.courseId;
       let invoiceItems = [1]; // Initial invoiceItems array with placeholder value
-  
+
       if (!courseId) {
         console.error("Course ID is missing!");
         return;
       }
-  
+
       // Fetch course fees by packageId and courseId
       if (packageId || selectedPackageId) {
         try {
           const response2 = await api.get(
-            `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId || selectedPackageId}&courseId=${courseId}`
+            `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${
+              packageId || selectedPackageId
+            }&courseId=${courseId}`
           );
-  
+
           const feeData = response2?.data || null;
-  
+
           // Handle cases when response data is null
           if (!feeData) {
-            console.warn("No fee data found for the selected course and package.");
+            console.warn(
+              "No fee data found for the selected course and package."
+            );
             invoiceItems[1] = {
               item: "Course Fee",
               itemAmount: 0,
@@ -544,7 +320,7 @@ export default function InvoiceAdd() {
             const selectedTax = taxData.find(
               (tax) => parseInt(feeData.taxType) === tax.id
             );
-  
+
             const weekdayFee = feeData.weekdayFee || 0;
             const weekendFee = feeData.weekendFee || 0;
             const days = studentCourseDetails.days;
@@ -553,7 +329,7 @@ export default function InvoiceAdd() {
             const amount = isWeekend ? weekendFee : weekdayFee || 0;
             const gstAmount = (amount * gstRate) / 100 || 0;
             const amountBeforeGST = amount - gstAmount || 0;
-  
+
             invoiceItems[1] = {
               item: "Course Fee",
               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
@@ -568,18 +344,18 @@ export default function InvoiceAdd() {
       } else {
         console.error("Package ID or selected package is missing!");
       }
-  
+
       // Update formik field with the updated invoice items
       formik.setFieldValue("invoiceItems", invoiceItems);
     } catch (error) {
       console.error("Error processing package change:", error);
     }
   };
-  
+
   useEffect(() => {
     const fetchStudentData = async () => {
       if (!formik.values.student) return;
-  
+
       try {
         const response = await api.get(
           `/getAllStudentById/${formik.values.student}`
@@ -590,17 +366,52 @@ export default function InvoiceAdd() {
         const packageId = studentCourseDetails?.packageName;
         const studentData = response.data;
         let invoiceItems = [];
-        
-        formik.setFieldValue("invoicePeriodFrom", studentCourseDetails.startDate);
+        let noOfLessonsValue = "";
+
+        if (packageId || selectedPackageId) {
+          const resolvedPackageId = selectedPackageId || packageId;
+
+          // Find the corresponding package in the packageData array
+          const matchedPackage = packageData?.find(
+            (pkg) => pkg.id === parseInt(resolvedPackageId)
+          );
+
+          if (matchedPackage) {
+            noOfLessonsValue = matchedPackage.noOfLesson;
+            console.log(
+              "Resolved noOfLessons:",
+              noOfLessonsValue,
+              "for Package ID:",
+              resolvedPackageId
+            );
+          } else {
+            console.warn(
+              `No matching package found for ID: ${resolvedPackageId}`
+            );
+          }
+        } else {
+          console.warn("Both packageId and selectedPackageId are missing!");
+        }
+
+        // Set noOfLessons field
+        if (noOfLessonsValue) {
+          formik.setFieldValue("noOfLessons", noOfLessonsValue);
+        } else {
+          formik.setFieldValue("noOfLessons", ""); // Clear if no value found
+        }
+        formik.setFieldValue(
+          "invoicePeriodFrom",
+          studentCourseDetails.startDate
+        );
         formik.setFieldValue("invoicePeriodTo", studentCourseDetails.endDate);
-  
+
         // Fetch Registration Fee
         if (centerId) {
           try {
             const response1 = await api.get(
               `/getLatestCenterRegistrationByCenterId/${centerId}`
             );
-  
+
             const selectedTax = taxData.find(
               (tax) => parseInt(response1.data.taxId) === tax.id
             );
@@ -608,7 +419,7 @@ export default function InvoiceAdd() {
             const amount = response1.data.amount || 0;
             const gstAmount = (amount * gstRate) / 100 || 0;
             const amountBeforeGST = amount - gstAmount || 0;
-  
+
             invoiceItems.push({
               item: "Registration Fee",
               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
@@ -622,7 +433,7 @@ export default function InvoiceAdd() {
         } else {
           console.error("Center ID not found");
         }
-  
+
         // Fetch Course Fee
         if ((courseId && packageId) || selectedPackageId) {
           try {
@@ -631,7 +442,7 @@ export default function InvoiceAdd() {
                 packageId || selectedPackageId
               }&courseId=${courseId}`
             );
-  
+
             const selectedTax = taxData.find(
               (tax) => parseInt(response2.data?.taxType) === tax.id
             );
@@ -647,10 +458,10 @@ export default function InvoiceAdd() {
             const amount = isWeekend ? weekendFee : weekdayFee || 0;
             const gstAmount = (amount * gstRate) / 100 || 0;
             const amountBeforeGST = amount - gstAmount || 0;
-  
+
             if (!response2.data) {
               invoiceItems.push({
-                item:"Course Fee",
+                item: "Course Fee",
                 itemAmount: 0,
                 taxType: "",
                 gstAmount: 0,
@@ -658,7 +469,7 @@ export default function InvoiceAdd() {
               });
             } else {
               invoiceItems.push({
-                item:"Course Fee",
+                item: "Course Fee",
                 itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
                 taxType: response2.data.taxTypeId || "",
                 gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
@@ -671,14 +482,14 @@ export default function InvoiceAdd() {
         } else {
           console.error("Course ID and Package ID not found");
         }
-  
+
         // Fetch Deposit Fee
         if (courseId) {
           try {
             const response3 = await api.get(
               `/getLatestCourseDepositFeesByCourseId/${courseId}`
             );
-  
+
             const selectedTax = taxData.find(
               (tax) => parseInt(response3.data.taxType) === tax.id
             );
@@ -686,7 +497,7 @@ export default function InvoiceAdd() {
             const amount = response3.data?.depositFees || 0;
             const gstAmount = (amount * gstRate) / 100 || 0;
             const amountBeforeGST = amount - gstAmount || 0;
-  
+
             invoiceItems.push({
               item: "Deposit Fee",
               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
@@ -700,7 +511,7 @@ export default function InvoiceAdd() {
         } else {
           console.error("Course ID not found");
         }
-  
+
         // Set Final Values
         setSchedulesData(studentData.schedules);
         formik.setValues({
@@ -711,7 +522,8 @@ export default function InvoiceAdd() {
           course: studentData.studentCourseDetailModels[0].courseId,
           packageId: studentData.studentCourseDetailModels[0].packageName,
           schedule: studentData?.schedules[0] || "",
-          noOfLessons: selectedPackage?.noOfLesson || "",
+          noOfLessons:
+            selectedPackageId?.noOfLessonsValue || packageId?.noOfLessonsValue || "",
           remark: studentData.remark,
           invoiceDate:
             formik.values.invoiceDate || new Date().toISOString().split("T")[0],
@@ -730,44 +542,17 @@ export default function InvoiceAdd() {
         console.error("Error fetching student data:", error);
       }
     };
-  
+
     if (courseData && taxData && formik.values.student) {
       fetchStudentData();
     }
   }, [courseData, taxData, formik.values.student, packageData]);
 
-  
   useEffect(() => {
     if (studentID) {
       handleStudentChange(studentID);
     }
   }, [studentID]);
-
-  useEffect(() => {
-    // Update the lessons dropdown options based on the selected package
-    if (selectedPackage && packageData) {
-      const selectedPackageDetails = packageData.find(
-        (pkg) => pkg.id === parseInt(selectedPackage)
-      );
-      if (selectedPackageDetails) {
-        const lessonsArray = [selectedPackageDetails.noOfLesson];
-        setLessonsOptions(lessonsArray);
-
-        // Set the default value for noOfLessons
-        if (lessonsArray.length > 0) {
-          formik.setFieldValue("noOfLessons", lessonsArray[0]);
-        }
-      } else {
-        // Reset to empty if no package is found
-        setLessonsOptions([]);
-        formik.setFieldValue("noOfLessons", "");
-      }
-    } else {
-      // Reset to empty if no package is selected
-      setLessonsOptions([]);
-      formik.setFieldValue("noOfLessons", "");
-    }
-  }, [selectedPackage, packageData]);
 
   const handleSelectChange = (index, value) => {
     const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
@@ -845,10 +630,46 @@ export default function InvoiceAdd() {
             `/getAvailableCreditAdviseOffset?studentId=${studentID}`
           );
           const studentData = response.data;
+          const packageId = studentData?.packageName;
           const referralAmount = referralDetails.data.overallTotalForFee;
           const referralIds = referralDetails.data.referralDetails.map(
             (referral) => referral.id
           );
+
+          let noOfLessonsValue = "";
+
+          if (packageId || selectedPackageId) {
+            const resolvedPackageId = selectedPackageId || packageId;
+  
+            // Find the corresponding package in the packageData array
+            const matchedPackage = packageData?.find(
+              (pkg) => pkg.id === parseInt(resolvedPackageId)
+            );
+  
+            if (matchedPackage) {
+              noOfLessonsValue = matchedPackage.noOfLesson;
+              console.log(
+                "Resolved noOfLessons:",
+                noOfLessonsValue,
+                "for Package ID:",
+                resolvedPackageId
+              );
+            } else {
+              console.warn(
+                `No matching package found for ID: ${resolvedPackageId}`
+              );
+            }
+          } else {
+            console.warn("Both packageId and selectedPackageId are missing!");
+          }
+  
+          // Set noOfLessons field
+          if (noOfLessonsValue) {
+            formik.setFieldValue("noOfLessons", noOfLessonsValue);
+          } else {
+            formik.setFieldValue("noOfLessons", ""); // Clear if no value found
+          }
+
           formik.setValues({
             center: studentData.centerId || "",
             parent: studentData?.studentParentsDetails[0]?.parentName || "",
@@ -856,7 +677,7 @@ export default function InvoiceAdd() {
             course: studentData.studentCourseDetailModels[0].courseId,
             packageId: studentData.studentCourseDetailModels[0].packageName,
             schedule: studentData?.schedules[0] || "",
-            noOfLessons: "",
+            noOfLessons: noOfLessonsValue || "",
             remark: studentData.remark,
             // invoiceDate: "",
             // dueDate: "",
@@ -896,10 +717,10 @@ export default function InvoiceAdd() {
   const handleRowDelete = (indexToDelete) => {
     // Filter out the item at the specified index
     const updatedRows = rows.filter((_, index) => index !== indexToDelete);
-    
+
     // Update the rows state
     setRows(updatedRows);
-  
+
     // Update Formik values for invoiceItems
     formik.setFieldValue(
       "invoiceItems",
@@ -913,7 +734,6 @@ export default function InvoiceAdd() {
     );
   };
 
-  
   useEffect(() => {
     const fetchReferralDetails = async () => {
       let overAllAmount = 0; // Default fallback value
@@ -1397,8 +1217,7 @@ export default function InvoiceAdd() {
                     type="text"
                     className="form-control"
                     {...formik.getFieldProps("noOfLessons")}
-                    // If you want to show the default value based on lessonsOptions array
-                    value={formik.values.noOfLessons || lessonsOptions[0] || ""}
+                    value={formik.values.noOfLessons || ""}
                     onChange={(e) => {
                       formik.setFieldValue("noOfLessons", e.target.value);
                     }}
@@ -1537,12 +1356,29 @@ export default function InvoiceAdd() {
                                 {...formik.getFieldProps(
                                   `invoiceItems[${index}].gstAmount`
                                 )}
-                                className="form-control"
+                                className={`form-control ${
+                                  formik.touched.invoiceItems?.[index]
+                                    ?.gstAmount &&
+                                  formik.errors.invoiceItems?.[index]?.gstAmount
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
                                 type="text"
                                 style={{ width: "80%" }}
                                 readOnly
                                 onChange={formik.handleChange}
                               />
+                              {formik.touched.invoiceItems?.[index]
+                                ?.gstAmount &&
+                                formik.errors.invoiceItems?.[index]
+                                  ?.gstAmount && (
+                                  <div className="invalid-feedback">
+                                    {
+                                      formik.errors.invoiceItems[index]
+                                        .gstAmount
+                                    }
+                                  </div>
+                                )}
                             </td>
                             <td>
                               <input
@@ -1553,13 +1389,31 @@ export default function InvoiceAdd() {
                                 {...formik.getFieldProps(
                                   `invoiceItems[${index}].totalAmount`
                                 )}
-                                className="form-control"
+                                className={`form-control ${
+                                  formik.touched.invoiceItems?.[index]
+                                    ?.totalAmount &&
+                                  formik.errors.invoiceItems?.[index]
+                                    ?.totalAmount
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
                                 type="text"
                                 style={{ width: "80%" }}
                                 onChange={(e) =>
                                   handelTotalAmountChange(index, e.target.value)
                                 }
                               />
+                              {formik.touched.invoiceItems?.[index]
+                                ?.totalAmount &&
+                                formik.errors.invoiceItems?.[index]
+                                  ?.totalAmount && (
+                                  <div className="invalid-feedback">
+                                    {
+                                      formik.errors.invoiceItems[index]
+                                        .totalAmount
+                                    }
+                                  </div>
+                                )}
                             </td>
                             <td>
                               {!isNonDeletable && (

@@ -64,40 +64,46 @@ function DocumentFile() {
       toast.error(error);
     }
   };
-  const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1GB in bytes
-  const MAX_FILE_NAME_LENGTH = 60; // Maximum character limit for file names
+
+      const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1GB in bytes
+  const MAX_FILE_NAME_LENGTH = 30;
   
   const fileSchema = Yup.mixed()
-    .test(
-      "fileSize",
-      "*Each file must be less than or equal to 1GB in size",
-      (value) => {
-        return value && value.size <= MAX_FILE_SIZE;
-      }
-    )
+    .required("*File is required")
+    .test("fileSize", "*Each file must be less than 1GB", (value) => {
+      return !value || (value.size && value.size <= MAX_FILE_SIZE);
+    })
+    .test("fileType", "*Only JPG, PNG, and MP4 files are allowed", (value) => {
+      return (
+        !value ||
+        (value.type &&
+          ["image/jpeg", "image/png", "video/mp4"].includes(value.type))
+      );
+    })
     .test(
       "fileNameLength",
-      "*File name must be less than or equal to 60 characters",
+      `*File name must be less than or equal to ${MAX_FILE_NAME_LENGTH} characters`,
       (value) => {
-        return value && value.name && value.name.length <= MAX_FILE_NAME_LENGTH;
+        return (
+          !value ||
+          (value.name && value.name.length <= MAX_FILE_NAME_LENGTH)
+        );
       }
     );
   
   const filesSchema = Yup.array()
     .of(fileSchema)
+    .required("*Files are required")
+    .min(1, "*At least one file must be selected")
     .test(
       "totalSize",
       "*Total size of all files must be less than or equal to 1GB",
       (values) => {
-        if (values && values.length) {
-          const totalSize = values.reduce((acc, file) => acc + file.size, 0);
-          return totalSize <= MAX_FILE_SIZE;
-        }
-        return true;
+        if (!values || values.length === 0) return true;
+        const totalSize = values.reduce((acc, file) => acc + file.size, 0);
+        return totalSize <= MAX_FILE_SIZE;
       }
-    )
-    .min(1, "*At least one file is required")
-    .required("*Files are required");
+    );
   
   const validationSchema = Yup.object().shape({
     centerName: Yup.string().required("*Centre is required"),
@@ -106,7 +112,6 @@ function DocumentFile() {
     folder: Yup.string().required("*Folder Name is required"),
     files: filesSchema,
   });
-  
 
   const formik = useFormik({
     initialValues: {
@@ -357,7 +362,7 @@ function DocumentFile() {
                   </div>
                 </div>
 
-                <div className="col-md-6 col-12 mb-2 ">
+                {/* <div className="col-md-6 col-12 mb-2 ">
                   <div className="row">
                     <label>
                       Files<span class="text-danger">*</span>
@@ -386,7 +391,33 @@ function DocumentFile() {
                       is 1GB.
                     </label>
                   </div>
-                </div>
+                </div> */}
+                <div className="col-md-6 col-12 mb-2">
+  <div className="row">
+    <label>
+      Files<span className="text-danger">*</span>
+    </label>
+    <div className="input-group">
+      <input
+        className="form-control"
+        type="file"
+        multiple
+        accept="image/jpeg, image/png, video/mp4"
+        onChange={(event) => {
+          const files = Array.from(event.target.files);
+          formik.setFieldValue("files", files); // Directly set files to Formik's field
+        }}
+      />
+    </div>
+    {formik.touched.files && formik.errors.files && (
+      <small className="text-danger">{formik.errors.files}</small>
+    )}
+    <label className="text-muted">
+      Note: Files must be JPG, PNG, or MP4, and the maximum total size is 1GB.
+    </label>
+  </div>
+</div>
+
               </div>
             </div>
           </div>
