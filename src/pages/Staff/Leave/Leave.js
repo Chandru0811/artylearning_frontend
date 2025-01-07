@@ -53,17 +53,18 @@ const Leave = () => {
         enableHiding: false,
         enableSorting: false,
         size: 20,
-        Cell: ({ cell }) => (
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation();
-              setMenuAnchor(e.currentTarget);
-              setSelectedId(cell.getValue());
-            }}
-          >
-            <MoreVertIcon />
-          </IconButton>
-        ),
+        Cell: ({ row, cell }) =>
+          row.original.leaveStatus === "PENDING" ? (
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                setMenuAnchor(e.currentTarget);
+                setSelectedId(cell.getValue());
+              }}
+            >
+              <MoreVertIcon />
+            </IconButton>
+          ) : null, // Hide the button for APPROVED or REJECTED
       },
       {
         accessorKey: "leaveStatus",
@@ -273,6 +274,12 @@ const Leave = () => {
               onClose={handleMenuClose}
               disableScrollLock
             >
+              <MenuItem
+                onClick={() => navigate(`/leave/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
+                Edit
+              </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteUserLeaveRequest/${selectedId}`}

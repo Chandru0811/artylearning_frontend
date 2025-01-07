@@ -12,19 +12,14 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import { MdOutlineModeEdit } from "react-icons/md";
 import CloseIcon from "@mui/icons-material/Close";
+
 function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
-  const [fields, setFields] = useState([
-    {
-      id: 1,
-      batchTimes: "",
-    },
-  ]);
+  const [fields, setFields] = useState([]); // No default field
 
   const validationSchema = Yup.object({
     batchTimes: Yup.array()
@@ -49,13 +44,18 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
         });
         if (response.status === 200) {
           onSuccess();
-
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        if (error?.response?.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else if (error?.response?.status === 404) {
+          toast.warning(error?.response?.data?.message);
+        } else {
+          toast.error(error?.response?.data?.message);
+        }
       } finally {
         handleClose();
         setLoadIndicator(false);
@@ -64,17 +64,6 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
     enableReinitialize: true,
     validateOnChange: true,
     validateOnBlur: true,
-    validate: (values) => {
-      if (
-        Object.values(values).some(
-          (value) => typeof value === "string" && value.trim() !== ""
-        )
-      ) {
-        setIsModified(true);
-      } else {
-        setIsModified(false);
-      }
-    },
   });
 
   const handleClose = () => {
@@ -92,22 +81,91 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
     setFields([
       ...fields,
       {
-        id: fields.length + 1,
+        id: null, // null indicates a new field
         batchTimes: "",
       },
     ]);
   };
 
-  const deleteFields = (id) => {
-    const updatedFields = fields.filter((field) => field.id !== id);
-    setFields(updatedFields);
+  // const deleteFields = async (field) => {
+  //   if (field.id) {
+  //     // Existing field: make API call
+  //     try {
+  //       const response = await api.delete(
+  //         `/deleteBatchTime/${id}?batchTime=${field.batchTimes}`
+  //       );
+  //       if (response.status === 200) {
+  //         toast.success("Batch time deleted successfully.");
+  //       } else {
+  //         toast.error("Failed to delete batch time.");
+  //       }
+  //     } catch (error) {
+  //       if (error?.response?.status === 409) {
+  //         toast.warning(error?.response?.data?.message);
+  //       } else if (error?.response?.status === 404) {
+  //         toast.warning(error?.response?.data?.message);
+  //       } else {
+  //         toast.error(error?.response?.data?.message);
+  //       }
+  //     } 
+  //   }
 
-    const updatedBatchTime = formik.values.batchTimes.filter(
-      (_, index) => fields[index].id !== id
-    );
-    formik.setFieldValue("batchTimes", updatedBatchTime);
+  //   // Remove field locally
+  //   const updatedFields = fields.filter((f) => f !== field);
+  //   setFields(updatedFields);
+
+  //   // Update formik values
+  //   const updatedBatchTimes = formik.values.batchTimes.filter(
+  //     (time) => time !== field.batchTimes
+  //   );
+  //   formik.setFieldValue("batchTimes", updatedBatchTimes);
+  // };
+
+  const deleteFields = async (field) => {
+    if (field.id) {
+      // Existing field: make API call
+      try {
+        const response = await api.delete(
+          `/deleteBatchTime/${id}?batchTime=${field.batchTimes}`
+        );
+        if (response.status === 200) {
+          toast.success("Batch time deleted successfully.");
+          // Remove the field locally only if the API deletion is successful
+          const updatedFields = fields.filter((f) => f !== field);
+          setFields(updatedFields);
+  
+          // Update formik values
+          const updatedBatchTimes = formik.values.batchTimes.filter(
+            (time) => time !== field.batchTimes
+          );
+          formik.setFieldValue("batchTimes", updatedBatchTimes);
+        } else {
+          toast.error("Failed to delete batch time.");
+        }
+      } catch (error) {
+        // Handle specific cases and show appropriate error messages
+        if (error?.response?.status === 409) {
+          toast.warning(error?.response?.data?.message || "Conflict detected. Cannot delete this batch time.");
+        } else if (error?.response?.status === 404) {
+          toast.warning(error?.response?.data?.message || "Batch time not found.");
+        } else {
+          toast.error(error?.response?.data?.message || "Error deleting batch time.");
+        }
+      }
+    } else {
+      // Remove new fields (id is null) directly
+      const updatedFields = fields.filter((f) => f !== field);
+      setFields(updatedFields);
+  
+      // Update formik values
+      const updatedBatchTimes = formik.values.batchTimes.filter(
+        (time) => time !== field.batchTimes
+      );
+      formik.setFieldValue("batchTimes", updatedBatchTimes);
+    }
   };
 
+  
   const getData = async () => {
     try {
       const response = await api.get(`/getBatchForSingleDay/${id}`);
@@ -119,8 +177,8 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
         updatedBy: userName,
       });
 
-      const updatedFields = fetchedData.batchTimes.map((time, index) => ({
-        id: index + 1,
+      const updatedFields = fetchedData.batchTimes.map((time) => ({
+        id: Math.random(), // Use unique ID if not available
         batchTimes: time,
       }));
       setFields(updatedFields);
@@ -192,8 +250,8 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
                 </div>
 
                 <div className="col-md-12 col-12 mb-2">
-                  {fields.map((row, index) => (
-                    <div key={row.id}>
+                  {fields.map((field, index) => (
+                    <div key={index}>
                       <div className="d-flex justify-content-between mt-3">
                         <span>
                           <label className="form-label">
@@ -203,8 +261,8 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
                         <span>
                           <button
                             type="button"
-                            className="btn btn-sm pb-2"
-                            onClick={() => deleteFields(row.id)}
+                            className="btn btn-sm pb-2 me-2"
+                            onClick={() => deleteFields(field)}
                           >
                             <IoCloseCircleOutline
                               style={{ color: "red", fontSize: "18px" }}
@@ -270,5 +328,4 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
     </>
   );
 }
-
 export default BatchTimeEdit;

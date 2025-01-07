@@ -10,7 +10,7 @@ const fetchAllCentersWithIds = async () => {
     
     return response.data;
   } catch (error) {
-    toast.error("Error fetching center data:", error);
+    console.error("Error fetching center data:", error);
     throw error;
   }
 };

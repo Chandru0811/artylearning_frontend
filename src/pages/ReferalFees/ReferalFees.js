@@ -204,16 +204,15 @@ const ReferalFees = () => {
     },
   });
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
-  };
-
   const clearFilter = () => {
-    setFilters({
-      centerName: "",
-    });
-  };
+  localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
+  setFilters({
+    centerId: "", // Reset filters
+    centerName: "",
+  });
+  setCenterId(""); // Clear local state for center ID
+  setIsClearFilterClicked(true); // Trigger fetch with no filters
+};
 
   const handleMenuClose = () => {
     setMenuAnchor(null);

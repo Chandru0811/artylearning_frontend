@@ -105,8 +105,8 @@ const EditStudentDetails = forwardRef(
         referByParent: formData.referByParent || "",
         referByStudent: formData.referByStudent || "",
         remark: formData.remark || "",
-        allowMagazine: false || "",
-        allowSocialMedia: false || "",
+        allowMagazine: true || "",
+        allowSocialMedia: true || "",
         updatedBy: userName,
       },
       validationSchema: validationSchema,
@@ -123,16 +123,11 @@ const EditStudentDetails = forwardRef(
 
         data.center = selectedCenter;
         try {
-          const allowMagazine = data.allowMagazine === "Yes" ? true : false;
-          const allowSocialMedia =
-            data.allowSocialMedia === "Yes" ? true : false;
           const updatedData = {
             ...data,
-            allowMagazine: allowMagazine,
-            allowSocialMedia: allowSocialMedia,
+            allowMagazine: data.allowMagazine === true, // Ensure boolean
+            allowSocialMedia: data.allowSocialMedia === true, // Ensure boolean
           };
-          // const formData = new FormData();
-          // formData.append("profileImage", data.profileImage);
 
           const response = await api.put(
             `/updateStudentDetail/${formData.id}`,
@@ -185,9 +180,10 @@ const EditStudentDetails = forwardRef(
             response.data;
           const updatedValues = {
             ...otherData,
-            allowMagazine: allowMagazine ? "Yes" : "No",
-            allowSocialMedia: allowSocialMedia ? "Yes" : "No",
+            allowMagazine: allowMagazine === true, // Ensure it's strictly boolean
+            allowSocialMedia: allowSocialMedia === true, // Ensure it's strictly boolean
           };
+
           formik.setValues(updatedValues);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -682,9 +678,14 @@ const EditStudentDetails = forwardRef(
                             className="form-check-input mx-2"
                             type="radio"
                             name="allowMagazine"
-                            value="yes"
-                            checked={formik.values.allowMagazine === "yes"}
-                            onChange={formik.handleChange}
+                            value="true" // String value for radio buttons
+                            checked={formik.values.allowMagazine === true} // Compare with boolean
+                            onChange={(e) =>
+                              formik.setFieldValue(
+                                "allowMagazine",
+                                e.target.value === "true"
+                              )
+                            } // Convert string back to boolean
                             onBlur={formik.handleBlur}
                           />
                           &nbsp; Yes &nbsp;&nbsp;&nbsp;
@@ -692,9 +693,14 @@ const EditStudentDetails = forwardRef(
                             className="form-check-input mx-2"
                             type="radio"
                             name="allowMagazine"
-                            value="No"
-                            checked={formik.values.allowMagazine === "No"}
-                            onChange={formik.handleChange}
+                            value="false" // String value for radio buttons
+                            checked={formik.values.allowMagazine === false} // Compare with boolean
+                            onChange={(e) =>
+                              formik.setFieldValue(
+                                "allowMagazine",
+                                e.target.value === "true"
+                              )
+                            } // Convert string back to boolean
                             onBlur={formik.handleBlur}
                           />
                           &nbsp; No
@@ -707,6 +713,7 @@ const EditStudentDetails = forwardRef(
                         </div>
                       </label>
                     </div>
+
                     <div className="col-lg-6 col-sm-12 mt-3">
                       <label>
                         <small>
@@ -718,9 +725,14 @@ const EditStudentDetails = forwardRef(
                             className="form-check-input mx-2"
                             type="radio"
                             name="allowSocialMedia"
-                            value="yes"
-                            checked={formik.values.allowSocialMedia === "yes"}
-                            onChange={formik.handleChange}
+                            value="true"
+                            checked={formik.values.allowSocialMedia === true}
+                            onChange={(e) =>
+                              formik.setFieldValue(
+                                "allowSocialMedia",
+                                e.target.value === "true"
+                              )
+                            }
                             onBlur={formik.handleBlur}
                           />
                           &nbsp; Yes &nbsp;&nbsp;&nbsp;
@@ -728,9 +740,14 @@ const EditStudentDetails = forwardRef(
                             className="form-check-input mx-2"
                             type="radio"
                             name="allowSocialMedia"
-                            value="No"
-                            checked={formik.values.allowSocialMedia === "No"}
-                            onChange={formik.handleChange}
+                            value="false"
+                            checked={formik.values.allowSocialMedia === false}
+                            onChange={(e) =>
+                              formik.setFieldValue(
+                                "allowSocialMedia",
+                                e.target.value === "true"
+                              )
+                            }
                             onBlur={formik.handleBlur}
                           />
                           &nbsp; No

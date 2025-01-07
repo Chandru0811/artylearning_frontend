@@ -58,6 +58,23 @@ const Staff = () => {
           </IconButton>
         ),
       },
+      {
+        accessorKey: "role",
+        enableHiding: false,
+        header: "Role",
+        Cell: ({ row }) =>
+          row.original.role === "staff" ||
+          row.original.role === "Staff" ||
+          row.original.role === "STAFF" ? (
+            <span className="badge badges-Green fw-light">Staff</span>
+          ) : row.original.role === "center_manager" ? (
+            <span className="badge badges-orange fw-light">Centre Manager</span>
+          ) : row.original.role === "staff_admin" ? (
+            <span className="badge badges-red fw-light">Staff Admin</span>
+          ) : row.original.role === "branch_admin" ? (
+            <span className="badge badges-Blue fw-light">Branch Admin</span>
+          ) : null,
+      },
       { accessorKey: "userUniqueId", enableHiding: false, header: "Staff Id" },
       {
         accessorKey: "teacherType",
@@ -79,23 +96,7 @@ const Staff = () => {
         enableHiding: false,
         header: "Gender",
       },
-      {
-        accessorKey: "role",
-        enableHiding: false,
-        header: "Role",
-        Cell: ({ row }) =>
-          row.original.role === "staff" ||
-          row.original.role === "Staff" ||
-          row.original.role === "STAFF" ? (
-            <span className="badge badges-Green fw-light">Staff</span>
-          ) : row.original.role === "center_manager" ? (
-            <span className="badge badges-orange fw-light">Center Manager</span>
-          ) : row.original.role === "staff_admin" ? (
-            <span className="badge badges-red fw-light">Staff Admin</span>
-          ) : row.original.role === "branch_admin" ? (
-            <span className="badge bg-primary fw-light">Branch Admin</span>
-          ) : null,
-      },
+      
       {
         accessorKey: "contactNumber",
         enableHiding: false,

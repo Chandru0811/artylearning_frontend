@@ -1557,7 +1557,7 @@ export default function InvoiceAdd() {
                     <br />
                     <input
                       {...formik.getFieldProps("gst")}
-                      className="form-control  "
+                      className="form-control"
                       type="text"
                       placeholder=""
                       readOnly

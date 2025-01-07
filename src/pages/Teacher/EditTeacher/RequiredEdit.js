@@ -131,7 +131,7 @@ const RequiredEdit = forwardRef(
 
     return (
       <form onSubmit={formik.handleSubmit}>
-        <div className="container-fluid" style={{ minHeight: "50vh" }}>
+        <div className="container-fluid" style={{ minHeight: "60vh" }}>
           <p className="headColor my-4">Required Information</p>
           <div class="row">
             <div class="col-md-6 col-12 mb-2">
@@ -149,26 +149,32 @@ const RequiredEdit = forwardRef(
               <p class="mt-4">Note : File must be PDF,Max Size 2 MB</p>
               {datas?.resume && (
                 <div class="card border-0 shadow" style={{ width: "18rem" }}>
-                  <a
-                    href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                      datas?.resume
-                    )}&embedded=true`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    style={{ cursor: "not-allowed" }}
                   >
                     <img
                       class="card-img-top img-fluid"
-                      style={{ height: "10rem" }}
+                      style={{
+                        height: "10rem",
+                        pointerEvents: "none",
+                        cursor: "not-allowed",
+                      }}
                       src={pdfLogo}
-                      alt="Card image cap"
+                      alt="Resume preview"
+                      onClick={(e) => e.stopPropagation()}
                     />
-                  </a>
-                  <div class="card-body d-flex justify-content-between flex-wrap">
+                  </div>
+                  <div class="card-body d-flex justify-content-between align-items-center">
                     <p class="card-title fw-semibold text-wrap">
                       {datas?.resume?.split("/").pop()}
                     </p>
-
-                    <a href={datas?.resume} class="btn text-dark">
+                    <a
+                      href={datas?.resume}
+                      download
+                      class="btn text-dark"
+                      title="Download Resume"
+                    >
                       <MdOutlineDownloadForOffline size={25} />
                     </a>
                   </div>
@@ -193,26 +199,32 @@ const RequiredEdit = forwardRef(
               <p class="mt-4">Note : File must be PDF,Max Size 2 MB</p>
               {datas?.educationCertificate && (
                 <div class="card border-0 shadow" style={{ width: "18rem" }}>
-                  <a
-                    href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                      datas?.educationCertificate
-                    )}&embedded=true`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    style={{ cursor: "not-allowed" }}
                   >
                     <img
                       class="card-img-top img-fluid"
-                      style={{ height: "10rem" }}
+                      style={{
+                        height: "10rem",
+                        pointerEvents: "none",
+                        cursor: "not-allowed",
+                      }}
                       src={pdfLogo}
-                      alt="Card image cap"
+                      alt="Education Certificate preview"
+                      onClick={(e) => e.stopPropagation()}
                     />
-                  </a>
-                  <div class="card-body d-flex justify-content-between flex-wrap">
+                  </div>
+                  <div class="card-body d-flex justify-content-between align-items-center">
                     <p class="card-title fw-semibold text-wrap">
                       {datas?.educationCertificate?.split("/").pop()}
                     </p>
-
-                    <a href={datas?.educationCertificate} class="btn text-dark">
+                    <a
+                      href={datas?.educationCertificate}
+                      download
+                      class="btn text-dark"
+                      title="Download Certificate"
+                    >
                       <MdOutlineDownloadForOffline size={25} />
                     </a>
                   </div>

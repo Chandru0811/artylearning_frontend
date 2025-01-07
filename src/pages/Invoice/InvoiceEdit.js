@@ -14,7 +14,19 @@ import fetchAllCentersWithStudentList from "../List/CenterAvailableStudentLidt";
 
 const invoiceItemSchema = Yup.object().shape({
   item: Yup.string().required("Item name is required"),
+  itemAmount: Yup.number()
+    .required("Item amount is required")
+    .min(0, "Item amount must be a positive number or zero"),
+  taxType: Yup.string().required("Tax type is required"),
+  gstAmount: Yup.number()
+    .required("GST amount is required")
+    .min(0, "GST amount must be a positive number or zero"),
+
+  totalAmount: Yup.number()
+    .required("Total amount is required")
+    .min(0, "Total amount must be a positive number or zero"),
 });
+
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Select a Centre"),
   parent: Yup.string().required("*Select a parent"),
@@ -29,10 +41,9 @@ const validationSchema = Yup.object({
   receiptAmount: Yup.number()
     .required("*Receipt Amount is required")
     .typeError("*Must be a Number"),
-  invoiceItems: Yup.array()
-    .of(invoiceItemSchema)
-    // .min(1, "At least one invoice item is required")
-    .required("Invoice items are required"),
+   invoiceItems: Yup.array()
+      .of(invoiceItemSchema)
+      .required("Invoice items are required"),
   remark: Yup.string()
     .max(200, "*The maximum length is 200 characters")
     .notRequired(),
@@ -51,8 +62,6 @@ export default function InvoiceEdit() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
-  const [description, setDescription] = useState("");
-  const [selectedStudentId, setSelectedStudentId] = useState(null);
 
   const lessonOptions = [];
   for (let i = 1; i <= 50; i++) {
@@ -175,10 +184,6 @@ export default function InvoiceEdit() {
       scrollToError(formik.errors);
     }
   }, [formik.submitCount, formik.errors]);
-
-  const handleInputChange = (e) => {
-    setDescription(e.target.value);
-  };
 
   const fetchData = async (id) => {
     try {
@@ -321,6 +326,8 @@ export default function InvoiceEdit() {
     const getData = async () => {
       try {
         const response = await api.get(`/getAllGenerateInvoicesById/${id}`);
+        console.log("Invoice Data byID :: ",response.data.remark);
+        
         const formattedResponseData = {
           ...response.data,
           invoiceDate: response.data.invoiceDate.substring(0, 10),
@@ -505,6 +512,7 @@ export default function InvoiceEdit() {
                         : ""
                     }`}
                     onChange={handleCenterChange}
+                    disabled
                   >
                     <option selected></option>
                     {centerData &&
@@ -533,6 +541,7 @@ export default function InvoiceEdit() {
                         : ""
                     }`}
                     type="text"
+                    disabled
                   />
                   {formik.touched.parent && formik.errors.parent && (
                     <div className="invalid-feedback">
@@ -553,6 +562,7 @@ export default function InvoiceEdit() {
                         ? "is-invalid"
                         : ""
                     }`}
+                    disabled
                   >
                     <option selected></option>
                     {studentData &&
@@ -581,6 +591,7 @@ export default function InvoiceEdit() {
                         ? "is-invalid"
                         : ""
                     }`}
+                    disabled
                   >
                     <option></option>
                     {courseData &&
@@ -629,6 +640,7 @@ export default function InvoiceEdit() {
                         ? "is-invalid"
                         : ""
                     }`}
+                    disabled
                   >
                     <option selected></option>
                     {packageData &&
@@ -655,7 +667,6 @@ export default function InvoiceEdit() {
                     {...formik.getFieldProps("remark")}
                     className="form-control "
                     type="text"
-                    placeholder="Remarks"
                     style={{
                       height: "7rem",
                     }}
@@ -666,8 +677,6 @@ export default function InvoiceEdit() {
                         e.stopPropagation(); // Prevent the event from bubbling up to the parent
                       }
                     }}
-                    value={description}
-                    onChange={handleInputChange}
                   />
                 </div>
               </div>

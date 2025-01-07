@@ -9,11 +9,7 @@ import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
 import ArrangeAssesmentAdd from "./ArrangeAssesmentAdd";
 import ArrangeAssesmentEdit from "./ArrangeAssesmentEdit";
-import { useFormik } from "formik";
-import { MdOutlineModeEdit } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
 import GlobalDelete from "../../components/common/GlobalDelete";
-// import { Dropdown, Button } from "react-bootstrap";
 import { MaterialReactTable } from "material-react-table";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
@@ -22,9 +18,6 @@ import {
   Menu,
   MenuItem,
   IconButton,
-  Popover,
-  Button,
-  Box,
 } from "@mui/material";
 
 const Lead = () => {
@@ -137,26 +130,25 @@ const Lead = () => {
     setSelectedId(row.id);
   };
 
-  // const handleFormSubmit = async () => {
-  //   try {
-  //     const response = await api.put(`/updateLeadInfo/${selectedId}`, {
-  //       leadStatus: newStatus,
-  //     });
+  const handleFormSubmit = async () => {
+    try {
+      const response = await api.put(`/updateLeadInfo/${selectedId}`, {
+        leadStatus: newStatus,
+      });
 
-  //     if (response.status === 200) {
-  //       toast.success("Lead Status Updated");
-  //       setShowModal(false);
-  //       ResetFilter();
-  //       getLeadData();
-  //     } else {
-  //       toast.error(response.data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error(error.message || "An error occurred");
-  //   }
-  // };
-
-  // Get filtered data based on Formik values
+      if (response.status === 200) {
+        toast.success("Lead Status Updated");
+        setShowModal(false);
+        ResetFilter();
+        getData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error.message || "An error occurred");
+    }
+  };
+  
   const getData = async () => {
     setLoading(true);
     let params = {};
@@ -1121,7 +1113,7 @@ const Lead = () => {
               <button
                 style={{ background: "#eb862a" }}
                 className="btn btn-sm text-white"
-                onClick={getData}
+                onClick={handleFormSubmit}
               >
                 Confirm
               </button>

@@ -59,6 +59,21 @@ const Teacher = () => {
           </IconButton>
         ),
       },
+      {
+        accessorKey: "role",
+        enableHiding: false,
+        header: "Role",
+        Cell: ({ row }) =>
+          row.original.role === "Teacher" ||
+          row.original.role === "teacher" ||
+          row.original.role === "TEACHER" ? (
+            <span className="badge badges-Green fw-light">Teacher</span>
+          ) : row.original.role === "freelancer" ||
+            row.original.role === "free_lancer" ||
+            row.original.role === "FREELANCER" ? (
+            <span className="badge badges-orange fw-light">Freelancer</span>
+          ) : null,
+      },
       { accessorKey: "countryName", enableHiding: false, header: "Country" },
       {
         accessorKey: "userUniqueId",
@@ -79,21 +94,7 @@ const Teacher = () => {
       },
       { accessorKey: "email", enableHiding: false, header: "Email" },
       { accessorKey: "contactNumber", enableHiding: false, header: "Mobile" },
-      {
-        accessorKey: "role",
-        enableHiding: false,
-        header: "Role",
-        Cell: ({ row }) =>
-          row.original.role === "Teacher" ||
-          row.original.role === "teacher" ||
-          row.original.role === "TEACHER" ? (
-            <span className="badge badges-Green fw-light">Teacher</span>
-          ) : row.original.role === "freelancer" ||
-            row.original.role === "free_lancer" ||
-            row.original.role === "FREELANCER" ? (
-            <span className="badge badges-orange fw-light">Freelancer</span>
-          ) : null,
-      },
+    
       {
         accessorKey: "createdAt",
         enableHiding: false,

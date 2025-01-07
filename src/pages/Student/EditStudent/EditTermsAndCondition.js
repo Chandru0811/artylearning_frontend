@@ -52,6 +52,97 @@ const EditTermsAndCondition = forwardRef(
       setShowImage(true); // Show the image again
     };
 
+    // const formik = useFormik({
+    //   initialValues: {
+    //     file: null || "",
+    //     termsAndConditionSignatureDate:
+    //       formData.termsAndConditionSignatureDate || "",
+    //     agree: formData.agree || "",
+    //     studentDetailId: formData.id || "",
+    //     updatedBy: userName,
+    //   },
+    //   validationSchema: validationSchema,
+    //   onSubmit: async (data) => {
+    //     setLoadIndicators(true);
+    //     try {
+    //       const formDatas = new FormData();
+
+    //       // Append common fields
+    //       formDatas.append(
+    //         "termsAndConditionSignatureDate",
+    //         data.termsAndConditionSignatureDate
+    //       );
+    //       formDatas.append("agree", data.agree);
+
+    //       if (data.stdTermsAndConditionId) {
+    //         // Edit existing record
+    //         formDatas.append(
+    //           "studentTermsAndConditionId",
+    //           data.stdTermsAndConditionId
+    //         );
+
+    //         if (!isEditing) {
+    //           // Append the signature only if it was edited
+    //           const randomNumber = Math.floor(Math.random() * 100000);
+    //           const apiResponse = await fetch(url);
+    //           const blob = await apiResponse.blob();
+    //           formDatas.append("file", blob, `${randomNumber}Signature.png`);
+    //         }
+
+    //         const response = await api.put(
+    //           `/updateStudentTermsAndConditions/${data.stdTermsAndConditionId}`,
+    //           formDatas,
+    //           {
+    //             headers: {
+    //               "Content-Type": "multipart/form-data",
+    //             },
+    //           }
+    //         );
+
+    //         if (response.status === 200) {
+    //           toast.success(response.data.message);
+    //           navigate("/student");
+    //         } else {
+    //           toast.error(response.data.message);
+    //         }
+    //       } else {
+    //         // Create new record
+    //         formDatas.append("studentDetailId", formData.id);
+
+    //         if (isEditing) {
+    //           // Append the signature only if it was edited
+    //           const randomNumber = Math.floor(Math.random() * 1000);
+    //           const apiResponse = await fetch(url);
+    //           const blob = await apiResponse.blob();
+    //           formDatas.append("file", blob, `${randomNumber}Signature.png`);
+    //         }
+
+    //         const response = await api.post(
+    //           `/createStudentTermsAndConditions`,
+    //           formDatas,
+    //           {
+    //             headers: {
+    //               "Content-Type": "multipart/form-data",
+    //             },
+    //           }
+    //         );
+
+    //         if (response.status === 201) {
+    //           toast.success(response.data.message);
+    //           setFormData((prev) => ({ ...prev, ...data }));
+    //           navigate("/student");
+    //         } else {
+    //           toast.error(response.data.message);
+    //         }
+    //       }
+    //     } catch (error) {
+    //       toast.error(error);
+    //     } finally {
+    //       setLoadIndicators(false);
+    //     }
+    //   },
+    // });
+    
     const formik = useFormik({
       initialValues: {
         file: null || "",
@@ -66,29 +157,29 @@ const EditTermsAndCondition = forwardRef(
         setLoadIndicators(true);
         try {
           const formDatas = new FormData();
-
+    
           // Append common fields
           formDatas.append(
             "termsAndConditionSignatureDate",
             data.termsAndConditionSignatureDate
           );
           formDatas.append("agree", data.agree);
-
+    
           if (data.stdTermsAndConditionId) {
             // Edit existing record
             formDatas.append(
               "studentTermsAndConditionId",
               data.stdTermsAndConditionId
             );
-
-            if (!isEditing) {
-              // Append the signature only if it was edited
+    
+            if (isEditing && url) {
+              // Append the new signature file only if it was edited
               const randomNumber = Math.floor(Math.random() * 100000);
               const apiResponse = await fetch(url);
               const blob = await apiResponse.blob();
               formDatas.append("file", blob, `${randomNumber}Signature.png`);
             }
-
+    
             const response = await api.put(
               `/updateStudentTermsAndConditions/${data.stdTermsAndConditionId}`,
               formDatas,
@@ -98,7 +189,7 @@ const EditTermsAndCondition = forwardRef(
                 },
               }
             );
-
+    
             if (response.status === 200) {
               toast.success(response.data.message);
               navigate("/student");
@@ -108,15 +199,15 @@ const EditTermsAndCondition = forwardRef(
           } else {
             // Create new record
             formDatas.append("studentDetailId", formData.id);
-
-            if (isEditing) {
-              // Append the signature only if it was edited
+    
+            if (url) {
+              // Append the new signature file if it exists
               const randomNumber = Math.floor(Math.random() * 1000);
               const apiResponse = await fetch(url);
               const blob = await apiResponse.blob();
               formDatas.append("file", blob, `${randomNumber}Signature.png`);
             }
-
+    
             const response = await api.post(
               `/createStudentTermsAndConditions`,
               formDatas,
@@ -126,7 +217,7 @@ const EditTermsAndCondition = forwardRef(
                 },
               }
             );
-
+    
             if (response.status === 201) {
               toast.success(response.data.message);
               setFormData((prev) => ({ ...prev, ...data }));
@@ -136,12 +227,14 @@ const EditTermsAndCondition = forwardRef(
             }
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message || "Something went wrong");
         } finally {
           setLoadIndicators(false);
         }
       },
     });
+    
+    
     const scrollToError = (errors) => {
       const errorField = Object.keys(errors)[0]; // Get the first error field
       const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
