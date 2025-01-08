@@ -147,10 +147,10 @@ const AddStudentDetails = forwardRef(
           formDatas.append("schoolName", values.schoolName);
           formDatas.append("preAssessmentResult", values.preAssessmentResult);
           formDatas.append("race", values.race);
-          formDatas.append("nationality", values.nationality);
-          formDatas.append("referByParent", values.referByParent);
-          formDatas.append("referByStudent", values.referByStudent);
-          formDatas.append("remark", values.remark);
+          formDatas.append("nationality", values.nationality || "");
+          formDatas.append("referByParent", values.referByParent || "");
+          formDatas.append("referByStudent", values.referByStudent || "");
+          formDatas.append("remark", values.remark || "");
           formDatas.append("allowMagazine", values.allowMagazine);
           formDatas.append("allowSocialMedia", values.allowSocialMedia);
           formDatas.append("centerId", values.centerId);
@@ -485,7 +485,7 @@ const AddStudentDetails = forwardRef(
                     </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
-                        <small>Refered By Parents</small>
+                        <small>Refered By Parent</small>
                         {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />

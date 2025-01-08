@@ -59,24 +59,24 @@ const EditEmergencyContact = forwardRef(
         setLoadIndicators(true);
         try {
           const formDatas = new FormData();
-          formDatas.append("emergencyContactName", data.emergencyContactName);
+          formDatas.append("emergencyContactName", data.emergencyContactName || "");
           formDatas.append("emergencyRelation", "Brother");
-          formDatas.append("emergencyContactNo", data.emergencyContactNo);
+          formDatas.append("emergencyContactNo", data.emergencyContactNo || "");
           data.emergencyContactInformation?.map((contact, index) => {
-            formDatas.append(`name[${index}]`, contact.name);
-            formDatas.append(`contactNo[${index}]`, contact.contactNo);
+            formDatas.append(`name[${index}]`, contact.name || "");
+            formDatas.append(`contactNo[${index}]`, contact.contactNo || "");
             formDatas.append(
               `authorizedRelation[${index}]`,
               contact.authorizedRelation || ""
             );
-            formDatas.append(`postalCode[${index}]`, contact.postalCode);
+            formDatas.append(`postalCode[${index}]`, contact.postalCode || "");
             formDatas.append(
               `emergencyContactAddress[${index}]`,
-              contact.emergencyContactAddress
+              contact.emergencyContactAddress || ""
             );
             // Append files only if it's not a URL and not null/empty
             if (contact.files && !String(contact.files).startsWith("http")) {
-              formDatas.append(`files[${index}]`, contact.files);
+              formDatas.append(`files[${index}]`, contact.files || "");
             }
             if (contact.id) {
               formDatas.append(`emergencyAuthorizedContactIds[${index}]`, contact.id);

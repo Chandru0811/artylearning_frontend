@@ -34,10 +34,12 @@ const AddcourseDetail = forwardRef(
     const [selectedRow, setSelectedRow] = useState(formData.id);
     const [selectedRowData, setSelectedRowData] = useState({});
     const [studentCourseDetailsId, setStudentCourseDetailsId] = useState({});
-    // console.log("FormData CenterID:", formData);
+    console.log("package data", packageData);
     console.log("Selected Row Data:", selectedRowData);
     console.log("Selected Row ID:", selectedRow);
-
+    const [selectedCourseId, setSelectedCourseId] = useState(null);
+    console.log("Selected Course ID:", selectedCourseId);
+    
     const handleDayChange = (e) => {
       formik.setFieldValue("days", e.target.value); // Update Formik value
       setAvailableDays([]); // Clear available days
@@ -287,22 +289,41 @@ const AddcourseDetail = forwardRef(
         toast.error(error);
       }
     };
-
-    const fetchPackageData = async () => {
+    
+    const fetchPackageData = async (courseId, centerId) => {
+      if (!centerId || !courseId) {
+        console.log("Both Center ID and Course ID are required to fetch packages");
+        return;
+      }
+    
       try {
-        const packageData = await fetchAllPackageListByCenter(
-          formData.centerId
+        const response = await api.get(
+          `/courseFeeAvailablePackages?centerId=${centerId}&courseId=${courseId}`
         );
-        setPackageData(packageData);
+        setPackageData(response.data);
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message || "Failed to fetch packages");
       }
     };
-
+    
+    const handleCourseChange = (e) => {
+      const courseId = e.target.value; // Capture the selected courseId
+      console.log("Selected Course ID:", courseId);
+      setSelectedCourseId(courseId);
+      
+      // Fetch package data with selected course ID and center ID from formData
+      fetchPackageData(courseId, formData.centerId);
+    };
+    
     useEffect(() => {
       fetchCourseData();
-      fetchPackageData();
-    }, []);
+    
+      // Ensure fetchPackageData is only triggered after course selection
+      if (selectedCourseId) {
+        fetchPackageData(selectedCourseId, formData.centerId);
+      }
+    }, [selectedCourseId]); // Rerun when selectedCourseId changes
+    
 
     const getData = async () => {
       setLoading(true);
@@ -531,6 +552,10 @@ const AddcourseDetail = forwardRef(
                       }`}
                       id="courseId"
                       name="courseId"
+                      onChange={(e) => {
+                        formik.handleChange(e); // Formik change handler
+                        handleCourseChange(e); // Pass selected courseId to API
+                      }}
                     >
                       <option value="" disabled selected>
                         Select Course
@@ -645,22 +670,22 @@ const AddcourseDetail = forwardRef(
                 <div className="row mt-2">
                   <div className="col-md-4">
                     <select
+                      id="packageId"
+                      name="packageId"
                       {...formik.getFieldProps("packageId")}
                       class={`form-select  ${
                         formik.touched.packageId && formik.errors.packageId
                           ? "is-invalid"
                           : ""
                       }`}
-                      id="packageId"
-                      name="packageId"
                     >
                       <option value="" disabled selected>
-                        Select Package
-                      </option>
+                          Select Package
+                        </option>
                       {packageData &&
-                        packageData.map((packages) => (
-                          <option key={packages.id} value={packages.id}>
-                            {packages.packageNames}
+                        packageData.map((pkg) => (
+                          <option key={pkg.packageId} value={pkg.packageId}>
+                            {pkg.packageName}
                           </option>
                         ))}
                     </select>

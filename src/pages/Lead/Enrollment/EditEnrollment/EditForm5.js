@@ -118,6 +118,7 @@ const EditForm5 = forwardRef(
         ...response.data,
         enquiryDate: enquiryDate || response.data.createdAt.substring(0, 10),
         preferredDay: response.data.preferredDay || [],
+        studentId: response.data.referByStudentId || "",
         preferredTimeSlot: response.data.preferredTimeSlot || [],
       });
     };

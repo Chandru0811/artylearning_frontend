@@ -608,35 +608,15 @@ const EditStudentDetails = forwardRef(
                         {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
-                      {/* <input
+                      <input
                         className="form-control "
                         type="text"
                         name="referByStudent"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.referByStudent}
-                      /> */}
-                      <select
-                        name="referByStudent"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.referByStudent}
-                        className="form-select"
-                      >
-                        <option selected></option>
-                        {studentData &&
-                          studentData.map((student) => (
-                            <option key={student.id} value={student.id}>
-                              {student.studentNames}
-                            </option>
-                          ))}
-                      </select>
-                      {formik.touched.referByStudent &&
-                        formik.errors.referByStudent && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.referByStudent}</small>
-                          </div>
-                        )}
+                        readOnly
+                      />
                     </div>
                   </div>
                 </div>

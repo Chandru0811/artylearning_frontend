@@ -371,7 +371,7 @@ function Attendances() {
                 attendanceData.map((attendanceItem, attendanceIndex) => (
                   <div
                     key={attendanceIndex}
-                    className="accordion p-0"
+                    className="accordion py-2"
                     id="accordionExample mb-3"
                   >
                     <div className="accordion-item">

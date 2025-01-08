@@ -15,6 +15,7 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 const validationSchema = Yup.object().shape({
   teacherName: Yup.string().required("*Teacher Name is required"),
   role: Yup.string().required("*Role is required"),
+  countryId: Yup.string().required("*Country is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
@@ -82,7 +83,7 @@ const PersonalAdd = forwardRef(
           formData.append("idNo", values.idNo);
           formData.append("age", 25);
           formData.append("citizenship", values.citizenship);
-          formData.append("shortIntroduction", values.shortIntroduction);
+          formData.append("shortIntroduction", values.shortIntroduction || "");
           formData.append("gender", values.gender);
           formData.append("countryId", values.countryId);
           formData.append("nationality", nationalityName.nationality);
@@ -281,7 +282,7 @@ const PersonalAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.countryId}
                 >
-                  <option selected></option>
+                  <option value="" selected></option>
                   {nationalityData &&
                     nationalityData.map((countryId) => (
                       <option key={countryId.id} value={countryId.id}>

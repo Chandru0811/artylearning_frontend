@@ -249,7 +249,7 @@ function AddMore({
                           name={`items[${index}].nextClassAdvice`}
                           value="Competent"
                           checked={
-                            formik.values.items[index].nextClassAdvice ===
+                            formik.values.items[index]?.nextClassAdvice ===
                             "Competent"
                           }
                           onChange={formik.handleChange}
@@ -275,7 +275,7 @@ function AddMore({
                           name={`items[${index}].nextClassAdvice`}
                           value="Require Revision"
                           checked={
-                            formik.values.items[index].nextClassAdvice ===
+                            formik.values.items[index]?.nextClassAdvice ===
                             "Require Revision"
                           }
                           onChange={formik.handleChange}
@@ -310,7 +310,7 @@ function AddMore({
                           name={`items[${index}].pace`}
                           value="Fast (F)"
                           checked={
-                            formik.values.items[index].pace === "Fast (F)"
+                            formik.values.items[index]?.pace === "Fast (F)"
                           }
                           onChange={formik.handleChange}
                           className={`form-check-input ${
@@ -335,7 +335,7 @@ function AddMore({
                           name={`items[${index}].pace`}
                           value="Normal (N)"
                           checked={
-                            formik.values.items[index].pace === "Normal (N)"
+                            formik.values.items[index]?.pace === "Normal (N)"
                           }
                           onChange={formik.handleChange}
                           className={`form-check-input ${

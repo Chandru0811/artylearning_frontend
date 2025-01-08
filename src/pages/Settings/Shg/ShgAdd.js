@@ -28,11 +28,18 @@ function ShgAdd({ onSuccess }) {
       .min(2, "*SHG Type must be at least 2 characters") // Optional: Minimum character length
       .max(100, "*SHG Type must not exceed 100 characters"), // Optional: Maximum character length
   
-    shgAmount: Yup.number()
+      shgAmount: Yup.number()
       .typeError("*SHG Amount must be a number") // Ensures value is a valid number
       .required("*SHG Amount is required") // Required validation
       .positive("*SHG Amount must be a positive number") // Only positive values allowed
-      .integer("*SHG Amount must be an integer"), // Only integer values allowed (no decimals)
+      .test(
+        "is-decimal",
+        "*SHG Amount must have at most 2 decimal places", // Custom error message
+        (value) => {
+          // Test allows numbers with up to 2 decimal places
+          return value ? /^\d+(\.\d{1,2})?$/.test(value) : true;
+        }
+      ), 
   });
   
 

@@ -87,40 +87,6 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
     ]);
   };
 
-  // const deleteFields = async (field) => {
-  //   if (field.id) {
-  //     // Existing field: make API call
-  //     try {
-  //       const response = await api.delete(
-  //         `/deleteBatchTime/${id}?batchTime=${field.batchTimes}`
-  //       );
-  //       if (response.status === 200) {
-  //         toast.success("Batch time deleted successfully.");
-  //       } else {
-  //         toast.error("Failed to delete batch time.");
-  //       }
-  //     } catch (error) {
-  //       if (error?.response?.status === 409) {
-  //         toast.warning(error?.response?.data?.message);
-  //       } else if (error?.response?.status === 404) {
-  //         toast.warning(error?.response?.data?.message);
-  //       } else {
-  //         toast.error(error?.response?.data?.message);
-  //       }
-  //     } 
-  //   }
-
-  //   // Remove field locally
-  //   const updatedFields = fields.filter((f) => f !== field);
-  //   setFields(updatedFields);
-
-  //   // Update formik values
-  //   const updatedBatchTimes = formik.values.batchTimes.filter(
-  //     (time) => time !== field.batchTimes
-  //   );
-  //   formik.setFieldValue("batchTimes", updatedBatchTimes);
-  // };
-
   const deleteFields = async (field) => {
     if (field.id) {
       // Existing field: make API call
@@ -129,11 +95,9 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
           `/deleteBatchTime/${id}?batchTime=${field.batchTimes}`
         );
         if (response.status === 200) {
-          toast.success("Batch time deleted successfully.");
-          // Remove the field locally only if the API deletion is successful
           const updatedFields = fields.filter((f) => f !== field);
           setFields(updatedFields);
-  
+          // toast.success(response.data.message);
           // Update formik values
           const updatedBatchTimes = formik.values.batchTimes.filter(
             (time) => time !== field.batchTimes

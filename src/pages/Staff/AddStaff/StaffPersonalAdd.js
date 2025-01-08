@@ -78,7 +78,7 @@ const StaffPersonalAdd = forwardRef(
           formData.append("idTypeId", values.idTypeId);
           formData.append("idNo", values.idNo);
           formData.append("age", 25);
-          formData.append("shortIntroduction", values.shortIntroduction);
+          formData.append("shortIntroduction", values.shortIntroduction || "");
           formData.append("gender", values.gender);
           formData.append("file", values.file);
           formData.append("email", values.email);
@@ -282,7 +282,7 @@ const StaffPersonalAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.countryId}
                 >
-                  <option selected></option>
+                  <option value=""></option>
                   {nationalityData &&
                     nationalityData.map((nationalityId) => (
                       <option key={nationalityId.id} value={nationalityId.id}>
@@ -297,6 +297,7 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
+
             <div class="col-md-6 col-12 mb-3">
               <div class="form-group col-sm">
                 <label>Nationality</label>

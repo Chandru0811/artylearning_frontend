@@ -120,7 +120,7 @@ const ReferalFees = () => {
           ? filters.centerId || centerLocalId
           : "";
 
-      const response = await api.get(`/getReferralFeeByCenterId/${centerId}`);
+      const response = await api.get(`/getReferralFeeByCenterId?centerId=${centerId}`);
       setData(response.data);
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);

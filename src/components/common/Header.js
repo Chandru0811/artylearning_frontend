@@ -82,6 +82,7 @@ function Header({ onLogout,centerChange }) {
                   paddingRight: "5px",
                 }}
               >
+                <option value="" selected disabled>Select a Centre</option>
                 {centerData &&
                   centerData.map((studentRelationCenter) => (
                     <option

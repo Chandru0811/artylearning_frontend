@@ -129,7 +129,7 @@ function StudentNewView() {
       unit: "px",
       format: "a3",
     });
-  
+
     const convertImageToDataURL = async (url) => {
       try {
         const response = await fetch(url, { mode: "cors" });
@@ -148,10 +148,10 @@ function StudentNewView() {
         return null; // Return null if the image can't be converted
       }
     };
-  
+
     const addTableToPDF = async (tableRef, pageNumber) => {
       const table = tableRef.current;
-  
+
       try {
         table.style.visibility = "visible";
         table.style.display = "block";
@@ -159,23 +159,23 @@ function StudentNewView() {
         for (const img of images) {
           if (img.src && !img.src.startsWith("data:")) {
             const dataURL = await convertImageToDataURL(img.src);
-            }
+          }
         }
-  
+
         const canvas = await html2canvas(table, {
           scale: 2, // Higher scale for better resolution
           useCORS: true, // Allow cross-origin images
           allowTaint: false, // Prevent tainted canvas
         });
-  
+
         const imgData = canvas.toDataURL();
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-  
+
         if (pageNumber > 1) {
           pdf.addPage();
         }
-  
+
         pdf.addImage(imgData, "PNG", 10, 10, pdfWidth - 20, pdfHeight);
         table.style.visibility = "hidden";
         table.style.display = "none";
@@ -183,15 +183,12 @@ function StudentNewView() {
         console.error("Error generating PDF:", error);
       }
     };
-  
+
     await addTableToPDF(table1Ref, 1);
     await addTableToPDF(table2Ref, 2);
 
     pdf.save(`${data.studentName}-details.pdf`);
   };
-  
-  
-  
 
   const handleClick = async () => {
     setLoadIndicator(true);
@@ -345,9 +342,13 @@ function StudentNewView() {
                   <span>{data.nationality || "--"}</span>
                 </li>
                 <li className="stdList">
-                  <b>School</b>
-                  <span>
-                    {data.schoolType || "--"} / {data.schoolName || "--"}
+                  <b>School Name</b>
+                  <span>{data.schoolName || "--"}
+                  </span>
+                </li>
+                <li className="stdList">
+                  <b>School Type</b>
+                  <span>{data.schoolType || "--"}
                   </span>
                 </li>
                 <li className="stdList">
@@ -363,10 +364,10 @@ function StudentNewView() {
                   <b>Date Enrolled</b>
                   <span>-</span>
                 </li>
-                <li className="stdList">
+                {/* <li className="stdList">
                   <b>Status</b>
                   <span>-</span>
-                </li>
+                </li> */}
                 <li className="stdList">
                   <b>Refer By Parent</b>
                   <span>{data.referByParent || "--"}</span>
@@ -375,51 +376,85 @@ function StudentNewView() {
                   <b>Refer By Student</b>
                   <span>{data.referByStudent || "--"}</span>
                 </li>
+
                 <li className="stdList">
                   <b>Signature</b>
                   {data.studentTermsAndConditions &&
                     data.studentTermsAndConditions.length > 0 &&
-                    data.studentTermsAndConditions.map((parent) => (
-                      <span>
+                    data.studentTermsAndConditions.map((parent, index) => (
+                      <span key={`signature-${index}`}>
                         <div style={{ textAlign: "left" }}>
                           <div style={{ marginBottom: "4px" }}>
-                            <img
-                              src={parent.parentSignature}
-                              alt="Signature"
-                              className="img-fluid"
-                              style={{
-                                width: "100px",
-                                height: "50px",
-                                border: "1px solid #ccc",
-                              }}
-                            />
+                            {parent.parentSignature &&
+                            (parent.parentSignature.startsWith("http://") ||
+                              parent.parentSignature.startsWith("https://")) ? (
+                              <img
+                                src={parent.parentSignature}
+                                alt="Signature"
+                                className="img-fluid"
+                                style={{
+                                  width: "100px",
+                                  height: "50px",
+                                  border: "1px solid #ccc",
+                                }}
+                                onError={(e) => {
+                                  e.target.style.display = "none"; // Hide broken images
+                                  e.target.insertAdjacentHTML(
+                                    "afterend",
+                                    "<span>No Signature</span>"
+                                  ); // Add fallback text
+                                }}
+                              />
+                            ) : (
+                              <span>No Signature</span>
+                            )}
                           </div>
                         </div>
-                        {parent.termsAndConditionSignatureDate}
+                        <small>
+                          {parent.termsAndConditionSignatureDate ||
+                            "No Date Provided"}
+                        </small>
                       </span>
                     ))}
                 </li>
+
                 <li className="stdList">
                   <b>T&C Signature</b>
                   {data.studentTermsAndConditions &&
                     data.studentTermsAndConditions.length > 0 &&
-                    data.studentTermsAndConditions.map((parent) => (
-                      <span>
+                    data.studentTermsAndConditions.map((parent, index) => (
+                      <span key={`tc-signature-${index}`}>
                         <div style={{ textAlign: "left" }}>
                           <div style={{ marginBottom: "4px" }}>
-                            <img
-                              src={parent.parentSignature}
-                              alt="Signature"
-                              className="img-fluid"
-                              style={{
-                                width: "100px",
-                                height: "50px",
-                                border: "1px solid #ccc",
-                              }}
-                            />
+                            {parent.parentSignature &&
+                            (parent.parentSignature.startsWith("http://") ||
+                              parent.parentSignature.startsWith("https://")) ? (
+                              <img
+                                src={parent.parentSignature}
+                                alt="T&C Signature"
+                                className="img-fluid"
+                                style={{
+                                  width: "100px",
+                                  height: "50px",
+                                  border: "1px solid #ccc",
+                                }}
+                                onError={(e) => {
+                                  e.target.style.display = "none"; // Hide broken images
+                                  e.target.insertAdjacentHTML(
+                                    "afterend",
+                                    "<span>No Signature</span>"
+                                  ); // Add fallback text
+                                }}
+                              />
+                            ) : (
+                              <span>No Signature</span>
+                            )}
                           </div>
                         </div>
-                        {parent.termsAndConditionSignatureDate}
+                        <small>
+                          {parent.termsAndConditionSignatureDate ||
+                            "No Date Provided"}
+                        </small>
                       </span>
                     ))}
                 </li>
@@ -427,117 +462,12 @@ function StudentNewView() {
             </div>
           </div>
           <div className="col-md-3 col-12 mb-3">
-            {/* <div className="card mb-3">
-              <div className="withBorder">
-                <p className="fw-medium ms-3 my-2">
-                  <FaBook size={20} />
-                  &nbsp;&nbsp;Course
-                </p>
-              </div>
-              <div style={{ padding: "10px" }}>
-                {data.studentCourseDetailModels &&
-                  data.studentCourseDetailModels.map((std) => (
-                    <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                      <li
-                        className="stdList"
-                        style={{ borderTop: "1px solid #ddd" }}
-                      >
-                        <b>Current Course</b>
-                        <span>{std.course || "--"}</span>
-                      </li>
-                      <li className="stdList">
-                        <b>Teacher</b>
-                        <span>{std.teacher || "--"}</span>
-                      </li>
-                      <li className="stdList">
-                        <b>Start Date</b>
-                        <span>{std.startDate || "--"}</span>
-                      </li>
-                      <li className="stdList">
-                        <b>Last Lesson Attendance</b>
-                        <span>-</span>
-                      </li>
-                      <li className="stdList">
-                        <b>Last Payment Made</b>
-                        <span>-</span>
-                      </li>
-                      <li className="stdList">
-                        <b>Last Paid Lesson Date</b>
-                        <span>-</span>
-                      </li>
-                      <li className="stdList">
-                        <b>Pre-Assessment Result</b>
-                        <span>{data.preAssessmentResult || "--"}</span>
-                      </li>
-                    </ul>
-                  ))}
-              </div>
-            </div> */}
-            {/* <div className="card mb-3">
-              <div className="withBorder">
-                <p className="fw-medium ms-3 my-2">
-                  Account Activate/Deactivate
-                </p>
-              </div>
-              <div style={{ padding: "10px" }}>
-                <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                  <li
-                    className="stdList1"
-                    style={{ borderTop: "1px solid #ddd" }}
-                  >
-                    <div class="dropdown">
-                      <button
-                        class="btn btn-primary btn-sm dropdown-toggle"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        Activate
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li>
-                          <a class="dropdown-item" href="#">
-                            Deactivate
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li className="stdList">
-                    <b>Hikvision Status</b>
-                    <span>-</span>
-                  </li>
-                </ul>
-              </div>
-            </div> */}
             <div className="card mb-3">
               <div className="withBorder">
                 <p className="fw-medium ms-3 my-2">Allow Photos</p>
               </div>
               <div style={{ padding: "10px" }}>
                 <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                  {/* <li
-                    className="stdList1"
-                    style={{ borderTop: "1px solid #ddd" }}
-                  >
-                    <div class="dropdown">
-                      <button
-                        class="btn btn-primary btn-sm dropdown-toggle"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        Activate
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li>
-                          <a class="dropdown-item" href="#">
-                            Deactivate
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </li> */}
                   <li className="stdList">
                     <b>Allow Magazine</b>
                     <span>{data.allowMagazine ? "Yes" : "No"}</span>
@@ -580,16 +510,6 @@ function StudentNewView() {
                         data.studentEmergencyContacts.length > 0 &&
                         data.studentEmergencyContacts[0].emergencyContactNo
                           ? data.studentEmergencyContacts[0].emergencyContactNo
-                          : "--"}
-                      </span>
-                    </p>
-                    <p className="m-0">
-                      <b>Relation</b>
-                      <span>
-                        {data.studentEmergencyContacts &&
-                        data.studentEmergencyContacts.length > 0 &&
-                        data.studentEmergencyContacts[0].emergencyRelation
-                          ? data.studentEmergencyContacts[0].emergencyRelation
                           : "--"}
                       </span>
                     </p>
@@ -723,47 +643,47 @@ function StudentNewView() {
               </div>
             </div>
             {/* <div className="card mb-3">
-              <div className="withBorder">
-                <p className="fw-medium ms-3 my-2">
-                  <BiSolidMessageRounded size={20} />
-                  &nbsp;&nbsp;Remark
-                </p>
-                <p className="text-end me-2">
-                  <AddTaskNoteModal />
-                </p>
-              </div>
-              <div style={{ padding: "10px" }}>
-                <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                  <li
-                    className="stdList"
-                    style={{ borderTop: "1px solid #ddd" }}
-                  >
-                    {data.remark || "--"}
-                  </li>
-                </ul>
-              </div>
-            </div> */}
+                <div className="withBorder">
+                  <p className="fw-medium ms-3 my-2">
+                    <BiSolidMessageRounded size={20} />
+                    &nbsp;&nbsp;Remark
+                  </p>
+                  <p className="text-end me-2">
+                    <AddTaskNoteModal />
+                  </p>
+                </div>
+                <div style={{ padding: "10px" }}>
+                  <ul style={{ listStyle: "none", paddingLeft: "0" }}>
+                    <li
+                      className="stdList"
+                      style={{ borderTop: "1px solid #ddd" }}
+                    >
+                      {data.remark || "--"}
+                    </li>
+                  </ul>
+                </div>
+              </div> */}
             {/* <div className="card" style={{ padding: "10px" }}>
-              <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                  <b>Upload Assessment Form</b>
-                  <input
-                    type="file"
-                    className="form-control form-control-sm mt-1"
-                  />
-                </li>
-                <li className="stdList">
-                  <b>Upload Enrollment Form</b>
-                  <input
-                    type="file"
-                    className="form-control form-control-sm mt-1"
-                  />
-                </li>
-                <button className="btn btn-danger btn-sm mt-2" type="button">
-                  Save
-                </button>
-              </ul>
-            </div> */}
+                <ul style={{ listStyle: "none", paddingLeft: "0" }}>
+                  <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                    <b>Upload Assessment Form</b>
+                    <input
+                      type="file"
+                      className="form-control form-control-sm mt-1"
+                    />
+                  </li>
+                  <li className="stdList">
+                    <b>Upload Enrollment Form</b>
+                    <input
+                      type="file"
+                      className="form-control form-control-sm mt-1"
+                    />
+                  </li>
+                  <button className="btn btn-danger btn-sm mt-2" type="button">
+                    Save
+                  </button>
+                </ul>
+              </div> */}
             <div className="card" style={{ padding: "10px" }}>
               <p className="fw-medium ms-3 my-2">Other Details</p>
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>
@@ -796,20 +716,20 @@ function StudentNewView() {
         <div className="card" style={{ borderRadius: "3px" }}>
           <div className="d-flex gap-2" style={{ padding: "10px" }}>
             {/* <button
-              className="btn btn-success btn-sm"
-              type="button"
-              style={{ fontSize: "12px" }}
-            >
-              Change Class
-            </button> */}
+                className="btn btn-success btn-sm"
+                type="button"
+                style={{ fontSize: "12px" }}
+              >
+                Change Class
+              </button> */}
             {centerId && <TransferOutModal id={data.id} centerId={centerId} />}
             {/* <button
-              className="btn btn-success btn-sm"
-              type="button"
-              style={{ fontSize: "12px" }}
-            >
-              Withdraw
-            </button> */}
+                className="btn btn-success btn-sm"
+                type="button"
+                style={{ fontSize: "12px" }}
+              >
+                Withdraw
+              </button> */}
             {storedScreens?.endClassCreate && (
               <Link
                 to={`/student/view/endClass/${data.id}?centerId=${centerId}`}
@@ -856,16 +776,16 @@ function StudentNewView() {
             </li>
             <li className="nav-item">
               {/* <button
-                className={`nav-link ${activeTab === "tab2" ? "active" : ""}`}
-                onClick={() => handleMainTabClick("tab2")}
-                style={{
-                  borderTop:
-                    activeTab === "tab2" ? "3px solid #fa994af5" : "none",
-                  borderRadius: "0px",
-                }}
-              >
-                Account Summary
-              </button> */}
+                  className={`nav-link ${activeTab === "tab2" ? "active" : ""}`}
+                  onClick={() => handleMainTabClick("tab2")}
+                  style={{
+                    borderTop:
+                      activeTab === "tab2" ? "3px solid #fa994af5" : "none",
+                    borderRadius: "0px",
+                  }}
+                >
+                  Account Summary
+                </button> */}
             </li>
             <li className="nav-item">
               <button
@@ -1216,15 +1136,15 @@ function StudentNewView() {
             </div>
           </div>
           {/* <div className="mb-2 d-flex col-md-4">
-              <div className="fw-medium">Relation:</div>
-              <div className="text-muted ms-2">
-                {data.studentEmergencyContacts &&
-                data.studentEmergencyContacts.length > 0 &&
-                data.studentEmergencyContacts[0].emergencyRelation
-                  ? data.studentEmergencyContacts[0].emergencyRelation
-                  : "--"}
-              </div>
-            </div> */}
+                <div className="fw-medium">Relation:</div>
+                <div className="text-muted ms-2">
+                  {data.studentEmergencyContacts &&
+                  data.studentEmergencyContacts.length > 0 &&
+                  data.studentEmergencyContacts[0].emergencyRelation
+                    ? data.studentEmergencyContacts[0].emergencyRelation
+                    : "--"}
+                </div>
+              </div> */}
         </div>
         <h5 className="mt-3">Authorized Person to take Child From Home</h5>
         <div>
@@ -1248,13 +1168,13 @@ function StudentNewView() {
                     <tr key={index}>
                       <td>{index + 1}</td>
                       {/* <td>
-                        <img
-                          src={emergency.personProfile || ""}
-                          alt=""
-                          style={{ width: "50px", height: "auto" }}
-                          className="rounded"
-                        />
-                      </td> */}
+                          <img
+                            src={emergency.personProfile || ""}
+                            alt=""
+                            style={{ width: "50px", height: "auto" }}
+                            className="rounded"
+                          />
+                        </td> */}
                       <td>{emergency.name || "--"}</td>
                       <td>{emergency.contactNo || "--"}</td>
                       <td>{emergency.authorizedRelation || "--"}</td>
@@ -1294,17 +1214,17 @@ function StudentNewView() {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         {/* <td>
-                          {parent.profileImage ? (
-                            <img
-                              src={parent.profileImage}
-                              className="img-fluid rounded-5"
-                              alt=""
-                              style={{ width: "10px" }}
-                            />
-                          ) : (
-                            <></>
-                          )}
-                        </td> */}
+                            {parent.profileImage ? (
+                              <img
+                                src={parent.profileImage}
+                                className="img-fluid rounded-5"
+                                alt=""
+                                style={{ width: "10px" }}
+                              />
+                            ) : (
+                              <></>
+                            )}
+                          </td> */}
                         <td>{parent.parentName || "--"}</td>
                         <td>{parent.occupation || "--"}</td>
                         <td>
@@ -1373,12 +1293,12 @@ function StudentNewView() {
                         </td>
                         <td>
                           {/* {(studentData &&
-                              studentData.find(
-                                (student) =>
-                                  student.id ===
-                                    std.studentRelationStudentName &&
-                                  student.centerId === centerId
-                              )?.studentNames) || */}
+                                studentData.find(
+                                  (student) =>
+                                    student.id ===
+                                      std.studentRelationStudentName &&
+                                    student.centerId === centerId
+                                )?.studentNames) || */}
                           {/* "--"} */}
                           {std.studentRelationStudentName || "--"}
                         </td>
@@ -1566,18 +1486,16 @@ function StudentNewView() {
               {data.studentTermsAndConditions &&
                 data.studentTermsAndConditions.length > 0 &&
                 data.studentTermsAndConditions.map((parent, index) => {
-                  // Log the Parent Signature URL
-                  console.log("Parent Signature URL:", parent.parentSignature);
-
                   return (
                     <div key={index} className="col-12 p-2">
                       <h6 className="mt-2 mb-4">Parent Signature</h6>
                       <img
-                        src={parent.parentSignature}
+                        src={parent.parentSignature || "No Profile"}
                         className="img-fluid rounded"
                         style={{ width: "50%" }}
                         alt="Parent Signature"
                       />
+                      dfdfd
                     </div>
                   );
                 })}

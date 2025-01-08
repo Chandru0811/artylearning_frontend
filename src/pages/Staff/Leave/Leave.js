@@ -64,7 +64,7 @@ const Leave = () => {
             >
               <MoreVertIcon />
             </IconButton>
-          ) : null, // Hide the button for APPROVED or REJECTED
+          ) : <div className="m-3" style={{width:"5px",height:"5px"}}></div>, // Hide the button for APPROVED or REJECTED
       },
       {
         accessorKey: "leaveStatus",

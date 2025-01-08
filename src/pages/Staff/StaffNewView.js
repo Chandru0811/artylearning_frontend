@@ -437,11 +437,23 @@ function StaffNewView() {
                   }}
                 >
                   <b>Resume/CV</b>
+                  <br />
                   {data.userRequireInformationModels &&
                   data.userRequireInformationModels.length > 0 &&
                   data.userRequireInformationModels[0].resume ? (
                     <>
-                      <span style={{ marginRight: "auto", marginLeft: "10px" }}>
+                      <span
+                        style={{
+                          flexGrow: 1,
+                          marginLeft: "10px",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        title={data.userRequireInformationModels[0].resume
+                          .split("/")
+                          .pop()}
+                      >
                         {data.userRequireInformationModels[0].resume
                           .split("/")
                           .pop()}
@@ -449,7 +461,12 @@ function StaffNewView() {
                       <a
                         href={data.userRequireInformationModels[0].resume}
                         download
-                        style={{ textDecoration: "none" }}
+                        style={{
+                          textDecoration: "none",
+                          display: "flex",
+                          alignItems: "center",
+                          marginLeft: "auto",
+                        }}
                       >
                         <i
                           className="fas fa-download"
@@ -466,6 +483,7 @@ function StaffNewView() {
                 <li
                   className="stdList"
                   style={{
+                    borderTop: "1px solid #ddd",
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
@@ -476,7 +494,18 @@ function StaffNewView() {
                   data.userRequireInformationModels.length > 0 &&
                   data.userRequireInformationModels[0].educationCertificate ? (
                     <>
-                      <span style={{ marginRight: "auto", marginLeft: "10px" }}>
+                      <span
+                        style={{
+                          flexGrow: 1,
+                          marginLeft: "10px",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        title={data.userRequireInformationModels[0].educationCertificate
+                          .split("/")
+                          .pop()}
+                      >
                         {data.userRequireInformationModels[0].educationCertificate
                           .split("/")
                           .pop()}
@@ -487,7 +516,12 @@ function StaffNewView() {
                             .educationCertificate
                         }
                         download
-                        style={{ textDecoration: "none" }}
+                        style={{
+                          textDecoration: "none",
+                          display: "flex",
+                          alignItems: "center",
+                          marginLeft: "auto",
+                        }}
                       >
                         <i
                           className="fas fa-download"
