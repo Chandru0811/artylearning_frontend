@@ -76,7 +76,7 @@ const Attendance = () => {
         }
         setCenterData(centers);
       } else {
-        toast.error("No centers found!");
+        console.error("No centers found!");
       }
     } catch (error) {
       toast.error(error.message || "Error fetching centers.");
