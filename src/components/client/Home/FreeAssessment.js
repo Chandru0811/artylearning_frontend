@@ -43,11 +43,11 @@ function FreeAssessment() {
               </span>
 
               <div>
-                <Link to="/course/english">
+                <Link to={`/courses/${1}`}>
                   <button className="btn btn-danger btn-lg me-4">ENGLISH</button>
                 </Link>
                 &nbsp;
-                <Link to="/course/chinesh">
+                <Link to={`/courses/${2}`}>
                   <button className="btn btn-outline-danger btn-lg">
                     CHINESE
                   </button>

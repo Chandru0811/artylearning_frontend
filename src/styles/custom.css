@@ -1176,10 +1176,18 @@ table.dataTable.display > tbody > tr > th {
   padding: 0px;
 }
 
-.cms-header {
-  background: #287f71 !important;
-  color: #fff !important;
+
+/* Time table */
+.table-striped > tbody > tr:nth-of-type(even) {
+  background-color: #ffffff; /* White background for even rows */
+  width: 30px;
+  height: 70px;
 }
-.orange-background {
-  background-color: #eb862a !important;
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+  justify-content: center;
+  align-items: center;
+  --bs-table-color-type: var(--bs-table-striped-color);
+  --bs-table-bg-type: #e9f2ff;
+  width: 30px;
+  height: 70px;
 }

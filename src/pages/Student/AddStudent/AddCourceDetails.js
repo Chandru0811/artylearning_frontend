@@ -290,22 +290,31 @@ const AddcourseDetail = forwardRef(
       }
     };
     
-    const fetchPackageData = async (courseId, centerId) => {
-      if (!centerId || !courseId) {
-        console.log("Both Center ID and Course ID are required to fetch packages");
-        return;
-      }
+    // const fetchPackageData = async (courseId, centerId) => {
+    //   if (!centerId || !courseId) {
+    //     console.log("Both Center ID and Course ID are required to fetch packages");
+    //     return;
+    //   }
     
+    //   try {
+    //     const response = await api.get(
+    //       `/courseFeeAvailablePackages?centerId=${centerId}&courseId=${courseId}`
+    //     );
+    //     setPackageData(response.data);
+    //   } catch (error) {
+    //     toast.error(error.message || "Failed to fetch packages");
+    //   }
+    // };
+    
+    const fetchPackageData = async () => {
       try {
-        const response = await api.get(
-          `/courseFeeAvailablePackages?centerId=${centerId}&courseId=${courseId}`
-        );
-        setPackageData(response.data);
+        const packageData = await fetchAllPackageListByCenter(formData.centerId);
+        setPackageData(packageData);
       } catch (error) {
-        toast.error(error.message || "Failed to fetch packages");
+        console.error(error);
       }
     };
-    
+
     const handleCourseChange = (e) => {
       const courseId = e.target.value; // Capture the selected courseId
       console.log("Selected Course ID:", courseId);
@@ -317,12 +326,11 @@ const AddcourseDetail = forwardRef(
     
     useEffect(() => {
       fetchCourseData();
-    
-      // Ensure fetchPackageData is only triggered after course selection
-      if (selectedCourseId) {
-        fetchPackageData(selectedCourseId, formData.centerId);
-      }
-    }, [selectedCourseId]); // Rerun when selectedCourseId changes
+      // if (selectedCourseId) {
+      //   fetchPackageData(selectedCourseId, formData.centerId);
+      // }
+    fetchPackageData();
+    }, []); // Rerun when selectedCourseId changes
     
 
     const getData = async () => {
@@ -437,6 +445,7 @@ const AddcourseDetail = forwardRef(
       }
       setSelectedRow(data.id);
       setSelectedRowData(data);
+      // setSelectedCourseId(data.courseId);
       setFormData((prev) => ({ ...prev, coursesData: data }));
 
       if (data.startDate && data.endDate) {
@@ -552,10 +561,10 @@ const AddcourseDetail = forwardRef(
                       }`}
                       id="courseId"
                       name="courseId"
-                      onChange={(e) => {
-                        formik.handleChange(e); // Formik change handler
-                        handleCourseChange(e); // Pass selected courseId to API
-                      }}
+                      // onChange={(e) => {
+                      //   formik.handleChange(e); // Formik change handler
+                      //   handleCourseChange(e); // Pass selected courseId to API
+                      // }}
                     >
                       <option value="" disabled selected>
                         Select Course
@@ -684,8 +693,9 @@ const AddcourseDetail = forwardRef(
                         </option>
                       {packageData &&
                         packageData.map((pkg) => (
-                          <option key={pkg.packageId} value={pkg.packageId}>
-                            {pkg.packageName}
+                          <option key={pkg.id} value={pkg.id}>
+                            {/* {pkg.packageName} */}
+                        {pkg.packageNames}
                           </option>
                         ))}
                     </select>

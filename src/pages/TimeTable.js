@@ -1,354 +1,210 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from "../config/URL";
+import fetchAllCentersWithIds from "./List/CenterList";
+import { toast } from "react-toastify";
+import fetchAllCoursesWithIdsC from "./List/CourseListByCenter";
+import fetchAllTeacherListByCenter from "./List/TeacherListByCenter";
 
 function TimeTable() {
+  const [data, setData] = useState([]);
+  const [day, setDay] = useState(null);
+  const [centerData, setCenterData] = useState([]);
+  const [courseData, setCourseData] = useState([]);
+  const [teacherData, setTeacherData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  console.log("DATA ::", data);
+
+  const [filters, setFilters] = useState({
+    centerId: localStorage.getItem("selectedCenterId") || "",
+    courseId: "",
+    teacherId: "",
+    date: new Date().toISOString().split("T")[0], // Default to today's date
+  });
+
+  const fetchData = async () => {
+    try {
+      // Fetch center data
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
+
+      // Set default center ID if not available
+      if (!filters.centerId && centers.length > 0) {
+        setFilters((prev) => ({ ...prev, centerId: centers[0].id }));
+      }
+
+      // Fetch course and teacher data for default center
+      if (filters.centerId) {
+        fetchCourseAndTeacherData(filters.centerId);
+      }
+    } catch (error) {
+      toast.error("Error fetching center data");
+      console.error(error);
+    }
+  };
+
+  const fetchCourseAndTeacherData = async (centerId) => {
+    try {
+      const courses = await fetchAllCoursesWithIdsC(centerId);
+      const teachers = await fetchAllTeacherListByCenter(centerId);
+      setCourseData(courses);
+      setTeacherData(teachers);
+    } catch (error) {
+      toast.error("Error fetching course or teacher data");
+      console.error(error);
+    }
+  };
+
+  const fetchScheduleData = async () => {
+    try {
+      setLoading(true);
+
+      // Construct query params
+      const queryParams = new URLSearchParams(
+        Object.entries(filters).filter(([_, value]) => value)
+      );
+
+      const response = await api.get(`/getScheduleOverView?${queryParams}`);
+      setData(response.data.data.scheduleData);
+      setDay(response.data.data.day);
+    } catch (error) {
+      toast.error("Error fetching schedule data");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+
+    // If the center changes, fetch new course and teacher data
+    if (name === "centerId") {
+      fetchCourseAndTeacherData(value);
+    }
+  };
+
   const convertTo12HourFormat = (time) => {
     const [hours, minutes] = time.split(":");
-    const hoursInt = parseInt(hours, 10);
-    const amOrPm = hoursInt >= 12 ? "PM" : "AM";
-    const twelveHour = hoursInt % 12 || 12;
-    return `${twelveHour}:${minutes} ${amOrPm}`;
+    const period = hours >= 12 ? "PM" : "AM";
+    const hour12 = hours % 12 || 12;
+    return `${hour12}:${minutes} ${period}`;
   };
-  const data = [
-    {
-      className: "Physics Class",
-      teacherName: "Mr. Smith",
-      maxClassSizeofDay: 5,
-      batches: [
-        {
-          startTime: "09:00",
-          endTime: "10:00",
-          batchMaxSize: 6,
-          students: [
-            {
-              studentId: 1,
-              studentUniqueId: "S001",
-              studentName: "Alice",
-            },
-            {
-              studentId: 2,
-              studentUniqueId: "S002",
-              studentName: "Bob",
-            },
-            {
-              studentId: 3,
-              studentUniqueId: "S003",
-              studentName: "Charlie",
-            },
-            {
-              studentId: 4,
-              studentUniqueId: "S004",
-              studentName: "Diana",
-            },
-            {
-              studentId: 5,
-              studentUniqueId: "S005",
-              studentName: "Eve",
-            },
-          ],
-        },
-        {
-          startTime: "11:00",
-          endTime: "12:00",
-          batchMaxSize: 4,
-          students: [
-            {
-              studentId: 7,
-              studentUniqueId: "S007",
-              studentName: "Grace",
-            },
-            {
-              studentId: 8,
-              studentUniqueId: "S008",
-              studentName: "Hank",
-            },
-            {
-              studentId: 9,
-              studentUniqueId: "S009",
-              studentName: "Ivy",
-            },
-            {
-              studentId: 10,
-              studentUniqueId: "S010",
-              studentName: "Jack",
-            },
-          ],
-        },
-        {
-          startTime: "14:00",
-          endTime: "15:00",
-          batchMaxSize: 1,
-          students: [
-            {
-              studentId: 11,
-              studentUniqueId: "S011",
-              studentName: "Kevin",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      className: "Mathematics Class",
-      teacherName: "Ms. Johnson",
-      maxClassSizeofDay: 5,
-      batches: [
-        {
-          startTime: "10:00",
-          endTime: "11:00",
-          batchMaxSize: 4,
-          students: [
-            {
-              studentId: 16,
-              studentUniqueId: "S016",
-              studentName: "Paul",
-            },
-            {
-              studentId: 17,
-              studentUniqueId: "S017",
-              studentName: "Quinn",
-            },
-            {
-              studentId: 18,
-              studentUniqueId: "S018",
-              studentName: "Rachel",
-            },
-          ],
-        },
-        {
-          startTime: "12:30",
-          endTime: "13:30",
-          batchMaxSize: 5,
-          students: [
-            {
-              studentId: 22,
-              studentUniqueId: "S022",
-              studentName: "Victor",
-            },
-            {
-              studentId: 23,
-              studentUniqueId: "S023",
-              studentName: "Wendy",
-            },
-            {
-              studentId: 24,
-              studentUniqueId: "S024",
-              studentName: "Xavier",
-            },
-            {
-              studentId: 25,
-              studentUniqueId: "S025",
-              studentName: "Yara",
-            },
-            {
-              studentId: 26,
-              studentUniqueId: "S026",
-              studentName: "Zane",
-            },
-          ],
-        },
-        {
-          startTime: "15:00",
-          endTime: "16:00",
-          batchMaxSize: 3,
-          students: [
-            {
-              studentId: 27,
-              studentUniqueId: "S027",
-              studentName: "Aaron",
-            },
-            {
-              studentId: 28,
-              studentUniqueId: "S028",
-              studentName: "Betty",
-            },
-            {
-              studentId: 29,
-              studentUniqueId: "S029",
-              studentName: "Carl",
-            },
-          ],
-        },
-        {
-          startTime: "16:30",
-          endTime: "17:30",
-          batchMaxSize: 4,
-          students: [
-            {
-              studentId: 30,
-              studentUniqueId: "S030",
-              studentName: "Derek",
-            },
-            {
-              studentId: 31,
-              studentUniqueId: "S031",
-              studentName: "Ella",
-            },
-            {
-              studentId: 32,
-              studentUniqueId: "S032",
-              studentName: "Frankie",
-            },
-            {
-              studentId: 33,
-              studentUniqueId: "S033",
-              studentName: "Gina",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      className: "Chemistry Class",
-      teacherName: "Dr. Brown",
-      maxClassSizeofDay: 5,
-      batches: [
-        {
-          startTime: "08:00",
-          endTime: "09:00",
-          batchMaxSize: 5,
-          students: [
-            {
-              studentId: 34,
-              studentUniqueId: "S034",
-              studentName: "Harry",
-            },
-            {
-              studentId: 35,
-              studentUniqueId: "S035",
-              studentName: "Irene",
-            },
-            {
-              studentId: 36,
-              studentUniqueId: "S036",
-              studentName: "Jake",
-            },
-            {
-              studentId: 37,
-              studentUniqueId: "S037",
-              studentName: "Kelly",
-            },
-            {
-              studentId: 38,
-              studentUniqueId: "S038",
-              studentName: "Leo",
-            },
-          ],
-        },
-        {
-          startTime: "13:00",
-          endTime: "14:00",
-          batchMaxSize: 5,
-          students: [
-            {
-              studentId: 39,
-              studentUniqueId: "S039",
-              studentName: "Mona",
-            },
-            {
-              studentId: 40,
-              studentUniqueId: "S040",
-              studentName: "Nathan",
-            },
-            {
-              studentId: 42,
-              studentUniqueId: "S042",
-              studentName: "Peter",
-            },
-            {
-              studentId: 43,
-              studentUniqueId: "S043",
-              studentName: "Quincy",
-            },
-            {
-              studentId: 44,
-              studentUniqueId: "S044",
-              studentName: "Rachel",
-            },
-          ],
-        },
-        {
-          startTime: "17:00",
-          endTime: "18:00",
-          batchMaxSize: 4,
-          students: [
-            {
-              studentId: 45,
-              studentUniqueId: "S045",
-              studentName: "Sam",
-            },
-            {
-              studentId: 46,
-              studentUniqueId: "S046",
-              studentName: "Tina",
-            },
-            {
-              studentId: 47,
-              studentUniqueId: "S047",
-              studentName: "Uma",
-            },
-            {
-              studentId: 48,
-              studentUniqueId: "S048",
-              studentName: "Victor",
-            },
-          ],
-        },
-      ],
-    },
-  ];
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (filters.centerId) {
+      fetchScheduleData();
+    }
+  }, [filters]);
 
   return (
     <div className="container-fluid my-4">
       <div className="card shadow-sm">
-        <div
-          className="card-header d-flex justify-content-between align-items-center"
-          style={{ background: "#f5f7f9" }}
-        >
-          <div className="d-flex align-items-center">
+        <div className="card-header bg-light d-flex align-items-center">
+     
             <div className="dot bg-success rounded-circle me-2"></div>
-            <span className="text-muted">
-              This database shows the list of{" "}
-              <span className="fw-bold" style={{ color: "#287f71" }}>
-                TimeTable
-              </span>
-            </span>
+            <span className="fw-bold text-muted">TimeTable</span>
+         
+        </div>
+        <div className="d-flex justify-content-between align-items-center py-3 px-2">
+          <div className="form-group mb-0 ms-2 mb-1">
+            <select
+              className="form-select form-select-sm center_list"
+              name="centerId"
+              style={{ width: "100%" }}
+              onChange={handleFilterChange}
+              value={filters.centerId}
+            >
+              <option value="">Select a Centre</option>
+              {centerData?.map((center) => (
+                <option key={center.id} value={center.id} selected>
+                  {center.centerNames}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group mb-0 ms-2 mb-1">
+            <input
+              type="date"
+              className="form-control form-control-sm center_list"
+              style={{ width: "140px" }}
+              name="date"
+              value={filters.date}
+              onChange={handleFilterChange}
+              placeholder="Date"
+            />
+          </div>
+
+          <div className="form-group mb-0 ms-2 mb-1">
+            <select
+              className="form-select form-select-sm center_list"
+              style={{ width: "100%" }}
+              name="courseId"
+              onChange={handleFilterChange}
+              value={filters.courseId}
+            >
+              <option selected>Select a Course</option>
+              {courseData &&
+                courseData.map((courseId) => (
+                  <option key={courseId.id} value={courseId.id}>
+                    {courseId.courseNames}
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          <div className="form-group mb-0 ms-2 mb-1">
+            <select
+              className="form-select form-select-sm center_list"
+              name="teacherId"
+              style={{ width: "100%" }}
+              value={filters.teacherId}
+              onChange={handleFilterChange}
+            >
+              <option selected>Select a Teacher</option>
+              {teacherData &&
+                teacherData.map((teacher) => (
+                  <option key={teacher.id} value={teacher.id}>
+                    {teacher.teacherNames}
+                  </option>
+                ))}
+            </select>
           </div>
         </div>
-        <div className="card-body p-2">
-          <h5 className="text-center badges-Green p-1">WEDNESDAY</h5>
-          {data.map((classData, index) => (
-            <div key={index}>
-              <div className="table-responsive">
-                <table
-                  className="table table-bordered table-striped"
-                  style={{ borderColor: "#b4c4d8" }}
-                >
+        <div className="card-body">
+          <h5 className="text-center text-white p-2" style={{background:"#287f71"}}>
+            {day || "No Available Days"}
+          </h5>
+
+          {Array.isArray(data) && data.length > 0 ? (
+            data.map((classData, classIndex) => (
+              <div className="table-responsive my-3" key={classIndex}>
+                <table className="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th scope="col" className="text-center fw-normal">
-                        Class Name
+                      <th className="text-center fw-medium">Class</th>
+                      <th className="text-center fw-medium">Teacher</th>
+                      <th
+                        colSpan={classData.maxClassSizeofDay}
+                        className="text-center fw-medium"
+                      >
+                        {classData.teacherName}
                       </th>
-                      <th scope="col" className="text-center fw-normal">
-                        Teacher Name
-                      </th>
-                      {Array.from({ length: classData.maxClassSizeofDay }).map(
-                        (_, colIndex) => (
-                          <th
-                            key={colIndex}
-                            scope="col"
-                            className="text-center fw-normal"
-                          >
-                            {colIndex === 0 ? classData.teacherName : ""}
-                          </th>
-                        )
-                      )}
                     </tr>
                   </thead>
                   <tbody>
                     {classData.batches.map((batch, batchIndex) => (
-                      <tr key={batchIndex} className="table-info">
-                        <td className="text-center">{classData.className}</td>
-                        <td className="text-center">
+                      <tr key={batchIndex}>
+                        <td className="text-center fw-medium">
+                          {batch.className}
+                        </td>
+                        <td className="text-center fw-medium">
                           {convertTo12HourFormat(batch.startTime)} -{" "}
                           {convertTo12HourFormat(batch.endTime)}
                         </td>
@@ -356,15 +212,16 @@ function TimeTable() {
                           length: classData.maxClassSizeofDay,
                         }).map((_, studentIndex) => {
                           const studentName =
-                            batch.students[studentIndex]?.studentName || ""; // Handle empty values
+                            batch.students[studentIndex]?.studentName || "";
                           return (
                             <td
                               key={studentIndex}
-                              className={`text-center ${
-                                !studentName ? "orange-background" : ""
-                              }`}
+                              className="text-center fw-medium"
+                              style={{
+                                backgroundColor: studentIndex > batch.batchMaxSize ? "#eb862a" : "inherit",
+                              }}
                             >
-                              {studentName}
+                              {studentName || ""}
                             </td>
                           );
                         })}
@@ -373,8 +230,12 @@ function TimeTable() {
                   </tbody>
                 </table>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-center text-danger">
+              No data available for the selected filters.
+            </p>
+          )}
         </div>
       </div>
     </div>

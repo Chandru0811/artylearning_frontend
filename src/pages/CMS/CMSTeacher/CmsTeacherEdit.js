@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import Delete from "../../../components/common/Delete";
+import { BiEditAlt } from "react-icons/bi";
 
 const CmsTeacherEdit = ({ id, fetchData }) => {
   const [showModal, setShowModal] = useState(false);
@@ -14,6 +15,7 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [selectedFile, setSelectedFile] = useState(null);
   const userName = localStorage.getItem("userName");
+  const [datas, setDatas] = useState([]);
 
   const formik = useFormik({
     initialValues: {
@@ -66,6 +68,7 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
     try {
       const response = await api.get(`/getTeacherSaveById/${id}`);
       formik.setValues(response.data);
+      setDatas(response.data);
     } catch (error) {
       toast.error("Error Fetching Data", error);
     }
@@ -83,7 +86,7 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
         <Delete path={`/deleteTeacherSave/${id}`} onSuccess={fetchData} />
       )}
       <button className="btn text-end" onClick={handleShowModal}>
-        <FaEdit />
+        <BiEditAlt />
       </button>
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
@@ -179,17 +182,26 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
                   <div className="text-danger">{formik.errors.files}</div>
                 )}
               </div>
-              {selectedFile && (
-                <div>
-                  {selectedFile.type.startsWith("image/") && (
+              {/* Display Image */}
+              <div className="col-12 mb-2">
+                {selectedFile ? (
+                  selectedFile.type.startsWith("image") ? (
                     <img
                       src={URL.createObjectURL(selectedFile)}
                       alt="Selected File"
-                      style={{ maxWidth: "100%" }}
+                      style={{ maxHeight: "200px" }}
                     />
-                  )}
-                </div>
-              )}
+                  ) : (
+                    <div>Invalid file type, please select an image file.</div>
+                  )
+                ) : (
+                  <img
+                    src={datas.image || ""}
+                    alt="Uploaded File"
+                    style={{ maxHeight: "200px" }}
+                  />
+                )}
+              </div>
               <div className="mb-3">
                 <label htmlFor="teacherDescription" className="form-label">
                   Description
@@ -210,15 +222,17 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              className="btn btn-sm btn-border bg-light text-dark"
+            <button
+              type="button"
+              className="btn btn-border btn-sm"
+              style={{ fontSize: "12px" }}
               onClick={handleCloseModal}
             >
-              Close
-            </Button>
-            <Button variant="primary" type="submit">
-              Save
-            </Button>
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-button btn-sm">
+              Update
+            </button>
           </Modal.Footer>
         </form>
       </Modal>

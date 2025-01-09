@@ -278,7 +278,7 @@ const CMSContact = () => {
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteContactUsSavePublish/${selectedId}`}
+                  path={`/deleteContactUsSave/${selectedId}`}
                   onDeleteSuccess={getCenterData}
                   onOpen={handleMenuClose}
                 />

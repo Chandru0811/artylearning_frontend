@@ -192,9 +192,9 @@ const CmsNewsUpdate = () => {
                       {item.role}/{item.date}/{item.comment}
                     </p>
                   </div>
-                  <div className="mt-auto">
+                  {/* <div className="mt-auto">
                     <button className="custom-button mt-4">Read More</button>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

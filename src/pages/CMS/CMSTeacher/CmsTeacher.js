@@ -1,49 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Tabs, Tab } from "react-bootstrap";
-import engteacher1 from "../../../assets/clientimage/teacher1.jpeg";
-import engteacher2 from "../../../assets/clientimage/teacher2.jpeg";
-import engteacher3 from "../../../assets/clientimage/teacher3.jpeg";
-import engteacher4 from "../../../assets/clientimage/teacher4.jpg";
-import engteacher5 from "../../../assets/clientimage/teacher5.jpeg";
-import engteacher6 from "../../../assets/clientimage/teacher6.jpeg";
-import engteacher7 from "../../../assets/clientimage/teacher7.jpg";
-import engteacher8 from "../../../assets/clientimage/teacher8.jpeg";
-import engteacher9 from "../../../assets/clientimage/teacher9.jpeg";
-import engteacher10 from "../../../assets/clientimage/teacher10.jpeg";
-import chiteacher from "../../../assets/clientimage/teacher1-1.jpg";
-import admin1 from "../../../assets/clientimage/teacher2-1.jpg";
-import admin2 from "../../../assets/clientimage/teacher2-2.jpeg";
-import admin3 from "../../../assets/clientimage/teacher2-3.jpeg";
 import CmsTeacherEdit from "../../CMS/CMSTeacher/CmsTeacherEdit";
-import { Button, Modal, Form } from "react-bootstrap";
-import { FaYoutube, FaInstagram, FaEdit, FaSave } from "react-icons/fa";
 import CmsTeacherAdd from "./CmsTeacherAdd";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 export const CmsTeacher = () => {
-  const [editingField, setEditingField] = useState(null);
   const [datas, setDatas] = useState([]);
-  const [heading, setHeading] = useState("Let the Journey Begin!");
-  const [headingMess, setHeadingMess] =
-    useState(`Meet the people who make it all possible, learn about their skills
-                  and experience, and see why they're passionate about what they do.`);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const handleChangeHeadgang = (e) => {
-    setHeading(e.target.value);
-  };
-
-  const toggleEditHeadGang = () => {
-    setHeading(!heading);
-  };
-
-  const toggleEdit = (field) => {
-    setEditingField(field);
-  };
-  const saveContent = () => {
-    setEditingField(null);
-  };
 
   const getData = async () => {
     try {

@@ -116,38 +116,6 @@ function Contact() {
                   </span>
                 </div>
               ))}
-            {/* <p className="mt-5">Arty Learning @ AMK</p>
-            <span className="d-flex my-3">
-              <img
-                src={business}
-                alt="bussiness"
-                width={"30px"}
-                height={"30px"}
-              />
-              &nbsp;&nbsp;
-              <span className="mx-2" style={{ fontSize: "18px" }}>
-                728 Ang Mo Kio Ave 6, #01-4216, Singapore 560728
-              </span>
-            </span> */}
-            {/* <span className="d-flex mb-3">
-              <img src={gmail} alt="gmail" width={"30px"} height={"30px"} />
-              &nbsp;&nbsp;
-              <span className="text-danger  mx-1" style={{ fontSize: "18px" }}>
-                artylearning@gmail.com
-              </span>
-            </span> */}
-            {/* <span className="d-flex mb-3">
-              <img
-                src={telephone}
-                alt="telephone"
-                width={"30px"}
-                height={"30px"}
-              />
-              &nbsp;&nbsp;
-              <span className="mx-1" style={{ fontSize: "18px" }}>
-                +65 9227 6868
-              </span>
-            </span> */}
           </div>
           <div className="col-md-6 col-12 d-flex align-items-center justify-content-center">
             <div className="card p-3" style={{ width: "100%" }}>
@@ -252,9 +220,8 @@ function Contact() {
             datas.map((data) => (
               <div className="col-md-4 col-12 p-2">
                 <h4 style={{ fontWeight: "bolder" }}>{data.centerName}</h4>
-
                 <iframe
-                  src={data.map}
+                  src={data.map || null}
                   width="100%"
                   height="300px"
                   style={{ border: "none" }}

@@ -260,7 +260,13 @@ function StudentRegisterCourse() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error.message || "An error occurred");
+        if (error?.response?.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else if (error?.response?.status === 404) {
+          toast.warning(error?.response?.data?.message);
+        } else {
+          toast.error(error?.response?.data?.message);
+        }
       } finally {
         setLoadIndicator(false);
       }

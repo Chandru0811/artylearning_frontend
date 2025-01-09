@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import api from "../../config/URL";
 import Delete from "../../components/common/Delete.js";
 import { FaTrash } from "react-icons/fa6";
+import { data } from "jquery";
 
 function CmsNewsUpdateEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -46,7 +47,7 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
           formData,
           {}
         );
-        if (response.status === 201) {
+        if (response.status === 201 || response.status === 200) {
           handleClose();
           onSuccess();
           toast.success(response.data.message);
@@ -69,14 +70,15 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
     try {
       const response = await api.get(`/getNewsUpdatedSavesById/${id}`);
       formik.setValues(response.data);
+      setDatas(response.data);
     } catch (error) {
       toast.error("Error fetching data ", error);
     }
   };
 
-  // useEffect(() => {
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -111,12 +113,12 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
             }}
           >
             <div className="row">
-              <div class=" col-12 mb-2">
-                <lable className="form-lable">Upload Image File</lable>
+              <div className="col-12 mb-2">
+                <label className="form-label">Upload Image File</label>
                 <div className="input-group mb-3">
                   <input
                     type="file"
-                    className={`form-control   ${
+                    className={`form-control ${
                       formik.touched.file && formik.errors.file
                         ? "is-invalid"
                         : ""
@@ -129,17 +131,27 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
                   )}
                 </div>
               </div>
-              {selectedFile && (
-                <div className="mb-2">
-                  {selectedFile.type.startsWith("image") && (
+
+              {/* Display Image */}
+              <div className="col-12 mb-2">
+                {selectedFile ? (
+                  selectedFile.type.startsWith("image") ? (
                     <img
                       src={URL.createObjectURL(selectedFile)}
                       alt="Selected File"
                       style={{ maxHeight: "200px" }}
                     />
-                  )}
-                </div>
-              )}
+                  ) : (
+                    <div>Invalid file type, please select an image file.</div>
+                  )
+                ) : (
+                  <img
+                    src={datas.cardImg || ""}
+                    alt="Uploaded File"
+                    style={{ maxHeight: "200px" }}
+                  />
+                )}
+              </div>
               <div class=" col-12 mb-2">
                 <lable class="">Heading</lable>
                 <div className="input-group mb-3">

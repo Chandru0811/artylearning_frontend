@@ -215,7 +215,6 @@ const CmsCourses = () => {
             </span>
           </div>
         </div>
-        ,
         <div className="container">
           <div className="row p-1">
             <div className="col-md-6 col-12">{/* <h4>Courses</h4> */}</div>

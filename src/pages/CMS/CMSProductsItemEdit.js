@@ -19,6 +19,7 @@ function CMSProductsItemEdit({ id, getData, handleMenuClose }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const userName = localStorage.getItem("userName");
+  const [datas, setDatas] = useState([]);
 
   const handleClose = () => {
     handleMenuClose();
@@ -30,14 +31,6 @@ function CMSProductsItemEdit({ id, getData, handleMenuClose }) {
   const handleOpen = () => setOpen(true);
 
   const validationSchema = Yup.object({
-    files: Yup.mixed()
-      .nullable()
-      .required("Image file is required")
-      .test(
-        "fileType",
-        "Only image files are allowed",
-        (value) => !value || (value && value.type.startsWith("image"))
-      ),
     imageDetails: Yup.string().required("Image details are required"),
   });
 
@@ -50,7 +43,7 @@ function CMSProductsItemEdit({ id, getData, handleMenuClose }) {
     onSubmit: async (data) => {
       setLoadIndicator(true);
       const formData = new FormData();
-      formData.append("files", data.files);
+      formData.append("files", data.files || "");
       formData.append("imageDetails", data.imageDetails);
       formData.append("updatedBy", userName);
 
@@ -91,6 +84,7 @@ function CMSProductsItemEdit({ id, getData, handleMenuClose }) {
       if (response.status === 200) {
         formik.setFieldValue("imageDetails", response.data.imageDetails || "");
       }
+      setDatas(response.data);
     } catch (error) {
       toast.error("Error fetching data: " + error.message);
     }
@@ -144,18 +138,26 @@ function CMSProductsItemEdit({ id, getData, handleMenuClose }) {
                 <div className="text-danger">{formik.errors.files}</div>
               )}
             </div>
-            {selectedFile && (
-              <div className="mb-3">
-                {selectedFile.type.startsWith("image") && (
+            {/* Display Image */}
+            <div className="col-12 mb-2">
+                {selectedFile ? (
+                  selectedFile.type.startsWith("image") ? (
+                    <img
+                      src={URL.createObjectURL(selectedFile)}
+                      alt="Selected File"
+                      style={{ maxHeight: "200px" }}
+                    />
+                  ) : (
+                    <div>Invalid file type, please select an image file.</div>
+                  )
+                ) : (
                   <img
-                    src={URL.createObjectURL(selectedFile)}
-                    alt="Selected File"
-                    style={{ maxWidth: "100%", marginTop: "10px" }}
+                    src={datas.image || ""}
+                    alt="Uploaded File"
+                    style={{ maxHeight: "200px" }}
                   />
                 )}
               </div>
-            )}
-
             <div className="mb-3">
               <label htmlFor="imageDetails" className="form-label">
                 Image Details

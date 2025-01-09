@@ -217,8 +217,8 @@
           subMenus: [
             {
               title: "Time Schedule",
-              // path: "/timetable",
-              path: "/calendar",
+              path: "/timetable",
+              // path: "/calendar",
               access: storedScreens.scheduleTeacherIndex,
             },
             // { title: "Make Up Class", path: "/reschedule" },
