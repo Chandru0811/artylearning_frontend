@@ -23,9 +23,11 @@ function AddMore({
   const validationSchema = Yup.object().shape({
     items: Yup.array().of(
       Yup.object().shape({
-        lessonNo: Yup.string().required("Lesson number is required"),
-        curriculumCode: Yup.string().required("Curriculum code is required"),
-        nextClassAdvice: Yup.string().required("Next class advice is required"),
+        lessonNo: Yup.string().required("*Lesson number is required"),
+        curriculumCode: Yup.string().required("*Curriculum code is required"),
+        nextClassAdvice: Yup.string().required(
+          "*Next class advice is required"
+        ),
         // pace: Yup.string().required("Pace is required"),
       })
     ),
@@ -89,7 +91,7 @@ function AddMore({
       // toast.info("Unsaved feedback removed.");
       return;
     }
-  
+
     try {
       // API call for saved feedback
       const response = await api.delete(`deleteFeedbackAttendance/${id}`);
@@ -106,7 +108,6 @@ function AddMore({
       toast.error("Error removing feedback ", error?.response?.data?.message);
     }
   };
-  
 
   useEffect(() => {
     const fetchCurriculumCodes = async () => {
@@ -172,25 +173,25 @@ function AddMore({
                 <div key={index}>
                   <div className="row">
                     <div className="col-1 text-end d-flex justify-content-center align-items-start">
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          className="btn mt-2"
-                          style={{ marginBottom: "5.0rem" }}
-                          onClick={() => handleDelete(item.id, index)}
-                        >
-                          <IoIosCloseCircleOutline
-                            style={{
-                              fontSize: "2rem",
-                              color: "red",
-                              background: "none",
-                            }}
-                          />
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        className="btn mt-2"
+                        style={{ marginBottom: "5.0rem" }}
+                        onClick={() => handleDelete(item.id, index)}
+                      >
+                        <IoIosCloseCircleOutline
+                          style={{
+                            fontSize: "2rem",
+                            color: "red",
+                            background: "none",
+                          }}
+                        />
+                      </button>
                     </div>
                     <div className="col-md-3 col-6 mb-4">
-                      <label className="form-label">Lesson No<span className="text-danger">*</span></label>
+                      <label className="form-label">
+                        Lesson No<span className="text-danger">*</span>
+                      </label>
                       <select
                         {...formik.getFieldProps(`items[${index}].lessonNo`)}
                         className={`form-select ${
@@ -217,7 +218,9 @@ function AddMore({
                       ) : null}
                     </div>
                     <div className="col-md-3 col-6 mb-4">
-                      <label className="form-label">Curriculum Code<span className="text-danger">*</span></label>
+                      <label className="form-label">
+                        Curriculum Code<span className="text-danger">*</span>
+                      </label>
                       <input
                         type="text"
                         className={`form-control ${
@@ -238,7 +241,14 @@ function AddMore({
                         </div>
                       ) : null}
                     </div>
-                    <div className="col-md-3 col-6 mb-4">
+                    <div
+                      className={`col-md-3 col-6 mb-4 ${
+                        formik.touched.items?.[index]?.nextClassAdvice &&
+                        formik.errors.items?.[index]?.nextClassAdvice
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    >
                       <label className="form-label">
                         Next Class Advice<span className="text-danger">*</span>
                       </label>
@@ -253,12 +263,13 @@ function AddMore({
                             "Competent"
                           }
                           onChange={formik.handleChange}
-                          className={`form-check-input ${
-                            formik.touched.items?.[index]?.nextClassAdvice &&
-                            formik.errors.items?.[index]?.nextClassAdvice
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          onBlur={() =>
+                            formik.setFieldTouched(
+                              `items[${index}].nextClassAdvice`,
+                              true
+                            )
+                          }
+                          className="form-check-input"
                         />
                         &nbsp;&nbsp;
                         <label
@@ -279,12 +290,13 @@ function AddMore({
                             "Require Revision"
                           }
                           onChange={formik.handleChange}
-                          className={`form-check-input ${
-                            formik.touched.items?.[index]?.nextClassAdvice &&
-                            formik.errors.items?.[index]?.nextClassAdvice
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          onBlur={() =>
+                            formik.setFieldTouched(
+                              `items[${index}].nextClassAdvice`,
+                              true
+                            )
+                          }
+                          className="form-check-input"
                         />
                         &nbsp;&nbsp;
                         <label
@@ -296,11 +308,12 @@ function AddMore({
                       </div>
                       {formik.touched.items?.[index]?.nextClassAdvice &&
                       formik.errors.items?.[index]?.nextClassAdvice ? (
-                        <div className="invalid-feedback">
+                        <div className="invalid-feedback d-block">
                           {formik.errors.items[index].nextClassAdvice}
                         </div>
                       ) : null}
                     </div>
+
                     <div className="col-md-2 col-6 mb-4">
                       <label className="form-label">Pace</label>
                       <div>

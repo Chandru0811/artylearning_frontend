@@ -94,7 +94,7 @@ function CourseView() {
         <div className="container-fluid px-4">
           <div className="row pb-3">
             <div className="col-md-12 col-12">
-              <div className="row mt-3 mb-2">
+              <div className="row mt-3">
                 <div className="col-3 ">
                   <p className="fw-medium">Centre Name</p>
                 </div>
@@ -114,7 +114,7 @@ function CourseView() {
               </div>
             </div>
             <div className="col-md-6 col-12">
-              <div className="row  mb-2 mt-3">
+              <div className="row  mb-2 mt-1">
                 <div className="col-6">
                   <p className="fw-medium">Course Name</p>
                 </div>
@@ -124,7 +124,7 @@ function CourseView() {
               </div>
             </div>
             <div className="col-md-6 col-12">
-              <div className="row  mb-2 mt-3">
+              <div className="row  mb-2 mt-1">
                 <div className="col-6">
                   <p className="fw-medium">Course Code</p>
                 </div>
@@ -266,7 +266,7 @@ function CourseView() {
                 </div>
               </div>
             </div>
-            <div className="col-md-12 col-12">
+            <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-3  ">
                   <p className="fw-medium">Description</p>
