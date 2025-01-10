@@ -11,12 +11,12 @@ function AboutJoinUs() {
             Abundance Of Love.
           </h3>
           <div className="text-center mt-4">
-            <Link to="/course/english">
+            <Link to="/courses/1">
               <button className="btn btn-danger btn-danger-button">
                 ENGLISH
               </button>
             </Link>
-            <Link to="/course/chinesh">
+            <Link to="/courses/2">
               <button className="btn btn-outline-danger btn-outline-danger-button mx-3">
                 CHINESE
               </button>

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Iframe from "react-iframe";
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import api from "../../../config/URL";
-import { data } from "jquery";
 
 function Footer() {
   const [datas, setDatas] = useState([]);
+  const [footerDatas, setFooterDatas] = useState([]);
 
   useEffect(() => {
     const getContactData = async () => {
@@ -18,6 +17,18 @@ function Footer() {
       }
     };
     getContactData();
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllHeaderSavePublish`);
+        setFooterDatas(response.data.copyRight);
+      } catch (error) {
+        console.error("Error Fetching Data: " + error.message);
+      }
+    };
+    getData();
   }, []);
 
   return (
@@ -96,7 +107,7 @@ function Footer() {
         </div>
         <div className="row mt-3">
           <div className="col-md-4 col-12">
-            <p>© 2017 ~ 2024 ArtyLearning. All rights reserved.</p>
+            <p>{footerDatas}</p>
           </div>
           <div className="col-md-4 col-12">
             <a

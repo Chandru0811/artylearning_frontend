@@ -19,10 +19,15 @@ function CMSProducts() {
   const handleShow = () => setShow(true);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState(null); // initialize as null for better checks
+  const [data, setData] = useState([]);
+  console.log("DATA:", data);
+
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const [selectedFile, setSelectedFile] = useState(null);
+
   const handleClose = () => {
     setShow(false);
+    setSelectedFile(null); // Clear file state on close
   };
 
   const getData = async () => {
@@ -84,6 +89,12 @@ function CMSProducts() {
     } catch (error) {
       toast.error("Error Fetching Data: " + error.message);
     }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    formik.setFieldValue("imageProduct", file);
   };
 
   return (
@@ -199,30 +210,44 @@ function CMSProducts() {
                 </div>
               </div>
 
-              <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">Upload Image File</label>
-                <div className="input-group mb-3">
-                  <input
-                    type="file"
-                    className={`form-control   ${
-                      formik.touched.imageProduct && formik.errors.imageProduct
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    onChange={(event) => {
-                      formik.setFieldValue(
-                        "imageProduct",
-                        event.currentTarget.files[0]
-                      );
-                    }}
+              <div className="mb-3">
+                <label htmlFor="imageProduct" className="form-label">
+                  Upload Image
+                </label>
+                <input
+                  onKeyDown={(e) => e.stopPropagation()}
+                  type="file"
+                  id="imageProduct"
+                  name="imageProduct"
+                  className="form-control"
+                  onChange={handleFileChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.imageProduct && formik.errors.imageProduct && (
+                  <div className="text-danger">
+                    {formik.errors.imageProduct}
+                  </div>
+                )}
+              </div>
+              {/* Display Image */}
+              <div className="col-12 mb-2">
+                {selectedFile ? (
+                  selectedFile.type.startsWith("image") ? (
+                    <img
+                      src={URL.createObjectURL(selectedFile)}
+                      alt="Selected File"
+                      style={{ maxHeight: "200px" }}
+                    />
+                  ) : (
+                    <div>Invalid file type, please select an image file.</div>
+                  )
+                ) : (
+                  <img
+                    src={data.imageProduct || ""}
+                    alt="Uploaded File"
+                    style={{ maxHeight: "200px" }}
                   />
-                  {formik.touched.imageProduct &&
-                    formik.errors.imageProduct && (
-                      <div className="invalid-feedback">
-                        {formik.errors.imageProduct}
-                      </div>
-                    )}
-                </div>
+                )}
               </div>
 
               <div className="col-md-6 col-12 mb-2">
