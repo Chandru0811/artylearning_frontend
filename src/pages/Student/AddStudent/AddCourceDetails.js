@@ -290,47 +290,33 @@ const AddcourseDetail = forwardRef(
       }
     };
     
-    // const fetchPackageData = async (courseId, centerId) => {
-    //   if (!centerId || !courseId) {
-    //     console.log("Both Center ID and Course ID are required to fetch packages");
-    //     return;
-    //   }
-    
-    //   try {
-    //     const response = await api.get(
-    //       `/courseFeeAvailablePackages?centerId=${centerId}&courseId=${courseId}`
-    //     );
-    //     setPackageData(response.data);
-    //   } catch (error) {
-    //     toast.error(error.message || "Failed to fetch packages");
-    //   }
-    // };
-    
     const fetchPackageData = async () => {
+      // Ensure that both centerId and courseId are present in selectedRowData
+      if (!selectedRowData.centerId || !selectedRowData.courseId) {
+        console.log("Both Center ID and Course ID are required to fetch packages");
+        return;
+      }
+    
       try {
-        const packageData = await fetchAllPackageListByCenter(formData.centerId);
-        setPackageData(packageData);
+        const response = await api.get(
+          `/courseFeeAvailablePackages?centerId=${selectedRowData.centerId}&courseId=${selectedRowData.courseId}`
+        );
+        setPackageData(response.data);
+        console.log("Fetched Package Data:", response.data); // For debugging
       } catch (error) {
-        console.error(error);
+        toast.error(error.message || "Failed to fetch packages");
       }
     };
-
-    const handleCourseChange = (e) => {
-      const courseId = e.target.value; // Capture the selected courseId
-      console.log("Selected Course ID:", courseId);
-      setSelectedCourseId(courseId);
-      
-      // Fetch package data with selected course ID and center ID from formData
-      fetchPackageData(courseId, formData.centerId);
-    };
     
+    // Call fetchPackageData when selectedRowData changes
+    useEffect(() => {
+      fetchPackageData();
+    }, [selectedRowData]); // Run when selectedRowData updates
+    
+  
     useEffect(() => {
       fetchCourseData();
-      // if (selectedCourseId) {
-      //   fetchPackageData(selectedCourseId, formData.centerId);
-      // }
-    fetchPackageData();
-    }, []); // Rerun when selectedCourseId changes
+    }, []);
     
 
     const getData = async () => {
@@ -561,10 +547,6 @@ const AddcourseDetail = forwardRef(
                       }`}
                       id="courseId"
                       name="courseId"
-                      // onChange={(e) => {
-                      //   formik.handleChange(e); // Formik change handler
-                      //   handleCourseChange(e); // Pass selected courseId to API
-                      // }}
                     >
                       <option value="" disabled selected>
                         Select Course
@@ -678,27 +660,26 @@ const AddcourseDetail = forwardRef(
                 </div>
                 <div className="row mt-2">
                   <div className="col-md-4">
-                    <select
-                      id="packageId"
-                      name="packageId"
-                      {...formik.getFieldProps("packageId")}
-                      class={`form-select  ${
-                        formik.touched.packageId && formik.errors.packageId
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                    >
-                      <option value="" disabled selected>
-                          Select Package
-                        </option>
-                      {packageData &&
-                        packageData.map((pkg) => (
-                          <option key={pkg.id} value={pkg.id}>
-                            {/* {pkg.packageName} */}
-                        {pkg.packageNames}
-                          </option>
-                        ))}
-                    </select>
+                  <select
+                  {...formik.getFieldProps("packageId")}
+                  class={`form-select  ${
+                    formik.touched.packageId && formik.errors.packageId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  id="packageId"
+                  name="packageId"
+                >
+                  <option value="" disabled selected>
+                    Select Package
+                  </option>
+                  {packageData &&
+                    packageData.map((pkg) => (
+                      <option key={pkg.packageId} value={pkg.packageId}>
+                        {pkg.packageName}
+                      </option>
+                    ))}
+                </select>
                     {formik.touched.packageId &&
                       formik.errors.packageId && (
                         <div className="invalid-feedback">

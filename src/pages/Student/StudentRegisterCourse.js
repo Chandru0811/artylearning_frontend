@@ -9,7 +9,6 @@ import "../../styles/custom.css";
 import { useFormik } from "formik";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import $ from "jquery";
 import "datatables.net-dt/css/jquery.dataTables.css";
 import "datatables.net";
 import * as Yup from "yup";
@@ -18,14 +17,11 @@ import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 import {
   ThemeProvider,
   createTheme,
-  Menu,
-  MenuItem,
-  IconButton,
 } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 const validationSchema = Yup.object().shape({
-  packageId: Yup.string().required("Package Name is required"),
-  lessonName: Yup.string().required("Lesson Name is required"),
+  packageId: Yup.string().required("*Package Name is required"),
+  lessonName: Yup.string().required("*Lesson Name is required"),
 });
 
 function StudentRegisterCourse() {
@@ -33,10 +29,6 @@ function StudentRegisterCourse() {
   const [data, setData] = useState({});
   console.log("Data ....:", data);
   console.log("ID ....:", id);
-
-  // const centerIdNO = data.centerId;
-  // console.log("Center ID:", centerIdNO);
-
   const [studentCourseDetailsId, setStudentCourseDetailsId] = useState(null);
 
   console.log("studentCourseDetailsId", studentCourseDetailsId);
@@ -228,7 +220,7 @@ function StudentRegisterCourse() {
         studentCount: selectedRowData.studentCount,
         teacher: selectedRowData.teacher,
         userId: selectedRowData.userId,
-        packageId: data.packageId,
+        // packageId: data.packageId,
       };
       console.log("Payload Data:", payload);
       try {
@@ -283,17 +275,31 @@ function StudentRegisterCourse() {
   };
 
   const fetchPackageData = async () => {
+    // Ensure that both centerId and courseId are present in selectedRowData
+    if (!selectedRowData.centerId || !selectedRowData.courseId) {
+      console.log("Both Center ID and Course ID are required to fetch packages");
+      return;
+    }
+  
     try {
-      const packageData = await fetchAllPackageListByCenter(centerId);
-      setPackageData(packageData);
+      const response = await api.get(
+        `/courseFeeAvailablePackages?centerId=${selectedRowData.centerId}&courseId=${selectedRowData.courseId}`
+      );
+      setPackageData(response.data);
+      console.log("Fetched Package Data:", response.data); // For debugging
     } catch (error) {
-      console.error(error);
+      toast.error(error.message || "Failed to fetch packages");
     }
   };
+  
+  // Call fetchPackageData when selectedRowData changes
+  useEffect(() => {
+    fetchPackageData();
+  }, [selectedRowData]); // Run when selectedRowData updates
+  
 
   useEffect(() => {
     fetchCourseData();
-    fetchPackageData();
   }, []);
 
   const getData = async () => {
@@ -355,24 +361,44 @@ function StudentRegisterCourse() {
     getData();
   }, [id]);
 
+  // const handleRowSelect = (data) => {
+  //   if (data.availableSlots === 0) {
+  //     toast.warning("Class is Full");
+  //     return; // Prevent further actions
+  //   }
+  //   setSelectedRow(data.id);
+  //   setSelectedRowData(data);
+  //   console.log("Selected Row Data:", data);
+
+  //   // Calculate days between startDate and endDate
+  //   if (data.startDate && data.endDate) {
+  //     const days = calculateDays(data.startDate, data.endDate, data.days);
+  //     setAvailableDays(days);
+  //   } else {
+  //     setAvailableDays([]);
+  //   }
+  // };
+
   const handleRowSelect = (data) => {
     if (data.availableSlots === 0) {
       toast.warning("Class is Full");
       return; // Prevent further actions
     }
-    setSelectedRow(data.id);
-    setSelectedRowData(data);
-    console.log("Selected Row Data:", data);
-
+  
+    setSelectedRow(data.id); // Save selected row ID
+    setSelectedRowData(data); // Save selected row data
+    console.log("Selected Row Data:", data); // Log selected row data for debugging
+  
     // Calculate days between startDate and endDate
     if (data.startDate && data.endDate) {
       const days = calculateDays(data.startDate, data.endDate, data.days);
-      setAvailableDays(days);
+      setAvailableDays(days); // Update available days
     } else {
       setAvailableDays([]);
     }
   };
 
+  
   const calculateDays = (startDate, endDate, selectedDay) => {
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -706,9 +732,9 @@ function StudentRegisterCourse() {
                     Select Package
                   </option>
                   {packageData &&
-                    packageData.map((packages) => (
-                      <option key={packages.id} value={packages.id}>
-                        {packages.packageNames}
+                    packageData.map((pkg) => (
+                      <option key={pkg.packageId} value={pkg.packageId}>
+                        {pkg.packageName}
                       </option>
                     ))}
                 </select>

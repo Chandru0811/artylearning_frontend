@@ -1191,3 +1191,8 @@ table.dataTable.display > tbody > tr > th {
   width: 30px;
   height: 70px;
 }
+
+.table_cell_color{
+  background-color: #eb862a !important;
+  border: #eb862a !important;
+}

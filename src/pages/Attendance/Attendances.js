@@ -101,7 +101,6 @@ function Attendances() {
         if (centerLocalId !== null && centerLocalId !== "undefined") {
           setSelectedCenter(centerLocalId);
           fetchCourses(centerLocalId);
-
         } else if (centerData !== null && centerData.length > 0) {
           setSelectedCenter(defaultCenterId);
           fetchCourses(defaultCenterId);
@@ -367,7 +366,7 @@ function Attendances() {
                   </p>
                 </div>
               </div>
-              {attendanceData &&
+              {attendanceData && attendanceData.length > 0 ? (
                 attendanceData.map((attendanceItem, attendanceIndex) => (
                   <div
                     key={attendanceIndex}
@@ -603,7 +602,12 @@ function Attendances() {
                       </div>
                     </div>
                   </div>
-                ))}
+                ))
+              ) : (
+                <div className="text-center py-3">
+                  <p>No Attendance Data Available</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
