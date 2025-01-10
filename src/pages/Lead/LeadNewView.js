@@ -894,7 +894,7 @@ function LeadNewView() {
                     <ul style={{ listStyle: "none", paddingLeft: "0" }}>
                       <li className="stdList pt-0">
                         <p className="m-0">
-                          <b> Comprehending Of Instructions</b>
+                          <b> Comprehension Of Instructions</b>
                           <span>
                             {doassesmentData &&
                             doassesmentData.leadDoAssessmentModel &&

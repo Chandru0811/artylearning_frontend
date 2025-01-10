@@ -13,7 +13,7 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 
 const ContractAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData }, ref) => {
-    console.log("formDataContractAdd", formData);
+    // console.log("formDataContractAdd", formData);
     const [centerData, setCenterData] = useState(null);
     const userName = localStorage.getItem("userName");
     const empRole = formData.role;
