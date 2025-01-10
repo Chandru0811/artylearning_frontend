@@ -156,9 +156,9 @@ const Lead = () => {
     if (filters.centerId !== "") {
       params.centerId = filters.centerId;
     }
-    if (filters.centerId === "") {
-      params.centerId = centerIDLocal;
-    }
+    // if (filters.centerId === "") {
+    //   params.centerId = centerIDLocal;
+    // }
 
     if (filters.subjectId !== "") {
       params.subjectId = filters.subjectId;
@@ -205,7 +205,7 @@ const Lead = () => {
 
   useEffect(() => {
     getData();
-  }, [filters.centerId, filters.subjectId, filters.leadStatus]);
+  }, [filters]);
 
   const ResetFilter = () => {
     setFilters({
@@ -948,7 +948,7 @@ const Lead = () => {
                 <select
                   className="form-select form-select-sm mb-2 mb-md-0 me-md-3"
                   name="centerId"
-                  value={filters.centerId || centerIDLocal}
+                  value={filters.centerId}
                   onChange={(e) =>
                     setFilters((pre) => ({ ...pre, centerId: e.target.value }))
                   }

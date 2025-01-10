@@ -513,7 +513,7 @@ function LeadNewView() {
                   <b>Emergency Contact Name</b>
                   <span> {data.nameOfEmergency || "--"}</span>
                 </li>
-                <li className="stdList">
+                <li className="stdList me-2">
                   <b>Emergency Contact NRIC</b>
                   <span> {data.emergencyNric || "--"}</span>
                 </li>
