@@ -216,10 +216,12 @@ function TimeTable() {
                           return (
                             <td
                               key={studentIndex}
-                              className="text-center fw-medium"
-                              style={{
-                                backgroundColor: studentIndex > batch.batchMaxSize ? "#eb862a" : "inherit",
-                              }}
+                              className={`text-center ${
+                                studentIndex + 1 > batch.batchMaxSize ? "table_cell_color" : ""
+                              }`}
+                              // style={{
+                              //   backgroundColor: 1 > 2 ? "#eb862a !important" : "inherit !important",
+                              // }}
                             >
                               {studentName || ""}
                             </td>
