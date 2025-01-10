@@ -5,7 +5,109 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-const validationSchema = Yup.object({});
+const FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png", "image/gif"];
+
+const validationSchema = Yup.object({
+  menuLogo: Yup.mixed()
+    .nullable()
+    .required("Menu Logo is required")
+    .test(
+      "fileSize",
+      "File size is too large. Max size is 2MB",
+      (value) => !value || (value && value.size <= FILE_SIZE)
+    )
+    .test(
+      "fileFormat",
+      "Unsupported file format. Allowed: JPG, JPEG, PNG, GIF",
+      (value) => !value || (value && SUPPORTED_FORMATS.includes(value.type))
+    ),
+  backgroundImage: Yup.mixed()
+    .nullable()
+    .required("Menu Background is required")
+    .test(
+      "fileSize",
+      "File size is too large. Max size is 2MB",
+      (value) => !value || (value && value.size <= FILE_SIZE)
+    )
+    .test(
+      "fileFormat",
+      "Unsupported file format. Allowed: JPG, JPEG, PNG, GIF",
+      (value) => !value || (value && SUPPORTED_FORMATS.includes(value.type))
+    ),
+  menuTitle: Yup.string()
+    .required("Menu title is required")
+    .max(50, "Menu title must not exceed 50 characters"),
+  heading: Yup.string()
+    .required("Heading is required")
+    .max(100, "Heading must not exceed 100 characters"),
+  contentOne: Yup.string()
+    .required("Content One is required")
+    .max(500, "Content One must not exceed 500 characters"),
+  contentTwo: Yup.string()
+    .required("Content Two is required")
+    .max(500, "Content Two must not exceed 500 characters"),
+  cardOneHeading: Yup.string()
+    .required("Card One Heading is required")
+    .max(100, "Card One Heading must not exceed 100 characters"),
+  cardOneContent: Yup.string()
+    .required("Card One Content is required")
+    .max(500, "Card One Content must not exceed 500 characters"),
+  cardOneImage: Yup.mixed()
+    .nullable()
+    .required("Card One Image is required")
+    .test(
+      "fileSize",
+      "File size is too large. Max size is 2MB",
+      (value) => !value || (value && value.size <= FILE_SIZE)
+    )
+    .test(
+      "fileFormat",
+      "Unsupported file format. Allowed: JPG, JPEG, PNG, GIF",
+      (value) => !value || (value && SUPPORTED_FORMATS.includes(value.type))
+    ),
+  cardTwoHeading: Yup.string()
+    .required("Card Two Heading is required")
+    .max(100, "Card Two Heading must not exceed 100 characters"),
+  cardTwoContent: Yup.string()
+    .required("Card Two Content is required")
+    .max(500, "Card Two Content must not exceed 500 characters"),
+  cardTwoImage: Yup.mixed()
+    .nullable()
+    .required("Card Two Image is required")
+    .test(
+      "fileSize",
+      "File size is too large. Max size is 2MB",
+      (value) => !value || (value && value.size <= FILE_SIZE)
+    )
+    .test(
+      "fileFormat",
+      "Unsupported file format. Allowed: JPG, JPEG, PNG, GIF",
+      (value) => !value || (value && SUPPORTED_FORMATS.includes(value.type))
+    ),
+  cardThreeHeading: Yup.string()
+    .required("Card Three Heading is required")
+    .max(100, "Card Three Heading must not exceed 100 characters"),
+  cardThreeContent: Yup.string()
+    .required("Card Three Content is required")
+    .max(500, "Card Three Content must not exceed 500 characters"),
+  cardThreeImage: Yup.mixed()
+    .nullable()
+    .required("Card Three Image is required")
+    .test(
+      "fileSize",
+      "File size is too large. Max size is 2MB",
+      (value) => !value || (value && value.size <= FILE_SIZE)
+    )
+    .test(
+      "fileFormat",
+      "Unsupported file format. Allowed: JPG, JPEG, PNG, GIF",
+      (value) => !value || (value && SUPPORTED_FORMATS.includes(value.type))
+    ),
+  finalContent: Yup.string()
+    .required("Final Content is required")
+    .max(1000, "Final Content must not exceed 1000 characters"),
+});
 
 function CmsCourseAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -134,8 +236,7 @@ function CmsCourseAdd() {
               {/* {storedScreens?.chineseCoursePublish && ( */}
               <button
                 type="submit"
-                className="btn btn-sm ms-2 text-white"
-                style={{ background: "#e60504" }}
+                className="btn btn-sm btn-button py-1"
                 disabled={loadIndicator}
               >
                 {loadIndicator && (
@@ -149,7 +250,7 @@ function CmsCourseAdd() {
               {/* )} */}
               <Link to={"/cms/CmsCourses"}>
                 <button
-                  className="btn btn-sm custom-outline-danger border ms-2 p-2"
+                  className="btn btn-sm btn-border mx-2 py-1"
                   type="button"
                 >
                   Back

@@ -84,27 +84,6 @@ function CMSBlogAdd({ onSuccess }) {
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      {/* <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-          <Link to="/cms/productsitem">
-            <button type="button" className="btn btn-sm btn-border">
-              Back7
-            </button>
-          </Link>
-          &nbsp;&nbsp;
-          <button
-            type="submit"
-            className="btn btn-button btn-sm"
-            disabled={formik.isSubmitting}
-          >
-            {loadIndicator && (
-              <span
-                className="spinner-border spinner-border-sm me-2"
-                aria-hidden="true"
-              ></span>
-            )}
-            Save
-          </button>
-        </div> */}
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add BLog</Modal.Title>
@@ -121,7 +100,7 @@ function CMSBlogAdd({ onSuccess }) {
             <div className="container">
               <div className="mb-3">
                 <label htmlFor="file" className="form-label">
-                  Upload Image
+                  Upload Image<span className="text-danger">*</span>
                 </label>
                 <input
                   type="file"
@@ -150,7 +129,7 @@ function CMSBlogAdd({ onSuccess }) {
 
               <div className="mb-3">
                 <label htmlFor="title" className="form-label">
-                  Blog Title
+                  Blog Title<span className="text-danger">*</span>
                 </label>
                 <input
                   id="title"
@@ -166,7 +145,7 @@ function CMSBlogAdd({ onSuccess }) {
               </div>
               <div className="mb-3">
                 <label htmlFor="description" className="form-label">
-                  Blog Description
+                  Blog Description<span className="text-danger">*</span>
                 </label>
                 <textarea
                   id="description"
