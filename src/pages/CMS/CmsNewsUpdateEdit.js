@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { Button, Modal } from "react-bootstrap";
-import * as Yup from "yup";
+import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 import Delete from "../../components/common/Delete.js";
-import { FaTrash } from "react-icons/fa6";
-import { data } from "jquery";
 
 function CmsNewsUpdateEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -19,6 +17,29 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
   const currentData = new Date().toISOString().split("T")[0];
   const userName = localStorage.getItem("userName");
 
+  const validationSchema = yup.object().shape({
+    // file: yup
+    //   .mixed()
+    //   .required("File is required")
+    //   .test("fileType", "Only JPG, JPEG, PNG files are allowed", (value) => {
+    //     return (
+    //       value && ["image/jpeg", "image/jpg", "image/png"].includes(value.type)
+    //     );
+    //   }),
+    heading: yup
+      .string()
+      .required("Heading is required")
+      .min(3, "Heading must be at least 3 characters"),
+    comment: yup
+      .string()
+      .required("Comment is required")
+      .min(3, "Comment must be at least 3 characters"),
+    para: yup
+      .string()
+      .required("Paragraph is required")
+      .min(10, "Paragraph must be at least 10 characters"),
+  });
+
   const formik = useFormik({
     initialValues: {
       cardImg: "",
@@ -28,7 +49,7 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
       comment: "",
       para: "",
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("data");
       const formData = new FormData();
@@ -114,7 +135,7 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
           >
             <div className="row">
               <div className="col-12 mb-2">
-                <label className="form-label">Upload Image File</label>
+                <label className="form-label">Upload Image File<span className="text-danger">*</span></label>
                 <div className="input-group mb-3">
                   <input
                     type="file"
@@ -153,7 +174,7 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
                 )}
               </div>
               <div class=" col-12 mb-2">
-                <lable class="">Heading</lable>
+                <lable class="">Heading<span className="text-danger">*</span></lable>
                 <div className="input-group mb-3">
                   <input
                     type="text"
@@ -175,7 +196,7 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
               </div>
 
               <div class=" col-12 mb-2">
-                <lable class="">Comment</lable>
+                <lable class="">Comment<span className="text-danger">*</span></lable>
                 <input
                   type="text"
                   className={`form-control   ${
@@ -193,7 +214,7 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
               </div>
 
               <div class=" col-12 mb-2">
-                <lable class="">Paragraph</lable>
+                <lable class="">Paragraph<span className="text-danger">*</span></lable>
                 <textarea
                   type="text"
                   className={`form-control   ${

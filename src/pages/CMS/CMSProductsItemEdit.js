@@ -43,7 +43,7 @@ function CMSProductsItemEdit({ id, getData, handleMenuClose }) {
     onSubmit: async (data) => {
       setLoadIndicator(true);
       const formData = new FormData();
-      formData.append("files", data.files || "");
+      formData.append("file", data.files || "");
       formData.append("imageDetails", data.imageDetails);
       formData.append("updatedBy", userName);
 

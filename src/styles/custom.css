@@ -1196,3 +1196,8 @@ table.dataTable.display > tbody > tr > th {
   background-color: #eb862a !important;
   border: #eb862a !important;
 }
+
+.table-bordered>:not(caption)>*>* {
+  border-width: 1px  var(--bs-border-width);
+  border: 1px solid #a9a9a9;
+}

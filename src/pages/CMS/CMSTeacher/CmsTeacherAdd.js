@@ -178,6 +178,7 @@ const CmsTeacherAdd = ({ getData }) => {
                   className="form-control"
                   onChange={handleFileChange}
                   onBlur={formik.handleBlur}
+                  accept=".jpg,.jpeg,.png,.gif"
                 />
                 {formik.touched.files && formik.errors.files && (
                   <div className="text-danger">{formik.errors.files}</div>
@@ -189,7 +190,7 @@ const CmsTeacherAdd = ({ getData }) => {
                     <img
                       src={URL.createObjectURL(selectedFile)}
                       alt="Selected File"
-                      style={{ maxWidth: "200px" }}
+                      style={{ maxWidth: "150px" }}
                     />
                   )}
                 </div>

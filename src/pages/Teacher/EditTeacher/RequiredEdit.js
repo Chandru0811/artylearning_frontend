@@ -146,9 +146,9 @@ const RequiredEdit = forwardRef(
                 }}
                 onBlur={formik.handleBlur}
               />
-              <p class="mt-4">Note : File must be PDF,Max Size 2 MB</p>
+              <p class="mt-4">Note: File must be PDF, Max Size 2 MB</p>
               {datas?.resume && (
-                <div class="card border-0 shadow" style={{ width: "18rem" }}>
+                <div class="card border-0 shadow" style={{ width: "70%" }}>
                   <div
                     onClick={(e) => e.stopPropagation()}
                     style={{ cursor: "not-allowed" }}
@@ -162,18 +162,30 @@ const RequiredEdit = forwardRef(
                       }}
                       src={pdfLogo}
                       alt="Resume preview"
-                      onClick={(e) => e.stopPropagation()}
                     />
                   </div>
-                  <div class="card-body d-flex justify-content-between align-items-center">
-                    <p class="card-title fw-semibold text-wrap">
+                  <div
+                    class="card-body d-flex justify-content-between align-items-center"
+                    style={{ flexWrap: "wrap" }}
+                  >
+                    <p
+                      class="card-title fw-semibold mb-0 text-wrap"
+                      style={{
+                        flex: 1,
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                      title={datas?.resume?.split("/").pop()}
+                    >
                       {datas?.resume?.split("/").pop()}
                     </p>
                     <a
                       href={datas?.resume}
                       download
-                      class="btn text-dark"
+                      class="btn text-dark ms-2"
                       title="Download Resume"
+                      style={{ flexShrink: 0 }}
                     >
                       <MdOutlineDownloadForOffline size={25} />
                     </a>
@@ -181,6 +193,7 @@ const RequiredEdit = forwardRef(
                 </div>
               )}
             </div>
+
             <div class="col-md-6 col-12 mb-2">
               <label>Education Certificate</label>
               <input
@@ -196,9 +209,9 @@ const RequiredEdit = forwardRef(
                 }}
                 onBlur={formik.handleBlur}
               />
-              <p class="mt-4">Note : File must be PDF,Max Size 2 MB</p>
+              <p class="mt-4">Note: File must be PDF, Max Size 2 MB</p>
               {datas?.educationCertificate && (
-                <div class="card border-0 shadow" style={{ width: "18rem" }}>
+                <div class="card border-0 shadow" style={{ width: "70%" }}>
                   <div
                     onClick={(e) => e.stopPropagation()}
                     style={{ cursor: "not-allowed" }}
@@ -212,18 +225,30 @@ const RequiredEdit = forwardRef(
                       }}
                       src={pdfLogo}
                       alt="Education Certificate preview"
-                      onClick={(e) => e.stopPropagation()}
                     />
                   </div>
-                  <div class="card-body d-flex justify-content-between align-items-center">
-                    <p class="card-title fw-semibold text-wrap">
+                  <div
+                    class="card-body d-flex justify-content-between align-items-center"
+                    style={{ flexWrap: "wrap" }}
+                  >
+                    <p
+                      class="card-title fw-semibold mb-0 text-wrap"
+                      style={{
+                        flex: 1,
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                      title={datas?.educationCertificate?.split("/").pop()}
+                    >
                       {datas?.educationCertificate?.split("/").pop()}
                     </p>
                     <a
                       href={datas?.educationCertificate}
                       download
-                      class="btn text-dark"
+                      class="btn text-dark ms-2"
                       title="Download Certificate"
+                      style={{ flexShrink: 0 }}
                     >
                       <MdOutlineDownloadForOffline size={25} />
                     </a>

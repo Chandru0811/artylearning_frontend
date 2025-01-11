@@ -4,6 +4,9 @@ import fetchAllCentersWithIds from "./List/CenterList";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIdsC from "./List/CourseListByCenter";
 import fetchAllTeacherListByCenter from "./List/TeacherListByCenter";
+import { FaDownload } from "react-icons/fa6";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 function TimeTable() {
   const [data, setData] = useState([]);
@@ -92,6 +95,28 @@ function TimeTable() {
     return `${hour12}:${minutes} ${period}`;
   };
 
+  const handleGeneratePDF = async () => {
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "px",
+      format: "a3",
+    });
+    try {
+      const canvas = await html2canvas(document.querySelector(".card-body"), {
+        scale: 2,
+      });
+      const imgData = canvas.toDataURL();
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 10, 10, pdfWidth - 20, pdfHeight);
+      pdf.save("Class_Timetable.pdf");
+    } catch (error) {
+      toast.error("Failed to generate PDF.");
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -106,10 +131,8 @@ function TimeTable() {
     <div className="container-fluid my-4">
       <div className="card shadow-sm">
         <div className="card-header bg-light d-flex align-items-center">
-     
-            <div className="dot bg-success rounded-circle me-2"></div>
-            <span className="fw-bold text-muted">TimeTable</span>
-         
+          <div className="dot bg-success rounded-circle me-2"></div>
+          <span className="fw-bold text-muted">TimeTable</span>
         </div>
         <div className="d-flex justify-content-between align-items-center py-3 px-2">
           <div className="form-group mb-0 ms-2 mb-1">
@@ -120,7 +143,9 @@ function TimeTable() {
               onChange={handleFilterChange}
               value={filters.centerId}
             >
-              <option value="">Select a Centre</option>
+              <option value="" disabled selected>
+                Select a Centre
+              </option>
               {centerData?.map((center) => (
                 <option key={center.id} value={center.id} selected>
                   {center.centerNames}
@@ -149,7 +174,9 @@ function TimeTable() {
               onChange={handleFilterChange}
               value={filters.courseId}
             >
-              <option selected>Select a Course</option>
+              <option value="" disabled selected>
+                Select a Course
+              </option>
               {courseData &&
                 courseData.map((courseId) => (
                   <option key={courseId.id} value={courseId.id}>
@@ -167,7 +194,9 @@ function TimeTable() {
               value={filters.teacherId}
               onChange={handleFilterChange}
             >
-              <option selected>Select a Teacher</option>
+              <option value="" disabled selected>
+                Select a Teacher
+              </option>
               {teacherData &&
                 teacherData.map((teacher) => (
                   <option key={teacher.id} value={teacher.id}>
@@ -176,9 +205,22 @@ function TimeTable() {
                 ))}
             </select>
           </div>
+
+          {data && Object.keys(data).length > 0 ? (
+            <button
+              className="btn mx-2 btn-sm m-2 text-white"
+              onClick={handleGeneratePDF}
+              style={{background:"#eb862a"}}
+            >
+              <FaDownload />
+            </button>
+          ) : null}
         </div>
         <div className="card-body">
-          <h5 className="text-center text-white p-2" style={{background:"#287f71"}}>
+          <h5
+            className="text-center text-white p-2"
+            style={{ background: "#287f71" }}
+          >
             {day || "No Available Days"}
           </h5>
 
@@ -217,7 +259,9 @@ function TimeTable() {
                             <td
                               key={studentIndex}
                               className={`text-center ${
-                                studentIndex + 1 > batch.batchMaxSize ? "table_cell_color" : ""
+                                studentIndex + 1 > batch.batchMaxSize
+                                  ? "table_cell_color"
+                                  : ""
                               }`}
                               // style={{
                               //   backgroundColor: 1 > 2 ? "#eb862a !important" : "inherit !important",
