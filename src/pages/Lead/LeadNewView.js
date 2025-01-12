@@ -463,11 +463,14 @@ function LeadNewView() {
                             className="text-wrap"
                             style={{
                               fontSize: "12px",
+                              whiteSpace: "normal",
+                              wordBreak: "break-word",
                             }}
                           >
                             {arrange.assessment || "--"}
                           </span>
                         </p>
+
                         <p className="m-0 ">
                           <b>Assessment Date</b>
                           <span>{arrange.assessmentDate || "--"}</span>
