@@ -18,6 +18,7 @@ const ContractEdit = forwardRef(
     const [submitted, setSubmitted] = useState(false);
     const [contactId, setContactId] = useState(null);
     const [empRole, setEmpRole] = useState(null);
+    const [workingDays, setWorkingDays] = useState();
     console.log("object", formData);
     const validationSchema = Yup.object().shape({
       employer: Yup.string().required("*Employer is required"),
@@ -326,6 +327,7 @@ const ContractEdit = forwardRef(
             `/getAllUserById/${formData.staff_id}`
           );
           setEmployerData(response.data.userAccountInfo[0].centers || []);
+          setWorkingDays(response.data.userAccountInfo[0].workingDays);
           if (response.data.userContractCreationModels?.length) {
             const contractData = response.data.userContractCreationModels[0];
             setContactId(contractData);
@@ -760,18 +762,17 @@ const ContractEdit = forwardRef(
                         type="checkbox"
                         className="form-check-input"
                         id={`myCheckbox${index + 1}`}
-                        value={contactId?.day}
+                        value={day}
                         name="workingDays"
                         checked={
-                          contactId?.workingDays &&
-                          contactId?.workingDays.includes(day)
+                          formik.values.workingDays &&
+                          formik.values.workingDays.includes(day)
                         }
                         onChange={(e) => {
                           formik.handleChange(e);
                         }}
                         onBlur={formik.handleBlur}
-                        // disabled={formik.isSubmitting}
-                        disabled
+                        disabled={workingDays && workingDays.length > 0}
                       />
                       <label
                         htmlFor={`myCheckbox${index + 1}`}
