@@ -149,13 +149,14 @@ const ReferalFees = () => {
           ...prevFilters,
           centerId: centerLocalId,
         }));
+      setCenterData(centerLocalId);
       } else if (centerData !== null && centerData.length > 0) {
         setFilters((prevFilters) => ({
           ...prevFilters,
           centerId: centerData[0].id,
         }));
-      }
       setCenterData(centerData);
+      }
     } catch (error) {
       toast.error(error);
     }

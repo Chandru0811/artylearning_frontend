@@ -73,7 +73,7 @@ const ContactEdit = forwardRef(
                 },
               }
             );
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 201) {
               toast.success(response.data.message);
               setFormData((prv) => ({ ...prv, ...values }));
               handleNext();
@@ -90,7 +90,7 @@ const ContactEdit = forwardRef(
                 },
               }
             );
-            if (response.status === 201) {
+            if (response.status === 201 || response.status === 200) {
               toast.success(response.data.message);
               setFormData((prv) => ({ ...prv, ...values }));
               handleNext();

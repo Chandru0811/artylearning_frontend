@@ -734,6 +734,7 @@ const ContractAdd = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.userContractSalary}
+                    readOnly
                   />
                   {formik.touched.userContractSalary &&
                     formik.errors.userContractSalary && (

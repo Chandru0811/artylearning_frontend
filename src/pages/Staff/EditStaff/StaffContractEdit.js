@@ -61,6 +61,10 @@ const StaffContractEdit = forwardRef(
     const [centerData, setCenterData] = useState(null);
     const [employerData, setEmployerData] = useState(null);
     const [datas, setDatas] = useState();
+    const [workingDays, setWorkingDays] = useState();
+
+    console.log("workingDays:",workingDays);
+    
 
     const formik = useFormik({
       initialValues: {
@@ -89,28 +93,6 @@ const StaffContractEdit = forwardRef(
         terminationNotice: formData.terminationNotice || "",
         updatedBy: userName,
       },
-      // onSubmit: async (data) => {
-      //   try {
-      //     const response = await api.put(
-      //       `/updateUserContractCreation/${data.contractId}`,
-      //       data,
-      //       {
-      //         headers: {
-      //           "Content-Type": "application/json",
-      //         },
-      //       }
-      //     );
-      //     if (response.status === 200) {
-      //       toast.success(response.data.message);
-      //       setFormData((prv) => ({ ...prv, ...data }));
-      //       navigate("/staff");
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   }
-      // },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
@@ -195,9 +177,9 @@ const StaffContractEdit = forwardRef(
         const response = await api.get(`/getAllCenterById/${id}`);
         formik.setFieldValue("uen", response.data.uenNumber);
         formik.setFieldValue("addressOfEmployment", response.data.address);
-        console.log("response", response.data);
+        // console.log("response", response.data);
       } catch (error) {
-        toast.error("Error Fetching Data", error);
+        console.error("Error Fetching Data", error);
       }
     };
 
@@ -242,6 +224,7 @@ const StaffContractEdit = forwardRef(
           const employerData = response.data.userAccountInfo[0].centers;
           setEmployerData(employerData);
           console.log("employerData", employerData);
+          setWorkingDays(response.data.userAccountInfo[0].workingDays);
           if (
             response.data.userContractCreationModels &&
             response.data.userContractCreationModels.length > 0
@@ -342,7 +325,7 @@ const StaffContractEdit = forwardRef(
             console.log("Contract ID:", formik.values.contractId);
           }
         } catch (error) {
-          toast.error("Error Fetching Data");
+          console.error("Error Fetching Data");
         }
       };
       console.log(formik.values);
@@ -679,36 +662,6 @@ const StaffContractEdit = forwardRef(
                   value={formik.values.probation}
                 />
               </div>
-              {/* <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>
-                  Working Days<span className="text-danger">*</span>
-                </label>
-                <select
-                  className={`form-select  ${
-                    formik.touched.workingDays && formik.errors.workingDays
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  name="workingDays"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.workingDays}
-                >
-                  <option></option>
-                  <option value="Sunday">Sunday</option>
-                  <option value="Monday">Monday</option>
-                  <option value="Tuesday">Tuesday</option>
-                  <option value="Wednesday">Wednesday</option>
-                  <option value="Thursday">Thursday</option>
-                  <option value="Friday">Friday</option>
-                  <option value="Saturday">Saturday</option>
-                </select>
-                {formik.touched.workingDays && formik.errors.workingDays && (
-                  <div className="invalid-feedback">
-                    {formik.errors.workingDays}
-                  </div>
-                )}
-              </div> */}
               <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Working Days<span className="text-danger">*</span>
@@ -738,8 +691,7 @@ const StaffContractEdit = forwardRef(
                           formik.handleChange(e);
                         }}
                         onBlur={formik.handleBlur}
-                        // Disable only if the form is submitted
-                        disabled={formik.isSubmitting}
+                        disabled={workingDays && workingDays.length > 0}
                       />
                       <label
                         htmlFor={`myCheckbox${index + 1}`}

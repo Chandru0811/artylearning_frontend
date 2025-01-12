@@ -218,11 +218,13 @@
             {
               title: "Time Schedule",
               path: "/timetable",
-              // path: "/calendar",
               access: storedScreens.scheduleTeacherIndex,
             },
-            // { title: "Make Up Class", path: "/reschedule" },
-            // Add more submenus as needed
+            {
+              title: "Calendar",
+              path: "/calendar",
+              access: storedScreens.scheduleTeacherIndex,
+            },
           ],
         },
         {

@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
 import api from "../../config/URL";
-import Delete from "../../components/common/Delete";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import { toast } from "react-toastify";
@@ -35,10 +33,11 @@ const Lead = () => {
   const [activeButton, setActiveButton] = useState("All");
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const centerIDLocal = localStorage.getItem("selectedCenterId");
+  const centerLocalId = localStorage.getItem("selectedCenterId");
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
 
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [filters, setFilters] = useState({
@@ -63,33 +62,29 @@ const Lead = () => {
     setShowEditDialog(false);
     // formik.resetForm();
   };
-  // console.log("object", filters);
-  const fetchData = async () => {
+
+  const fetchCenterData = async () => {
     try {
-      const centerDatas = await fetchAllCentersWithIds();
+      const centerData = await fetchAllCentersWithIds();
       const subjectDatas = await fetchAllSubjectsWithIds();
 
-      setCenterData(centerDatas);
+      if (centerLocalId !== null && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData !== null && centerData.length > 0) {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
+      setCenterData(centerData);
       setSubjectData(subjectDatas);
     } catch (error) {
       toast.error(error);
     }
   };
-
-  // const getLeadData = async () => {
-  //   try {
-  //     const response = await api.get("/getAllLeadInfo");
-  //     setDatas(response.data);
-  //   } catch (error) {
-  //     toast.error("Error Fetch Data ", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  useEffect(() => {
-    // getLeadData();
-    fetchData();
-  }, []);
 
   const handleStatusChange = async (row, status) => {
     setSelectedRow(row);
@@ -153,12 +148,15 @@ const Lead = () => {
     setLoading(true);
     let params = {};
 
-    if (filters.centerId !== "") {
-      params.centerId = filters.centerId;
+    const centerId =
+    !isClearFilterClicked &&
+    (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
+      ? filters.centerId || centerLocalId
+      : "";
+
+    if (centerId !== "") {
+      params.centerId = centerId;
     }
-    // if (filters.centerId === "") {
-    //   params.centerId = centerIDLocal;
-    // }
 
     if (filters.subjectId !== "") {
       params.subjectId = filters.subjectId;
@@ -200,19 +198,43 @@ const Lead = () => {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
+      setIsClearFilterClicked(false);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data and subjects
+  
+      // Check if local storage has center ID
+      if (centerLocalId && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData && centerData.length > 0) {
+        // Use the first center's ID as the default if no center is in local storage
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     getData();
   }, [filters]);
 
   const ResetFilter = () => {
+  localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
     setFilters({
       centerId: "",
       subjectId: "",
       leadStatus: "",
     });
+  setIsClearFilterClicked(true);
   };
 
   useEffect(() => {

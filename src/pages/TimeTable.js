@@ -110,7 +110,7 @@ function TimeTable() {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
       pdf.addImage(imgData, "PNG", 10, 10, pdfWidth - 20, pdfHeight);
-      pdf.save("Class_Timetable.pdf");
+      pdf.save("Class Time Table.pdf");
     } catch (error) {
       toast.error("Failed to generate PDF.");
       console.error(error);
@@ -134,7 +134,7 @@ function TimeTable() {
           <div className="dot bg-success rounded-circle me-2"></div>
           <span className="fw-bold text-muted">TimeTable</span>
         </div>
-        <div className="d-flex justify-content-between align-items-center py-3 px-2">
+        {/* <div className="d-flex justify-content-between align-items-center py-3 px-2 wrap-md">
           <div className="form-group mb-0 ms-2 mb-1">
             <select
               className="form-select form-select-sm center_list"
@@ -215,7 +215,102 @@ function TimeTable() {
               <FaDownload />
             </button>
           ) : null}
+        </div> */}
+        <div className="container">
+          <div className="row py-3 px-2">
+            <div className="col-md-6 col-lg-3 mb-2">
+              <div className="form-group">
+                <select
+                  className="form-select form-select-sm"
+                  name="centerId"
+                  style={{ width: "100%" }}
+                  onChange={handleFilterChange}
+                  value={filters.centerId}
+                >
+                  <option value="" disabled>
+                    Select a Centre
+                  </option>
+                  {centerData?.map((center) => (
+                    <option key={center.id} value={center.id}>
+                      {center.centerNames}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-lg-2 mb-2">
+              <div className="form-group">
+                <input
+                  type="date"
+                  className="form-control form-control-sm"
+                  style={{ width: "100%" }}
+                  name="date"
+                  value={filters.date}
+                  onChange={handleFilterChange}
+                  placeholder="Date"
+                />
+              </div>
+            </div>
+
+            <div className="col-md-6 col-lg-3 mb-2">
+              <div className="form-group">
+                <select
+                  className="form-select form-select-sm"
+                  style={{ width: "100%" }}
+                  name="courseId"
+                  onChange={handleFilterChange}
+                  value={filters.courseId}
+                >
+                  <option value="" disabled>
+                    Select a Course
+                  </option>
+                  {courseData &&
+                    courseData.map((courseId) => (
+                      <option key={courseId.id} value={courseId.id}>
+                        {courseId.courseNames}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-lg-3 mb-2">
+              <div className="form-group">
+                <select
+                  className="form-select form-select-sm"
+                  name="teacherId"
+                  style={{ width: "100%" }}
+                  value={filters.teacherId}
+                  onChange={handleFilterChange}
+                >
+                  <option value="" disabled>
+                    Select a Teacher
+                  </option>
+                  {teacherData &&
+                    teacherData.map((teacher) => (
+                      <option key={teacher.id} value={teacher.id}>
+                        {teacher.teacherNames}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            </div>
+
+            {data && Object.keys(data).length > 0 ? (
+              <div className="col-md-6 col-lg-1 mb-2 text-center">
+                <button
+                  className="btn btn-sm text-white"
+                  onClick={handleGeneratePDF}
+                  style={{ background: "#eb862a" }}
+                >
+                  <FaDownload />
+                </button>
+              </div>
+            ) : null}
+          </div>
         </div>
+
         <div className="card-body">
           <h5
             className="text-center text-white p-2"

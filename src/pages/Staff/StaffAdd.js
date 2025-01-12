@@ -1,5 +1,5 @@
 import { Step, StepLabel, Stepper } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // import Tick from "../../assets/images/Tick.png";
 import StaffPersonalAdd from "./AddStaff/StaffPersonalAdd";
 import StaffAccountAdd from "./AddStaff/StaffAccountAdd";
@@ -24,10 +24,10 @@ const steps = [
 ];
 
 function StaffAdd() {
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set());
+  const [activeStep, setActiveStep] = useState(0);
+  const [skipped, setSkipped] = useState(new Set());
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const childRef = React.useRef();
+  const childRef = useRef();
   const [formData, setFormData] = useState({});
 
   console.log("perant", formData);
