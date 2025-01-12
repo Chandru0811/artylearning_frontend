@@ -38,10 +38,6 @@ function LeaveAdd() {
   const [leaveTypeData, setLeaveTypeData] = useState([]);
   const userName = localStorage.getItem("userName");
 
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
-
   const formik = useFormik({
     initialValues: {
       userId: userId,
@@ -50,7 +46,7 @@ function LeaveAdd() {
       employeeName: "",
       leaveTypeId: "",
       noOfDays: "",
-      fromDate: "",
+      fromDate: new Date().toISOString().split("T")[0],
       toDate: "",
       requestDate: "",
       approverName: "",
@@ -253,11 +249,10 @@ function LeaveAdd() {
                     Leave Type<span className="text-danger">*</span>
                   </label>
                   <select
-                    className={`form-select  ${
-                      formik.touched.leaveTypeId && formik.errors.leaveTypeId
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-select  ${formik.touched.leaveTypeId && formik.errors.leaveTypeId
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("leaveTypeId")}
                   >
                     <option selected></option>
@@ -281,11 +276,11 @@ function LeaveAdd() {
                   </label>
                   <input
                     type="date"
-                    className={`form-control  ${
-                      formik.touched.fromDate && formik.errors.fromDate
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control  ${formik.touched.fromDate && formik.errors.fromDate
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    min={new Date().toISOString().split("T")[0]}
                     {...formik.getFieldProps("fromDate")}
                     onChange={(e) => {
                       formik.handleChange(e);
@@ -309,11 +304,10 @@ function LeaveAdd() {
                   </label>
                   <input
                     type="date"
-                    className={`form-control  ${
-                      formik.touched.toDate && formik.errors.toDate
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control  ${formik.touched.toDate && formik.errors.toDate
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("toDate")}
                     onChange={(e) => {
                       formik.handleChange(e);
@@ -337,11 +331,10 @@ function LeaveAdd() {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.noOfDays && formik.errors.noOfDays
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control  ${formik.touched.noOfDays && formik.errors.noOfDays
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("noOfDays")}
                     value={daysDifference || "0"}
                     readOnly
@@ -359,11 +352,10 @@ function LeaveAdd() {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.dayType && formik.errors.dayType
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control  ${formik.touched.dayType && formik.errors.dayType
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("dayType")}
                   />
                   {formik.touched.dayType && formik.errors.dayType && (
@@ -394,11 +386,10 @@ function LeaveAdd() {
                   </label>
                   <textarea
                     rows={5}
-                    className={`form-control  ${
-                      formik.touched.leaveReason && formik.errors.leaveReason
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control  ${formik.touched.leaveReason && formik.errors.leaveReason
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("leaveReason")}
                   ></textarea>
                   {formik.touched.leaveReason && formik.errors.leaveReason && (
