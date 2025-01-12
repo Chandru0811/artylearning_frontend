@@ -1114,9 +1114,24 @@ table.dataTable.display > tbody > tr > th {
   color: #9f9e9e !important;
 }
 
+/* .MuiStepLabel-iconContainer .MuiSvgIcon-root {
+  color: #287f71 !important;
+} */
+/* Default state (deselected) */
 .MuiStepLabel-iconContainer .MuiSvgIcon-root {
+  color: #5ea99c !important; /* Deselected color (gray) */
+}
+
+/* Active (selected) state */
+.MuiStepLabel-iconContainer.Mui-active .MuiSvgIcon-root {
+  color: #389585 !important; /* Selected color (green) */
+}
+
+/* Completed state */
+.MuiStepLabel-iconContainer.Mui-completed .MuiSvgIcon-root {
   color: #287f71 !important;
 }
+
 /* table */
 
 .MuiTableBody-root tr td {
@@ -1200,4 +1215,37 @@ table.dataTable.display > tbody > tr > th {
 .table-bordered>:not(caption)>*>* {
   border-width: 1px  var(--bs-border-width);
   border: 1px solid #a9a9a9;
+}
+
+/* General table styles */
+.table-bordered {
+  width: 100%;
+  text-align: center; /* Center align all text by default */
+  border-collapse: collapse; /* Ensure borders collapse for cleaner lines */
+}
+
+.table-bordered th, 
+.table-bordered td {
+  text-align: center; /* Center-align content */
+  vertical-align: middle; /* Vertically align text in the middle */
+  border: 1px solid #a9a9a9; /* Add border styling */
+  padding: 10px; /* Add padding for better spacing */
+}
+
+.table-striped > tbody > tr:nth-of-type(even) {
+  background-color: #ffffff; /* White background for even rows */
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #e9f2ff; /* Light blue background for odd rows */
+}
+
+.table_cell_color {
+  background-color: #eb862a !important;
+  border-color: #eb862a !important; /* Ensure consistent border color */
+}
+
+thead th {
+  background-color: #317b5d; /* Example color for header */
+  color: #fff; /* White text color for better contrast */
 }
