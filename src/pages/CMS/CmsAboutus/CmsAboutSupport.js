@@ -9,8 +9,7 @@ function CmsAboutSupport({ getData, datas }) {
   const [editingField, setEditingField] = useState(null);
   const [glassImgUrl, setGlassImgUrl] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const userName  = localStorage.getItem('userName');
-
+  const userName = localStorage.getItem("userName");
 
   console.log("object", datas);
   // const [content, setContent] = useState({
@@ -28,6 +27,7 @@ function CmsAboutSupport({ getData, datas }) {
     setEditingField(field);
   };
   const cancelEdit = () => {
+    formik.resetForm();
     setEditingField(null);
     getData();
   };
@@ -70,7 +70,6 @@ function CmsAboutSupport({ getData, datas }) {
       formData.append("contentOne", values.paragraphs);
       formData.append("updatedBy ", userName);
 
-
       try {
         const response = await api.put(`/updateAboutUsSaveImage`, formData);
         if (response.status === 200) {
@@ -100,11 +99,7 @@ function CmsAboutSupport({ getData, datas }) {
       <section className="support">
         <div className="container-fluid backgound-imag-2 edit-container">
           <div className="container pt-4" style={{ minHeight: "80vh" }}>
-             <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+            <form onSubmit={formik.handleSubmit}>
               <div className="row pt-5">
                 <div className="col-md-5 col-12 d-flex align-items-center justify-content-end paint">
                   <div className="position-relative">
@@ -157,7 +152,8 @@ function CmsAboutSupport({ getData, datas }) {
                             onClick={() => toggleEdit("image")}
                           >
                             <FaEdit />
-                          </button>)}
+                          </button>
+                        )}
                       </div>
                     )}
                     <img
@@ -218,11 +214,13 @@ function CmsAboutSupport({ getData, datas }) {
                       </p>
                       {storedScreens?.aboutUpdate && (
                         <button
+                          type="button"
                           className="btn btn-sm border-transparent ms-2 edit-button"
                           onClick={() => toggleEdit("paragraphs")}
                         >
                           <FaEdit />
-                        </button>)}
+                        </button>
+                      )}
                     </>
                   )}
                 </div>

@@ -27,6 +27,7 @@ function CmsAboutPersonalized({ getData, datas }) {
     setEditingField(index);
   };
   const cancelEdit = () => {
+    formik.resetForm();
     setEditingField(null);
     getData();
   };
@@ -114,11 +115,7 @@ function CmsAboutPersonalized({ getData, datas }) {
       className="container-fluid edit-container"
       style={{ backgroundColor: "#f9fafb" }}
     >
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
+      <form onSubmit={formik.handleSubmit} >
         <div className="container">
           <div className="row py-5">
             <div className="col-md-5 col-12 ">
@@ -130,12 +127,7 @@ function CmsAboutPersonalized({ getData, datas }) {
                     onChange={formik.handleChange}
                     rows="20"
                     className="form-control"
-                    // onKeyDown={(e) => {
-                    //   if (e.key === "Enter") {
-                    //     e.preventDefault(); // Prevent default "new line" behavior
-                    //     console.log("Enter key pressed, but no new line created.");
-                    //   }
-                    // }}
+                   
                   />
                   <span
                     className="btn btn-sm btn-outline-primary border ms-2"

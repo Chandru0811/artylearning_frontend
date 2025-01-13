@@ -354,7 +354,7 @@ const ContractEdit = forwardRef(
             });
           }
         } catch (error) {
-          toast.error("Failed to load data.");
+          console.error("Error Fetching Data");
         }
       };
 

@@ -35,9 +35,10 @@ function LeaveAdminEdit() {
 
   const extension = fileName?.slice(fileName?.lastIndexOf("."));
 
-  const attachementName = fileName?.length - extension?.length <= maxLength
-    ? fileName
-    : `${fileName?.slice(0, maxLength)}${extension}`;
+  const attachementName =
+    fileName?.length - extension?.length <= maxLength
+      ? fileName
+      : `${fileName?.slice(0, maxLength)}${extension}`;
 
   const formik = useFormik({
     initialValues: {
@@ -234,10 +235,11 @@ function LeaveAdminEdit() {
                 </label>
                 <input
                   type="date"
-                  className={`form-control  ${formik.touched.fromDate && formik.errors.fromDate
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control  ${
+                    formik.touched.fromDate && formik.errors.fromDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   readOnly
                   {...formik.getFieldProps("fromDate")}
                   onChange={(e) => {
@@ -263,10 +265,11 @@ function LeaveAdminEdit() {
                 <input
                   type="date"
                   readOnly
-                  className={`form-control  ${formik.touched.toDate && formik.errors.toDate
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control  ${
+                    formik.touched.toDate && formik.errors.toDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("toDate")}
                   onChange={(e) => {
                     formik.handleChange(e);
@@ -288,10 +291,11 @@ function LeaveAdminEdit() {
                 </label>
                 <input
                   type="text"
-                  className={`form-control  ${formik.touched.noOfDays && formik.errors.noOfDays
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control  ${
+                    formik.touched.noOfDays && formik.errors.noOfDays
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("noOfDays")}
                   value={daysDifference || "0"}
                   readOnly
@@ -309,10 +313,11 @@ function LeaveAdminEdit() {
                 </label>
                 <input
                   type="text"
-                  className={`form-control  ${formik.touched.dayType && formik.errors.dayType
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control  ${
+                    formik.touched.dayType && formik.errors.dayType
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("dayType")}
                   readOnly
                 />
@@ -329,10 +334,11 @@ function LeaveAdminEdit() {
                 </label>
                 <input
                   type="text"
-                  className={`form-control  ${formik.touched.leaveType && formik.errors.leaveType
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control  ${
+                    formik.touched.leaveType && formik.errors.leaveType
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("leaveType")}
                   readOnly
                 />
@@ -349,10 +355,11 @@ function LeaveAdminEdit() {
                 </label>
                 <select
                   name="leaveStatus"
-                  className={`form-select ${formik.touched.leaveStatus && formik.errors.leaveStatus
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-select ${
+                    formik.touched.leaveStatus && formik.errors.leaveStatus
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("leaveStatus")}
                 >
                   <option value="PENDING">Pending</option>
@@ -372,10 +379,11 @@ function LeaveAdminEdit() {
                 </label>
                 <textarea
                   rows={5}
-                  className={`form-control  ${formik.touched.leaveReason && formik.errors.leaveReason
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control  ${
+                    formik.touched.leaveReason && formik.errors.leaveReason
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("leaveReason")}
                   readOnly
                 ></textarea>
@@ -386,9 +394,9 @@ function LeaveAdminEdit() {
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3">
-                <p className="headColor mt-5">Attachment</p>
+                <p className="">Attachment</p>
                 {data?.attachment && (
-                  <div class="card border-0 shadow" style={{ width: "70%" }}>
+                  <div class="card border-0 shadow">
                     <div
                       onClick={(e) => e.stopPropagation()}
                       style={{ cursor: "not-allowed" }}

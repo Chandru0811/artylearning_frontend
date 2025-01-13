@@ -423,32 +423,44 @@ function LeaveEdit() {
                   ) : leavedatas?.attachment ? (
                     <div className="mt-3">
                       {leavedatas.attachment.endsWith(".pdf") ? (
-                        <div
-                          class="card border-0 shadow"
-                          style={{ width: "18rem" }}
-                        >
-                          <a
-                            href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                              leavedatas?.attachment
-                            )}&embedded=true`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <div className="card border-0 shadow">
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ cursor: "not-allowed" }}
                           >
                             <img
-                              class="card-img-top img-fluid"
-                              style={{ height: "50%" }}
+                              className="card-img-top img-fluid"
+                              style={{
+                                height: "10rem",
+                                pointerEvents: "none",
+                                cursor: "not-allowed",
+                              }}
                               src={pdfLogo}
-                              alt="Card image cap"
+                              alt="Resume preview"
                             />
-                          </a>
-                          <div class="card-body d-flex justify-content-between">
-                            <p class="card-title fw-semibold text-wrap">
-                              {leavedatas?.attachment?.split("/").pop()}
+                          </div>
+                          <div
+                            className="card-body d-flex justify-content-between align-items-center"
+                            style={{ flexWrap: "wrap" }}
+                          >
+                            <p
+                              className="card-title fw-semibold mb-0 text-wrap"
+                              style={{
+                                flex: 1,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                              title={leavedatas.attachment.split("/").pop()}
+                            >
+                              {leavedatas.attachment.split("/").pop()}
                             </p>
-
                             <a
-                              href={leavedatas?.attachment}
-                              class="btn text-dark"
+                              href={leavedatas.attachment}
+                              download
+                              className="btn text-dark ms-2"
+                              title="Download Resume"
+                              style={{ flexShrink: 0 }}
                             >
                               <MdOutlineDownloadForOffline size={25} />
                             </a>
@@ -465,6 +477,7 @@ function LeaveEdit() {
                     </div>
                   ) : null}
                 </div>
+
                 <div className="col-md-6 col-12 mb-3">
                   <label className="form-label">
                     Leave Reason<span className="text-danger">*</span>
