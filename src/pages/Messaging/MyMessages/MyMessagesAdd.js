@@ -18,6 +18,14 @@ function MyMessagesAdd({ onSuccess }) {
   const validationSchema = yup.object().shape({
     student: yup.string().required("*Student is required"),
     message: yup.string().required("*Message is required"),
+    files: yup
+      .mixed()
+      .notRequired()
+      .test(
+        "max-file-name-length",
+        "*File name must be at most 50 characters",
+        (value) => !value || (value.name && value.name.length <= 50)
+      ),
   });
 
   const formik = useFormik({

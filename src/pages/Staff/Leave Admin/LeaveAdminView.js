@@ -225,50 +225,50 @@ function LeaveAdminView() {
           <div className="row mt-4">
             <div className="container p-2">
               {data?.attachment && (
-                  <div class="card border-0 shadow" style={{ width: "30%" }}>
-                    <div
-                      onClick={(e) => e.stopPropagation()}
-                      style={{ cursor: "not-allowed" }}
-                    >
-                      <img
-                        class="card-img-top img-fluid"
-                        style={{
-                          height: "10rem",
-                          pointerEvents: "none",
-                          cursor: "not-allowed",
-                        }}
-                        src={pdfLogo}
-                        alt="Resume preview"
-                      />
-                    </div>
-                    <div
-                      class="card-body d-flex justify-content-between align-items-center"
-                      style={{ flexWrap: "wrap" }}
-                    >
-                      <p
-                        class="card-title fw-semibold mb-0 text-wrap"
-                        style={{
-                          flex: 1,
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                        title={data?.attachment?.split("/").pop()}
-                      >
-                        {data?.attachment?.split("/").pop()}
-                      </p>
-                      <a
-                        href={data?.attachment}
-                        download
-                        class="btn text-dark ms-2"
-                        title="Download Resume"
-                        style={{ flexShrink: 0 }}
-                      >
-                        <MdOutlineDownloadForOffline size={25} />
-                      </a>
-                    </div>
+                <div class="card border-0 shadow" style={{ width: "30%" }}>
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    style={{ cursor: "not-allowed" }}
+                  >
+                    <img
+                      class="card-img-top img-fluid"
+                      style={{
+                        height: "10rem",
+                        pointerEvents: "none",
+                        cursor: "not-allowed",
+                      }}
+                      src={pdfLogo}
+                      alt="Resume preview"
+                    />
                   </div>
-                )}
+                  <div
+                    class="card-body d-flex justify-content-between align-items-center"
+                    style={{ flexWrap: "wrap" }}
+                  >
+                    <p
+                      class="card-title fw-semibold mb-0 text-wrap"
+                      style={{
+                        flex: 1,
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                      title={data?.attachment?.split("/").pop()}
+                    >
+                      {data?.attachment?.split("/").pop()}
+                    </p>
+                    <a
+                      href={data?.attachment}
+                      download
+                      class="btn text-dark ms-2"
+                      title="Download Resume"
+                      style={{ flexShrink: 0 }}
+                    >
+                      <MdOutlineDownloadForOffline size={25} />
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

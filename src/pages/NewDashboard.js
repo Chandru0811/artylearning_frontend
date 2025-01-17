@@ -204,7 +204,7 @@ function NewDashboard() {
       ) : (
         <div className="container mt-4">
           <div className="row mt-3">
-            {datas.revenueGrowthByMonth &&
+            {datas?.revenueGrowthByMonth &&
               datas?.revenueGrowthByMonth.map((data, index) => (
                 <div className="col-md-3 mb-3">
                   <div

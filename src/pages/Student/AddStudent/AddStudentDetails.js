@@ -31,7 +31,13 @@ const validationSchema = Yup.object().shape({
   studentChineseName: Yup.string().required(
     "*Student Chinese Name is required"
   ),
-  file: Yup.string().required("*Select a Profile Image"),
+  file: Yup.mixed()
+    .required("*File is required")
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || (value.name && value.name.length <= 50)
+    ),
   // preAssessmentResult: Yup.string().required(
   //   "*Pre-Assessment Result is required!"
   // ),
@@ -39,7 +45,8 @@ const validationSchema = Yup.object().shape({
     "*Medical Condition Result is required"
   ),
   remark: Yup.string()
-    .max(200, "*The maximum length is 200 characters").notRequired(),
+    .max(200, "*The maximum length is 200 characters")
+    .notRequired(),
   // nationality: Yup.string().required("*Select a Nationality!"),
   primaryLanguage: Yup.string().required("*Primary Language is required"),
   race: Yup.string().required("*Select a Race"),
@@ -52,7 +59,7 @@ const AddStudentDetails = forwardRef(
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
-    const userName = localStorage.getItem('userName');
+    const userName = localStorage.getItem("userName");
 
     // console.log("FormData is ", formData);
 
@@ -117,7 +124,7 @@ const AddStudentDetails = forwardRef(
         remark: formData.remark || "",
         allowMagazine: formData.allowMagazine || "",
         allowSocialMedia: formData.allowSocialMedia || "",
-        createdby:  userName,
+        createdby: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -189,7 +196,7 @@ const AddStudentDetails = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -222,7 +229,7 @@ const AddStudentDetails = forwardRef(
             formik.setValues({
               centerId: leadData.centerId || "",
               studentName: leadData.studentName || "",
-              leadId:leadData.id || "",
+              leadId: leadData.id || "",
               studentChineseName: leadData.studentChineseName || "",
               file: null || "",
               age: leadData.dateOfBirth
@@ -233,7 +240,8 @@ const AddStudentDetails = forwardRef(
               gender: leadData.gender || "",
               schoolType: leadData.schoolType || "",
               schoolName: leadData.nameOfSchool || "",
-              preAssessmentResult: leadData.gradeCategory || "No Assessment Performed",
+              preAssessmentResult:
+                leadData.gradeCategory || "No Assessment Performed",
               race: leadData.ethnicGroup || "",
               nationality: leadData.nationality || "",
               primaryLanguage: leadData.primaryLanguage || "",
@@ -271,11 +279,14 @@ const AddStudentDetails = forwardRef(
 
     return (
       <div className="container-fluid">
-        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className=" border-0 mb-5">
             <div className="mb-3">
               <p class="headColor">Student Details</p>
@@ -347,7 +358,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.dateOfBirth}
-                      // max={maxDate.toISOString().split("T")[0]}
+                        // max={maxDate.toISOString().split("T")[0]}
                       />
                       {formik.touched.dateOfBirth &&
                         formik.errors.dateOfBirth && (
@@ -735,7 +746,6 @@ const AddStudentDetails = forwardRef(
                       height: "7rem",
                     }}
                     maxLength={200}
-
                   />
                   {formik.touched.remark && formik.errors.remark && (
                     <div className="error text-danger">

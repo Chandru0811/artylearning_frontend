@@ -21,6 +21,13 @@ const validationSchema = Yup.object().shape({
       postalCode: Yup.string()
         .matches(/^\d{6}$/, "Invalid Number(6 digit)")
         .notRequired(),
+      files: Yup.mixed()
+        .notRequired()
+        .test(
+          "max-file-name-length",
+          "*File name must be at most 50 characters",
+          (value) => !value || (value.name && value.name.length <= 50)
+        ),
     })
   ),
 });
@@ -59,7 +66,10 @@ const AddEmergencyContact = forwardRef(
         setLoadIndicators(true);
         try {
           const formDatas = new FormData();
-          formDatas.append("emergencyContactName", data.emergencyContactName || "");
+          formDatas.append(
+            "emergencyContactName",
+            data.emergencyContactName || ""
+          );
           formDatas.append("emergencyRelation", "Brother");
           formDatas.append("emergencyContactNo", data.emergencyContactNo || "");
           data.emergencyContactInformation?.map((contact, index) => {
@@ -79,7 +89,10 @@ const AddEmergencyContact = forwardRef(
               formDatas.append(`files[${index}]`, contact.files || "");
             }
             if (contact.id) {
-              formDatas.append(`emergencyAuthorizedContactIds[${index}]`, contact.id);
+              formDatas.append(
+                `emergencyAuthorizedContactIds[${index}]`,
+                contact.id
+              );
             }
             // formDatas.append(`index[${index}]`, index);
           });
@@ -569,6 +582,20 @@ const AddEmergencyContact = forwardRef(
                               onBlur={formik.handleBlur}
                               accept=".jpg, .jpeg, .png, .gif, .bmp"
                             />
+                            {formik.touched.emergencyContactInformation?.[index]
+                              ?.files &&
+                              formik.errors.emergencyContactInformation?.[index]
+                                ?.files && (
+                                <div className="error text-danger">
+                                  <small>
+                                    {
+                                      formik.errors
+                                        .emergencyContactInformation?.[index]
+                                        ?.files
+                                    }
+                                  </small>
+                                </div>
+                              )}
                             {profileImage[index] ? (
                               <img
                                 src={profileImage[index]}

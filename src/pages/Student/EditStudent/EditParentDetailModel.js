@@ -24,6 +24,13 @@ const validationSchema = Yup.object().shape({
     .matches(/^\d+$/, "Invalid Postal Code")
     .required("*Postal code is required"),
   address: Yup.string().required("*Address is required"),
+  files: Yup.mixed()
+    .notRequired()
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || (value.name && value.name.length <= 50)
+    ),
 });
 
 const EditParentDetailModel = forwardRef(({ id, getData }) => {
@@ -221,6 +228,11 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                     onBlur={formik.handleBlur}
                     accept=".jpg, .jpeg, .png, .gif, .bmp"
                   />
+                  {formik.touched.file && formik.errors.file && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.file}</small>
+                    </div>
+                  )}
                   <div className="my-2">
                     {data.profileImage ? (
                       <img
@@ -235,17 +247,17 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                       />
                     ) : (
                       <div
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        backgroundColor: "#e0e0e0",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      No Image
-                    </div>
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          backgroundColor: "#e0e0e0",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        No Image
+                      </div>
                     )}
                   </div>
                 </div>

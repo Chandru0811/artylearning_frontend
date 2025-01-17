@@ -26,7 +26,13 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().email("*Invalid Email").required("*Email is required"),
   // shortIntroduction: Yup.string().required("*Short Introduction is required!"),
   gender: Yup.string().required("*Gender is required"),
-  file: Yup.string().required("*Photo is required"),
+  file: Yup.mixed()
+    .required("*Photo is required")
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || value.name.length <= 50
+    ),
   status: Yup.string().required("*Status is required"),
 
   password: Yup.string()

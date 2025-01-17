@@ -39,19 +39,26 @@ const validationSchema = Yup.object().shape({
     .positive("*Please enter a valid number")
     .integer("*Bank Account Number is must be number"),
   bankAccountName: Yup.string().required("*Bank Account Name is required"),
-  file: Yup.mixed().required("*File is required"),
+  file: Yup.mixed()
+    .required("*File is required")
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || value.name.length <= 50
+    ),
+
   target: Yup.number()
-  .typeError("*Must be a number")
-  .required("*Target is required")
-  .positive("*Must be a positive number")
-  .integer("*Must be a whole number"),
+    .typeError("*Must be a number")
+    .required("*Target is required")
+    .positive("*Must be a positive number")
+    .integer("*Must be a whole number"),
 
   invoiceNotes: Yup.string()
     .notRequired()
     .max(200, "*The maximum length is 200 characters"),
 });
 
-function CenterAdd({handleCenterChanged}) {
+function CenterAdd({ handleCenterChanged }) {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [managerData, setmanagerData] = useState(null);
@@ -134,7 +141,7 @@ function CenterAdd({handleCenterChanged}) {
         });
         if (response.status === 201) {
           toast.success(response.data.message);
-          handleCenterChanged()
+          handleCenterChanged();
           navigate("/center");
         } else {
           toast.error(response.data.message);

@@ -24,6 +24,13 @@ const validationSchema = Yup.object({
     ),
   dayType: Yup.string().required("*Day Type is required"),
   leaveReason: Yup.string().required("*Leave Reason is required"),
+  file: Yup.mixed()
+    .notRequired()
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || (value.name && value.name.length <= 50)
+    ),
 });
 
 function LeaveEdit() {
@@ -410,72 +417,77 @@ function LeaveEdit() {
                     }}
                     onBlur={formik.handleBlur}
                   />
-                  {formik.values.file instanceof File ? (
-                    <div className="mt-3">
-                      {formik.values.file.type.startsWith("image/") && (
+                  {formik.touched.file && formik.errors.file && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.file}</small>
+                    </div>
+                  )}
+                  <div className="mt-3">
+                    {formik.values.file instanceof File ? (
+                      formik.values.file.type.startsWith("image/") ? (
                         <img
                           src={URL.createObjectURL(formik.values.file)}
                           alt="Preview"
                           className="img-fluid"
                         />
-                      )}
-                    </div>
-                  ) : leavedatas?.attachment ? (
-                    <div className="mt-3">
-                      {leavedatas.attachment.endsWith(".pdf") ? (
-                        <div className="card border-0 shadow">
-                          <div
-                            onClick={(e) => e.stopPropagation()}
-                            style={{ cursor: "not-allowed" }}
-                          >
-                            <img
-                              className="card-img-top img-fluid"
-                              style={{
-                                height: "10rem",
-                                pointerEvents: "none",
-                                cursor: "not-allowed",
-                              }}
-                              src={pdfLogo}
-                              alt="Resume preview"
-                            />
-                          </div>
-                          <div
-                            className="card-body d-flex justify-content-between align-items-center"
-                            style={{ flexWrap: "wrap" }}
-                          >
-                            <p
-                              className="card-title fw-semibold mb-0 text-wrap"
-                              style={{
-                                flex: 1,
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                              }}
-                              title={leavedatas.attachment.split("/").pop()}
-                            >
-                              {leavedatas.attachment.split("/").pop()}
-                            </p>
-                            <a
-                              href={leavedatas.attachment}
-                              download
-                              className="btn text-dark ms-2"
-                              title="Download Resume"
-                              style={{ flexShrink: 0 }}
-                            >
-                              <MdOutlineDownloadForOffline size={25} />
-                            </a>
-                          </div>
-                        </div>
                       ) : (
-                        <img
-                          src={leavedatas.attachment}
-                          alt="Attachment"
-                          className="img-fluid"
-                          style={{ height: "100px", objectFit: "contain" }}
-                        />
-                      )}
-                    </div>
-                  ) : null}
+                        <p className="text-muted">
+                          Unsupported file type for preview
+                        </p>
+                      )
+                    ) : leavedatas?.attachment ? (
+                      <div
+                        className="card border-0 shadow"
+                        style={{ width: "70%" }}
+                      >
+                        <div
+                          onClick={(e) => e.stopPropagation()}
+                          style={{ cursor: "not-allowed" }}
+                        >
+                          <img
+                            className="card-img-top img-fluid"
+                            style={{
+                              height: "10rem",
+                              pointerEvents: "none",
+                              cursor: "not-allowed",
+                            }}
+                            src={
+                              leavedatas.attachment.endsWith(".pdf")
+                                ? pdfLogo
+                                : leavedatas.attachment
+                            }
+                            alt="Attachment Preview"
+                          />
+                        </div>
+                        <div
+                          className="card-body d-flex justify-content-between align-items-center"
+                          style={{ flexWrap: "wrap" }}
+                        >
+                          <p
+                            className="card-title fw-semibold mb-0 text-wrap"
+                            style={{
+                              flex: 1,
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}
+                            title={leavedatas.attachment.split("/").pop()}
+                          >
+                            {leavedatas.attachment.split("/").pop()}
+                          </p>
+                          <a
+                            href={leavedatas.attachment}
+                            download
+                            className="btn text-dark ms-2"
+                            title="Download Attachment"
+                            style={{ flexShrink: 0 }}
+                          >
+                            <MdOutlineDownloadForOffline size={25} />
+                          </a>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
 
                 <div className="col-md-6 col-12 mb-3">

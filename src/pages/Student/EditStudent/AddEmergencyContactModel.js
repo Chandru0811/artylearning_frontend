@@ -13,6 +13,13 @@ const validationSchema = Yup.object().shape({
   postalCode: Yup.string()
     .matches(/^\d+$/, "Invalid Phone Number")
     .notRequired(""),
+  files: Yup.mixed()
+    .notRequired()
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || (value.name && value.name.length <= 50)
+    ),
 });
 
 const AddEmergencyContactModel = forwardRef(
@@ -250,6 +257,11 @@ const AddEmergencyContactModel = forwardRef(
                       onBlur={formik.handleBlur}
                       accept=".jpg, .jpeg, .png"
                     />
+                     {formik.touched.files && formik.errors.files && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.files}</small>
+                    </div>
+                  )}
                   </div>
                 </div>
               </Modal.Body>

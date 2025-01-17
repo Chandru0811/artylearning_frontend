@@ -28,6 +28,13 @@ const validationSchema = Yup.object().shape({
     .matches(/^\d+$/, "*Invalid Postal Code")
     .required("*Postal code is required"),
   addresses: Yup.string().required("*Address is required"),
+  file: Yup.mixed()
+    .notRequired()
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || (value.name && value.name.length <= 50)
+    ),
 });
 
 const AddParentDetailModel = forwardRef(
@@ -340,6 +347,11 @@ const AddParentDetailModel = forwardRef(
                                 1 MB
                               </small>
                             </p>
+                            {formik.touched.file && formik.errors.file && (
+                              <div className="error text-danger">
+                                <small>{formik.errors.file}</small>
+                              </div>
+                            )}
                           </div>
                           <div className="text-start">
                             <label htmlFor="" className="mb-1 fw-medium">

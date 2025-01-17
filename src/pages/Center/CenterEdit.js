@@ -48,6 +48,13 @@ const validationSchema = Yup.object().shape({
   invoiceNotes: Yup.string()
     .notRequired()
     .max(200, "*The maximum length is 200 characters"),
+  file: Yup.mixed()
+    .required("*File is required")
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || value.name.length <= 50
+    ),
   target: Yup.number()
     .typeError("*Must be a number")
     .required("*Target is required")
@@ -55,7 +62,7 @@ const validationSchema = Yup.object().shape({
     .integer("*Must be a whole number"),
 });
 
-function CenterEdit({handleCenterChanged}) {
+function CenterEdit({ handleCenterChanged }) {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);

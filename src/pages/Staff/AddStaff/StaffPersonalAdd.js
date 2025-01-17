@@ -24,7 +24,14 @@ const validationSchema = Yup.object().shape({
   citizenship: Yup.string().required("*Citizenship is required"),
   status: Yup.string().required("*Status is required"),
   role: Yup.string().required("*Role is required"),
-  file: Yup.mixed().required("*Photo is required"),
+  file: Yup.mixed()
+    .required("*Photo is required")
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || value.name.length <= 50
+    ),
+
   password: Yup.string()
     .matches(/^\S*$/, "*Password must not contain spaces.")
     .required("*Enter the valid Password"),
@@ -371,11 +378,11 @@ const StaffPersonalAdd = forwardRef(
                   }}
                   onBlur={formik.handleBlur}
                 />
-                {formik.touched.file && !formik.values.file && (
-                  <div className="error text-danger">
-                    <small>Photo is required</small>
-                  </div>
-                )}
+                {formik.touched.file && formik.errors.file && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.file}</small>
+                    </div>
+                  )}
               </div>
             </div>
             <div class="col-md-6 col-12 mb-3">

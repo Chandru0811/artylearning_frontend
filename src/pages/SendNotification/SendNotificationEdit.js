@@ -22,7 +22,16 @@ const validationSchema = Yup.object({
   courseIds: Yup.array().min(1, "At least one course must be selected"),
   classIds: Yup.array().min(1, "At least one class must be selected"),
   days: Yup.string().required("*Day is required"),
-  // attachments: Yup.string().required("*Photo is required"),
+  attachments: Yup.array()
+    .notRequired()
+    .test(
+      "max-file-name-length",
+      "*Each file name must be at most 50 characters",
+      (values) => {
+        if (!values || values.length === 0) return true;
+        return values.every((file) => file.name && file.name.length <= 50);
+      }
+    ),
 });
 
 function SendNotificationEdit() {

@@ -26,6 +26,13 @@ function ReplacementAdd({
     // classCode: Yup.string().required("*Class Code is required"),
     absentDate: Yup.string().required("*Absent Date is required"),
     absentReason: Yup.string().required("*Absent Reason is required"),
+    file: Yup.mixed()
+      .required("*File is required")
+      .test(
+        "max-file-name-length",
+        "*File name must be at most 50 characters",
+        (value) => !value || value.name.length <= 50
+      ),
   });
 
   const handleClose = () => {
@@ -116,7 +123,7 @@ function ReplacementAdd({
   const fetchBatchandTeacherData = async (day) => {
     try {
       const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
-      console.log("response.data.batchList",response.data.batchList)
+      console.log("response.data.batchList", response.data.batchList);
       setBatchData(response.data.batchList);
     } catch (error) {
       toast.error(error.message);
@@ -325,19 +332,19 @@ function ReplacementAdd({
                   >
                     <option value="" disabled selected></option>
                     {batchData &&
-                    batchData.map((time) => {
-                      const displayTime = normalizeTime(time);
-                      const valueTime =
-                        time.includes("AM") || time.includes("PM")
-                          ? convertTo24Hour(time)
-                          : time;
+                      batchData.map((time) => {
+                        const displayTime = normalizeTime(time);
+                        const valueTime =
+                          time.includes("AM") || time.includes("PM")
+                            ? convertTo24Hour(time)
+                            : time;
 
-                      return (
-                        <option key={time} value={valueTime}>
-                          {displayTime}
-                        </option>
-                      );
-                    })}
+                        return (
+                          <option key={time} value={valueTime}>
+                            {displayTime}
+                          </option>
+                        );
+                      })}
                   </select>
                   {formik.touched.preferredTiming &&
                     formik.errors.preferredTiming && (
@@ -386,7 +393,10 @@ function ReplacementAdd({
                     <option value="STUDENT_SICK">STUDENT_SICK</option> */}
                     {attendanceDatas &&
                       attendanceDatas.map((attendance) => (
-                        <option key={attendance.id} value={attendance.absentReason}>
+                        <option
+                          key={attendance.id}
+                          value={attendance.absentReason}
+                        >
                           {attendance.absentReason}
                         </option>
                       ))}

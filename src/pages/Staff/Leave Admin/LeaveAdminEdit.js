@@ -395,8 +395,9 @@ function LeaveAdminEdit() {
               </div>
               <div className="col-md-6 col-12 mb-3">
                 <p className="">Attachment</p>
+
                 {data?.attachment && (
-                  <div class="card border-0 shadow">
+                  <div class="card border-0 shadow" style={{ width: "70%" }}>
                     <div
                       onClick={(e) => e.stopPropagation()}
                       style={{ cursor: "not-allowed" }}

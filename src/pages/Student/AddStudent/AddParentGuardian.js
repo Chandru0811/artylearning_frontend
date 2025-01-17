@@ -46,7 +46,13 @@ const AddParentGuardian = forwardRef(
             primaryContact: Yup.boolean().required(
               "*Primary Contact is required"
             ),
-            file: Yup.mixed().nullable(), // File is not mandatory
+            file: Yup.mixed()
+              .notRequired()
+              .test(
+                "max-file-name-length",
+                "*File name must be at most 50 characters",
+                (value) => !value || (value.name && value.name.length <= 50)
+              ),
           })
         )
         .min(1, "*At least one parent information is required"),
@@ -298,11 +304,11 @@ const AddParentGuardian = forwardRef(
             ]);
 
             const selectedContactIndex = leadData.primaryContactMother
-            ? 0
-            : leadData.primaryContactFather
-            ? 1
-            : null;
-          setSelectedPrimaryContactIndex(selectedContactIndex);
+              ? 0
+              : leadData.primaryContactFather
+              ? 1
+              : null;
+            setSelectedPrimaryContactIndex(selectedContactIndex);
             setRows(2);
           }
         } catch (error) {
@@ -445,21 +451,24 @@ const AddParentGuardian = forwardRef(
                     // }}
                     onChange={(e) => {
                       const isChecked = e.target.checked;
-          
+
                       if (isChecked) {
                         // Set the clicked row as the primary contact
                         formik.setFieldValue(
                           `parentInformation[${index}].primaryContact`,
                           true
                         );
-          
+
                         // Deselect all other rows' primaryContact fields
                         formik.values.parentInformation.forEach((_, i) => {
                           if (i !== index) {
-                            formik.setFieldValue(`parentInformation[${i}].primaryContact`, false);
+                            formik.setFieldValue(
+                              `parentInformation[${i}].primaryContact`,
+                              false
+                            );
                           }
                         });
-          
+
                         // Update the selected index
                         setSelectedPrimaryContactIndex(index);
                       }
@@ -662,7 +671,7 @@ const AddParentGuardian = forwardRef(
                       const file = event.target.files[0];
                       if (!file) {
                         const updatedProfileImage = [...profileImage];
-                        updatedProfileImage[index] = null; 
+                        updatedProfileImage[index] = null;
                         setProfileImage(updatedProfileImage);
                         formik.setFieldValue(
                           `parentInformation[${index}].file`,

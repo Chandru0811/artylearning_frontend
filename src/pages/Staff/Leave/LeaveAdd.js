@@ -24,6 +24,13 @@ const validationSchema = Yup.object({
   leaveReason: Yup.string()
     .required("*Leave Reason is required")
     .max(200, "*The maximum length is 200 characters"),
+  file: Yup.mixed()
+    .notRequired()
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || (value.name && value.name.length <= 50)
+    ),
 });
 
 function LeaveAdd() {
@@ -175,7 +182,8 @@ function LeaveAdd() {
           </li>
           <li>
             <Link to="/leave" className="custom-breadcrumb">
-              &nbsp;Leave Request <span className="breadcrumb-separator"> &gt; </span>
+              &nbsp;Leave Request{" "}
+              <span className="breadcrumb-separator"> &gt; </span>
             </Link>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
@@ -249,10 +257,11 @@ function LeaveAdd() {
                     Leave Type<span className="text-danger">*</span>
                   </label>
                   <select
-                    className={`form-select  ${formik.touched.leaveTypeId && formik.errors.leaveTypeId
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-select  ${
+                      formik.touched.leaveTypeId && formik.errors.leaveTypeId
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("leaveTypeId")}
                   >
                     <option selected></option>
@@ -276,10 +285,11 @@ function LeaveAdd() {
                   </label>
                   <input
                     type="date"
-                    className={`form-control  ${formik.touched.fromDate && formik.errors.fromDate
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.fromDate && formik.errors.fromDate
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     min={new Date().toISOString().split("T")[0]}
                     {...formik.getFieldProps("fromDate")}
                     onChange={(e) => {
@@ -304,10 +314,11 @@ function LeaveAdd() {
                   </label>
                   <input
                     type="date"
-                    className={`form-control  ${formik.touched.toDate && formik.errors.toDate
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.toDate && formik.errors.toDate
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("toDate")}
                     onChange={(e) => {
                       formik.handleChange(e);
@@ -331,10 +342,11 @@ function LeaveAdd() {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${formik.touched.noOfDays && formik.errors.noOfDays
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.noOfDays && formik.errors.noOfDays
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("noOfDays")}
                     value={daysDifference || "0"}
                     readOnly
@@ -352,10 +364,11 @@ function LeaveAdd() {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${formik.touched.dayType && formik.errors.dayType
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.dayType && formik.errors.dayType
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("dayType")}
                   />
                   {formik.touched.dayType && formik.errors.dayType && (
@@ -379,6 +392,11 @@ function LeaveAdd() {
                     }}
                     onBlur={formik.handleBlur}
                   />
+                   {formik.touched.file && formik.errors.file && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.file}</small>
+                    </div>
+                  )}
                 </div>
                 <div className="col-md-6 col-12 mb-3">
                   <label className="form-label">
@@ -386,10 +404,11 @@ function LeaveAdd() {
                   </label>
                   <textarea
                     rows={5}
-                    className={`form-control  ${formik.touched.leaveReason && formik.errors.leaveReason
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.leaveReason && formik.errors.leaveReason
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("leaveReason")}
                   ></textarea>
                   {formik.touched.leaveReason && formik.errors.leaveReason && (
