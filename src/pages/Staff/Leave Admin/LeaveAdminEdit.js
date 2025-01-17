@@ -120,20 +120,19 @@ function LeaveAdminEdit() {
     getData();
   }, [id]);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(
-          `/getUserLeaveRequestByUserId/${userId}`
-        );
-        setData(response.data);
-      } catch (error) {
-        toast.error("Error Fetching Data : ", error);
-      }
-    };
-    getData();
-  }, []);
-
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await api.get(
+  //         `/getUserLeaveRequestByUserId/${userId}`
+  //       );
+  //       setData(response.data);
+  //     } catch (error) {
+  //       toast.error("Error Fetching Data : ", error);
+  //     }
+  //   };
+  //   getData();
+  // }, []);
   return (
     <div className="container-fluid">
       <ol

@@ -138,7 +138,7 @@ const ReferalFees = () => {
           ...prevFilters,
           centerId: centerLocalId,
         }));
-      setCenterData(centerLocalId);
+      setCenterData(centerData);
       } else if (centerData !== null && centerData.length > 0) {
         setFilters((prevFilters) => ({
           ...prevFilters,
@@ -157,7 +157,7 @@ const ReferalFees = () => {
     };
     fetchData();
   }, []);
-
+console.log("centerData",centerData);
   useEffect(() => {
     fetchData();
   }, [filters]);
@@ -270,7 +270,7 @@ const ReferalFees = () => {
                 value={filters.centerId}
               >
                 <option value="">All Center</option>
-                {centerData?.map((center) => (
+                { Array.isArray(centerData) && centerData?.map((center) => (
                   <option key={center.id} value={center.id}>
                     {center.centerNames}
                   </option>
