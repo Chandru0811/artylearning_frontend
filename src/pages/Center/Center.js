@@ -120,11 +120,31 @@ const Center = ({handleCenterChanged}) => {
     fetchCenterManagerData();
   }, []);
 
+  // const fetchData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const queryParams = new URLSearchParams(filters).toString();
+  //     const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
+  //     setData(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const fetchData = async () => {
     try {
       setLoading(true);
-      const queryParams = new URLSearchParams(filters).toString();
+  
+      // Filter out empty or null values from the filters
+      const nonEmptyFilters = Object.fromEntries(
+        Object.entries(filters).filter(([key, value]) => value !== "")
+      );
+  
+      const queryParams = new URLSearchParams(nonEmptyFilters).toString();
       const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
+  
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -133,6 +153,7 @@ const Center = ({handleCenterChanged}) => {
     }
   };
 
+  
   useEffect(() => {
     fetchData();
   }, [filters]);
