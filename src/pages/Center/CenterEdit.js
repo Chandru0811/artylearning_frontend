@@ -34,27 +34,22 @@ const validationSchema = Yup.object().shape({
     .required("*Email is required"),
   openingDate: Yup.date().required("*Date is required"),
   uenNumber: Yup.string().required("*UEN number is required"),
-  // taxRegistrationNumber: Yup.string().required(
-  //   "*Tax Registration Number is required"
-  // ),
+  address: Yup.string().required("*Address is required"),
+
   bankName: Yup.string().required("*Bank Name is required"),
   bankBranch: Yup.string().required("*Bank Branch is required"),
-  bankAccountNumber: Yup.number()
-    .typeError("*Bank Account Number be numeric")
-    .required("*Bank Account Number is required")
-    .positive("*Please enter a valid number")
-    .integer("*Bank Account Number must be Numeric"),
+  bankAccountNumber: Yup.string().required("*Bank Account Number is required"),
   bankAccountName: Yup.string().required("*Bank Account Name is required"),
   invoiceNotes: Yup.string()
     .notRequired()
     .max(200, "*The maximum length is 200 characters"),
-  file: Yup.mixed()
-    .required("*File is required")
-    .test(
-      "max-file-name-length",
-      "*File name must be at most 50 characters",
-      (value) => !value || value.name.length <= 50
-    ),
+  // file: Yup.mixed()
+  //   .required("*File is required")
+  //   .test(
+  //     "max-file-name-length",
+  //     "*File name must be at most 50 characters",
+  //     (value) => !value || value.name.length <= 50
+  //   ),
   target: Yup.number()
     .typeError("*Must be a number")
     .required("*Target is required")
@@ -350,14 +345,19 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Address
+                    Address<span className="text-danger">*</span>
                   </label>
                   <textarea
                     className="form-control"
+                    name="address"
                     {...formik.getFieldProps("address")}
-                    id="exampleFormControlTextarea1"
                     rows="3"
                   ></textarea>
+                  {formik.touched.address && formik.errors.address && (
+                    <div className="invalid-feedback">
+                      {formik.errors.address}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-md-6 col-12">

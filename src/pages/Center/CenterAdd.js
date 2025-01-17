@@ -33,11 +33,7 @@ const validationSchema = Yup.object().shape({
   // taxRegistrationNumber: Yup.string().required("*Tax Registration Number is required"),
   bankName: Yup.string().required("*Bank Name is required"),
   bankBranch: Yup.string().required("*Bank Branch is required"),
-  bankAccountNumber: Yup.number()
-    .typeError("*Bank Account Number be numeric")
-    .required("*Bank Account Number is required")
-    .positive("*Please enter a valid number")
-    .integer("*Bank Account Number is must be number"),
+  bankAccountNumber:Yup.string().required("*Bank Account Number is required"),
   bankAccountName: Yup.string().required("*Bank Account Name is required"),
   file: Yup.mixed()
     .required("*File is required")

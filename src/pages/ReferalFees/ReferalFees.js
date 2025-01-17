@@ -130,17 +130,6 @@ const ReferalFees = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchCenterData(); // Fetch center data
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [filters]);
-
   const fetchCenterData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -161,6 +150,19 @@ const ReferalFees = () => {
       toast.error(error);
     }
   };
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [filters]);
+
+
 
   const theme = createTheme({
     components: {
