@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import api from "../../../config/URL";
 import { ThemeProvider, createTheme, IconButton } from "@mui/material";
@@ -18,6 +18,7 @@ const ReplaceClassLesson = () => {
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState([]);
   const [courseData, setCourseData] = useState([]);
+  const navigate = useNavigate();
 
   const columns = useMemo(
     () => [
@@ -370,6 +371,10 @@ const ReplaceClassLesson = () => {
                     updatedAt: false,
                   },
                 }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/replaceclasslesson/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
           </>
