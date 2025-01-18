@@ -283,34 +283,46 @@ function ReplaceClassLessonView() {
                   <p className="fw-medium">Document</p>
                 </div>
                 <div className="col-9">
-                  {/* <p className="text-muted text-sm d-flex text-break">
-                    : {data.document || ""}
-                  </p> */}
                   {data?.document && (
-                    <div
-                      class="card border-0 shadow"
-                      style={{ width: "18rem" }}
-                    >
-                      <a
-                        href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                          data?.document
-                        )}&embedded=true`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <div class="card border-0 shadow" style={{ width: "70%" }}>
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ cursor: "not-allowed" }}
                       >
                         <img
                           class="card-img-top img-fluid"
-                          style={{ height: "10rem" }}
+                          style={{
+                            height: "10rem",
+                            pointerEvents: "none",
+                            cursor: "not-allowed",
+                          }}
                           src={pdfLogo}
-                          alt="Card image cap"
+                          alt="Resume preview"
                         />
-                      </a>
-                      <div class="card-body d-flex justify-content-between flex-wrap">
-                        <p class="card-title fw-semibold text-wrap">
+                      </div>
+                      <div
+                        class="card-body d-flex justify-content-between align-items-center"
+                        style={{ flexWrap: "wrap" }}
+                      >
+                        <p
+                          class="card-title fw-semibold mb-0 text-wrap"
+                          style={{
+                            flex: 1,
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                          title={data?.document?.split("/").pop()}
+                        >
                           {data?.document?.split("/").pop()}
                         </p>
-
-                        <a href={data?.document} class="btn text-dark">
+                        <a
+                          href={data?.document}
+                          download
+                          class="btn text-dark ms-2"
+                          title="Download Resume"
+                          style={{ flexShrink: 0 }}
+                        >
                           <MdOutlineDownloadForOffline size={25} />
                         </a>
                       </div>

@@ -409,6 +409,7 @@ function LeaveEdit() {
                     type="file"
                     className="form-control"
                     name="file"
+                    accept=".jpg,.jpeg,.png,.pdf"
                     onChange={(event) => {
                       formik.setFieldValue(
                         "file",
@@ -430,6 +431,57 @@ function LeaveEdit() {
                           alt="Preview"
                           className="img-fluid"
                         />
+                      ) : formik.values.file.type === "application/pdf" ? (
+                        <div
+                          className="card border-0 shadow"
+                          style={{ width: "70%" }}
+                        >
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ cursor: "not-allowed" }}
+                          >
+                            <img
+                              className="card-img-top img-fluid"
+                              style={{
+                                height: "10rem",
+                                pointerEvents: "none",
+                                cursor: "not-allowed",
+                              }}
+                              src={
+                                leavedatas.attachment.endsWith(".pdf")
+                                  ? pdfLogo
+                                  : leavedatas.attachment
+                              }
+                              alt="Attachment Preview"
+                            />
+                          </div>
+                          <div
+                            className="card-body d-flex justify-content-between align-items-center"
+                            style={{ flexWrap: "wrap" }}
+                          >
+                            <p
+                              className="card-title fw-semibold mb-0 text-wrap"
+                              style={{
+                                flex: 1,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                              title={formik.values.file.name.split("/").pop()}
+                            >
+                              {formik.values.file.name.split("/").pop()}
+                            </p>
+                            <a
+                              href={URL.createObjectURL(formik.values.file)}
+                              download
+                              className="btn text-dark ms-2"
+                              title="Download Attachment"
+                              style={{ flexShrink: 0 }}
+                            >
+                              <MdOutlineDownloadForOffline size={25} />
+                            </a>
+                          </div>
+                        </div>
                       ) : (
                         <p className="text-muted">
                           Unsupported file type for preview

@@ -170,9 +170,16 @@ function Payslip() {
                               <strong>Designation </strong>
                             </p>
                           </dvi>
-                          <dvi className="col-8">
-                            <p>: {data.designation || "--"}</p>
-                          </dvi>
+                          <div className="col-8">
+                            <p>
+                              :{" "}
+                              {data.designation === "staff"
+                                ? "Staff"
+                                : data.designation === "teacher"
+                                ? "Teacher"
+                                : data.designation || "--"}
+                            </p>
+                          </div>
                         </div>
                       </div>
                       <div className="col-5">

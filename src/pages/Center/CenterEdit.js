@@ -14,6 +14,7 @@ import Delete from "../../components/common/Delete";
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
   code: Yup.string().required("*Code is required"),
+  address: Yup.string().required("*Address is required"),
   // userId: Yup.string().required("*Select the Centre Manager"),
   zipCode: Yup.number()
     .typeError("*Zip Code must be number")
@@ -34,8 +35,6 @@ const validationSchema = Yup.object().shape({
     .required("*Email is required"),
   openingDate: Yup.date().required("*Date is required"),
   uenNumber: Yup.string().required("*UEN number is required"),
-  address: Yup.string().required("*Address is required"),
-
   bankName: Yup.string().required("*Bank Name is required"),
   bankBranch: Yup.string().required("*Bank Branch is required"),
   bankAccountNumber: Yup.string().required("*Bank Account Number is required"),
@@ -348,10 +347,20 @@ function CenterEdit({ handleCenterChanged }) {
                     Address<span className="text-danger">*</span>
                   </label>
                   <textarea
-                    className="form-control"
-                    name="address"
+                    className={`form-control ${
+                      formik.touched.address && formik.errors.address
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("address")}
+                    id="exampleFormControlTextarea1"
                     rows="3"
+                    onBlur={formik.handleBlur}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                      }
+                    }}
                   ></textarea>
                   {formik.touched.address && formik.errors.address && (
                     <div className="invalid-feedback">
@@ -655,7 +664,7 @@ function CenterEdit({ handleCenterChanged }) {
                 <img
                   src={data.qrCode}
                   className="img-fluid ms-2 w-50 rounded mt-2"
-                  alt="Profile Image"
+                  alt="Profile"
                 />
               </div>
               <div className="col-md-6 col-12">
