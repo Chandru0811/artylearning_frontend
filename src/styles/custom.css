@@ -1249,3 +1249,16 @@ thead th {
   background-color: #317b5d; /* Example color for header */
   color: #fff; /* White text color for better contrast */
 }
+
+ /* Apply custom color for selected button */
+ .btn-outline-orange {
+  background-color: #ffffff; /* Custom selected color */
+  color: #eb862a !important;   /* Adjust text color if needed */
+  border-color: #eb862a !important; /* Match border to the background */
+ }
+
+ .btn-check-status:checked + .btn {
+  background-color: #eb862a; /* Custom selected color */
+  color: white !important; /* Adjust text color if needed */
+  border-color: #eb862a; /* Match border to the background */
+}

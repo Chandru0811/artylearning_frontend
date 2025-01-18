@@ -3,7 +3,7 @@ import { IoMdSend } from "react-icons/io";
 import { CgAttachment } from "react-icons/cg";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 // import { LuDownload } from "react-icons/lu";
 import document from "../../../assets/images/Blue and Peach Gradient Facebook Profile Picture.png";
@@ -183,6 +183,12 @@ function MyMessagesView() {
   return (
     <section className="chat-section">
       <div className="container-fluid">
+        <div className="text-end bg-light p-1">
+          <Link to={'/messaging'}>
+          <button type="button" className="btn btn-border btn-sm">Back</button>
+          
+          </Link>
+        </div>
         <div className="row message-list">
           <div className="col-12">
             {/* Message List */}

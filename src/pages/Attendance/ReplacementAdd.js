@@ -182,7 +182,7 @@ function ReplacementAdd({
         <label className="radio-button">
           <button
             type="button"
-            className="btn btn-button3 btn-sm mt-3"
+            className="btn btn-sm mt-3"
             onClick={handleShow}
             style={{ backgroundColor: "#fa994af5" }}
           >

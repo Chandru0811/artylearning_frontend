@@ -11,16 +11,34 @@ import { MdOutlineDownloadForOffline } from "react-icons/md";
 function ReplaceClassLessonView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  const [status, setStatus] = useState("pending");
+  const [status, setStatus] = useState("");
 
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
 
+  const getData = async () => {
+    try {
+      const response = await api.get(
+        `/getAllStudentReplacementClassById/${id}`
+      );
+      setData(response.data);
+      const fetchedStatus = response.data.status; // Assuming 'status' is part of the response data
+      if (fetchedStatus === "APPROVED" || fetchedStatus === "REJECTED") {
+        setStatus(fetchedStatus); // Set the status based on the fetched data
+      } else {
+        console.log("Unknown status");
+      }
+    } catch (error) {
+      toast.error("Error Fetching Data ", error);
+    }
+  };
+
   const handleStatusToggle = async (newStatus) => {
-    setStatus(newStatus);
+    setStatus(newStatus); // Update the state with the selected status
     try {
       const response = await api.put(
         `/updateStatus/${id}?id=${id}&leaveStatus=${newStatus}`,
+        {},
         {
           headers: {
             "Content-Type": "application/json",
@@ -28,7 +46,8 @@ function ReplaceClassLessonView() {
         }
       );
       if (response.status === 200) {
-        toast.success("Update successfully");
+        toast.success("Status updated successfully.");
+        getData();
       } else {
         toast.error(response.data.message);
       }
@@ -36,10 +55,11 @@ function ReplaceClassLessonView() {
       if (error.response?.status === 409) {
         toast.warning(error?.response?.data?.message);
       } else {
-        toast.error(error?.response?.data?.message);
+        toast.error(error?.response?.data?.message || "An error occurred.");
       }
     }
   };
+
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -49,17 +69,8 @@ function ReplaceClassLessonView() {
       toast.error(error);
     }
   };
+
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(
-          `/getAllStudentReplacementClassById/${id}`
-        );
-        setData(response.data);
-      } catch (error) {
-        toast.error("Error Fetching Data ", error);
-      }
-    };
     getData();
     fetchData();
   }, [id]);
@@ -95,25 +106,79 @@ function ReplaceClassLessonView() {
           className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
           style={{ background: "#f5f7f9" }}
         >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
+          <div className="d-flex align-items-center">
+            <div className="d-flex">
+              <div className="dot active"></div>
             </div>
-            <span class="me-2 text-muted">View Replace Class Lesson List</span>
+            <span className="me-2 text-muted">
+              View Replace Class Lesson List
+            </span>
           </div>
           <div className="my-2 pe-3 d-flex align-items-center">
-            <Link to="/replaceclasslesson">
-              <button type="button " className="btn btn-sm btn-border   ">
-                Back
-              </button>
-            </Link>
+            {/* <div
+              className="btn-group"
+              role="group"
+            >
+              <input
+                type="radio"
+                className="btn-check btn-check-status"
+                name="status"
+                id="approve"
+                autocomplete="off"
+                checked
+              />
+              <label className="btn btn-outline-orange btn-sm" for="approve">
+                Approved
+              </label>
+
+              <input
+                type="radio"
+                className="btn-check btn-check-status"
+                name="status"
+                id="reject"
+                autocomplete="off"
+              />
+              <label className="btn btn-outline-orange btn-sm" for="reject">
+                Rejected
+              </label>
+            </div> */}
+            <div className="btn-group" role="group">
+              <input
+                type="radio"
+                className="btn-check btn-check-status"
+                name="status"
+                id="approve"
+                autoComplete="off"
+                checked={status === "APPROVED"} // Dynamically set based on fetched status
+                onChange={() => handleStatusToggle("APPROVED")} // Handle click to update status
+              />
+              <label
+                className="btn btn-outline-orange btn-sm"
+                htmlFor="approve"
+              >
+                Approved
+              </label>
+
+              <input
+                type="radio"
+                className="btn-check btn-check-status"
+                name="status"
+                id="reject"
+                autoComplete="off"
+                checked={status === "REJECTED"} // Dynamically set based on fetched status
+                onChange={() => handleStatusToggle("REJECTED")} // Handle click to update status
+              />
+              <label className="btn btn-outline-orange btn-sm" htmlFor="reject">
+                Rejected
+              </label>
+            </div>
             &nbsp; &nbsp;
             {data.status === "APPROVED" ? (
               <>
                 <Link
                   to={`/replaceclasslessonList?centerId=${data.centerId}&studentId=${data.studentId}`}
                 >
-                  <button type="button" className="btn btn-button2 btn-sm">
+                  <button type="button" className="btn btn-button btn-sm">
                     Replace Class Lesson
                   </button>
                 </Link>
@@ -121,6 +186,11 @@ function ReplaceClassLessonView() {
             ) : (
               <></>
             )}
+            <Link to="/replaceclasslesson">
+              <button type="button " className="btn btn-sm btn-border mx-2">
+                Back
+              </button>
+            </Link>
           </div>
         </div>
         <div className="container-fluid px-4">
@@ -284,13 +354,16 @@ function ReplaceClassLessonView() {
                 </div>
                 <div className="col-9">
                   {data?.document && (
-                    <div class="card border-0 shadow" style={{ width: "70%" }}>
+                    <div
+                      className="card border-0 shadow"
+                      style={{ width: "70%" }}
+                    >
                       <div
                         onClick={(e) => e.stopPropagation()}
                         style={{ cursor: "not-allowed" }}
                       >
                         <img
-                          class="card-img-top img-fluid"
+                          className="card-img-top img-fluid"
                           style={{
                             height: "10rem",
                             pointerEvents: "none",
@@ -301,11 +374,11 @@ function ReplaceClassLessonView() {
                         />
                       </div>
                       <div
-                        class="card-body d-flex justify-content-between align-items-center"
+                        className="card-body d-flex justify-content-between align-items-center"
                         style={{ flexWrap: "wrap" }}
                       >
                         <p
-                          class="card-title fw-semibold mb-0 text-wrap"
+                          className="card-title fw-semibold mb-0 text-wrap"
                           style={{
                             flex: 1,
                             whiteSpace: "nowrap",
@@ -319,7 +392,7 @@ function ReplaceClassLessonView() {
                         <a
                           href={data?.document}
                           download
-                          class="btn text-dark ms-2"
+                          className="btn text-dark ms-2"
                           title="Download Resume"
                           style={{ flexShrink: 0 }}
                         >

@@ -79,8 +79,20 @@ function InvoiceView() {
       doc.text(`${data.center}`, 130, 25);
 
       doc.setFont("helvetica", "normal");
-      doc.text("Tel No:87270752", 130, 35);
-      doc.text("Email:Artylearning@gmail.com", 130, 45);
+      doc.text(
+        `Tel No: ${
+          centerData?.find((center) => parseInt(data.centerId) === center.id)?.phone || "--"
+        }`,
+        130,
+        35
+      );
+      doc.text(
+        `Email: ${
+          centerData?.find((center) => parseInt(data.centerId) === center.id)?.email || "--"
+        }`,
+        130,
+        45
+      );
 
       doc.line(16, 70, 50, 70); // x, y, width, height
 
@@ -374,8 +386,18 @@ function InvoiceView() {
                         : ""
                     )}
                 </h5>
-                <span>Tel No : 87270752</span>
-                <span>Email &nbsp;: Artylearning@gmail.com</span>
+                <span>Tel No :  {centerData &&
+                    centerData.map((center) =>
+                      parseInt(data.centerId) === center.id
+                        ? center.phone || "--"
+                        : ""
+                    )}</span>
+                <span>Email &nbsp;:  {centerData &&
+                    centerData.map((center) =>
+                      parseInt(data.centerId) === center.id
+                        ? center.email || "--"
+                        : ""
+                    )}</span>
               </div>
               <div className="card-header my-5">
                 <h5>Official Receipt</h5>

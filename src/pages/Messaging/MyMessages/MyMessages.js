@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import api from "../../../config/URL";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
@@ -18,6 +18,7 @@ const MyMessages = () => {
   const [loading, setLoading] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const navigate = useNavigate();
   const id = localStorage.getItem("userId");
   const userName = localStorage.getItem("userName");
 
@@ -52,7 +53,7 @@ const MyMessages = () => {
       {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
-        size: 40,
+        size: 20,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
@@ -60,10 +61,13 @@ const MyMessages = () => {
       {
         accessorKey: "id",
         header: "",
+        enableHiding: false,
+        enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -86,7 +90,7 @@ const MyMessages = () => {
         accessorKey: "message",
         enableHiding: false,
         header: "Message",
-        size: 20,
+        size: 40,
       },
       {
         accessorKey: "createdAt",
@@ -189,46 +193,48 @@ const MyMessages = () => {
               </div>
             </div>
           ) : (
-            <ThemeProvider theme={theme}>
-              <MaterialReactTable
-                columns={columns}
-                data={datas}
-                enableColumnActions={false}
-                enableColumnFilters={false}
-                enableDensityToggle={false}
-                enableFullScreenToggle={false}
-                initialState={{
-                  columnVisibility: {
-                    createdBy: false,
-                    createdAt: false,
-                    updatedBy: false,
-                    updatedAt: false,
-                  },
-                }}
-              />
-            </ThemeProvider>
+            <>
+              <ThemeProvider theme={theme}>
+                <MaterialReactTable
+                  columns={columns}
+                  data={datas}
+                  enableColumnActions={false}
+                  enableColumnFilters={false}
+                  enableDensityToggle={false}
+                  enableFullScreenToggle={false}
+                  initialState={{
+                    columnVisibility: {
+                      createdBy: false,
+                      createdAt: false,
+                      updatedBy: false,
+                      updatedAt: false,
+                    },
+                  }}
+                  muiTableBodyRowProps={({ row }) => ({
+                    onClick: () =>
+                      navigate(`/messaging/view/${row.original.id}`),
+                    style: { cursor: "pointer" },
+                  })}
+                />
+              </ThemeProvider>
+              <Menu
+                id="action-menu"
+                anchorEl={menuAnchor}
+                open={Boolean(menuAnchor)}
+                onClose={handleMenuClose}
+                disableScrollLock
+              >
+                <MenuItem>
+                  <GlobalDelete
+                    path={`/deleteMessage/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                </MenuItem>
+              </Menu>
+            </>
           )}
         </div>
-        <Menu
-          id="action-menu"
-          anchorEl={menuAnchor}
-          open={Boolean(menuAnchor)}
-          onClose={handleMenuClose}
-        >
-          <MenuItem>
-            <Link to={`/messaging/view/${selectedId}`}>
-              <button className="btn btn-sm">
-                <FaEye /> View
-              </button>
-            </Link>
-          </MenuItem>
-          <MenuItem>
-            <GlobalDelete
-              path={`/deleteMessage/${selectedId}`}
-              onDeleteSuccess={getData}
-            />
-          </MenuItem>
-        </Menu>
       </div>
     </div>
   );
