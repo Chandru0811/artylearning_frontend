@@ -18,7 +18,7 @@ const ContractEdit = forwardRef(
     const [submitted, setSubmitted] = useState(false);
     const [contactId, setContactId] = useState(null);
     const [empRole, setEmpRole] = useState(null);
-    const [workingDays, setWorkingDays] = useState();
+    const [workingDays, setWorkingDays] = useState([]);
     console.log("object", formData);
     const validationSchema = Yup.object().shape({
       employer: Yup.string().required("*Employer is required"),
@@ -31,22 +31,6 @@ const ContractEdit = forwardRef(
       mainDuties: Yup.string().required("*Main Duties is required"),
       startDateOfEmployment: Yup.string().required("*Date is required"),
       training: Yup.string().required("*Training is required"),
-
-      // userContractStartDate: Yup.string().required("*Date is required"),
-      // userContractEndDate: Yup.string()
-      //   .required("*End Date Of Contract is required")
-      //   .test(
-      //     "is-greater",
-      //     "*End Date should be later than the Start Date",
-      //     function (value) {
-      //       const { userContractStartDate } = this.parent;
-      //       return (
-      //         !userContractStartDate ||
-      //         new Date(value) >= new Date(userContractStartDate)
-      //       );
-      //     }
-      //   ),
-      // contactPeriod: Yup.string().required("*Contact is required"),
       ...(empRole !== "freelancer" && {
         userContractStartDate: Yup.string().required("*Date is required"),
         userContractEndDate: Yup.string()
@@ -79,19 +63,107 @@ const ContractEdit = forwardRef(
             : Yup.string().notRequired(),
       }),
       workingDays: Yup.array()
-        .min(1, "*Working days are required")
-        .required("*Working days are required"),
-      // userContractSalary: Yup.number()
-      //   .typeError("*Salary Must be numbers")
-      //   .required("*Salary is required"),
-      // salaryStartDate: Yup.string().required("*Start Date is required"),
-      // contractDate: Yup.string().required("*Contract Date is required"),
+         .min(1, "*Working days are required")
+         .required("*Working days are required"),
       terminationNotice: Yup.string().required("*Notice is required"),
       allowance: Yup.number()
         .typeError("*Allowance Must be numbers")
         .notRequired(),
     });
     const navigate = useNavigate();
+    // const formik = useFormik({
+    //   initialValues: {
+    //     employer: formData.employer || "",
+    //     employee: formData.teacherName || "",
+    //     uen: formData.uen || "",
+    //     addressOfEmployment: formData.addressOfEmployment || "",
+    //     detailsEmployee: formData.detailsEmployee || "",
+    //     nric: formData.nric || "",
+    //     userContractAddress: formData.address || "",
+    //     jobTitle: formData.jobTitle || "",
+    //     mainDuties: formData.mainDuties || "",
+    //     startDateOfEmployment: formData.startDate || "",
+    //     training: formData.training || "",
+    //     allowance: formData.allowance || "",
+    //     // userContractStartDate: formData.startDate || "",
+    //     userContractStartDate:
+    //       empRole !== "freelancer" ? formData.startDate || "" : "",
+    //     contactPeriod:
+    //       empRole !== "freelancer" ? formData.contactPeriod || "" : "",
+    //     // contactPeriod: formData.contactPeriod || "",
+    //     probation: formData.probation || "",
+    //     workingDays: formData.workingDays || "",
+    //     userContractSalary:
+    //       empRole !== "freelancer" ? formData.salary || "" : "",
+    //     salaryStartDate:
+    //       empRole !== "freelancer" ? formData.effectiveDate || "" : "",
+    //     // userContractSalary: formData.salary || "",
+    //     // salaryStartDate: formData.effectiveDate || "",
+    //     // userContractEndDate: formData.endDate || "",
+    //     userContractEndDate:
+    //       empRole !== "freelancer" ? formData.endDate || "" : "",
+    //     payNow: formData.payNow || "",
+    //     internetBanking: formData.internetBanking || "",
+    //     contractDate:
+    //       empRole !== "freelancer"
+    //         ? formData.startDate || formData.userContractStartDate
+    //         : "",
+    //     // contractDate: formData.contractDate || "",
+    //     terminationNotice: formData.terminationNotice || "",
+    //     updatedBy: userName,
+    //   },
+    //   validationSchema: validationSchema,
+    //   onSubmit: async (values) => {
+    //     setLoadIndicators(true);
+    //     values.updatedBy = userName;
+    //     console.log("Api Data:", values);
+    //     values.workingDays = contactId.workingDays;
+    //     try {
+    //       if (contactId !== null) {
+    //         const response = await api.put(
+    //           `/updateUserContractCreation/${contactId.id}`,
+    //           values,
+    //           {
+    //             headers: {
+    //               "Content-Type": "application/json",
+    //             },
+    //           }
+    //         );
+    //         if (response.status === 200) {
+    //           toast.success(response.data.message);
+    //           setFormData((prv) => ({ ...prv, ...values }));
+    //           navigate("/teacher");
+    //         } else {
+    //           toast.error(response.data.message);
+    //         }
+    //       } else {
+    //         const response = await api.post(
+    //           `/createUserContractCreation/${formData.staff_id}`,
+    //           values,
+    //           {
+    //             headers: {
+    //               "Content-Type": "application/json",
+    //             },
+    //           }
+    //         );
+    //         if (response.status === 201) {
+    //           toast.success(response.data.message);
+    //           setFormData((prv) => ({ ...prv, ...values }));
+    //           navigate("/teacher");
+    //         } else {
+    //           toast.error(response.data.message);
+    //         }
+    //       }
+    //     } catch (error) {
+    //       toast.error(error);
+    //     } finally {
+    //       setLoadIndicators(false);
+    //     }
+    //   },
+    //   validateOnChange: false,
+    //   validateOnBlur: true,
+    // });
+
     const formik = useFormik({
       initialValues: {
         employer: formData.employer || "",
@@ -106,21 +178,15 @@ const ContractEdit = forwardRef(
         startDateOfEmployment: formData.startDate || "",
         training: formData.training || "",
         allowance: formData.allowance || "",
-        // userContractStartDate: formData.startDate || "",
         userContractStartDate:
           empRole !== "freelancer" ? formData.startDate || "" : "",
-        contactPeriod:
-          empRole !== "freelancer" ? formData.contactPeriod || "" : "",
-        // contactPeriod: formData.contactPeriod || "",
+        contactPeriod: empRole !== "freelancer" ? formData.contactPeriod || "" : "",
         probation: formData.probation || "",
         workingDays: formData.workingDays || "",
         userContractSalary:
           empRole !== "freelancer" ? formData.salary || "" : "",
         salaryStartDate:
           empRole !== "freelancer" ? formData.effectiveDate || "" : "",
-        // userContractSalary: formData.salary || "",
-        // salaryStartDate: formData.effectiveDate || "",
-        // userContractEndDate: formData.endDate || "",
         userContractEndDate:
           empRole !== "freelancer" ? formData.endDate || "" : "",
         payNow: formData.payNow || "",
@@ -129,55 +195,38 @@ const ContractEdit = forwardRef(
           empRole !== "freelancer"
             ? formData.startDate || formData.userContractStartDate
             : "",
-        // contractDate: formData.contractDate || "",
         terminationNotice: formData.terminationNotice || "",
         updatedBy: userName,
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
+        // Start loader
         setLoadIndicators(true);
-        values.updatedBy = userName;
-        console.log("Api Data:", values);
-        values.workingDays = contactId.workingDays;
+    
         try {
-          if (contactId !== null) {
-            const response = await api.put(
-              `/updateUserContractCreation/${contactId.id}`,
-              values,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-            if (response.status === 200) {
-              toast.success(response.data.message);
-              setFormData((prv) => ({ ...prv, ...values }));
-              navigate("/teacher");
-            } else {
-              toast.error(response.data.message);
-            }
+          values.updatedBy = userName;
+    
+          const apiCall = contactId
+            ? api.put(`/updateUserContractCreation/${contactId.id}`, values, {
+                headers: { "Content-Type": "application/json" },
+              })
+            : api.post(`/createUserContractCreation/${formData.staff_id}`, values, {
+                headers: { "Content-Type": "application/json" },
+              });
+    
+          const response = await apiCall;
+    
+          if (response.status === 200 || response.status === 201) {
+            toast.success(response.data.message);
+            setFormData((prev) => ({ ...prev, ...values }));
+            navigate("/teacher");
           } else {
-            const response = await api.post(
-              `/createUserContractCreation/${formData.staff_id}`,
-              values,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-            if (response.status === 201) {
-              toast.success(response.data.message);
-              setFormData((prv) => ({ ...prv, ...values }));
-              navigate("/teacher");
-            } else {
-              toast.error(response.data.message);
-            }
+            toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error?.response?.data?.message || "Something went wrong!");
         } finally {
+          // Stop loader
           setLoadIndicators(false);
         }
       },
@@ -185,6 +234,7 @@ const ContractEdit = forwardRef(
       validateOnBlur: true,
     });
 
+    
     const scrollToError = (errors) => {
       const errorField = Object.keys(errors)[0];
       const errorElement = document.querySelector(`[name="${errorField}"]`);
@@ -200,126 +250,6 @@ const ContractEdit = forwardRef(
       }
     }, [formik.submitCount, formik.errors]);
 
-    // useEffect(() => {
-    //   const getData = async () => {
-    //     try {
-    //       const response = await api.get(
-    //         `/getAllUserById/${formData.staff_id}`
-    //       );
-    //       const employerData = response.data.userAccountInfo[0].centers;
-    //       setEmployerData(employerData);
-    //       console.log("employerData", employerData);
-    //       if (
-    //         response.data.userContractCreationModels &&
-    //         response.data.userContractCreationModels.length > 0
-    //       ) {
-    //         setDatas(response.data.userContractCreationModels[0]);
-
-    //         const contractData = response.data.userContractCreationModels[0];
-    //         console.log("first", contractData.id);
-    //         setContactId(contractData);
-    //         formik.setValues({
-    //           ...contractData,
-    //           employee: formData.teacherName || contractData.employee || "",
-    //           userContractAddress:
-    //             formData.address ||
-    //             response.data.userContactInfo[0].address ||
-    //             "",
-    //           startDateOfEmployment:
-    //             formData.startDate ||
-    //             response.data.userAccountInfo[0].startDate ||
-    //             "",
-    //           userContractStartDate:
-    //             formData.startDate ||
-    //             response.data.userAccountInfo[0].startDate ||
-    //             "",
-    //           workingDays:
-    //             formData.workingDays ||
-    //             response.data.userAccountInfo[0].workingDays ||
-    //             "",
-    //           userContractSalary:
-    //             formData.salary ||
-    //             response.data.userSalaryCreationModels[0].salary ||
-    //             "",
-    //           contractDate:
-    //             formData.contractDate ||
-    //             response.data.userAccountInfo[0].startDate ||
-    //             "",
-
-    //           contractId: contractData.id,
-
-    //           startDateOfEmployment: contractData.startDateOfEmployment
-    //             ? contractData.startDateOfEmployment.substring(0, 10)
-    //             : "",
-    //           userContractStartDate: contractData.userContractStartDate
-    //             ? contractData.userContractStartDate.substring(0, 10)
-    //             : "",
-    //           userContractEndDate: contractData.userContractEndDate
-    //             ? contractData.userContractEndDate.substring(0, 10)
-    //             : "",
-    //           contractDate: contractData.contractDate
-    //             ? contractData.contractDate.substring(0, 10)
-    //             : "",
-    //           salaryStartDate: contractData.salaryStartDate
-    //             ? contractData.salaryStartDate.substring(0, 10)
-    //             : "",
-    //         });
-    //       } else {
-    //         formik.setValues({
-    //           contractId: null,
-    //           employer: formData.employer || "",
-    //           uen: formData.uen || "",
-    //           employee: formData.teacherName || response.data.teacherName || "",
-    //           addressOfEmployment: formData.addressOfEmployment || "",
-    //           detailsEmployee: formData.detailsEmployee || "",
-    //           nric: formData.nric || "",
-    //           userContractAddress:
-    //             formData.address ||
-    //             response.data.userContactInfo[0].address ||
-    //             "",
-    //           jobTitle: formData.jobTitle || "",
-    //           mainDuties: formData.mainDuties || "",
-    //           startDateOfEmployment:
-    //             formData.startDate ||
-    //             response.data.userAccountInfo[0].startDate ||
-    //             "",
-    //           training: formData.training || "",
-    //           allowance: formData.allowance || "",
-    //           userContractStartDate:
-    //             formData.startDate ||
-    //             response.data.userAccountInfo[0].startDate ||
-    //             "",
-    //           contactPeriod: formData.contactPeriod || "",
-    //           probation: formData.probation || "",
-    //           workingDays:
-    //             formData.workingDays ||
-    //             response.data.userAccountInfo[0].workingDays ||
-    //             "",
-    //           userContractSalary:
-    //             formData.salary ||
-    //             response.data.userSalaryCreationModels[0].salary ||
-    //             "",
-    //           salaryStartDate: formData.effectiveDate || "",
-    //           userContractEndDate: formData.endDate || "",
-    //           payNow: formData.payNow || "",
-    //           internetBanking: formData.internetBanking || "",
-    //           contractDate:
-    //             formData.contractDate ||
-    //             response.data.userAccountInfo[0].startDate ||
-    //             "",
-    //           terminationNotice: formData.terminationNotice || "",
-    //         });
-    //         // console.log("Contract ID:", formik.values.contractId);
-    //       }
-    //     } catch (error) {
-    //       console.error("Error fetching data:", error);
-    //     }
-    //   };
-    //   // console.log(formik.values);
-    //   getData();
-    //   window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
     useEffect(() => {
       const fetchEmployerData = async () => {
         try {
@@ -344,6 +274,10 @@ const ContractEdit = forwardRef(
                 0,
                 10
               ),
+              workingDays:
+                formData.workingDays ||
+                response.data.userAccountInfo[0].workingDays ||
+                "",
               userContractStartDate:
                 contractData.userContractStartDate.slice(0, 10) ||
                 contractData.contractDate.slice(0, 10),
@@ -360,6 +294,7 @@ const ContractEdit = forwardRef(
 
       fetchEmployerData();
     }, [formData.staff_id]);
+    
     const getData1 = async (id) => {
       try {
         const response = await api.get(`/getAllCenterById/${id}`);
@@ -743,6 +678,58 @@ const ContractEdit = forwardRef(
                 />
               </div>
 
+              {/* <div className="col-md-6 col-12 mb-2 mt-3">
+                <label>
+                  Working Days<span className="text-danger">*</span>
+                </label>
+                <div className="mt-2 d-flex justify-content-between mt-3">
+                  {[
+                    "MONDAY",
+                    "TUESDAY",
+                    "WEDNESDAY",
+                    "THURSDAY",
+                    "FRIDAY",
+                    "SATURDAY",
+                    "SUNDAY",
+                  ].map((day, index) => (
+                    <div className="checkbox-container" key={day}>
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        id={`myCheckbox${index + 1}`}
+                        value={day}
+                        name="workingDays"
+                        checked={
+                          formik.values.workingDays &&
+                          formik.values.workingDays.includes(day)
+                        }
+                        onChange={(e) => {
+                          formik.handleChange(e);
+                        }}
+                        onBlur={formik.handleBlur}
+                        disabled={workingDays && workingDays.length > 0}
+                      />
+                      <label
+                        htmlFor={`myCheckbox${index + 1}`}
+                        className="custom-checkbox"
+                      >
+                        <div className="inner-square"></div>
+                      </label>
+                      <label
+                        htmlFor={`myCheckbox${index + 1}`}
+                        className="mx-1"
+                      >
+                        {day.slice(0, 3)}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+                {formik.touched.workingDays && formik.errors.workingDays && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.workingDays}</small>
+                  </div>
+                )}
+              </div> */}
               <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Working Days<span className="text-danger">*</span>

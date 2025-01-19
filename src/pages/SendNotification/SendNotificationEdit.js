@@ -15,25 +15,6 @@ import AttactmentWord from "../../assets/images/AttactmentWord.jpg";
 import AttactmentPpt from "../../assets/images/AttachmentPpt.png";
 import { IoMdDownload } from "react-icons/io";
 
-const validationSchema = Yup.object({
-  recipient: Yup.string().required("*Recipient Name is required"),
-  messageTitle: Yup.string().required("*Title is required"),
-  centerIds: Yup.array().min(1, "At least one center must be selected"),
-  courseIds: Yup.array().min(1, "At least one course must be selected"),
-  classIds: Yup.array().min(1, "At least one class must be selected"),
-  days: Yup.string().required("*Day is required"),
-  attachments: Yup.array()
-    .notRequired()
-    .test(
-      "max-file-name-length",
-      "*Each file name must be at most 50 characters",
-      (values) => {
-        if (!values || values.length === 0) return true;
-        return values.every((file) => file.name && file.name.length <= 50);
-      }
-    ),
-});
-
 function SendNotificationEdit() {
   const { id } = useParams();
   const [data, setData] = useState({});
@@ -46,6 +27,36 @@ function SendNotificationEdit() {
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
   const userName = localStorage.getItem("userName");
+
+  const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+  const MAX_FILE_NAME_LENGTH = 50;
+
+  const validationSchema = Yup.object({
+    recipient: Yup.string().required("*Recipient Name is required"),
+    messageTitle: Yup.string().required("*Title is required"),
+    centerIds: Yup.array().min(1, "At least one center must be selected"),
+    courseIds: Yup.array().min(1, "At least one course must be selected"),
+    classIds: Yup.array().min(1, "At least one class must be selected"),
+    days: Yup.string().required("*Day is required"),
+    // attachments: Yup.array()
+    //   .of(
+    //     Yup.mixed()
+    //       .test(
+    //         "fileNameLength",
+    //         `*Filename must be ${MAX_FILE_NAME_LENGTH} characters`,
+    //         (file) =>
+    //           !file || (file.name && file.name.length <= MAX_FILE_NAME_LENGTH)
+    //       )
+    //       .test("fileSize", "*Each file must be <= 1GB", (file) =>
+    //         file ? file.size <= MAX_FILE_SIZE : true
+    //       )
+    //       .test("fileType", "*Allowed formats: JPG, PNG, MP4", (file) => {
+    //         const validTypes = ["image/jpeg", "image/png", "video/mp4"];
+    //         return file ? validTypes.includes(file.type) : true;
+    //       })
+    //   )
+    //   .notRequired(), // Attachments are optional
+  });
 
   const centerOptions = centerData.map((center) => ({
     label: center.centerNames,
@@ -96,7 +107,8 @@ function SendNotificationEdit() {
     // console.log("firstAttachment", attachment)
     const url = attachment.fileUrl;
     const extension = url.split(".").pop().toLowerCase();
-    const fileName = url.split("/").pop();
+    let fileName = url.split("/").pop();
+    fileName = fileName.replace(/\+/g, " ");
 
     const downloadFile = () => {
       const a = document.createElement("a");
@@ -517,28 +529,7 @@ function SendNotificationEdit() {
                 )}
               </div>
 
-              {/* <div class="col-md-6 col-12 mb-4">
-              <label className="form-label">Attachement</label>
-
-              <input
-                type="file"
-                multiple
-                name="attachments"
-                className={`form-control  ${formik.touched.attachments && formik.errors.attachments
-                  ? "is-invalid"
-                  : ""
-                  }`}
-                onChange={(event) => {
-                  formik.setFieldValue("attachments", event.target.files[0]);
-                }}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.attachments && formik.errors.attachments && (
-                <div className="invalid-feedback">{formik.errors.attachments}</div>
-              )}
-            </div> */}
-
-              <div className="col-md-6 col-12 mb-4">
+              {/* <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">Attachments</label>
                 <input
                   type="file"
@@ -551,6 +542,28 @@ function SendNotificationEdit() {
                   onChange={(event) => {
                     const files = Array.from(event.currentTarget.files);
                     formik.setFieldValue("attachments", files);
+                  }}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.attachments && formik.errors.attachments && (
+                  <div className="invalid-feedback">
+                    {formik.errors.attachments}
+                  </div>
+                )}
+              </div> */}
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">Attachments</label>
+                <input
+                  type="file"
+                  className={`form-control ${
+                    formik.touched.attachments && formik.errors.attachments
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  multiple
+                  onChange={(event) => {
+                    const files = Array.from(event.currentTarget.files);
+                    formik.setFieldValue("attachments", files); // Update only when new files are uploaded
                   }}
                   onBlur={formik.handleBlur}
                 />

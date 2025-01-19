@@ -40,13 +40,9 @@ function GlobalDelete({
   const handleDelete = async () => {
     try {
       const response = await api.delete(path);
-      if (response.status === 200 || response.status === 201) {
-      
-        // if (deleteCenterData === true) {
-        //   handleCenterChanged();
-        // }
-        toast.success(response.data.message);
+      if (response.status === 200 || response.status === 201 || response.status === 204) {
         onDeleteSuccess();
+        toast.success(response.data.message);
         if (typeof onOpen === "function") onOpen();
         handleCenterChanged();
       }

@@ -196,11 +196,11 @@ function CenterAdd({ handleCenterChanged }) {
       </ol>
       <form
         onSubmit={formik.handleSubmit}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !formik.isSubmitting) {
-            e.preventDefault(); // Prevent default form submission
-          }
-        }}
+        // onKeyDown={(e) => {
+        //   if (e.key === "Enter" && !formik.isSubmitting) {
+        //     e.preventDefault(); // Prevent default form submission
+        //   }
+        // }}
       >
         <div className="card">
           <div
@@ -321,6 +321,12 @@ function CenterAdd({ handleCenterChanged }) {
                     {...formik.getFieldProps("address")}
                     id="exampleFormControlTextarea1"
                     rows="3"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        // Allow the default behavior for Enter key
+                        console.log("Enter key pressed: moving to the next line");
+                      }
+                    }}
                   ></textarea>
                   {formik.touched.address && formik.errors.address && (
                     <div className="invalid-feedback">

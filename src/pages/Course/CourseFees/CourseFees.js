@@ -177,7 +177,7 @@ const CourseFees = () => {
   const getData = async () => {
     try {
       const response = await api.get(`/getCourseFeesByCourseId/${id}`);
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 204) {
         setDatas(response.data);
       }
     } catch (error) {
@@ -195,7 +195,7 @@ const CourseFees = () => {
       try {
         const response = await api.get(`/getAllCoursesById/${id}`);
 
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 204) {
           console.log("course id", response.data);
           setCenterId(response.data.centers);
         }

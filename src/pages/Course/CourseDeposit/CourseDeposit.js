@@ -110,7 +110,7 @@ const CourseDeposit = () => {
   const getData = async () => {
     try {
       const response = await api.get(`/getCourseDepositByCourseId/${id}`);
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 204) {
         setDatas(response.data);
       }
     } catch (error) {

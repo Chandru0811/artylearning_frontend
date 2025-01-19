@@ -233,11 +233,11 @@ function CenterEdit({ handleCenterChanged }) {
       </ol>
       <form
         onSubmit={formik.handleSubmit}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !formik.isSubmitting) {
-            e.preventDefault(); // Prevent default form submission
-          }
-        }}
+        // onKeyDown={(e) => {
+        //   if (e.key === "Enter" && !formik.isSubmitting) {
+        //     e.preventDefault(); // Prevent default form submission
+        //   }
+        // }}
       >
         <div className="card">
           <div
@@ -358,7 +358,8 @@ function CenterEdit({ handleCenterChanged }) {
                     onBlur={formik.handleBlur}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
-                        e.preventDefault();
+                        // Allow the default behavior for Enter key
+                        console.log("Enter key pressed: moving to the next line");
                       }
                     }}
                   ></textarea>
