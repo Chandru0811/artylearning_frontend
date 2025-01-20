@@ -20,7 +20,9 @@ function SendNotificationView() {
     // console.log("firstAttachment", attachment)
     const url = attachment.fileUrl;
     const extension = url.split(".").pop().toLowerCase();
-    const fileName = url.split("/").pop();
+    let fileName = url.split("/").pop();
+    fileName = fileName.replace(/\+/g, " ");
+
 
     const downloadFile = () => {
       const a = document.createElement("a");

@@ -211,10 +211,18 @@ const MyMessages = () => {
                     },
                   }}
                   muiTableBodyRowProps={({ row }) => ({
-                    onClick: () =>
-                      navigate(`/messaging/view/${row.original.id}`),
+                    onClick: () => navigate(`/messaging/view/${row.original.id}`, {
+                      state: {
+                        senderId: row.original.senderId,
+                        receiverId: row.original.receiverId,
+                        senderName: row.original.senderName,
+                        receiverName: row.original.receiverName,
+                        message: row.original.message,
+                      },
+                    }),
                     style: { cursor: "pointer" },
                   })}
+                  
                 />
               </ThemeProvider>
               <Menu

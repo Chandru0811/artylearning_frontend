@@ -278,6 +278,10 @@ const ContractEdit = forwardRef(
                 formData.workingDays ||
                 response.data.userAccountInfo[0].workingDays ||
                 "",
+                userContractSalary:
+                formData.salary ||
+                response.data.userSalaryCreationModels[0].salary ||
+                "",
               userContractStartDate:
                 contractData.userContractStartDate.slice(0, 10) ||
                 contractData.contractDate.slice(0, 10),

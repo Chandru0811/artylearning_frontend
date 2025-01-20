@@ -3,9 +3,10 @@ import { IoMdSend } from "react-icons/io";
 import { CgAttachment } from "react-icons/cg";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 // import { LuDownload } from "react-icons/lu";
+import { IoChevronBackOutline } from "react-icons/io5";
 import document from "../../../assets/images/Blue and Peach Gradient Facebook Profile Picture.png";
 
 function MyMessagesView() {
@@ -13,7 +14,9 @@ function MyMessagesView() {
   const messagesContainerRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [data, setData] = useState(null);
-  const [loadIndicator, setLoadIndicator] = useState(false);
+  const location = useLocation();
+  const { senderId, receiverId, senderName, receiverName, message } =
+    location.state || {};
   const [fileCount, setFileCount] = useState(0);
   const userId = localStorage.getItem("userId");
   const userName = localStorage.getItem("userName");
@@ -27,14 +30,13 @@ function MyMessagesView() {
     },
     onSubmit: async (values) => {
       if (values.message || values.files.length > 0) {
-        setLoadIndicator(true);
         const formData = new FormData();
 
-        formData.append("senderName", "Cheryl");
+        formData.append("senderName", data[0].receiverName);
         formData.append("senderId", userId);
         formData.append("senderRole", userName);
         formData.append("messageTo", "PARENT");
-        formData.append("recipientId", id);
+        formData.append("recipientId", 2);
         formData.append("recipientName", data[0].receiverName);
         formData.append("recipientRole", data[0].receiverRole);
         formData.append("message", values.message);
@@ -60,8 +62,6 @@ function MyMessagesView() {
           }
         } catch (error) {
           toast.error(error.message);
-        } finally {
-          setLoadIndicator(false);
         }
       }
     },
@@ -77,23 +77,23 @@ function MyMessagesView() {
     fileInputRef.current.click();
   };
 
-  useEffect(() => {
-    getData();
-  }, [userId, id]);
-
   const getData = async () => {
     try {
       const response = await api.get(
-        `getSingleChatConversation?transcriptOne=${userId}&transcriptTwo=${id}`
+        `getSingleChatConversation?transcriptOne=${receiverId}&transcriptTwo=${senderId}`
       );
       setData(response.data);
       const messages = response.data;
       console.log("messages", messages);
+
       const combinedMessages = messages.map((msg) => ({
         content: msg.message,
         isSender: msg.senderId == userId,
         attachments: msg.attachments,
-        time: new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        time: new Date(msg.createdAt).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
         // time: msg.createdAt
       }));
 
@@ -103,6 +103,7 @@ function MyMessagesView() {
       toast.error(`Error Fetching Data: ${error.message}`);
     }
   };
+
   const renderAttachment = (attachment, index) => {
     if (!attachment) {
       return <span>No attachment available</span>;
@@ -173,6 +174,7 @@ function MyMessagesView() {
       return <></>;
     }
   };
+
   useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =
@@ -180,115 +182,135 @@ function MyMessagesView() {
     }
   }, [messages]);
 
+  useEffect(() => {
+    getData();
+  }, [userId, id]);
+
   return (
-    <section className="chat-section">
-      <div className="container-fluid">
-        <div className="text-end bg-light p-1">
-          <Link to={'/messaging'}>
-          <button type="button" className="btn btn-border btn-sm">Back</button>
-          
-          </Link>
-        </div>
-        <div className="row message-list">
-          <div className="col-12">
-            {/* Message List */}
-            <div
-              className="messages mb-5"
-              ref={messagesContainerRef}
-              style={{
-                maxHeight: "450px",
-                overflowY: "auto",
-                overflowX: "hidden",
-              }}
-            >
-              {messages.map((msg, index) => (
-                <div key={index}>
-                  <div className={`message ${msg.isSender ? "right" : ""}`}>
-                    <div className="message-bubble my-2 w-75">
-                      {msg.content}
-                    </div>
-                    {msg.attachments.length > 0 ? (
-                      msg.attachments.map((attachment, attIndex) => (
-                        <div
-                          key={attIndex}
-                          className="message-bubble w-75 mt-2"
-                        >
-                          {renderAttachment(attachment, attIndex)}
-                        </div>
-                      ))
-                      
-                    ) : (
-                      <></>
-                    )}
-                     <div className="message-bubble my-2 w-75" style={{fontSize:"11px",background:"transparent"}}>
-                      {msg.time}
+    <>
+      <section className="chat-section">
+        <div className="container-fluid">
+          {/* <div className="text-end bg-light p-1">
+            <Link to={"/messaging"}>
+              <button type="button" className="btn btn-border btn-sm">
+                Back
+              </button>
+            </Link>
+          </div> */}
+          <div className="row message-list">
+            <div className="col-12">
+              {/* Message List */}
+              <div
+                className="messages mb-5"
+                ref={messagesContainerRef}
+                style={{
+                  maxHeight: "450px",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                }}
+              >
+                {messages.map((msg, index) => (
+                  <div key={index}>
+                    <div className={`message ${msg.isSender ? "right" : ""}`}>
+                      <div className="message-bubble my-2 w-75">
+                        {msg.content}
+                      </div>
+                      {msg.attachments.length > 0 ? (
+                        msg.attachments.map((attachment, attIndex) => (
+                          <div
+                            key={attIndex}
+                            className="message-bubble w-75 mt-2"
+                          >
+                            {renderAttachment(attachment, attIndex)}
+                          </div>
+                        ))
+                      ) : (
+                        <></>
+                      )}
+                      <div
+                        className="message-bubble my-2 w-75"
+                        style={{ fontSize: "11px", background: "transparent" }}
+                      >
+                        {msg.time}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="sticky-input-container">
-          <div
-            className="row p-1 w-100 ms-1"
-            style={{ backgroundColor: "#fff" }}
-          >
-            <div className="col-md-9 col-12"></div>
-            <div className="col-md-3 col-12">
-              {fileCount > 0 && (
-                <div className="file-count">
-                  <p style={{ marginBottom: "0px" }}>
-                    {fileCount} file(s) selected
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="row ms-1">
-            <div className="col-md-11 col-11 px-2">
-              <div className="mb-3">
-                <div className="input-group mb-3">
-                  <input
-                    type="text"
-                    placeholder="Type a message"
-                    aria-label="Recipient's username"
-                    aria-describedby="basic-addon2"
-                    {...formik.getFieldProps("message")}
-                    className={`form-control ${
-                      formik.touched.message && formik.errors.message
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                  <span
-                    className="input-group-text"
-                    id="basic-addon2"
-                    onClick={handleAttachmentClick}
-                  >
-                    <CgAttachment style={{ cursor: "pointer" }} />
-                  </span>
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    style={{ display: "none" }}
-                    onChange={handleFileChange}
-                    accept="*"
-                    multiple
-                  />
-                </div>
+                ))}
               </div>
             </div>
-            <div className="col-md-1 col-1 d-flex align-items-start justify-content-start">
-              <span className="p-2 rounded-circle text-bg-danger">
-                <IoMdSend onClick={formik.handleSubmit} />
-              </span>
+          </div>
+          <div className="sticky-input-container">
+            <div
+              className="row p-1 w-100 ms-1"
+              style={{ backgroundColor: "#fff" }}
+            >
+              <div className="col-md-9 col-12"></div>
+              <div className="col-md-3 col-12">
+                {fileCount > 0 && (
+                  <div className="file-count">
+                    <p style={{ marginBottom: "0px" }}>
+                      {fileCount} file(s) selected
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="row ms-1">
+              <div className="col-md-1 col-1 d-flex align-items-start justify-content-end">
+                <Link to={"/messaging"}>
+                  <button type="button" className="btn btn-sm btn-border">
+                    <IoChevronBackOutline className="fs-6" />
+                  </button>
+                </Link>
+              </div>
+              <div className="col-md-10 col-10 px-2">
+                <div className="mb-3">
+                  <div className="input-group mb-3">
+                    <input
+                      type="text"
+                      placeholder="Type a message"
+                      aria-label="Recipient's username"
+                      aria-describedby="basic-addon2"
+                      {...formik.getFieldProps("message")}
+                      className={`form-control ${
+                        formik.touched.message && formik.errors.message
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    />
+                    <span
+                      className="input-group-text"
+                      id="basic-addon2"
+                      onClick={handleAttachmentClick}
+                    >
+                      <CgAttachment style={{ cursor: "pointer" }} />
+                    </span>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      style={{ display: "none" }}
+                      onChange={handleFileChange}
+                      accept="*"
+                      multiple
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-1 col-1 d-flex align-items-start justify-content-start">
+                <button
+                  type="button"
+                  className="btn btn-sm btn-button"
+                  onClick={formik.handleSubmit}
+                >
+                  <IoMdSend className="fs-6 " />
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 
