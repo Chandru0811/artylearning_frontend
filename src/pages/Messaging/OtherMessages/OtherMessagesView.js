@@ -48,7 +48,10 @@ function OtherMessagesView() {
     }
 
     const fileUrl = attachment.attachment;
+    const url = attachment.fileUrl;
     const extension = fileUrl.split(".").pop().toLowerCase();
+    let fileName = url.split("/").pop();
+    fileName = fileName.replace(/\+/g, " ");
 
     if (["jpg", "jpeg", "png", "gif", "bmp"].includes(extension)) {
       return (

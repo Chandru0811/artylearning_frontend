@@ -1262,3 +1262,25 @@ thead th {
   color: white !important; /* Adjust text color if needed */
   border-color: #eb862a; /* Match border to the background */
 }
+
+/* Message */
+.message-bubble {
+  padding: 10px;
+  border-radius: 12px;
+  word-wrap: break-word;
+}
+
+.messages {
+  max-height: 450px;
+  overflow-y: auto;
+}
+
+.justify-content-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.justify-content-start {
+  display: flex;
+  justify-content: flex-start;
+}
