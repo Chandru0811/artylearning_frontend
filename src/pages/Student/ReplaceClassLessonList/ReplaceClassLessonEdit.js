@@ -101,7 +101,21 @@ function ReplaceClassLessonEdit() {
         enableHiding: false,
         header: "Course",
       },
-      { accessorKey: "batch", enableHiding: false, header: "Batch", size: 50 },
+      {
+        accessorKey: "batch",
+        enableHiding: false,
+        header: "Batch",
+        size: 50,
+        Cell: ({ cell }) => {
+          const [hours, minutes] = cell.getValue().split(":").map(Number);
+          const ampm = hours >= 12 ? "PM" : "AM";
+          const formattedTime = `${hours % 12 || 12}:${String(minutes).padStart(
+            2,
+            "0"
+          )} ${ampm}`;
+          return <span>{formattedTime}</span>;
+        },
+      },
       {
         accessorKey: "startDate",
         enableHiding: false,
@@ -573,7 +587,20 @@ function ReplaceClassLessonEdit() {
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>{stdCourse.course || "--"}</td>
-                      <td>{stdCourse.batch || "--"}</td>
+                      <td>
+                        {stdCourse.batch
+                          ? (() => {
+                              const [hours, minutes] = stdCourse.batch
+                                .split(":")
+                                .map(Number);
+                              const ampm = hours >= 12 ? "PM" : "AM";
+                              const formattedTime = `${
+                                hours % 12 || 12
+                              }:${String(minutes).padStart(2, "0")} ${ampm}`;
+                              return formattedTime;
+                            })()
+                          : "--"}
+                      </td>
                       <td>{stdCourse.days || "--"}</td>
                       <td>{stdCourse.packageId || "--"}</td>
                       <td>{stdCourse.lessonName || "--"}</td>
