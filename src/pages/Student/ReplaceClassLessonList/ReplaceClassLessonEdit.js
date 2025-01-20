@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Link,
+  useLocation,
   useNavigate,
   useParams,
   useSearchParams,
@@ -11,27 +12,16 @@ import { useFormik } from "formik";
 import "datatables.net-dt/css/jquery.dataTables.css";
 import "datatables.net";
 import * as Yup from "yup";
-import {
-  ThemeProvider,
-  createTheme,
-} from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIdsC from "../../List/CourseListByCenter";
-const validationSchema = Yup.object().shape({
-  packageId: Yup.string().required("*Package Name is required"),
-  lessonName: Yup.string().required("*Lesson Name is required"),
-});
 
 function ReplaceClassLessonEdit() {
   const { id } = useParams();
   const [data, setData] = useState({});
-  console.log("Data ....:", data);
-  console.log("ID ....:", id);
   const [studentCourseDetailsId, setStudentCourseDetailsId] = useState(null);
-
-  console.log("studentCourseDetailsId", studentCourseDetailsId);
   const [datas, setDatas] = useState({});
   const [loading, setLoading] = useState(true);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -44,10 +34,18 @@ function ReplaceClassLessonEdit() {
   const [searchParams] = useSearchParams();
   const centerId = searchParams.get("centerId");
   const [batchData, setBatchData] = useState(null);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const studentId = queryParams.get("studentId");
+
+  const validationSchema = Yup.object().shape({
+    packageId: Yup.string().required("*Package Name is required"),
+    lessonName: Yup.string().required("*Lesson Name is required"),
+  });
 
   const handleDayChange = (e) => {
-    formik.setFieldValue("days", e.target.value); 
-    setAvailableDays([]); 
+    formik.setFieldValue("days", e.target.value);
+    setAvailableDays([]);
   };
 
   const columns = useMemo(
@@ -143,6 +141,7 @@ function ReplaceClassLessonEdit() {
         Cell: ({ cell }) => cell.getValue() || "",
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -192,19 +191,21 @@ function ReplaceClassLessonEdit() {
 
   const formik = useFormik({
     initialValues: {
-      lessonName: "",
       packageId: "",
+      lessonName: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (data) => {
+    onSubmit: async (values) => {
+      console.log("Form Submitted", values);
+
       if (!selectedRow) {
         toast.warning("Please select a course");
         return;
       }
       setLoadIndicator(true);
       const payload = {
-        ...data,
-        studentId: id,
+        ...values,
+        studentId: studentId,
         centerId: selectedRowData.centerId,
         centerName: selectedRowData.centerName,
         classId: selectedRowData.classId,
@@ -246,7 +247,7 @@ function ReplaceClassLessonEdit() {
         if (response.status === 200 || response.status === 201) {
           toast.success(response.data.message);
           // navigate("/student");
-          navigate(`/invoice/add?studentID=${id}`);
+          // navigate(`/invoice/add?studentID=${studentId}`);
           formik.resetForm();
         } else {
           toast.error(response.data.message);
@@ -277,10 +278,12 @@ function ReplaceClassLessonEdit() {
   const fetchPackageData = async () => {
     // Ensure that both centerId and courseId are present in selectedRowData
     if (!selectedRowData.centerId || !selectedRowData.courseId) {
-      console.log("Both Center ID and Course ID are required to fetch packages");
+      console.log(
+        "Both Center ID and Course ID are required to fetch packages"
+      );
       return;
     }
-  
+
     try {
       const response = await api.get(
         `/courseFeeAvailablePackages?centerId=${selectedRowData.centerId}&courseId=${selectedRowData.courseId}`
@@ -291,15 +294,16 @@ function ReplaceClassLessonEdit() {
       toast.error(error.message || "Failed to fetch packages");
     }
   };
-  
+
   // Call fetchPackageData when selectedRowData changes
   useEffect(() => {
     fetchPackageData();
-  }, [selectedRowData]); // Run when selectedRowData updates
-  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedRowData]);
 
   useEffect(() => {
     fetchCourseData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getData = async () => {
@@ -335,12 +339,13 @@ function ReplaceClassLessonEdit() {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.courseId, formik.values.batchs, formik.values.days]);
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllStudentById/${id}`);
+        const response = await api.get(`/getAllStudentById/${studentId}`);
         setData(response.data);
 
         const studentCourseDetail = response.data.studentCourseDetailModels[0];
@@ -359,6 +364,7 @@ function ReplaceClassLessonEdit() {
       }
     };
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleRowSelect = (data) => {
@@ -366,11 +372,11 @@ function ReplaceClassLessonEdit() {
       toast.warning("Class is Full");
       return; // Prevent further actions
     }
-  
+
     setSelectedRow(data.id); // Save selected row ID
     setSelectedRowData(data); // Save selected row data
     console.log("Selected Row Data:", data); // Log selected row data for debugging
-  
+
     // Calculate days between startDate and endDate
     if (data.startDate && data.endDate) {
       const days = calculateDays(data.startDate, data.endDate, data.days);
@@ -486,7 +492,7 @@ function ReplaceClassLessonEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to={`/student/view/${id}`} className="custom-breadcrumb">
+          <Link to={`/replaceclasslesson`} className="custom-breadcrumb">
             &nbsp;Replace Class Lesson List View
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
@@ -499,7 +505,7 @@ function ReplaceClassLessonEdit() {
         onSubmit={formik.handleSubmit}
         onKeyDown={(e) => {
           if (e.key === "Enter" && !formik.isSubmitting) {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault();
           }
         }}
       >
@@ -521,7 +527,18 @@ function ReplaceClassLessonEdit() {
                 </button>
               </Link>
               &nbsp;&nbsp;
-              <button type="submit" className="btn btn-button btn-sm">
+              <button
+                type="submit"
+                className="btn btn-button btn-sm"
+                onClick={formik.handleSubmit}
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 <span className="fw-medium">Arrange</span>
               </button>
             </div>
@@ -578,7 +595,7 @@ function ReplaceClassLessonEdit() {
                   id="courseId"
                   name="courseId"
                 >
-                  <option value="" disabled selected>
+                  <option value="" disabled>
                     Select Course
                   </option>
                   {courseData &&
@@ -599,9 +616,9 @@ function ReplaceClassLessonEdit() {
                   }`}
                   id="days"
                   name="days"
-                  onChange={handleDayChange} 
+                  onChange={handleDayChange}
                 >
-                  <option value="" disabled selected>
+                  <option value="" disabled>
                     Select Day
                   </option>
                   <option value="MONDAY">MONDAY</option>
@@ -688,6 +705,11 @@ function ReplaceClassLessonEdit() {
                       }}
                     />
                   </ThemeProvider>
+                  {!selectedRow && (
+                    <div className="text-danger text-center fs-6 mt-2">
+                      * Please select a row.
+                    </div>
+                  )}
                 </>
               )}
             </div>
@@ -719,16 +741,19 @@ function ReplaceClassLessonEdit() {
                   </div>
                 )}
               </div>
+
               {availableDays.length > 0 && (
                 <div className="col-md-4">
                   <select
-                    className="form-select"
-                    name="lessonName"
                     {...formik.getFieldProps("lessonName")}
+                    className={`form-select ${
+                      formik.touched.lessonName && formik.errors.lessonName
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    name="lessonName"
                   >
-                    <option value="" disabled selected>
-                      Select Date
-                    </option>
+                    <option>Select Date</option>
                     {availableDays.map((day) => (
                       <option key={day.value} value={day.value}>
                         {day.label}

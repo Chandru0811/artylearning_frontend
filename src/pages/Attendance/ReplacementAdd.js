@@ -184,7 +184,7 @@ function ReplacementAdd({
             type="button"
             className="btn btn-sm mt-3"
             onClick={handleShow}
-            style={{ backgroundColor: "#fa994af5" }}
+            style={{ backgroundColor: "#fa994af5", color: "#fff" }}
           >
             Replacement Lesson Class
           </button>
@@ -447,7 +447,6 @@ function ReplacementAdd({
                 <div className="col-md-12 col-12 mb-2">
                   <label className="form-label">Remark</label>
                   <textarea
-                    type="file"
                     className={`form-control  ${
                       formik.touched.remark && formik.errors.remark
                         ? "is-invalid"

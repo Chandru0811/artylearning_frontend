@@ -39,7 +39,7 @@ const AddcourseDetail = forwardRef(
     console.log("Selected Row ID:", selectedRow);
     const [selectedCourseId, setSelectedCourseId] = useState(null);
     console.log("Selected Course ID:", selectedCourseId);
-    
+
     const handleDayChange = (e) => {
       formik.setFieldValue("days", e.target.value); // Update Formik value
       setAvailableDays([]); // Clear available days
@@ -289,14 +289,16 @@ const AddcourseDetail = forwardRef(
         toast.error(error);
       }
     };
-    
+
     const fetchPackageData = async () => {
       // Ensure that both centerId and courseId are present in selectedRowData
       if (!selectedRowData.centerId || !selectedRowData.courseId) {
-        console.log("Both Center ID and Course ID are required to fetch packages");
+        console.log(
+          "Both Center ID and Course ID are required to fetch packages"
+        );
         return;
       }
-    
+
       try {
         const response = await api.get(
           `/courseFeeAvailablePackages?centerId=${selectedRowData.centerId}&courseId=${selectedRowData.courseId}`
@@ -307,17 +309,15 @@ const AddcourseDetail = forwardRef(
         toast.error(error.message || "Failed to fetch packages");
       }
     };
-    
+
     // Call fetchPackageData when selectedRowData changes
     useEffect(() => {
       fetchPackageData();
     }, [selectedRowData]); // Run when selectedRowData updates
-    
-  
+
     useEffect(() => {
       fetchCourseData();
     }, []);
-    
 
     const getData = async () => {
       setLoading(true);
@@ -506,8 +506,7 @@ const AddcourseDetail = forwardRef(
           endDate: studentCourseDetail?.endDate || prevValues.endDate,
           teacher: studentCourseDetail?.teacher || prevValues.teacher,
           lessonName: studentCourseDetail?.lessonName || prevValues.lessonName,
-          packageId:
-            studentCourseDetail?.packageId || prevValues.packageId,
+          packageId: studentCourseDetail?.packageId || prevValues.packageId,
         }));
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -660,32 +659,31 @@ const AddcourseDetail = forwardRef(
                 </div>
                 <div className="row mt-2">
                   <div className="col-md-4">
-                  <select
-                  {...formik.getFieldProps("packageId")}
-                  class={`form-select  ${
-                    formik.touched.packageId && formik.errors.packageId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  id="packageId"
-                  name="packageId"
-                >
-                  <option value="" disabled selected>
-                    Select Package
-                  </option>
-                  {packageData &&
-                    packageData.map((pkg) => (
-                      <option key={pkg.packageId} value={pkg.packageId}>
-                        {pkg.packageName}
+                    <select
+                      {...formik.getFieldProps("packageId")}
+                      class={`form-select  ${
+                        formik.touched.packageId && formik.errors.packageId
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      id="packageId"
+                      name="packageId"
+                    >
+                      <option value="" disabled selected>
+                        Select Package
                       </option>
-                    ))}
-                </select>
-                    {formik.touched.packageId &&
-                      formik.errors.packageId && (
-                        <div className="invalid-feedback">
-                          {formik.errors.packageId}
-                        </div>
-                      )}
+                      {packageData &&
+                        packageData.map((pkg) => (
+                          <option key={pkg.packageId} value={pkg.packageId}>
+                            {pkg.packageName}
+                          </option>
+                        ))}
+                    </select>
+                    {formik.touched.packageId && formik.errors.packageId && (
+                      <div className="invalid-feedback">
+                        {formik.errors.packageId}
+                      </div>
+                    )}
                   </div>
                   {availableDays.length > 0 && (
                     <div className="col-md-4">

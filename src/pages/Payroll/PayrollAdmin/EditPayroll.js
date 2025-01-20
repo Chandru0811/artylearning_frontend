@@ -175,6 +175,7 @@ function EditPayroll() {
   useEffect(() => {
     const currentMonth = format(new Date(), "yyyy-MM");
     formik.setFieldValue("payrollMonth", currentMonth);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchUserName = async (centerId) => {
@@ -219,6 +220,7 @@ function EditPayroll() {
     };
 
     fetchUserData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.userId, formik.values.payrollMonth]);
 
   useEffect(() => {
@@ -236,6 +238,7 @@ function EditPayroll() {
       }
     };
     calculateNetPay();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     formik.values.grossPay,
     formik.values.bonus,
@@ -297,6 +300,7 @@ function EditPayroll() {
     };
 
     fetchUserPaymentData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     formik.values.freelancerCount,
     formik.values.payrollType,
@@ -322,6 +326,7 @@ function EditPayroll() {
     };
     getData();
     // fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

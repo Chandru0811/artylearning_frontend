@@ -156,7 +156,7 @@ function ReplaceClassLessonView() {
                 className="btn btn-outline-orange btn-sm"
                 htmlFor="approve"
               >
-                Approved
+                Approve
               </label>
 
               <input
@@ -169,7 +169,7 @@ function ReplaceClassLessonView() {
                 onChange={() => handleStatusToggle("REJECTED")} // Handle click to update status
               />
               <label className="btn btn-outline-orange btn-sm" htmlFor="reject">
-                Rejected
+                Reject
               </label>
             </div>
             &nbsp; &nbsp;
@@ -287,13 +287,21 @@ function ReplaceClassLessonView() {
               </div>
             </div>
             <div className="col-md-6 col-12">
-              <div className="row  mb-2">
-                <div className="col-3  ">
+              <div className="row mb-2">
+                <div className="col-3">
                   <p className="fw-medium">Preferred Timing</p>
                 </div>
                 <div className="col-9">
                   <p className="text-muted text-sm d-flex text-break">
-                    : {data.preferredTiming || ""}
+                    :{" "}
+                    {data.preferredTiming
+                      ? new Date(
+                          `1970-01-01T${data.preferredTiming}:00`
+                        ).toLocaleTimeString("en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : ""}
                   </p>
                 </div>
               </div>

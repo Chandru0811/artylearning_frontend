@@ -14,11 +14,9 @@ import "datatables.net";
 import * as Yup from "yup";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
-import {
-  ThemeProvider,
-  createTheme,
-} from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
+
 const validationSchema = Yup.object().shape({
   packageId: Yup.string().required("*Package Name is required"),
   lessonName: Yup.string().required("*Lesson Name is required"),
@@ -46,8 +44,8 @@ function StudentRegisterCourse() {
   const [batchData, setBatchData] = useState(null);
 
   const handleDayChange = (e) => {
-    formik.setFieldValue("days", e.target.value); 
-    setAvailableDays([]); 
+    formik.setFieldValue("days", e.target.value);
+    setAvailableDays([]);
   };
 
   const columns = useMemo(
@@ -277,10 +275,12 @@ function StudentRegisterCourse() {
   const fetchPackageData = async () => {
     // Ensure that both centerId and courseId are present in selectedRowData
     if (!selectedRowData.centerId || !selectedRowData.courseId) {
-      console.log("Both Center ID and Course ID are required to fetch packages");
+      console.log(
+        "Both Center ID and Course ID are required to fetch packages"
+      );
       return;
     }
-  
+
     try {
       const response = await api.get(
         `/courseFeeAvailablePackages?centerId=${selectedRowData.centerId}&courseId=${selectedRowData.courseId}`
@@ -291,15 +291,16 @@ function StudentRegisterCourse() {
       toast.error(error.message || "Failed to fetch packages");
     }
   };
-  
+
   // Call fetchPackageData when selectedRowData changes
   useEffect(() => {
     fetchPackageData();
-  }, [selectedRowData]); // Run when selectedRowData updates
-  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedRowData]);
 
   useEffect(() => {
     fetchCourseData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getData = async () => {
@@ -335,6 +336,7 @@ function StudentRegisterCourse() {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.courseId, formik.values.batchs, formik.values.days]);
 
   useEffect(() => {
@@ -359,6 +361,7 @@ function StudentRegisterCourse() {
       }
     };
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // const handleRowSelect = (data) => {
@@ -384,11 +387,11 @@ function StudentRegisterCourse() {
       toast.warning("Class is Full");
       return; // Prevent further actions
     }
-  
+
     setSelectedRow(data.id); // Save selected row ID
     setSelectedRowData(data); // Save selected row data
     console.log("Selected Row Data:", data); // Log selected row data for debugging
-  
+
     // Calculate days between startDate and endDate
     if (data.startDate && data.endDate) {
       const days = calculateDays(data.startDate, data.endDate, data.days);
@@ -398,7 +401,6 @@ function StudentRegisterCourse() {
     }
   };
 
-  
   const calculateDays = (startDate, endDate, selectedDay) => {
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -624,7 +626,7 @@ function StudentRegisterCourse() {
                   }`}
                   id="days"
                   name="days"
-                  onChange={handleDayChange} 
+                  onChange={handleDayChange}
                 >
                   <option value="" disabled selected>
                     Select Day
