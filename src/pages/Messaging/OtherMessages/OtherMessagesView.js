@@ -43,14 +43,14 @@ function OtherMessagesView() {
     }
   };
   const renderAttachment = (attachment, index) => {
-    if (!attachment) {
+    if (!attachment || !attachment.attachment) {
       return <span>No attachment available</span>;
     }
 
     const fileUrl = attachment.attachment;
-    const url = attachment.fileUrl;
+    const url = attachment.fileUrl || "";
     const extension = fileUrl.split(".").pop().toLowerCase();
-    let fileName = url.split("/").pop();
+    let fileName = url.split("/").pop() || "unknown";
     fileName = fileName.replace(/\+/g, " ");
 
     if (["jpg", "jpeg", "png", "gif", "bmp"].includes(extension)) {
@@ -167,44 +167,39 @@ function OtherMessagesView() {
             </Link>
           </div>
         </div>
-      <div className="container-fluid">
-        <div className="row message-list">
-          <div className="col-12">
-            {/* Message List */}
-            <div
-              className="messages mb-5"
-              ref={messagesContainerRef}
-              style={{
-                maxHeight: "450px",
-                overflowY: "auto",
-                overflowX: "hidden",
-              }}
-            >
-              {messages.map((msg, index) => (
-                <div key={index}>
-                  <div className={`message ${msg.isSender ? "right" : ""}`}>
-                    <div className="message-bubble my-2 w-75">
-                      {msg.content}
+        <div className="container-fluid">
+          <div className="row message-list">
+            <div className="col-12">
+              {/* Message List */}
+              <div
+                className="messages mb-5"
+                ref={messagesContainerRef}
+                style={{
+                  maxHeight: "450px",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                }}
+              >
+                {messages.map((msg, index) => (
+                  <div key={index}>
+                    <div className={`message ${msg.isSender ? "right" : ""}`}>
+                      <div className="message-bubble my-2 w-75">
+                        {msg.content}
+                      </div>
+                      {msg.attachments && msg.attachments.length > 0 ? (
+                        msg.attachments.map((attachment, attIndex) =>
+                          renderAttachment(attachment, attIndex)
+                        )
+                      ) : (
+                        <></>
+                      )}
                     </div>
-                    {msg.attachments.length > 0 ? (
-                      msg.attachments.map((attachment, attIndex) => (
-                        <div
-                          key={attIndex}
-                          className="message-bubble w-75 mt-2"
-                        >
-                          {renderAttachment(attachment, attIndex)}
-                        </div>
-                      ))
-                    ) : (
-                      <></>
-                    )}
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </section>
   );
