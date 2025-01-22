@@ -58,10 +58,9 @@ const validationSchema = Yup.object().shape({
 function LeadForm({Id}) {
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
+  console.log("subjectData::",subjectData);
+  
   const [studentData, setStudentData] = useState(null);
-
-  const [searchParams] = useSearchParams();
-  // const subjects = searchParams.get("subjects");
   console.log("ID:",Id);
 
   const formik = useFormik({
@@ -141,17 +140,29 @@ function LeadForm({Id}) {
     fetchStudent(center);
   };
 
-  const fetchAllSubjectsList = async () => {
-    try {
-      const response = await api.get("getAllSubjectWithoutToken");
-      setSubjectData(response.data);
-      return response.data;
-    } catch (error) {
-      toast.error("Error fetching center data:", error);
-      throw error;
-    }
-  };
-
+  useEffect(() => {
+    const fetchAllSubjectsList = async () => {
+      try {
+        const response = await api.get("getAllSubjectWithoutToken");
+        setSubjectData(response.data);
+  
+        // Find matching subject by ID with type conversion
+        const matchingSubject = response.data.find(
+          (subject) => String(subject.id) === String(Id) // Ensure both are strings
+        );
+        console.log("Matching Subject:", matchingSubject);
+  
+        // Update the subjectId field in the form
+        if (matchingSubject) {
+          formik.setFieldValue("subjectId", matchingSubject.id); // Set default subject ID
+        }
+      } catch (error) {
+        console.error("Error fetching subjects:", error);
+      }
+    };
+  
+    fetchAllSubjectsList();
+  }, [Id]);
   const fetchStudent = async (centerId) => {
     try {
       const student = await fetchAllStudentListByCenterWOT(centerId);
@@ -164,7 +175,6 @@ function LeadForm({Id}) {
   useEffect(() => {
     formik.setFieldValue("parentMobileNumberPrefix","65")
     fetchData();
-    fetchAllSubjectsList();
   }, []);
 
   return (
@@ -330,7 +340,7 @@ function LeadForm({Id}) {
                 <option value="" selected>--Select--</option>
                 {subjectData &&
                   subjectData.map((subject) => (
-                    <option key={subject.id} value={subject.id} selected={subject.id === Id}>
+                    <option key={subject.id} value={subject.id}>
                       {subject.subjects}
                     </option>
                   ))}
