@@ -409,7 +409,7 @@ function LeaveEdit() {
                     type="file"
                     className="form-control"
                     name="file"
-                    accept=".jpg,.jpeg,.png,.pdf"
+                    accept=".pdf"
                     onChange={(event) => {
                       formik.setFieldValue(
                         "file",

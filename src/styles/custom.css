@@ -591,6 +591,31 @@ tbody tr td {
   margin-left: auto;
   background-color: #f7e8db;
 }
+/* left */
+.chat-section .message.left .message-bubble {
+  width: fit-content !important;
+  padding: 5px;
+  border-radius: 10px;
+  margin-right: auto;
+  background-color: #f7e8db;
+}
+
+.chat-section .message .message-bubble {
+  width: fit-content !important;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: #fff;
+  border: 1px solid #f4f3f3;
+}
+
+.chat-section .message:not(.right) {
+  margin-right: auto;
+}
+
+.chat-section .message:not(.right) .message-bubble {
+  background-color: #f0f0f0;
+}
+
 
 .sticky-input-container {
   min-width: 78%;
