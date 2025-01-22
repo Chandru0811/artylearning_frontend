@@ -127,25 +127,23 @@ function Footer() {
             <p>{footerDatas}</p>
           </div>
           <div className="col-md-4 col-12">
-            <a
-              href="https://artylearning.com/privacypolicy/index.html"
+            <Link
+              to="/privacypolicy"
               style={{ color: "#000" }}
-              target="_blank"
               rel="noreferrer"
             >
               <p className="text-center">Privacy Policy</p>
-            </a>
+            </Link>
           </div>
           <div className="col-md-2 col-12">
             <span>
-              <a
-                href="https://artylearning.com/termsandconditions/index.html"
+              <Link
+                to="/terms&conditions"
                 style={{ color: "#000" }}
-                target="_blank"
                 rel="noreferrer"
               >
                 <p className="text-center">Terms & Condition </p>
-              </a>
+              </Link>
             </span>
           </div>
           <div className="col-md-2 col-12">

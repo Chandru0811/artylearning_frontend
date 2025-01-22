@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function PrivacyPolicy() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, []);
   return (
     <section style={{ backgroundColor: "#f9fafb" }}>
       <div className="container py-5">

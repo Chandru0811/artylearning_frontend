@@ -73,15 +73,19 @@ function Header({ onLogout, centerChange }) {
               value={selectedCenter}
               name="studentRelationCenter"
               className="form-select shadow-none"
-              onChange={handleCenterChange} // Update local storage dynamically here
+              onChange={handleCenterChange}
               style={{
                 border: "none",
                 outline: "none",
-                paddingRight: "5px",
+                fontSize: "14px", // Readable size
+                width: "auto", // Automatically adjust width based on content
+                minWidth: "150px", // Ensure the dropdown is not too small
+                maxWidth: "100%", // Allow full width on smaller screens
+                padding: "0 10px", // Add some padding for a neat look
               }}
             >
               <option value="" selected disabled>
-                Select a Centre
+                Select a Centre dsdsdsdsdsd
               </option>
               {centerData &&
                 centerData.map((studentRelationCenter) => (

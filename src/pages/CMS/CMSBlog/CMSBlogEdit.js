@@ -41,7 +41,7 @@ function CMSBlogEdit({ id, onSuccess, handleMenuClose }) {
 
   const formik = useFormik({
     initialValues,
-    // validationSchema,
+    validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       const formData = new FormData();

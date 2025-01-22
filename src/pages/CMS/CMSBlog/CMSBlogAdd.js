@@ -30,8 +30,8 @@ function CMSBlogAdd({ onSuccess }) {
 
   const validationSchema = Yup.object().shape({
     file: Yup.mixed().required("Image file is required"),
-    description: Yup.string().required("Image details are required"),
-    title: Yup.string().required("Image details are required"),
+    description: Yup.string().required("Description is required"),
+    title: Yup.string().required("Title is required"),
   });
 
   const handleFileChange = (event) => {
@@ -86,7 +86,7 @@ function CMSBlogAdd({ onSuccess }) {
       </div>
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Add BLog</Modal.Title>
+          <Modal.Title className="headColor">Add Blog</Modal.Title>
         </Modal.Header>
         <form
           onSubmit={formik.handleSubmit}

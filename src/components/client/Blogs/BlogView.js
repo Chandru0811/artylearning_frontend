@@ -27,7 +27,7 @@ export default function BlogView() {
                 className="img-fluid py-1 rounded"
                 alt="Article"
               />
-              <p>
+              <p className='text-wrap text-break'>
                 {data.description || ""}
               </p>
             </div>
