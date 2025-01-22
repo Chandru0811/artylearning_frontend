@@ -7,6 +7,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 // import { LuDownload } from "react-icons/lu";
 import { IoChevronBackOutline } from "react-icons/io5";
+import { MdDelete } from "react-icons/md";
 import document from "../../../assets/images/Blue and Peach Gradient Facebook Profile Picture.png";
 
 function MyMessagesView() {
@@ -36,7 +37,7 @@ function MyMessagesView() {
         formData.append("senderId", userId);
         formData.append("senderRole", userName);
         formData.append("messageTo", "PARENT");
-        formData.append("recipientId", 2);
+        formData.append("recipientId", receiverId);
         formData.append("recipientName", data[0].receiverName);
         formData.append("recipientRole", data[0].receiverRole);
         formData.append("message", values.message);
@@ -67,16 +68,6 @@ function MyMessagesView() {
     },
   });
 
-  const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    setFileCount(files.length);
-    formik.setFieldValue("files", files);
-  };
-
-  const handleAttachmentClick = () => {
-    fileInputRef.current.click();
-  };
-
   const getData = async () => {
     try {
       const response = await api.get(
@@ -88,7 +79,7 @@ function MyMessagesView() {
 
       const combinedMessages = messages.map((msg) => ({
         content: msg.message,
-        isSender: msg.senderId == userId,
+        isSender: msg.senderId,
         attachments: msg.attachments,
         time: new Date(msg.createdAt).toLocaleTimeString([], {
           hour: "2-digit",
@@ -102,6 +93,33 @@ function MyMessagesView() {
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
     }
+  };
+
+  const handleDeleteMessage = async (messageId) => {
+    try {
+      const response = await api.delete(`/deleteMessage/${id}`);
+      if (response.status === 200) {
+        toast.success("Message deleted successfully!");
+        getData();
+        setMessages((prevMessages) =>
+          prevMessages.filter((msg) => msg.messageId !== messageId)
+        );
+      } else {
+        toast.error("Failed to delete the message.");
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    setFileCount(files.length);
+    formik.setFieldValue("files", files);
+  };
+
+  const handleAttachmentClick = () => {
+    fileInputRef.current.click();
   };
 
   const renderAttachment = (attachment, index) => {
@@ -211,7 +229,7 @@ function MyMessagesView() {
               >
                 {messages.map((msg, index) => (
                   <div key={index}>
-                    <div className={`message ${msg.isSender ? "right" : ""}`}>
+                    <div className={`message ${msg.isSender ? "right" : "left"}`}>
                       <div className="message-bubble my-2 w-75">
                         {msg.content}
                       </div>
@@ -232,6 +250,13 @@ function MyMessagesView() {
                         style={{ fontSize: "11px", background: "transparent" }}
                       >
                         {msg.time}
+                      </div>
+                      <div className="text-end message-bubble">
+                        {msg.isSender && (
+                          <MdDelete
+                            style={{ cursor: "pointer" }}
+                            onClick={() => handleDeleteMessage(msg.messageId)} />
+                        )}
                       </div>
                     </div>
                   </div>
@@ -273,11 +298,10 @@ function MyMessagesView() {
                       aria-label="Recipient's username"
                       aria-describedby="basic-addon2"
                       {...formik.getFieldProps("message")}
-                      className={`form-control ${
-                        formik.touched.message && formik.errors.message
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                      className={`form-control ${formik.touched.message && formik.errors.message
+                        ? "is-invalid"
+                        : ""
+                        }`}
                     />
                     <span
                       className="input-group-text"
