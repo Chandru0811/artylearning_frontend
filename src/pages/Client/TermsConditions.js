@@ -35,7 +35,7 @@ function TermsConditions() {
                                 <li>806 Hougang Central,</li>
                                 <li>#04-146</li>
                                 <li>Singapore (530806)</li>
-                                <li>Email: <Link style={{ color: 'red', textDecoration: 'underline' }}>artylearning@gmail.com</Link></li>
+                                <li>Email: <Link style={{ color: 'red', textDecoration: 'underline' }}>headquarters@artylearning.com</Link></li>
                             </ul>
                         </p>
                     </div>

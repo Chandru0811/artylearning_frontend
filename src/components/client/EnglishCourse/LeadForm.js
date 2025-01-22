@@ -55,13 +55,14 @@ const validationSchema = Yup.object().shape({
   recognizeAToZ: Yup.string().required("*Recognize is required"),
 });
 
-function LeadForm() {
+function LeadForm({Id}) {
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [studentData, setStudentData] = useState(null);
 
   const [searchParams] = useSearchParams();
-  const subjects = searchParams.get("subjects");
+  // const subjects = searchParams.get("subjects");
+  console.log("ID:",Id);
 
   const formik = useFormik({
     initialValues: {
@@ -70,7 +71,7 @@ function LeadForm() {
       gender: "",
       dateOfBirth: "",
       pencilGrip: "",
-      subjectId: "",
+      subjectId:"",
       marketingSource: "",
       referBy: "",
       writeUpperAToZ: "",
@@ -325,16 +326,12 @@ function LeadForm() {
                     ? "is-invalid"
                     : ""
                 }`}
-                aria-label="Default select example"
               >
-                {/* <option selected>--Select--</option> */}
-                {/* <option value="ENGLISH">English / 英文</option>
-                <option value="CHINESE">Chinese / 中文</option> */}
                 <option value="" selected>--Select--</option>
                 {subjectData &&
-                  subjectData.map((subjectId) => (
-                    <option key={subjectId.id} value={subjectId.id}>
-                      {subjectId.subjects}
+                  subjectData.map((subject) => (
+                    <option key={subject.id} value={subject.id} selected={subject.id === Id}>
+                      {subject.subjects}
                     </option>
                   ))}
               </select>
@@ -671,8 +668,9 @@ function LeadForm() {
               <option selected>--Select--</option>
               <option value="Father">Father</option>
               <option value="Mother">Mother</option>
-              <option value="Brother">Brother</option>
-              <option value="Sister">Sister</option>
+              <option value="Grandparents">Grandparents</option>
+              <option value="Helper">Helper</option>
+              <option value="Others">Others</option>
             </select>
             {formik.touched.relation && formik.errors.relation && (
               <div className="invalid-feedback">{formik.errors.relation}</div>

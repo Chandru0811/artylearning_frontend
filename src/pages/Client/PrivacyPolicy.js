@@ -197,7 +197,7 @@ function PrivacyPolicy() {
                 <li>
                   Email:
                   <Link style={{ color: "red", textDecoration: "underline" }}>
-                    artylearning@gmail.com
+                    headquarters@artylearning.com 
                   </Link>
                 </li>
               </ul>

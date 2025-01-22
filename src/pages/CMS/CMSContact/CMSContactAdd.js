@@ -175,6 +175,24 @@ function CMSContactAdd({ onSuccess }) {
                     </div>
                   )}
                 </div>
+                {/* <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Social Link<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="address"
+                    className={`form-control  ${
+                      formik.touched.map && formik.errors.address
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("address")}
+                  />
+                  {formik.touched.address && formik.errors.address && (
+                    <div className="invalid-feedback">{formik.errors.address}</div>
+                  )}
+                </div> */}
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Google Address<span className="text-danger">*</span>

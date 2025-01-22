@@ -6,7 +6,7 @@ import ChangePassword from "./ChangePassword";
 import { BiLogOut } from "react-icons/bi";
 import { CiCalendarDate } from "react-icons/ci";
 
-function Header({ onLogout,centerChange }) {
+function Header({ onLogout, centerChange }) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("email");
@@ -16,8 +16,8 @@ function Header({ onLogout,centerChange }) {
 
   const handleLogOutClick = () => {
     document.body.classList.remove("offcanvas-backdrop", "modal-open");
-    document.body.style.overflow = "auto"; 
-    document.body.style.paddingRight = '0px';
+    document.body.style.overflow = "auto";
+    document.body.style.paddingRight = "0px";
     onLogout();
     navigate("/login");
   };
@@ -40,7 +40,7 @@ function Header({ onLogout,centerChange }) {
         } else if (centerData && centerData.length > 0) {
           setSelectedCenter(centerData[0].id);
           localStorage.setItem("selectedCenterId", centerData[0].id); // Set in localStorage
-        }        
+        }
       } catch (error) {
         toast.error(error.message);
       }
@@ -68,32 +68,31 @@ function Header({ onLogout,centerChange }) {
               />
             </button>
           </Link>
-
-          <div style={{ minWidth: "50%" }}>
-            <div className="position-relative">
-              <select
-                value={selectedCenter}
-                name="studentRelationCenter"
-                className="form-select shadow-none"
-                onChange={handleCenterChange} // Update local storage dynamically here
-                style={{
-                  border: "none",
-                  outline: "none",
-                  paddingRight: "5px",
-                }}
-              >
-                <option value="" selected disabled>Select a Centre</option>
-                {centerData &&
-                  centerData.map((studentRelationCenter) => (
-                    <option
-                      key={studentRelationCenter.id}
-                      value={studentRelationCenter.id}
-                    >
-                      {studentRelationCenter.centerNames}
-                    </option>
-                  ))}
-              </select>
-            </div>
+          <div className="position-relative">
+            <select
+              value={selectedCenter}
+              name="studentRelationCenter"
+              className="form-select shadow-none"
+              onChange={handleCenterChange} // Update local storage dynamically here
+              style={{
+                border: "none",
+                outline: "none",
+                paddingRight: "5px",
+              }}
+            >
+              <option value="" selected disabled>
+                Select a Centre
+              </option>
+              {centerData &&
+                centerData.map((studentRelationCenter) => (
+                  <option
+                    key={studentRelationCenter.id}
+                    value={studentRelationCenter.id}
+                  >
+                    {studentRelationCenter.centerNames}
+                  </option>
+                ))}
+            </select>
           </div>
           <button
             className="btn border border-1 rounded-circle"
