@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import api from "../../../config/URL";
-
+import { BsWhatsapp } from "react-icons/bs";
 function Footer() {
   const [datas, setDatas] = useState([]);
   const [footerDatas, setFooterDatas] = useState([]);
@@ -39,10 +39,24 @@ function Footer() {
             {datas &&
               datas.slice(0, 2).map((data, index) => (
                 <>
-                  <h4 style={{ fontWeight: "400" }}>
+                <div className="mb-3">
+                <h4 style={{ fontWeight: "400" }}>
                     <b>{data.centerName || "Arty Learning @ Hougang"}</b>
                   </h4>
-
+                  {/* {data.socialLike || (
+                    <>
+                      <BsWhatsapp className="fs-5 text-success"/>
+                       &nbsp;
+                       &nbsp;
+                      <a
+                        href="https://api.whatsapp.com/send/?text=https%3A%2F%2Fsgitjobs.com%2Fdealslah%2Fdeal%2F138&type=custom_url&app_absent=0"
+                        target="_blank"
+                        className="decoration-none text-dark" 
+                      >
+                        Whatsapp
+                      </a>
+                    </>
+                  )} */}
                   {data.address || (
                     <>
                       <p>
@@ -51,6 +65,9 @@ function Footer() {
                       </p>
                     </>
                   )}
+
+                </div>
+                  
                 </>
               ))}
           </div>

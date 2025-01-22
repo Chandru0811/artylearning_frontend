@@ -44,7 +44,7 @@ function ParticulerCourse() {
           <>
             <CoursesBanner datas={datas} getData={getData} />
             <CoursesListing datas={datas} getData={getData} />
-            <LeadForm />
+            <LeadForm Id={id}/>
           </>
         )}
       </>

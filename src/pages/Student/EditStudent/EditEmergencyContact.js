@@ -412,11 +412,11 @@ const EditEmergencyContact = forwardRef(
                               }
                             >
                               <option value="">Select Relation</option>
-                              <option value="Mother">Mother</option>
                               <option value="Father">Father</option>
-                              <option value="Sister">Sister</option>
-                              <option value="Brother">Brother</option>
-                              {/* Add more options as needed */}
+                              <option value="Mother">Mother</option>
+                              <option value="Grandparents">Grandparents</option>
+                              <option value="Helper">Helper</option>
+                              <option value="Others">Others</option>
                             </select>
                             {formik.touched.emergencyContactInformation?.[index]
                               ?.authorizedRelation &&

@@ -355,21 +355,12 @@ const EditForm4 = forwardRef(
                   value={formik.values.relationToChils}
                 >
                   <option value=""></option>
-                  <option value="Mother">Mother</option>
                   <option value="Father">Father</option>
-                  <option value="Sister">Sister</option>
-                  <option value="Brother">Brother</option>
+                  <option value="Mother">Mother</option>
+                  <option value="Grandparents">Grandparents</option>
+                  <option value="Helper">Helper</option>
+                  <option value="Others">Others</option>
                 </select>
-                {/* <form className="">
-                  <textarea
-                    type="text"
-                    className="form-control "
-                    name="relationToChils"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.relationToChils}
-                  />
-                </form> */}
               </div>
             </div>
             <div className="col-md-6 col-12">
