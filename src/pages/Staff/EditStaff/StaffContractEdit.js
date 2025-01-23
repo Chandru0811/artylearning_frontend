@@ -378,7 +378,7 @@ const StaffContractEdit = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.employer}
                 >
-                  <option selected></option>
+                  <option selected disabled></option>
                   {employerData?.map((center) => (
                     <option key={center.id} value={center.id}>
                       {center.centerName}

@@ -385,7 +385,7 @@ const ContractEdit = forwardRef(
                   value={formik.values.employer}
                   // value={contactId?.employer}
                 >
-                  <option selected></option>
+                  <option selected disabled></option>
                   {employerData?.map((center) => (
                     <option key={center.id} value={center.id}>
                       {center.centerName}
