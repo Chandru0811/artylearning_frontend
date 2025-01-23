@@ -211,6 +211,16 @@ function ReplaceClassLessonEdit() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Form Submitted", values);
+      formik.setTouched({
+        packageId: true,
+        lessonName: true,
+      });
+    
+      // Check if the form is valid
+      if (!formik.isValid) {
+        toast.error("Please fill all the required fields");
+        return;
+      }
 
       if (!selectedRow) {
         toast.warning("Please select a course");
@@ -260,7 +270,7 @@ function ReplaceClassLessonEdit() {
         }
         if (response.status === 200 || response.status === 201) {
           toast.success(response.data.message);
-          // navigate("/student");
+          navigate("/replaceclasslesson");
           // navigate(`/invoice/add?studentID=${studentId}`);
           formik.resetForm();
         } else {
@@ -279,6 +289,23 @@ function ReplaceClassLessonEdit() {
       }
     },
   });
+
+  const scrollToError = (errors) => {
+    const errorField = Object.keys(errors)[0]; // Get the first error field
+    const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+    if (errorElement) {
+      errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      errorElement.focus(); // Set focus to the error element
+      toast.warning("Please fill all the required fields");
+    }
+  };
+
+  // Watch for form submit and validation errors
+  useEffect(() => {
+    if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+      scrollToError(formik.errors);
+    }
+  }, [formik.submitCount, formik.errors]);
 
   const fetchCourseData = async () => {
     try {
@@ -768,19 +795,16 @@ function ReplaceClassLessonEdit() {
                   </div>
                 )}
               </div>
-
               {availableDays.length > 0 && (
                 <div className="col-md-4">
                   <select
-                    {...formik.getFieldProps("lessonName")}
-                    className={`form-select ${
-                      formik.touched.lessonName && formik.errors.lessonName
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className="form-select"
                     name="lessonName"
+                    {...formik.getFieldProps("lessonName")}
                   >
-                    <option>Select Date</option>
+                    <option value="" disabled selected>
+                      Select Date
+                    </option>
                     {availableDays.map((day) => (
                       <option key={day.value} value={day.value}>
                         {day.label}
