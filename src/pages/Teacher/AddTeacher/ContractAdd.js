@@ -267,7 +267,7 @@ const ContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.employer}
                 >
-                  <option selected></option>
+                  <option selected disabled></option>
                   {filteredCenters?.map((center) => (
                     <option key={center.id} value={center.id}>
                       {center.centerNames}
