@@ -175,6 +175,12 @@ function CMSBlogEdit({ id, onSuccess, handleMenuClose }) {
                 name="description"
                 className="form-control"
                 rows={4}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    // Allow the default behavior for Enter key
+                    console.log("Enter key pressed: moving to the next line");
+                  }
+                }}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.description}

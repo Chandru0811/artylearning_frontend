@@ -85,7 +85,7 @@ function Header({ onLogout, centerChange }) {
               }}
             >
               <option value="" selected disabled>
-                Select a Centre dsdsdsdsdsd
+                Select a Centre
               </option>
               {centerData &&
                 centerData.map((studentRelationCenter) => (

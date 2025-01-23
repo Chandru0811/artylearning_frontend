@@ -90,11 +90,11 @@ function CMSBlogAdd({ onSuccess }) {
         </Modal.Header>
         <form
           onSubmit={formik.handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
-            }
-          }}
+          // onKeyDown={(e) => {
+          //   if (e.key === "Enter" && !formik.isSubmitting) {
+          //     e.preventDefault(); // Prevent default form submission
+          //   }
+          // }}
         >
           <Modal.Body>
             <div className="container">
@@ -151,6 +151,12 @@ function CMSBlogAdd({ onSuccess }) {
                   id="description"
                   name="description"
                   className="form-control"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      // Allow the default behavior for Enter key
+                      console.log("Enter key pressed: moving to the next line");
+                    }
+                  }}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.description}
