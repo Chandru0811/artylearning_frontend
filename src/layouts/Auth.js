@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "../styles/client.css";
 import Header from "../components/client/common/Header.js";
@@ -22,6 +22,15 @@ import Blogs from "../pages/Client/Blogs.js";
 import ParticulerCourse from "../pages/Client/ParticulerCourse.js";
 
 function Auth({ handleLogin }) {
+  useEffect(() => {
+    const hideButton = () => {
+      const buttons = document.querySelectorAll(".MuiButton-containedPrimary");
+      buttons.forEach((button) => {
+        button.style.display = "flex";
+      });
+    };
+    hideButton();
+  }, []);
   return (
     <BrowserRouter basename="/sms">
       <ToastContainer position="top-center" />

@@ -258,8 +258,18 @@ function Admin({ handleLogout }) {
   }, []);
   const handleCenterChanged = () => {
     setCenterChange((prevCount) => prevCount + 1);
-    console.log("centerChange",centerChange)
+    console.log("centerChange", centerChange);
   };
+
+  useEffect(() => {
+    const hideButton = () => {
+      const buttons = document.querySelectorAll(".MuiButton-containedPrimary");
+      buttons.forEach((button) => {
+        button.style.display = "none";
+      });
+    };
+    hideButton();
+  }, []);
 
   return (
     <div>
@@ -345,10 +355,23 @@ function Admin({ handleLogout }) {
               <Route path="/transferOut" element={<TransferOut />} />
 
               {/* Center */}
-              <Route path="/center" element={<Center handleCenterChanged={handleCenterChanged} />} />
-              <Route path="/center/add" element={<CenterAdd handleCenterChanged={handleCenterChanged} />} />
+              <Route
+                path="/center"
+                element={<Center handleCenterChanged={handleCenterChanged} />}
+              />
+              <Route
+                path="/center/add"
+                element={
+                  <CenterAdd handleCenterChanged={handleCenterChanged} />
+                }
+              />
               <Route path="/center/view/:id" element={<CenterView />} />
-              <Route path="/center/edit/:id" element={<CenterEdit handleCenterChanged={handleCenterChanged}/>} />
+              <Route
+                path="/center/edit/:id"
+                element={
+                  <CenterEdit handleCenterChanged={handleCenterChanged} />
+                }
+              />
 
               <Route path="/centermanager" element={<CenterManager />} />
               <Route path="/centermanager/add" element={<CenterManagerAdd />} />
@@ -763,10 +786,7 @@ function Admin({ handleLogout }) {
                 path="/othermessaging/view/:id"
                 element={<OtherMessagesView />}
               />
-              <Route
-                path="/timetable"
-                element={<TimeTable />}
-              />
+              <Route path="/timetable" element={<TimeTable />} />
             </Routes>
           </div>
           <Footer />
