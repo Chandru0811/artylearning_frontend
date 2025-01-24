@@ -187,7 +187,7 @@ function Login({ onLogin }) {
                         )}
                       </div>
                     </div>
-                    <div className="text-end">
+                    {/* <div className="text-end">
                       <Link
                         to="/password"
                         className="text-muted fw-medium"
@@ -195,7 +195,7 @@ function Login({ onLogin }) {
                       >
                         Forgot Password?
                       </Link>
-                    </div>
+                    </div> */}
                     <button
                       type="submit"
                       className="btn btn-danger mt-4"
