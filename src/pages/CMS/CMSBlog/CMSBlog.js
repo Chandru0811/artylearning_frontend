@@ -149,15 +149,13 @@ const CMSBlog = () => {
     },
   });
   const blogsPublish = async () => {
-    let isPublished = false;
+    try {
+      if (!datas || datas.length === 0) {
+        const formData = new FormData();
+        formData.append("description", "");
+        formData.append("title", "");
+        formData.append("file", null);
 
-    for (const data of datas) {
-      const formData = new FormData();
-      formData.append("description", data.description);
-      formData.append("title", data.title);
-      formData.append("file", data.imagerOne);
-
-      try {
         const response = await api.post("/publishBlogSave", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -165,16 +163,32 @@ const CMSBlog = () => {
         });
 
         if (response.status === 201) {
-          isPublished = true; // Set flag if at least one blog is published successfully
+          toast.success(response.data.message);
         }
-      } catch (error) {
-        console.error("Error publishing blog:", error);
-      }
-    }
+      } else {
+        for (const data of datas) {
+          const formData = new FormData();
+          formData.append("description", data.description);
+          formData.append("title", data.title);
+          formData.append("file", data.imagerOne);
 
-    // Show the toast only once after all blogs are processed
-    if (isPublished) {
-      toast.success("Blogs Published Successfully.");
+          const response = await api.post("/publishBlogSave", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          if (response.status === 201) {
+            toast.success(response.data.message);
+          }
+        }
+      }
+    } catch (error) {
+      if (error?.response?.status === 404) {
+        toast.error(error?.response?.data?.message);
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 

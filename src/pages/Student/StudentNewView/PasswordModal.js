@@ -21,6 +21,7 @@ function PasswordModal({password}) {
   };
 
   const handleShow = () => {
+    formik.resetForm();
     setShow(true);
   };
 
@@ -59,6 +60,7 @@ function PasswordModal({password}) {
         if (response.status === 200) {
           toast.success(response.data.message);
           setShow(false);
+          formik.resetForm();
           //   onLogout();
         } else {
           toast.error(response.data.message);

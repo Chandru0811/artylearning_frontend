@@ -27,20 +27,28 @@ const CmsNewsUpdate = () => {
     setSelectedFile(null);
   };
 
-  const handleShowAddModal = () => setShowAddModal(true);
+  const handleShowAddModal = () => {
+    setShowAddModal(true);
+    setSelectedFile(null);
+  };
 
   const validationSchema = yup.object().shape({
     file: yup
       .mixed()
       .required("File is required")
       .test("fileType", "Only JPG, JPEG, PNG files are allowed", (value) => {
-        return value && ["image/jpeg", "image/jpg", "image/png"].includes(value.type);
+        return (
+          value && ["image/jpeg", "image/jpg", "image/png"].includes(value.type)
+        );
       }),
     heading: yup
       .string()
       .required("Heading is required")
       .min(3, "Heading must be at least 3 characters"),
-    comment: yup.string().required("Comment is required").min(3, "Comment must be at least 3 characters"),
+    comment: yup
+      .string()
+      .required("Comment is required")
+      .min(3, "Comment must be at least 3 characters"),
     para: yup
       .string()
       .required("Paragraph is required")
@@ -95,7 +103,10 @@ const CmsNewsUpdate = () => {
     setLoading(true);
     try {
       const response = await api.get("/getAllNewsUpdatedSave");
-      setDatas(response.data);
+      const sortedData = response.data.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+      setDatas(sortedData);
     } catch (error) {
       console.error("Error refreshing data:", error);
     }
@@ -236,7 +247,9 @@ const CmsNewsUpdate = () => {
           <Modal.Body>
             <div className="row">
               <div className="mb-2">
-                <label className="form-label">Upload Image File<span className="text-danger">*</span></label>
+                <label className="form-label">
+                  Upload Image File<span className="text-danger">*</span>
+                </label>
                 <div className="input-group mb-3">
                   <input
                     type="file"
@@ -265,7 +278,9 @@ const CmsNewsUpdate = () => {
               )}
 
               <div className="mb-2">
-                <label className="form-label">Heading<span className="text-danger">*</span></label>
+                <label className="form-label">
+                  Heading<span className="text-danger">*</span>
+                </label>
                 <input
                   type="text"
                   className={`form-control ${
@@ -283,9 +298,11 @@ const CmsNewsUpdate = () => {
               </div>
 
               <div className="mb-2">
-                <label className="form-label">Comment<span className="text-danger">*</span></label>
+                <label className="form-label">
+                  Comment<span className="text-danger">*</span>
+                </label>
                 <input
-                  type="text" 
+                  type="text"
                   className={`form-control ${
                     formik.touched.comment && formik.errors.comment
                       ? "is-invalid"
@@ -301,7 +318,9 @@ const CmsNewsUpdate = () => {
               </div>
 
               <div className="mb-2">
-                <label className="form-label">Paragraph<span className="text-danger">*</span></label>
+                <label className="form-label">
+                  Paragraph<span className="text-danger">*</span>
+                </label>
                 <textarea
                   className={`form-control ${
                     formik.touched.para && formik.errors.para

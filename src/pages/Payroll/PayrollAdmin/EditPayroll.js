@@ -223,27 +223,27 @@ function EditPayroll() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.userId, formik.values.payrollMonth]);
 
-  useEffect(() => {
-    const calculateNetPay = () => {
-      if (empRole !== "freelancer") {
-        const grossPay = parseFloat(formik.values.grossPay) || 0;
-        const bonus = parseFloat(formik.values.bonus) || 0;
-        const deductionAmount = parseFloat(formik.values.deductionAmount) || 0;
-        const cpf = parseFloat(formik.values.cpfContribution) || 0;
-        const shg = parseFloat(formik.values.shgContribution) || 0;
-        const netPay = grossPay + bonus - deductionAmount - cpf - shg;
-        formik.setFieldValue("netPay", isNaN(netPay) ? 0 : netPay.toFixed(2));
-      } else {
-        formik.setFieldValue("netPay", "");
-      }
-    };
-    calculateNetPay();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    formik.values.grossPay,
-    formik.values.bonus,
-    formik.values.deductionAmount,
-  ]);
+  // useEffect(() => {
+  //   const calculateNetPay = () => {
+  //     if (empRole !== "freelancer") {
+  //       const grossPay = parseFloat(formik.values.grossPay) || 0;
+  //       const bonus = parseFloat(formik.values.bonus) || 0;
+  //       const deductionAmount = parseFloat(formik.values.deductionAmount) || 0;
+  //       const cpf = parseFloat(formik.values.cpfContribution) || 0;
+  //       const shg = parseFloat(formik.values.shgContribution) || 0;
+  //       const netPay = grossPay + bonus - deductionAmount - cpf - shg;
+  //       formik.setFieldValue("netPay", isNaN(netPay) ? 0 : netPay.toFixed(2));
+  //     } else {
+  //       formik.setFieldValue("netPay", "");
+  //     }
+  //   };
+  //   calculateNetPay();
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [
+  //   formik.values.grossPay,
+  //   formik.values.bonus,
+  //   formik.values.deductionAmount,
+  // ]);
 
   const fetchUserPaymenthours = async (startDate, endDate, userId) => {
     const queryParams = new URLSearchParams({

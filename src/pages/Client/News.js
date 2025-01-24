@@ -35,20 +35,23 @@ function News() {
           {Array.isArray(data) && data.length > 0 ? (
             data.map((item, index) => (
               <div className="col-md-4 col-12 my-2 calendar-item" key={index}>
-                <div className="custom-card shadow-lg h-100 d-flex flex-column align-items-center mx-3 mt-2 pt-3 position-relative">
-                  <img src={item.cardImageOne || View} style={{ height: "45%", width: "96%" }} alt="view" className="custom-img-fluid" />
+                <div className="custom-card shadow-lg h-75 d-flex flex-column align-items-center mx-3 mt-2 pt-3 position-relative">
+                  <img
+                    src={item.cardImageOne || View}
+                    style={{ height: "45%", width: "100%" }}
+                    alt="view"
+                    className="custom-img-fluid"
+                  />
                   <div className="custom-card-body d-flex flex-column p-2">
                     <div className="custom-content">
-                      <h6 className="custom-card-title">
-                        {item.heading}
-                      </h6>
+                      <h6 className="custom-card-title">{item.heading}</h6>
                       <p>
                         {item.role}/{item.date}/{item.comment}
                       </p>
                     </div>
-                    <div className="">
+                    <div className="mt-auto">
                       <Link to={`/calender/${item.id}`}>
-                        <button className="custom-button mt-4">Read More</button>
+                        <button className="custom-button">Read More</button>
                       </Link>
                     </div>
                   </div>
