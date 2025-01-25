@@ -103,10 +103,7 @@ const CmsNewsUpdate = () => {
     setLoading(true);
     try {
       const response = await api.get("/getAllNewsUpdatedSave");
-      const sortedData = response.data.sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-      });
-      setDatas(sortedData);
+      setDatas(response.data);
     } catch (error) {
       console.error("Error refreshing data:", error);
     }
