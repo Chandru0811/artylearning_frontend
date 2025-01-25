@@ -42,7 +42,7 @@ export default function WithdrawAdd() {
 
 
   return (
-    <div class="container-fluid minHeight my-5">
+    <div className="container-fluid minHeight my-5">
       <Stepper activeStep={activeStep}>
         {steps.map((label) => {
           
@@ -53,7 +53,7 @@ export default function WithdrawAdd() {
           );
         })}
       </Stepper>
-      <div class="container-fluid py-3 card shadow border-0 mb-7 mt-5">
+      <div className="container-fluid py-3 card shadow border-0 mb-7 mt-5">
         
           
          

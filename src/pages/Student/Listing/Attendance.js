@@ -8,16 +8,16 @@ import { MdDelete } from "react-icons/md";
 function Attendance() {
   return (
     <div className='container-fluid p-3 '>
-      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
-        <div class="card-body">
-          <div class="row">
-            <div class="col d-flex">
+      <div className="card shadow-lg p-3 mb-5 bg-white rounded">
+        <div className="card-body">
+          <div className="row">
+            <div className="col d-flex">
               <span>Show</span>
-              <button type="button" class="dropdown-toggle px-4">25</button><span>entries</span>
+              <button type="button" className="dropdown-toggle px-4">25</button><span>entries</span>
 
             </div>
             <div className='table-responsive'>
-              <table class="table">
+              <table className="table">
                 <thead className='align-self-center'>
                   <tr className='text-center'>
                     <th scope="col">S.no</th>
@@ -39,7 +39,7 @@ function Attendance() {
                     <td>Part Time Local</td>
                     <td>zemura113@gmail.com</td>
                     <td>83009867</td>
-                    <td> <button type="button" class="btn btn-success" style={{width:'7rem'}}>Active</button></td>
+                    <td> <button type="button" className="btn btn-success" style={{width:'7rem'}}>Active</button></td>
                     <td><span>
 
                       <Link to="/listing/lastview">
@@ -59,7 +59,7 @@ function Attendance() {
                     <td>Part Time Local</td>
                     <td>artylearning@gmail.com</td>
                     <td>91009867</td>
-                    <td> <button type="button" class="btn btn-danger"style={{width:'7rem'}}>Resigned</button></td>
+                    <td> <button type="button" className="btn btn-danger"style={{width:'7rem'}}>Resigned</button></td>
                     <td><span>
 
                       <Link to="/listing/lastview">
@@ -78,7 +78,7 @@ function Attendance() {
                     <td> Part Time Local</td>
                     <td>artylearning@gmail.com</td>
                     <td>91567789</td>
-                    <td><button type="button" class="btn btn-success"style={{width:'7rem'}}>Active</button></td>
+                    <td><button type="button" className="btn btn-success"style={{width:'7rem'}}>Active</button></td>
                     <td><span>
 
                       <Link to="/listing/lastview">

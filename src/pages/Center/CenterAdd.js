@@ -207,11 +207,11 @@ function CenterAdd({ handleCenterChanged }) {
             className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div className="d-flex align-items-center">
+              <div className="d-flex">
+                <div className="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Centre</span>
+              <span className="me-2 text-muted">Add Centre</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/center">
@@ -475,7 +475,7 @@ function CenterAdd({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    UEN Number<span class="text-danger">*</span>
+                    UEN Number<span className="text-danger">*</span>
                   </label>
                   <input
                     {...formik.getFieldProps("uenNumber")}
@@ -653,10 +653,10 @@ function CenterAdd({ handleCenterChanged }) {
                 <label for="exampleFormControlInput1" className="form-label">
                   Invoice Notes
                 </label>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                   <textarea
                     name="invoiceNotes"
-                    class="form-control"
+                    className="form-control"
                     {...formik.getFieldProps("invoiceNotes")}
                     id="invoiceNotes"
                     rows="5"

@@ -75,14 +75,14 @@ const CenterManager = () => {
         {storedScreens?.classCreate && (
           <Link to={`/centermanager/add`}>
             <button type="button" className="btn btn-button btn-sm">
-              Add <i class="bx bx-plus"></i>
+              Add <i className="bx bx-plus"></i>
             </button>
           </Link>
         )}
       </div>
       {loading ? (
         <div className="loader-container">
-          <div class="loading">
+          <div className="loading">
             <span></span>
             <span></span>
             <span></span>

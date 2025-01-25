@@ -143,11 +143,11 @@ function EditBreak({ id, onSuccess }) {
           </Modal.Header>
           <Modal.Body>
             <div className="row">
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
-                  Break Name<span class="text-danger">*</span>
+                  Break Name<span className="text-danger">*</span>
                 </lable>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                   <input
                     type="data"
                     value="New Year Chinese"
@@ -165,9 +165,9 @@ function EditBreak({ id, onSuccess }) {
                   )}
                 </div>
               </div>
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <lable>
-                  From Date<span class="text-danger">*</span>
+                  From Date<span className="text-danger">*</span>
                 </lable>
                 <input
                   type="date"
@@ -184,11 +184,11 @@ function EditBreak({ id, onSuccess }) {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
-                  To Date<span class="text-danger">*</span>
+                  To Date<span className="text-danger">*</span>
                 </lable>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                   <input
                     type="date"
                     className={`form-control   ${

@@ -164,11 +164,11 @@ function DeductionAdd() {
             className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div className="d-flex align-items-center">
+              <div className="d-flex">
+                <div className="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Deduction</span>
+              <span className="me-2 text-muted">Add Deduction</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/deduction">
@@ -226,7 +226,7 @@ function DeductionAdd() {
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}
-                  class={`form-select  ${
+                  className={`form-select  ${
                     formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""

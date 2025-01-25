@@ -1259,7 +1259,7 @@ function StudentNewView() {
 
         <h3 className="mt-5 mb-2">Student Relation</h3>
         <div id="panelsStayOpen-collapseFour">
-          <div class="accordion-body">
+          <div className="accordion-body">
             <div className="table-responsive">
               <table className="table">
                 <thead>

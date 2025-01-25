@@ -110,16 +110,16 @@ function RescheduleStudent() {
                   <td>{timeSlot}</td>
                   <td>
                     {selectedId === id ? (
-                      <div class="dropdown">
+                      <div className="dropdown">
                         <button
-                          class="btn btn-border dropdown-toggle"
+                          className="btn btn-border dropdown-toggle"
                           type="button"
                           data-bs-toggle="dropdown"
                           aria-expanded="false"
                         >
                           {action}
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                           <li>
                             <AssignMakeUpClass />
                           </li>

@@ -252,9 +252,9 @@ const AssessmentPursuers = forwardRef(
       <section>
         <h5 className="headColor py-3">Arty Pursuers</h5>
         <div className="container mt-5 px-4">
-          <div class="row">
+          <div className="row">
             <div className="table-responsive">
-              <table class="table table-borderless">
+              <table className="table table-borderless">
                 <tbody>
                   <tr>
                     <th
@@ -265,9 +265,9 @@ const AssessmentPursuers = forwardRef(
                       Sight Words<span className="text-danger">*</span> :
                     </th>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           id="inlineCheckbox1"
                           name="sightWords"
@@ -279,15 +279,15 @@ const AssessmentPursuers = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           The
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           id="inlineCheckbox1"
                           name="sightWords"
@@ -299,15 +299,15 @@ const AssessmentPursuers = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           She
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           id="inlineCheckbox1"
                           name="sightWords"
@@ -319,15 +319,15 @@ const AssessmentPursuers = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           He
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           id="inlineCheckbox1"
                           name="sightWords"
@@ -339,15 +339,15 @@ const AssessmentPursuers = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           See
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           id="inlineCheckbox1"
                           name="sightWords"
@@ -359,7 +359,7 @@ const AssessmentPursuers = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           On
                         </label>
                       </div>
@@ -368,9 +368,9 @@ const AssessmentPursuers = forwardRef(
                   <tr>
                     <th scope="row"></th>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           id="inlineCheckbox1"
                           name="sightWords"
@@ -382,15 +382,15 @@ const AssessmentPursuers = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           Could
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           id="inlineCheckbox1"
                           name="sightWords"
@@ -402,15 +402,15 @@ const AssessmentPursuers = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           White
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           id="inlineCheckbox1"
                           name="sightWords"
@@ -422,15 +422,15 @@ const AssessmentPursuers = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           Together
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           id="inlineCheckbox1"
                           name="sightWords"
@@ -442,15 +442,15 @@ const AssessmentPursuers = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           Might
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           id="inlineCheckbox1"
                           name="sightWords"
@@ -462,7 +462,7 @@ const AssessmentPursuers = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           About
                         </label>
                       </div>
@@ -471,9 +471,9 @@ const AssessmentPursuers = forwardRef(
                   <tr>
                     <th scope="row"></th>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           id="inlineCheckbox1"
                           name="sightWords"
@@ -485,7 +485,7 @@ const AssessmentPursuers = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           Nil
                         </label>
                       </div>
@@ -505,7 +505,7 @@ const AssessmentPursuers = forwardRef(
               </table>
             </div>
             <div className="table-responsive">
-              <table class="table table-borderless">
+              <table className="table table-borderless">
                 <tbody>
                   <tr style={{ width: "200px" }}>
                     <th scope="row" className="text-end fw-medium">
@@ -558,10 +558,10 @@ const AssessmentPursuers = forwardRef(
                       Real:
                     </th>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="realHag"
                             name="realHag"
@@ -571,17 +571,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="realHag"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Hag
                       </div>
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="realKeg"
                             name="realKeg"
@@ -591,17 +591,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="realKeg"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>
                         &nbsp; Keg
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="bopis3"
                             name="realDip"
@@ -611,17 +611,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="bopis3"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>
                         &nbsp; Dip
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="realLot"
                             name="realLot"
@@ -631,17 +631,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="realLot"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>
                         &nbsp; Lot
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="realBud"
                             name="realBud"
@@ -651,7 +651,7 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="realBud"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Bud
@@ -728,10 +728,10 @@ const AssessmentPursuers = forwardRef(
                       Non sense:
                     </th>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="nonSenseZam"
                             name="nonSenseZam"
@@ -741,17 +741,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="nonSenseZam"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Zam
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="nonSenseDen"
                             name="nonSenseDen"
@@ -761,17 +761,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="nonSenseDen"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Den
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="nonSenseWip"
                             name="nonSenseWip"
@@ -781,17 +781,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="nonSenseWip"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Wip
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="nonSenseSot"
                             name="nonSenseSot"
@@ -801,17 +801,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="nonSenseSot"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Sot
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="nonSenseYub"
                             name="nonSenseYub"
@@ -821,7 +821,7 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="nonSenseYub"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Yub
@@ -896,7 +896,7 @@ const AssessmentPursuers = forwardRef(
               </table>
             </div>
             <div className="table-responsive">
-              <table class="table table-borderless">
+              <table className="table table-borderless">
                 <tbody>
                   <tr>
                     <th
@@ -921,7 +921,7 @@ const AssessmentPursuers = forwardRef(
               </table>
             </div>
             <div className="table-responsive">
-              <table class="table table-borderless">
+              <table className="table table-borderless">
                 <tbody>
                   <tr style={{ width: "200px" }}>
                     <th scope="row" className="text-end fw-medium">
@@ -974,10 +974,10 @@ const AssessmentPursuers = forwardRef(
                       L Blend:
                     </th>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="lblendClaf"
                             name="lblendClaf"
@@ -987,17 +987,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="lblendClaf"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Claf
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="lblendFled"
                             name="lblendFled"
@@ -1007,17 +1007,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="lblendFled"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Fled
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="lblendSilm"
                             name="lblendSilm"
@@ -1027,17 +1027,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="lblendSilm"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Silm
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="lblendGlob"
                             name="lblendGlob"
@@ -1047,17 +1047,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="lblendGlob"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Glob
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="lblendBlum"
                             name="lblendBlum"
@@ -1067,7 +1067,7 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="lblendBlum"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Blum
@@ -1144,10 +1144,10 @@ const AssessmentPursuers = forwardRef(
                       R Blend:
                     </th>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="rblendDrap"
                             name="rblendDrap"
@@ -1157,17 +1157,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="rblendDrap"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Drap
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="rblendCued"
                             name="rblendCued"
@@ -1177,17 +1177,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="rblendCued"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Curd
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="rblendBrim"
                             name="rblendBrim"
@@ -1197,17 +1197,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="rblendBrim"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Brim
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="rblendTrop"
                             name="rblendTrop"
@@ -1217,17 +1217,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="rblendTrop"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Trop
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="rblendCrum"
                             name="rblendCrum"
@@ -1237,7 +1237,7 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="rblendCrum"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Crum
@@ -1314,10 +1314,10 @@ const AssessmentPursuers = forwardRef(
                       S Blend:
                     </th>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="sblendSnap"
                             name="sblendSnap"
@@ -1327,17 +1327,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="sblendSnap"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Snap
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="sblendSmeg"
                             name="sblendSmeg"
@@ -1347,17 +1347,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="sblendSmeg"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Smeg
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="sblendSpit"
                             name="sblendSpit"
@@ -1367,17 +1367,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="sblendSpit"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Spit
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="sblendStomp"
                             name="sblendStomp"
@@ -1387,17 +1387,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="sblendStomp"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Stomp
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="sblendSwum"
                             name="sblendSwum"
@@ -1407,7 +1407,7 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="sblendSwum"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Swum
@@ -1482,7 +1482,7 @@ const AssessmentPursuers = forwardRef(
               </table>
             </div>
             <div className="table-responsive">
-              <table class="table table-borderless">
+              <table className="table table-borderless">
                 <tbody>
                   <tr>
                     <th
@@ -1507,7 +1507,7 @@ const AssessmentPursuers = forwardRef(
               </table>
             </div>
             <div className="table-responsive">
-              <table class="table table-borderless">
+              <table className="table table-borderless">
                 <tbody>
                   <tr style={{ width: "200px" }}>
                     <th scope="row" className="text-end fw-medium">
@@ -1561,10 +1561,10 @@ const AssessmentPursuers = forwardRef(
                       L Blend :
                     </th>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="lblendShamrock"
                             name="lblendShamrock"
@@ -1574,17 +1574,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="lblendShamrock"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Shamrock
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="lblendChoose"
                             name="lblendChoose"
@@ -1594,17 +1594,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="lblendChoose"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Choose
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="lblendWhack"
                             name="lblendWhack"
@@ -1614,17 +1614,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="lblendWhack"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Whack
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="lblendThrust"
                             name="lblendThrust"
@@ -1634,17 +1634,17 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="lblendThrust"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Thrust
                       </div>{" "}
                     </td>
                     <td>
-                      <div class="d-flex">
-                        <div class="on-off-toggle">
+                      <div className="d-flex">
+                        <div className="on-off-toggle">
                           <input
-                            class="on-off-toggle__input"
+                            className="on-off-toggle__input"
                             type="checkbox"
                             id="lblendPhobics"
                             value="lblendPhobics"
@@ -1654,7 +1654,7 @@ const AssessmentPursuers = forwardRef(
                           />
                           <label
                             for="lblendPhobics"
-                            class="on-off-toggle__slider"
+                            className="on-off-toggle__slider"
                           ></label>
                         </div>{" "}
                         &nbsp; Phobics
@@ -1729,7 +1729,7 @@ const AssessmentPursuers = forwardRef(
               </table>
             </div>
             <div className="table-responsive">
-              <table class="table table-borderless">
+              <table className="table table-borderless">
                 <tbody>
                   <tr>
                     <th
@@ -1754,7 +1754,7 @@ const AssessmentPursuers = forwardRef(
               </table>
             </div>
             <div className="table-responsive">
-              <table class="table table-borderless">
+              <table className="table table-borderless">
                 <tbody>
                   <tr>
                     <th
@@ -1765,7 +1765,7 @@ const AssessmentPursuers = forwardRef(
                       Sight Words<span className="text-danger">*</span> :
                     </th>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1779,13 +1779,13 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           ee
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1799,13 +1799,13 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           ng
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1819,13 +1819,13 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           oo
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1839,13 +1839,13 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           squ
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1859,7 +1859,7 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           scr
                         </label>
                       </div>
@@ -1868,7 +1868,7 @@ const AssessmentPursuers = forwardRef(
                   <tr>
                     <th scope="row"></th>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1882,13 +1882,13 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           ow
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1902,13 +1902,13 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           ou
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1922,13 +1922,13 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           ai
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1942,13 +1942,13 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           ay
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1962,7 +1962,7 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           oa
                         </label>
                       </div>
@@ -1971,7 +1971,7 @@ const AssessmentPursuers = forwardRef(
                   <tr>
                     <th scope="row"></th>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1985,13 +1985,13 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           aw
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -2005,13 +2005,13 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           ar
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -2025,13 +2025,13 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           ie
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -2045,13 +2045,13 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           er
                         </label>
                       </div>
                     </td>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -2065,7 +2065,7 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           wr
                         </label>
                       </div>
@@ -2074,7 +2074,7 @@ const AssessmentPursuers = forwardRef(
                   <tr>
                     <th scope="row"></th>
                     <td>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -2088,7 +2088,7 @@ const AssessmentPursuers = forwardRef(
                           onBlur={formik.handleBlur}
                           id="flexCheckDefault"
                         />
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label className="form-check-label" for="flexCheckDefault">
                           Nil
                         </label>
                       </div>
@@ -2109,7 +2109,7 @@ const AssessmentPursuers = forwardRef(
               </table>
             </div>
             <div className="table-responsive">
-              <table class="table table-borderless">
+              <table className="table table-borderless">
                 <tbody>
                   <tr>
                     <th

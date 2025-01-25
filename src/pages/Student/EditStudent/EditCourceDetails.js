@@ -153,7 +153,7 @@ const EditCourseDetail = forwardRef(
           <div className="border-0 mb-5">
             <div className="mb-5">
               <div className="border-0 my-2 px-2">
-                <p class="headColor">Course Detail</p>
+                <p className="headColor">Course Detail</p>
                 <div className="container py-3">
                   <div className="row">
                     <div className="col-lg-6 col-md-6 col-12">
@@ -217,7 +217,7 @@ const EditCourseDetail = forwardRef(
                         <br />
                         <select
                           {...formik.getFieldProps("courseDay")}
-                          class={`form-select  ${
+                          className={`form-select  ${
                             formik.touched.courseDay && formik.errors.courseDay
                               ? "is-invalid"
                               : ""

@@ -44,7 +44,7 @@ const AssessmentChildPencil = forwardRef(
         }}>
           <div className="py-3">
             <h5 className="headColor">Child Pencil Grip </h5>
-            <div class="container-fluid row d-flex my-4">
+            <div className="container-fluid row d-flex my-4">
               <div className="col-12 mb-4">
                 <p>Pencil Grip</p>
                 <div className="row">
@@ -154,7 +154,7 @@ const AssessmentChildPencil = forwardRef(
             </div>
           </div>
 
-          <div class="container-fluid row d-flex my-4">
+          <div className="container-fluid row d-flex my-4">
             <div className="col-12 mb-4">
               <p>Written Strokes</p>
               <div className="row">

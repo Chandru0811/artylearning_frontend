@@ -108,7 +108,7 @@ function CurriculumOutletAdd({ onSuccess }) {
           className="btn btn-button btn-sm"
           onClick={handleShow}
         >
-          Add <i class="bx bx-plus"></i>
+          Add <i className="bx bx-plus"></i>
         </button>
       </div>
       <Modal
@@ -178,7 +178,7 @@ function CurriculumOutletAdd({ onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("status")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""

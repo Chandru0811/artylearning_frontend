@@ -39,7 +39,7 @@ function AssignMakeUpClass() {
 
   return (
     <>
-      <button type="button" class="btn text-success fs-4" onClick={handleShow}>
+      <button type="button" className="btn text-success fs-4" onClick={handleShow}>
         <FaPlusCircle />
       </button>
       <Modal
@@ -67,7 +67,7 @@ function AssignMakeUpClass() {
                   <label className="form-label">
                     Student ID<span className="text-danger">*</span>
                   </label>
-                  <div class="input-group mb-3">
+                  <div className="input-group mb-3">
                     <select
                       className={`form-select  ${
                         formik.touched.studentId && formik.errors.studentId
@@ -92,7 +92,7 @@ function AssignMakeUpClass() {
                   <label className="form-label">
                     Student Name<span className="text-danger">*</span>
                   </label>
-                  <div class="input-group mb-3">
+                  <div className="input-group mb-3">
                     <select
                       className={`form-select  ${
                         formik.touched.studentName && formik.errors.studentName
@@ -120,7 +120,7 @@ function AssignMakeUpClass() {
                   <label className="form-label">
                     Centre<span className="text-danger">*</span>
                   </label>
-                  <div class="input-group mb-3">
+                  <div className="input-group mb-3">
                     <select
                       className={`form-select  ${
                         formik.touched.center && formik.errors.center
@@ -149,7 +149,7 @@ function AssignMakeUpClass() {
                   <label className="form-label">
                     Course<span className="text-danger">*</span>
                   </label>
-                  <div class="input-group mb-3">
+                  <div className="input-group mb-3">
                     <select
                       className={`form-select  ${
                         formik.touched.course && formik.errors.course
@@ -178,7 +178,7 @@ function AssignMakeUpClass() {
                   <label className="form-label">
                     Class<span className="text-danger">*</span>
                   </label>
-                  <div class="input-group mb-3">
+                  <div className="input-group mb-3">
                     <select
                       className={`form-select  ${
                         formik.touched.class && formik.errors.class
@@ -206,7 +206,7 @@ function AssignMakeUpClass() {
                       <label className="form-label">
                         From<span className="text-danger">*</span>
                       </label>
-                      <div class="input-group mb-3">
+                      <div className="input-group mb-3">
                         <input
                           type="time"
                           className={`form-control  ${
@@ -228,7 +228,7 @@ function AssignMakeUpClass() {
                       <label className="form-label">
                         To<span className="text-danger">*</span>
                       </label>
-                      <div class="input-group mb-3">
+                      <div className="input-group mb-3">
                         <input
                           type="time"
                           className={`form-control  ${
@@ -253,7 +253,7 @@ function AssignMakeUpClass() {
                   <label className="form-label">
                     Teacher<span className="text-danger">*</span>
                   </label>
-                  <div class="input-group mb-3">
+                  <div className="input-group mb-3">
                     <select
                       className={`form-select  ${
                         formik.touched.teacher && formik.errors.teacher

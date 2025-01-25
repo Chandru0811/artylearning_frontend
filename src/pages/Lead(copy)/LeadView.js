@@ -21,17 +21,17 @@ function Leadview() {
     <div className="mb-5">
       <div className="container-fluid minHeight">
         <div className=" products">
-          <div class="container-fluid py-4">
-            <div class="row d-flex  justify-content-end">
-              <div class="col-auto ">
-                <div class="hstack  gap-2 ">
+          <div className="container-fluid py-4">
+            <div className="row d-flex  justify-content-end">
+              <div className="col-auto ">
+                <div className="hstack  gap-2 ">
                   <Link to="/lead/lead">
-                    <button type="button" class="btn btn-border btn-sm">
+                    <button type="button" className="btn btn-border btn-sm">
                       <span>Back</span>
                     </button>
                   </Link>
                   <Link to="/lead/lead/assessment">
-                    <button type="submit" class="btn btn-border btn-sm">
+                    <button type="submit" className="btn btn-border btn-sm">
                       <span>Do Assessment</span>
                     </button>
                   </Link>

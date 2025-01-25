@@ -42,13 +42,13 @@ function InvoicePayment() {
         <div className="card shadow border-0 minHeight">
           <div className="container">
             <div className="row py-4">
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Student Name<span class="text-danger">*</span>
+                  Student Name<span className="text-danger">*</span>
                 </label>
                 <input
                   name="studentname"
-                  class="form-control"
+                  className="form-control"
                   type="text"
                   className={`form-select  ${
                     formik.touched.studentname && formik.errors.studentname
@@ -63,13 +63,13 @@ function InvoicePayment() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Student ID<span class="text-danger">*</span>
+                  Student ID<span className="text-danger">*</span>
                 </label>
                 <input
                   name="studentid"
-                  class="form-control "
+                  className="form-control "
                   type="text"
                   className={`form-select  ${
                     formik.touched.studentid && formik.errors.studentid
@@ -84,9 +84,9 @@ function InvoicePayment() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                Centre<span class="text-danger">*</span>
+                Centre<span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("center")}
@@ -97,7 +97,7 @@ function InvoicePayment() {
                       : ""
                   }`}
                   aria-label="Default select example"
-                  class="form-select "
+                  className="form-select "
                 >
                   <option selected></option>
                   <option value="1">One</option>
@@ -108,9 +108,9 @@ function InvoicePayment() {
                   <div className="invalid-feedback">{formik.errors.center}</div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Student<span class="text-danger">*</span>
+                  Student<span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("student")}
@@ -121,7 +121,7 @@ function InvoicePayment() {
                       : ""
                   }`}
                   aria-label="Default select example"
-                  class="form-select "
+                  className="form-select "
                 >
                   <option selected></option>
                   <option value="1">One</option>
@@ -134,9 +134,9 @@ function InvoicePayment() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Payment Date<span class="text-danger">*</span>
+                  Payment Date<span className="text-danger">*</span>
                 </label>
                 <input
                   name="paymentdate"
@@ -155,9 +155,9 @@ function InvoicePayment() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Payment Method<span class="text-danger">*</span>
+                  Payment Method<span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("paymentmethod")}
@@ -168,7 +168,7 @@ function InvoicePayment() {
                       : ""
                   }`}
                   aria-label="Default select example"
-                  class="form-select "
+                  className="form-select "
                 >
                   <option selected></option>
                   <option value="1">One</option>
@@ -182,11 +182,11 @@ function InvoicePayment() {
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>Payment Reference</label>
                 <input
                   name="paymentreference"
-                  class="form-control "
+                  className="form-control "
                   type="text"
                   className={`form-control  ${
                     formik.touched.paymentreference &&
@@ -203,11 +203,11 @@ function InvoicePayment() {
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>Receipt No</label>
                 <input
                   name="receiptno"
-                  class="form-control "
+                  className="form-control "
                   type="text"
                   className={`form-control  ${
                     formik.touched.receiptno && formik.errors.receiptno
@@ -222,12 +222,12 @@ function InvoicePayment() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>Remark</label>
                 <textarea
                   rows="3"
                   name="remark"
-                  class="form-control "
+                  className="form-control "
                   type="text"
                   className={`form-control  ${
                     formik.touched.remark && formik.errors.remark
@@ -240,11 +240,11 @@ function InvoicePayment() {
                   <div className="invalid-feedback">{formik.errors.remark}</div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>Amount</label>
                 <input
                   name="amount"
-                  class="form-control "
+                  className="form-control "
                   type="text"
                   className={`form-control  ${
                     formik.touched.amount && formik.errors.amount

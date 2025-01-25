@@ -220,8 +220,8 @@ const StaffContractAdd = forwardRef(
           <p className="headColor my-4">Contract Information</p>
           <div className="container-fluid mt-5" style={{ minHeight: "95vh" }}>
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
-            <div class="row mt-4">
-              <div class="col-md-6 col-12 mb-2 mt-3">
+            <div className="row mt-4">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Employer</label>
                 <span className="text-danger">*</span>
                 <select
@@ -249,7 +249,7 @@ const StaffContractAdd = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>UEN</label>
                 <span className="text-danger">*</span>
                 <input
@@ -267,7 +267,7 @@ const StaffContractAdd = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3 ">
+              <div className="col-md-6 col-12 mb-2 mt-3 ">
                 <label>Address of Employment</label>
                 <span className="text-danger">*</span>
                 <input
@@ -287,9 +287,9 @@ const StaffContractAdd = forwardRef(
                   )}
               </div>
             </div>
-            <div class="row mt-3 ">
+            <div className="row mt-3 ">
               <span className="mt-3 fw-bold ">Details of EMPLOYEE</span>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Employee</label>
                 <span className="text-danger">*</span>
                 <input
@@ -307,7 +307,7 @@ const StaffContractAdd = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>NRIC</label>
                 <span className="text-danger">*</span>
                 <input
@@ -324,7 +324,7 @@ const StaffContractAdd = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Address</label>
                 <span className="text-danger">*</span>
                 <input
@@ -343,7 +343,7 @@ const StaffContractAdd = forwardRef(
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Job Title</label>
                 <span className="text-danger">*</span>
                 <input
@@ -360,7 +360,7 @@ const StaffContractAdd = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Main Duties</label>
                 <span className="text-danger">*</span>
                 <input
@@ -397,7 +397,7 @@ const StaffContractAdd = forwardRef(
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Training</label>
                 <span className="text-danger">*</span>
                 <input
@@ -414,7 +414,7 @@ const StaffContractAdd = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Allowance</label>
                 <input
                   type="text"
@@ -507,7 +507,7 @@ const StaffContractAdd = forwardRef(
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Probation (Day)</label>
                 <input
                   type="text"
@@ -519,12 +519,12 @@ const StaffContractAdd = forwardRef(
                 />
               </div>
 
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>
-                  Working Days<span class="text-danger">*</span>
+                  Working Days<span className="text-danger">*</span>
                 </label>
-                <div class="mt-2 d-flex justify-content-between mt-3">
-                  <div class="checkbox-container">
+                <div className="mt-2 d-flex justify-content-between mt-3">
+                  <div className="checkbox-container">
                     <input
                       type="checkbox"
                       className="form-check-input"
@@ -539,14 +539,14 @@ const StaffContractAdd = forwardRef(
                       onBlur={formik.handleBlur}
                       disabled
                     />
-                    <label for="myCheckbox1" class="custom-checkbox">
-                      <div class="inner-square"></div>
+                    <label for="myCheckbox1" className="custom-checkbox">
+                      <div className="inner-square"></div>
                     </label>
                     <label for="myCheckbox1" className="mx-1">
                       Mon
                     </label>
                   </div>
-                  <div class="checkbox-container">
+                  <div className="checkbox-container">
                     <input
                       type="checkbox"
                       className="form-check-input"
@@ -561,14 +561,14 @@ const StaffContractAdd = forwardRef(
                       onBlur={formik.handleBlur}
                       disabled
                     />
-                    <label for="myCheckbox2" class="custom-checkbox">
-                      <div class="inner-square"></div>
+                    <label for="myCheckbox2" className="custom-checkbox">
+                      <div className="inner-square"></div>
                     </label>
                     <label for="myCheckbox2" className="mx-1">
                       Tue
                     </label>
                   </div>
-                  <div class="checkbox-container">
+                  <div className="checkbox-container">
                     <input
                       type="checkbox"
                       className="form-check-input"
@@ -583,14 +583,14 @@ const StaffContractAdd = forwardRef(
                       onBlur={formik.handleBlur}
                       disabled
                     />
-                    <label for="myCheckbox3" class="custom-checkbox">
-                      <div class="inner-square"></div>
+                    <label for="myCheckbox3" className="custom-checkbox">
+                      <div className="inner-square"></div>
                     </label>
                     <label for="myCheckbox3" className="mx-1">
                       Wed
                     </label>
                   </div>
-                  <div class="checkbox-container">
+                  <div className="checkbox-container">
                     <input
                       type="checkbox"
                       className="form-check-input"
@@ -605,14 +605,14 @@ const StaffContractAdd = forwardRef(
                       onBlur={formik.handleBlur}
                       disabled
                     />
-                    <label for="myCheckbox4" class="custom-checkbox">
-                      <div class="inner-square"></div>
+                    <label for="myCheckbox4" className="custom-checkbox">
+                      <div className="inner-square"></div>
                     </label>
                     <label for="myCheckbox4" className="mx-1">
                       Thu
                     </label>
                   </div>
-                  <div class="checkbox-container">
+                  <div className="checkbox-container">
                     <input
                       type="checkbox"
                       className="form-check-input"
@@ -627,14 +627,14 @@ const StaffContractAdd = forwardRef(
                       onBlur={formik.handleBlur}
                       disabled
                     />
-                    <label for="myCheckbox5" class="custom-checkbox">
-                      <div class="inner-square"></div>
+                    <label for="myCheckbox5" className="custom-checkbox">
+                      <div className="inner-square"></div>
                     </label>
                     <label for="myCheckbox5" className="mx-1">
                       Fri
                     </label>
                   </div>
-                  <div class="checkbox-container">
+                  <div className="checkbox-container">
                     <input
                       type="checkbox"
                       className="form-check-input"
@@ -649,14 +649,14 @@ const StaffContractAdd = forwardRef(
                       onBlur={formik.handleBlur}
                       disabled
                     />
-                    <label for="myCheckbox6" class="custom-checkbox">
-                      <div class="inner-square"></div>
+                    <label for="myCheckbox6" className="custom-checkbox">
+                      <div className="inner-square"></div>
                     </label>
                     <label for="myCheckbox6" className="mx-1">
                       Sat
                     </label>
                   </div>
-                  <div class="checkbox-container">
+                  <div className="checkbox-container">
                     <input
                       type="checkbox"
                       className="form-check-input"
@@ -671,8 +671,8 @@ const StaffContractAdd = forwardRef(
                       onBlur={formik.handleBlur}
                       disabled
                     />
-                    <label for="myCheckbox7" class="custom-checkbox">
-                      <div class="inner-square"></div>
+                    <label for="myCheckbox7" className="custom-checkbox">
+                      <div className="inner-square"></div>
                     </label>
                     <label for="myCheckbox7" className="mx-1">
                       Sun
@@ -686,7 +686,7 @@ const StaffContractAdd = forwardRef(
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Salary</label>
                 <span className="text-danger">*</span>
                 <input
@@ -705,7 +705,7 @@ const StaffContractAdd = forwardRef(
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Salary Start Date</label>
                 <span className="text-danger">*</span>
                 <input
@@ -724,9 +724,9 @@ const StaffContractAdd = forwardRef(
                     </div>
                   )}
               </div>
-              <div class="row mt-3">
+              <div className="row mt-3">
                 <span className="mt-3 fw-bold">Bank Account Details</span>
-                <div class="col-md-6 col-12 mb-2 mt-3">
+                <div className="col-md-6 col-12 mb-2 mt-3">
                   <label>Pay Now</label>
                   <input
                     type="text"
@@ -737,7 +737,7 @@ const StaffContractAdd = forwardRef(
                     value={formik.values.payNow}
                   />
                 </div>
-                <div class="col-md-6 col-12 mb-2 mt-3">
+                <div className="col-md-6 col-12 mb-2 mt-3">
                   <label>Internet Banking</label>
                   <input
                     type="text"
@@ -748,7 +748,7 @@ const StaffContractAdd = forwardRef(
                     value={formik.values.internetBanking}
                   />
                 </div>
-                <div class="col-md-6 col-12 mb-2 mt-3">
+                <div className="col-md-6 col-12 mb-2 mt-3">
                   <label>Contract Date</label>
                   <span className="text-danger">*</span>
                   <input
@@ -767,7 +767,7 @@ const StaffContractAdd = forwardRef(
                       </div>
                     )}
                 </div>
-                <div class="col-md-6 col-12 mb-2 mt-3">
+                <div className="col-md-6 col-12 mb-2 mt-3">
                   <label>Termination Notice (Month)</label>
                   <span className="text-danger">*</span>
                   <input

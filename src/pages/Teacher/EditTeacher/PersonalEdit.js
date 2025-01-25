@@ -334,13 +334,13 @@ const PersonalEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
-                <div class="form-group col-sm">
+              <div className="col-md-6 col-12 mb-2 mt-3">
+                <div className="form-group col-sm">
                   <label>Status</label>
                   <span className="text-danger">*</span>
                   <select
                     type="text"
-                    class="form-select"
+                    className="form-select"
                     name="status"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}

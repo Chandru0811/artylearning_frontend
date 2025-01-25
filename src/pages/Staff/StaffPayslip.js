@@ -7,9 +7,9 @@ function StaffPayslip() {
     <div className="mb-5 minHeight">
       <div className="container-fluid">
         <div className="row mt-3 d-flex justify-content-end">
-          <div class="col-auto mb-4">
+          <div className="col-auto mb-4">
             <Link to="/staff">
-              <button type="submit" class="btn btn-sm btn-border">
+              <button type="submit" className="btn btn-sm btn-border">
                 <span>Back</span>
               </button>
             </Link>
@@ -28,8 +28,8 @@ function StaffPayslip() {
         </div>
       </div>
       <div className="container-fluid">
-        <div class="card mb-2 mt-4">
-          <div class="card-body p-5">
+        <div className="card mb-2 mt-4">
+          <div className="card-body p-5">
             <div className="container">
               <div className="row">
                 <div className="col-6 text-start">

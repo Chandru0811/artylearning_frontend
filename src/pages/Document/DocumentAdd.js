@@ -331,11 +331,11 @@ function DocumentAdd() {
             className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div className="d-flex align-items-center">
+              <div className="d-flex">
+                <div className="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Document</span>
+              <span className="me-2 text-muted">Add Document</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/document">
@@ -362,9 +362,9 @@ function DocumentAdd() {
 
           <div className="container">
             <div className="row py-4">
-              <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Centre<span class="text-danger">*</span>
+              <div className="col-md-6 col-12 mb-4">
+                <lable className="">
+                  Centre<span className="text-danger">*</span>
                 </lable>
                 <select
                   {...formik.getFieldProps("center")}
@@ -390,9 +390,9 @@ function DocumentAdd() {
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Course<span class="text-danger">*</span>
+              <div className="col-md-6 col-12 mb-4">
+                <lable className="">
+                  Course<span className="text-danger">*</span>
                 </lable>
                 <select
                   {...formik.getFieldProps("course")}
@@ -418,9 +418,9 @@ function DocumentAdd() {
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
-                <lable class="">
-                  Class Listing<span class="text-danger">*</span>
+              <div className="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
+                <lable className="">
+                  Class Listing<span className="text-danger">*</span>
                 </lable>
                 <select
                   {...formik.getFieldProps("classListing")}
@@ -447,9 +447,9 @@ function DocumentAdd() {
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Teacher<span class="text-danger">*</span>
+              <div className="col-md-6 col-12 mb-4">
+                <lable className="">
+                  Teacher<span className="text-danger">*</span>
                 </lable>
                 <select
                   {...formik.getFieldProps("userId")}
@@ -579,7 +579,7 @@ function DocumentAdd() {
                   )}
               </div>
 
-              <div class="col-md-6 col-12 mb-3">
+              <div className="col-md-6 col-12 mb-3">
                 {folderCategory === "group" ? (
                   <></>
                 ) : (

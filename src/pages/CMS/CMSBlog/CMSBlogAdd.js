@@ -81,7 +81,7 @@ function CMSBlogAdd({ onSuccess }) {
           className="btn btn-button btn-sm"
           onClick={handleShow}
         >
-          Add <i class="bx bx-plus"></i>
+          Add <i className="bx bx-plus"></i>
         </button>
       </div>
       <Modal show={show} size="lg" onHide={handleClose} centered>

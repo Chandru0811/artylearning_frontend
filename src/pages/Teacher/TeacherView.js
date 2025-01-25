@@ -92,7 +92,7 @@ function TeacherView() {
   };
 
   return (
-    <div class="container-fluid minHeight mb-5">
+    <div className="container-fluid minHeight mb-5">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -118,13 +118,13 @@ function TeacherView() {
         </li>
       </ol>
       
-      <div class="container-fluid py-4">
-        <div class="row align-items-center">
-          <div class="col">
-            <div class="d-flex align-items-center gap-4"></div>
+      <div className="container-fluid py-4">
+        <div className="row align-items-center">
+          <div className="col">
+            <div className="d-flex align-items-center gap-4"></div>
           </div>
-          <div class="col-auto">
-            <div class="hstack gap-2 justify-content-end">
+          <div className="col-auto">
+            <div className="hstack gap-2 justify-content-end">
               <Link to="/teacher">
                 <button type="submit" className="btn btn-border btn-sm">
                   <span>Back</span>
@@ -133,14 +133,14 @@ function TeacherView() {
               <TeacherSummary data={data} />
               {/* {storedScreens?.payrollIndex && (
                 <Link to="/teacher/payslip">
-                  <button type="submit" class="btn btn-border">
+                  <button type="submit" className="btn btn-border">
                     <span>Payroll</span>
                   </button>
                 </Link>
               )}
               {storedScreens?.leaveRequestIndex && (
                 <Link to="/teacher/leave">
-                  <button type="submit" class="btn btn-border">
+                  <button type="submit" className="btn btn-border">
                     <span>Leave Request</span>
                   </button>
                 </Link>
@@ -149,7 +149,7 @@ function TeacherView() {
           </div>
         </div>
       </div>
-      <p class="headColor mt-3">Personal Information</p>
+      <p className="headColor mt-3">Personal Information</p>
       <div className="d-flex justify-content-center">
         <p className="my-2 d-flex">
           {data.photo ? (
@@ -274,7 +274,7 @@ function TeacherView() {
           </div>
         </div>
       </div>
-      <p class="headColor mt-5">Account Information</p>
+      <p className="headColor mt-5">Account Information</p>
       <div className="row mt-4">
         <div className="col-md-6 col-12">
           <div className="row mb-3">
@@ -473,7 +473,7 @@ function TeacherView() {
           </div>
         </div>
       </div>
-      <p class="headColor mt-5">Contact Information</p>
+      <p className="headColor mt-5">Contact Information</p>
       <div className="row mt-4">
         <div className="col-md-6 col-12">
           <div className="row mb-3">
@@ -527,7 +527,7 @@ function TeacherView() {
           </div>
         </div>
       </div>
-      <p class="headColor mt-5">Required Documents</p>
+      <p className="headColor mt-5">Required Documents</p>
       <hr></hr>
       <div className="row mt-4">
         <div className="row">
@@ -600,7 +600,7 @@ function TeacherView() {
       </div>
       {data.role !== "freelancer" && (
         <>
-          <p class="headColor mt-5">Salary Information</p>
+          <p className="headColor mt-5">Salary Information</p>
           <div className="row mt-4">
             <div className="col-md-6 col-12">
               <div className="row mb-3">
@@ -659,7 +659,7 @@ function TeacherView() {
               </div>
             </div>
           </div>
-          <p class="headColor mt-5">Leave Information</p>
+          <p className="headColor mt-5">Leave Information</p>
           <div className="row mt-4">
             <div className="col-md-6 col-12">
               <div className="row mb-3">
@@ -750,7 +750,7 @@ function TeacherView() {
         </>
       )}
 
-      <p class="headColor mt-5">Contract Information</p>
+      <p className="headColor mt-5">Contract Information</p>
       <div className="row mt-4">
         <div className="row mb-4">
           <b>Details of Employer</b>

@@ -291,11 +291,11 @@ function ClassEdit() {
             className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div className="d-flex align-items-center">
+              <div className="d-flex">
+                <div className="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Edit Class</span>
+              <span className="me-2 text-muted">Edit Class</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/class">
@@ -321,9 +321,9 @@ function ClassEdit() {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Centre<span class="text-danger">*</span>
+              <div className="col-md-6 col-12 mb-4">
+                <lable className="">
+                  Centre<span className="text-danger">*</span>
                 </lable>
                 <select
                   {...formik.getFieldProps("centerId")}
@@ -334,7 +334,7 @@ function ClassEdit() {
                       : ""
                   }`}
                   aria-label="Default select example"
-                  class="form-select "
+                  className="form-select "
                   onChange={handleCenterChange}
                   disabled
                 >
@@ -352,9 +352,9 @@ function ClassEdit() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Course<span class="text-danger">*</span>
+                  Course<span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("courseId")}
@@ -365,7 +365,7 @@ function ClassEdit() {
                       : ""
                   }`}
                   aria-label="Default select example"
-                  class="form-select"
+                  className="form-select"
                   disabled
                 >
                   <option selected></option>
@@ -382,13 +382,13 @@ function ClassEdit() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Class Name<span class="text-danger">*</span>
+                  Class Name<span className="text-danger">*</span>
                 </label>
                 <input
                   name="className"
-                  class="form-control "
+                  className="form-control "
                   type="text"
                   className={`form-control  ${
                     formik.touched.className && formik.errors.className
@@ -404,14 +404,14 @@ function ClassEdit() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Class Type<span class="text-danger">*</span>
+                  Class Type<span className="text-danger">*</span>
                 </label>{" "}
                 <br />
-                <div class="form-check form-check-inline">
+                <div className="form-check form-check-inline">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="radio"
                     name="classType"
                     id="inlineRadio1"
@@ -420,13 +420,13 @@ function ClassEdit() {
                     checked={formik.values.classType === "Group"}
                     disabled
                   />
-                  <label class="form-check-label" for="inlineRadio1">
+                  <label className="form-check-label" for="inlineRadio1">
                     Group
                   </label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div className="form-check form-check-inline">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="radio"
                     name="classType"
                     id="inlineRadio2"
@@ -435,7 +435,7 @@ function ClassEdit() {
                     checked={formik.values.classType === "Individual"}
                     disabled
                   />
-                  <label class="form-check-label" for="inlineRadio2">
+                  <label className="form-check-label" for="inlineRadio2">
                     Individual
                   </label>
                 </div>
@@ -445,9 +445,9 @@ function ClassEdit() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Duration(Hrs)<span class="text-danger">*</span>
+                  Duration(Hrs)<span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("durationInHrs")}
@@ -475,9 +475,9 @@ function ClassEdit() {
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Duration(Mins)<span class="text-danger">*</span>
+                  Duration(Mins)<span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("durationInMins")}
@@ -506,9 +506,9 @@ function ClassEdit() {
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Start Date<span class="text-danger">*</span>
+                  Start Date<span className="text-danger">*</span>
                 </label>
                 <input
                   {...formik.getFieldProps("startDate")}
@@ -530,9 +530,9 @@ function ClassEdit() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  End Date<span class="text-danger">*</span>
+                  End Date<span className="text-danger">*</span>
                 </label>
                 <input
                   {...formik.getFieldProps("endDate")}
@@ -554,9 +554,9 @@ function ClassEdit() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Day<span class="text-danger">*</span>
+                  Day<span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("day")}
@@ -582,7 +582,7 @@ function ClassEdit() {
                   <div className="invalid-feedback">{formik.errors.day}</div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>Teacher</label>
                 <select
                   {...formik.getFieldProps("userId")}
@@ -609,9 +609,9 @@ function ClassEdit() {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Start Time<span class="text-danger">*</span>
+                  Start Time<span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("startTime")}
@@ -648,9 +648,9 @@ function ClassEdit() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>
-                  End Time<span class="text-danger">*</span>
+                  End Time<span className="text-danger">*</span>
                 </label>
                 <input
                   {...formik.getFieldProps("endTime")}
@@ -672,7 +672,7 @@ function ClassEdit() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label>Class Room</label>
                 <select
                   {...formik.getFieldProps("classId")}

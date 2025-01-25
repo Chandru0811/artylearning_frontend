@@ -78,7 +78,7 @@ function DayTableAdd({ onSuccess, id, centerId, courseId, day }) {
 
   return (
     <>
-      <button type="button" class="btn text-success fs-4" onClick={handleShow}>
+      <button type="button" className="btn text-success fs-4" onClick={handleShow}>
         <FaPlusCircle />
       </button>
       <Modal show={show} size="md" onHide={handleClose} centered>
@@ -102,7 +102,7 @@ function DayTableAdd({ onSuccess, id, centerId, courseId, day }) {
                   </label>
                   <select
                     {...formik.getFieldProps("studentId")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.studentId && formik.errors.studentId
                         ? "is-invalid"
                         : ""

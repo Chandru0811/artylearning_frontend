@@ -230,8 +230,8 @@ export default function TeacherAdd() {
         </Stepper>
       </div>
 
-      <div class="container-fluid minHeight">
-        <div class="container-fluid py-3 card shadow border-0 mb-5">
+      <div className="container-fluid minHeight">
+        <div className="container-fluid py-3 card shadow border-0 mb-5">
           {activeStep === steps.length ? (
             <React.Fragment>
               <Typography sx={{ mt: 2, mb: 1 }}>

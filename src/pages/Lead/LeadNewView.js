@@ -988,7 +988,7 @@ function LeadNewView() {
                 <div className="row  m-3">
                   <h5 className="headColor mt-5 mb-4">Alphabet</h5>
                   <div className="table-responsive">
-                    <table class="table">
+                    <table className="table">
                       <thead className="table-warning">
                         <tr>
                           <th scope="col">Alphabets</th>
@@ -2316,7 +2316,7 @@ function LeadNewView() {
                     </table>
                   </div>
                   <div className="table-responsive">
-                    <table class="table">
+                    <table className="table">
                       <thead className="table-warning">
                         <tr>
                           <th scope="col">Alphabets</th>
@@ -3726,7 +3726,7 @@ function LeadNewView() {
                   </div>
                   <hr />
                   <div className="table-responsive">
-                    <table class="table">
+                    <table className="table">
                       <thead className="table-warning">
                         <tr>
                           <th scope="col">CVC</th>
@@ -4107,7 +4107,7 @@ function LeadNewView() {
                   </div>
                   <hr />
                   <div className="table-responsive">
-                    <table class="table">
+                    <table className="table">
                       <thead className="table-warning">
                         <tr>
                           <th scope="col">CVC</th>
@@ -4671,7 +4671,7 @@ function LeadNewView() {
                   </div>
                   <hr />
                   <div className="table-responsive">
-                    <table class="table">
+                    <table className="table">
                       <thead className="table-warning">
                         <tr>
                           <th scope="col">H Brothers</th>

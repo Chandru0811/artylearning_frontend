@@ -100,7 +100,7 @@ function AttendancesEdit() {
         </div>
         <div className="container">
           <div className="row py-4">
-            <div class="col-md-6 col-12 mb-2">
+            <div className="col-md-6 col-12 mb-2">
               <lable className="form-lable">Student ID</lable>
               <span className="text-danger">*</span>
               <div className="input-group mb-3">
@@ -124,7 +124,7 @@ function AttendancesEdit() {
               </div>
             </div>
             <div className="col-md-6 col-12 mb-2">
-              <lable class="">Student Name</lable>
+              <lable className="">Student Name</lable>
               <span className="text-danger">*</span>
               <input
                 type="text"
@@ -183,7 +183,7 @@ function AttendancesEdit() {
               </div>
             </div>
 
-            <div class="col-md-6 col-12 mb-2">
+            <div className="col-md-6 col-12 mb-2">
               <lable className="form-lable">Body Temperature</lable>
               <span className="text-danger">*</span>
               <div className="input-group mb-3">
@@ -332,10 +332,10 @@ function AttendancesEdit() {
               </div>
             </div>
 
-            <div class=" mb-2">
+            <div className=" mb-2">
               <lable>Remark</lable>
               <textarea
-                class="form-control"
+                className="form-control"
                 {...formik.getFieldProps("remark")}
                 rows="3"
                 maxLength={200}

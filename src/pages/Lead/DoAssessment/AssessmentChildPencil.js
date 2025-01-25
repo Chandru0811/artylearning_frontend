@@ -130,8 +130,8 @@ const AssessmentChildPencil = forwardRef(
           <div className="py-3">
             <h5 className="headColor">Child Pencil Grip</h5>
             <div className="container">
-              <div class="plans">
-                <div class="plan h-100">
+              <div className="plans">
+                <div className="plan h-100">
                   <input
                     type="radio"
                     className="form-check-input"
@@ -143,23 +143,23 @@ const AssessmentChildPencil = forwardRef(
                     checked={formik.values.pencilGrip === "FISTED"}
                   />
                   <label
-                    class="plan-content"
+                    className="plan-content"
                     for="FISTED"
                     style={{ padding: "20px" }}
                   >
                     <img
                       src={Tripod}
                       alt="FISTED"
-                      class="img-fluid"
+                      className="img-fluid"
                       width={30}
                       height={30}
                     />
-                    <div class="plan-details">
+                    <div className="plan-details">
                       <span>Fisted</span>
                     </div>
                   </label>
                 </div>
-                <div class="plan h-100">
+                <div className="plan h-100">
                   <input
                     type="radio"
                     className="form-check-input"
@@ -171,23 +171,23 @@ const AssessmentChildPencil = forwardRef(
                     checked={formik.values.pencilGrip === "PLAMERGRASP"}
                   />
                   <label
-                    class="plan-content"
+                    className="plan-content"
                     for="PLAMERGRASP"
                     style={{ padding: "10px 20px" }}
                   >
                     <img
                       src={Fisted}
                       alt="PLAMERGRASP"
-                      class="img-fluid"
+                      className="img-fluid"
                       width={30}
                       height={30}
                     />
-                    <div class="plan-details">
+                    <div className="plan-details">
                       <span>Plamer Grasp</span>
                     </div>
                   </label>
                 </div>
-                <div class="plan h-100">
+                <div className="plan h-100">
                   <input
                     type="radio"
                     className="form-check-input"
@@ -199,23 +199,23 @@ const AssessmentChildPencil = forwardRef(
                     checked={formik.values.pencilGrip === "TRIPOD"}
                   />
                   <label
-                    class="plan-content"
+                    className="plan-content"
                     for="TRIPOD"
                     style={{ padding: "20px" }}
                   >
                     <img
                       src={Plamer}
                       alt="TRIPOD"
-                      class="img-fluid"
+                      className="img-fluid"
                       width={30}
                       height={30}
                     />
-                    <div class="plan-details">
+                    <div className="plan-details">
                       <span>Tripod</span>
                     </div>
                   </label>
                 </div>
-                <div class="plan h-100">
+                <div className="plan h-100">
                   <input
                     type="radio"
                     className="form-check-input"
@@ -227,18 +227,18 @@ const AssessmentChildPencil = forwardRef(
                     checked={formik.values.pencilGrip === "FOREFINGERANDTHUMB"}
                   />
                   <label
-                    class="plan-content"
+                    className="plan-content"
                     for="FOREFINGERANDTHUMB"
                     style={{ padding: "10px" }}
                   >
                     <img
                       src={Fore}
                       alt="FOREFINGERANDTHUMB"
-                      class="img-fluid"
+                      className="img-fluid"
                       width={30}
                       height={30}
                     />
-                    <div class="plan-details">
+                    <div className="plan-details">
                       <span>Fore Finger And Thumb</span>
                     </div>
                   </label>

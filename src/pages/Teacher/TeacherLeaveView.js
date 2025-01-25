@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 function TeacherLeaveView() {
   return (
     <div className="container-fluid minHeight">
-      <div class="col-auto">
-        <div class="hstack gap-2 justify-content-end mt-4">
+      <div className="col-auto">
+        <div className="hstack gap-2 justify-content-end mt-4">
           <Link to="/teacher/leave">
-            <button type="submit" class="btn btn-sm btn-border">
+            <button type="submit" className="btn btn-sm btn-border">
               <span>Back</span>
             </button>
           </Link>
@@ -122,12 +122,12 @@ function TeacherLeaveView() {
 
       <div className="mb-7 m-4">
         <div className="row mt-3">
-          <div class="card-header">
+          <div className="card-header">
             <h6 className="">Attachment</h6>
           </div>
           <hr></hr>
           <div className="table-responsive">
-            <table class="table table-hover">
+            <table className="table table-hover">
               <thead className="thead-light">
                 <tr>
                   <th scope="col">File Type</th>

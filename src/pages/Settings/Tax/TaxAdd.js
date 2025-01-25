@@ -180,7 +180,7 @@ function TaxAdd({ onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("status")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""

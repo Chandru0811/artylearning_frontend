@@ -128,13 +128,13 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
         </style>
         </head>
         <body>
-          <div class="invoice-box">
+          <div className="invoice-box">
             <table>
-              <tr class="top">
+              <tr className="top">
                 <td colspan="2">
                   <table>
                     <tr>
-                       <td class="third">
+                       <td className="third">
                         <b>Arty Learning @HG</b><br />
                         Tel No:87270752<br />
                         Email:Artylearning@gmail.com
@@ -183,7 +183,7 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
 
             <div style="max-width: 590px; overflow: auto">
               <table>
-                <tr class="heading">
+                <tr className="heading">
                   <td style="white-space: nowrap">No</td>
                   <td style="white-space: nowrap">Item</td>
                   <td style="white-space: nowrap">Item Amount</td>
@@ -260,7 +260,7 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
                   <img
                     src="${qr}"
                     alt="Advantage"
-                    class="img-fluid"
+                    className="img-fluid"
                     width="50%"
                   />
                   <div><strong style="margin-right: 14px;margin-bottom: 10px;">Arty Learning Pte.Ltd.</strong>
@@ -304,7 +304,7 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
     <button className="btn btn-border btn-sm me-1" onClick={sendEmail}>
       {loadIndicator && (
         <span
-          class="spinner-border spinner-border-sm me-2"
+          className="spinner-border spinner-border-sm me-2"
           aria-hidden="true"
         ></span>
       )}

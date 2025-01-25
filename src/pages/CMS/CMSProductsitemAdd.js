@@ -78,7 +78,7 @@ function CMSProductsItemAdd({ onSuccess }) {
           className="btn btn-button btn-sm"
           onClick={handleShowModal}
         >
-          Add <i class="bx bx-plus"></i>
+          Add <i className="bx bx-plus"></i>
         </button>
       </div>
       {/* <div className="my-3 d-flex justify-content-end align-items-end  mb-5">

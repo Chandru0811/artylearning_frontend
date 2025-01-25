@@ -64,9 +64,9 @@ function ContactAdd() {
           </div>
           <div className="container">
             <div className="row">
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
-                  Student ID<span class="text-danger">*</span>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="">
+                  Student ID<span className="text-danger">*</span>
                 </lable>
                 <input
                   type="text"
@@ -83,9 +83,9 @@ function ContactAdd() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
-                  Student Name<span class="text-danger">*</span>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="">
+                  Student Name<span className="text-danger">*</span>
                 </lable>
                 <input
                   type="text"
@@ -104,11 +104,11 @@ function ContactAdd() {
               </div>
             </div>
             <div className="row">
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
-                  Email ID<span class="text-danger">*</span>
+                  Email ID<span className="text-danger">*</span>
                 </lable>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                   <input
                     type="text"
                     className={`form-control  ${
@@ -125,9 +125,9 @@ function ContactAdd() {
                   )}
                 </div>
               </div>
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
-                  Parent Name<span class="text-danger">*</span>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="">
+                  Parent Name<span className="text-danger">*</span>
                 </lable>
                 <input
                   type="text"
@@ -146,9 +146,9 @@ function ContactAdd() {
               </div>
             </div>
             <div className="row">
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
-                  Parent Number<span class="text-danger">*</span>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="">
+                  Parent Number<span className="text-danger">*</span>
                 </lable>
                 <input
                   type="text"

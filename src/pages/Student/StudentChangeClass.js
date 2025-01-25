@@ -60,13 +60,13 @@ function StudentChangeClass() {
         </div>
         <div className="container">
           <div className="row py-4">
-            <div class="col-md-6 col-12 mb-2">
-              <lable class="">
-                Current Course<span class="text-danger">*</span>
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="">
+                Current Course<span className="text-danger">*</span>
               </lable>
               <select
                 {...formik.getFieldProps("currentCourse")}
-                class={`form-select ${
+                className={`form-select ${
                   formik.touched.currentCourse && formik.errors.currentCourse
                     ? "is-invalid"
                     : ""
@@ -85,13 +85,13 @@ function StudentChangeClass() {
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-2">
-              <lable class="">
-                Current Class<span class="text-danger">*</span>
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="">
+                Current Class<span className="text-danger">*</span>
               </lable>
               <select
                 {...formik.getFieldProps("currentClass")}
-                class={`form-select  ${
+                className={`form-select  ${
                   formik.touched.currentClass && formik.errors.currentClass
                     ? "is-invalid"
                     : ""
@@ -112,13 +112,13 @@ function StudentChangeClass() {
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-2">
-              <lable class="">
-                Last Lesson Date<span class="text-danger">*</span>
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="">
+                Last Lesson Date<span className="text-danger">*</span>
               </lable>
               <select
                 {...formik.getFieldProps("lastLessonDate")}
-                class={`form-select ${
+                className={`form-select ${
                   formik.touched.lastLessonDate && formik.errors.lastLessonDate
                     ? "is-invalid"
                     : ""
@@ -137,30 +137,30 @@ function StudentChangeClass() {
                   </div>
                 )}
             </div>
-            <div class="col-md-6 col-12 mb-2">
-              <lable class="">Prefer Days</lable>
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="">Prefer Days</lable>
               <input
                 type="text"
                 {...formik.getFieldProps("preferDays")}
                 className="form-control"
               />
             </div>
-            <div class="col-md-6 col-12 mb-2 ">
+            <div className="col-md-6 col-12 mb-2 ">
               <label>Prefer Timing</label>
               <input
-                class="form-control "
+                className="form-control "
                 {...formik.getFieldProps("preferTiming")}
                 type="text"
               />
             </div>
-            <div class="col-md-6 col-12 mb-2">
+            <div className="col-md-6 col-12 mb-2">
               <label>
-                Prefer Start date<span class="text-danger">*</span>
+                Prefer Start date<span className="text-danger">*</span>
               </label>
               <input
                 type="date"
                 onFocus={(e) => e.target.showPicker()}
-                class={`form-control  ${
+                className={`form-control  ${
                   formik.touched.preferStartDate &&
                   formik.errors.preferStartDate
                     ? "is-invalid"
@@ -175,13 +175,13 @@ function StudentChangeClass() {
                   </div>
                 )}
             </div>
-            <div class="col-md-6 col-12 mb-2">
-              <lable class="">
-                Reason<span class="text-danger">*</span>
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="">
+                Reason<span className="text-danger">*</span>
               </lable>
               <select
                 {...formik.getFieldProps("reason")}
-                class={`form-select  ${
+                className={`form-select  ${
                   formik.touched.reason && formik.errors.reason
                     ? "is-invalid"
                     : ""
@@ -197,21 +197,21 @@ function StudentChangeClass() {
                 <div className="invalid-feedback">{formik.errors.reason}</div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-2 ">
+            <div className="col-md-6 col-12 mb-2 ">
               <label>Other Reason </label>
               <input
-                class="form-control "
+                className="form-control "
                 {...formik.getFieldProps("otherReason")}
                 type="text"
               />
             </div>
 
-            <div class="col-12 mb-2 ">
+            <div className="col-12 mb-2 ">
               <label>
-                Centre Remark<span class="text-danger">*</span>
+                Centre Remark<span className="text-danger">*</span>
               </label>
               <textarea
-                class={`form-control  ${
+                className={`form-control  ${
                   formik.touched.centerRemark && formik.errors.centerRemark
                     ? "is-invalid"
                     : ""
@@ -226,10 +226,10 @@ function StudentChangeClass() {
                 </div>
               )}
             </div>
-            <div class=" col-12 mb-2 ">
+            <div className=" col-12 mb-2 ">
               <label>Parent Remark</label>
               <textarea
-                class="form-control "
+                className="form-control "
                 {...formik.getFieldProps("parentRemark")}
                 type="text"
                 rows="4"

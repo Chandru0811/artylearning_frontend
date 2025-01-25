@@ -190,8 +190,8 @@ const SalaryEdit = forwardRef(
         <section>
           <div className="container-fluid" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Salary Information</p>
-            <div class="row">
-              <div class="col-md-6 col-12 mb-2 mt-3">
+            <div className="row">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Salary</label>
                 <span className="text-danger">*</span>
                 <input
@@ -208,7 +208,7 @@ const SalaryEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Effective Date</label>
                 <input
                   type="date"
@@ -220,7 +220,7 @@ const SalaryEdit = forwardRef(
                   value={formik.values.effectiveDate}
                 />
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Salary Type</label>
                 <select
                   type="text"

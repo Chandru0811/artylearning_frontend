@@ -178,7 +178,7 @@ const Form1 = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-2">
+            <div className="col-md-6 col-12 mb-2">
               <label className="form-label">Subject</label>
               <span className="text-danger">*</span>
               <select

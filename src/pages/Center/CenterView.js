@@ -76,11 +76,11 @@ function CenterView() {
           className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
           style={{ background: "#f5f7f9" }}
         >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
+          <div className="d-flex align-items-center">
+            <div className="d-flex">
+              <div className="dot active"></div>
             </div>
-            <span class="me-2 text-muted">View Centre</span>
+            <span className="me-2 text-muted">View Centre</span>
           </div>
           <div className="my-2 pe-3 d-flex align-items-center">
             <Link to="/center">
@@ -351,7 +351,7 @@ function CenterView() {
             {/* Center Break */}
             <div className="col-md-12 col-12 mt-4">
               <h5 className="headColor mb-3">Centre Break</h5>
-              <table class="table table-border-solid">
+              <table className="table table-border-solid">
                 <thead>
                   <tr>
                     <td className="">S.No</td>
@@ -376,7 +376,7 @@ function CenterView() {
             {/* class Room  */}
             <div className="col-md-12 col-12 mt-4">
               <h5 className="headColor mb-3">Centre Class Room</h5>
-              <table class="table table-border-solid">
+              <table className="table table-border-solid">
                 <thead>
                   <tr>
                     <td className="">S.No</td>
@@ -417,7 +417,7 @@ function CenterView() {
             {/* Package  */}
             <div className="col-md-12 col-12 mt-4">
               <h5 className="headColor mb-3">Centre Package</h5>
-              <table class="table table-border-solid">
+              <table className="table table-border-solid">
                 <thead>
                   <tr>
                     <td className="">S.No</td>

@@ -88,14 +88,14 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
           }
         }}>
         <div className="container-fluid">
-          <div class="row px-1">
+          <div className="row px-1">
             <div className="py-3">
               <p className="headColor">Account Information</p>
             </div>
 
-            <div class="col-md-6 col-12 ">
-              <lable class="">
-              Centre<span class="text-danger">*</span>
+            <div className="col-md-6 col-12 ">
+              <lable className="">
+              Centre<span className="text-danger">*</span>
               </lable>
               <select
                 className="form-select"
@@ -119,15 +119,15 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
               )}
             </div>
 
-            <div class="col-md-6 col-12 mb-2 ">
-              <lable class="">
+            <div className="col-md-6 col-12 mb-2 ">
+              <lable className="">
                 Preferrded Day
                 <span className="text-danger">*</span>
               </lable>
-              <div class="gap-2">
-                <div class="form-check form-check-inline">
+              <div className="gap-2">
+                <div className="form-check form-check-inline">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="checkbox"
                     id="inlineCheckbox1"
                     name="preferredDay"
@@ -139,13 +139,13 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label class="form-check-label" for="inlineCheckbox1">
+                  <label className="form-check-label" for="inlineCheckbox1">
                     Monday
                   </label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div className="form-check form-check-inline">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="checkbox"
                     id="inlineCheckbox1"
                     name="preferredDay"
@@ -157,13 +157,13 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label class="form-check-label" for="inlineCheckbox1">
+                  <label className="form-check-label" for="inlineCheckbox1">
                     Tuesday
                   </label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div className="form-check form-check-inline">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="checkbox"
                     id="inlineCheckbox2"
                     name="preferredDay"
@@ -175,13 +175,13 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label class="form-check-label" for="inlineCheckbox2">
+                  <label className="form-check-label" for="inlineCheckbox2">
                     Wednesday
                   </label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div className="form-check form-check-inline">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="checkbox"
                     id="inlineCheckbox3"
                     name="preferredDay"
@@ -193,13 +193,13 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label class="form-check-label" for="inlineCheckbox3">
+                  <label className="form-check-label" for="inlineCheckbox3">
                     Thursday
                   </label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div className="form-check form-check-inline">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="checkbox"
                     id="inlineCheckbox2"
                     name="preferredDay"
@@ -211,13 +211,13 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label class="form-check-label" for="inlineCheckbox2">
+                  <label className="form-check-label" for="inlineCheckbox2">
                     Friday
                   </label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div className="form-check form-check-inline">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="checkbox"
                     id="inlineCheckbox3"
                     name="preferredDay"
@@ -229,13 +229,13 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label class="form-check-label" for="inlineCheckbox3">
+                  <label className="form-check-label" for="inlineCheckbox3">
                     Saturday
                   </label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div className="form-check form-check-inline">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="checkbox"
                     id="inlineCheckbox3"
                     name="preferredDay"
@@ -247,7 +247,7 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label class="form-check-label" for="inlineCheckbox3">
+                  <label className="form-check-label" for="inlineCheckbox3">
                     Sunday
                   </label>
                 </div>
@@ -259,12 +259,12 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
               )}
             </div>
 
-            <div class="col-md-6 col-12 mb-3">
+            <div className="col-md-6 col-12 mb-3">
               <label>Preferred Timeslot</label>
               <div className="mt-2 d-flex">
-                <div class="checkbox-container ">
+                <div className="checkbox-container ">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="checkbox"
                     id="myCheckbox1"
                     name="preferredTimeSlot"
@@ -276,16 +276,16 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label for="myCheckbox1" class="custom-checkbox">
-                    <div class="inner-square"></div>
+                  <label for="myCheckbox1" className="custom-checkbox">
+                    <div className="inner-square"></div>
                   </label>
                   <label for="myCheckbox1" className="mx-1">
                     3PM - 6PM
                   </label>
                 </div>
-                <div class="checkbox-container mx-4">
+                <div className="checkbox-container mx-4">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="checkbox"
                     id="myCheckbox2"
                     name="preferredTimeSlot"
@@ -297,8 +297,8 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label for="myCheckbox2" class="custom-checkbox">
-                    <div class="inner-square"></div>
+                  <label for="myCheckbox2" className="custom-checkbox">
+                    <div className="inner-square"></div>
                   </label>
                   <label for="myCheckbox2" className="mx-1">
                     6PM - 9PM
@@ -307,9 +307,9 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
               </div>
 
               <div className="d-flex">
-                <div class="checkbox-container ">
+                <div className="checkbox-container ">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="checkbox"
                     id="myCheckbox3"
                     name="preferredTimeSlot"
@@ -321,16 +321,16 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label for="myCheckbox3" class="custom-checkbox">
-                    <div class="inner-square"></div>
+                  <label for="myCheckbox3" className="custom-checkbox">
+                    <div className="inner-square"></div>
                   </label>
                   <label for="myCheckbox3" className="mx-1">
                     9AM -12NN
                   </label>
                 </div>
-                <div class="checkbox-container mx-4">
+                <div className="checkbox-container mx-4">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="checkbox"
                     id="myCheckbox4"
                     name="preferredTimeSlot"
@@ -342,16 +342,16 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label for="myCheckbox4" class="custom-checkbox">
-                    <div class="inner-square"></div>
+                  <label for="myCheckbox4" className="custom-checkbox">
+                    <div className="inner-square"></div>
                   </label>
                   <label for="myCheckbox4" className="mx-1">
                     12NN - 3PM
                   </label>
                 </div>
-                <div class="checkbox-container mx-4">
+                <div className="checkbox-container mx-4">
                   <input
-                    class="form-check-input"
+                    className="form-check-input"
                     type="checkbox"
                     id="myCheckbox5"
                     name="preferredTimeSlot"
@@ -363,8 +363,8 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label for="myCheckbox5" class="custom-checkbox">
-                    <div class="inner-square"></div>
+                  <label for="myCheckbox5" className="custom-checkbox">
+                    <div className="inner-square"></div>
                   </label>
                   <label for="myCheckbox5" className="mx-1">
                     3AM - 6AM
@@ -375,7 +375,7 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
 
             <div className="col-md-6 col-12 mb-2"></div>
 
-            <div class="col-md-6 col-12 mb-3">
+            <div className="col-md-6 col-12 mb-3">
               <label>Marketing Source</label>
               <div className="input-group ">
                 <select
@@ -398,7 +398,7 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
                 )}
             </div>
 
-            <div class="col-md-6 col-12 mb-3">
+            <div className="col-md-6 col-12 mb-3">
               <label>Refer By</label>
               <div className="input-group ">
                 <select
@@ -421,11 +421,11 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
               )}
             </div>
 
-            <div class="col-md-6 col-12">
+            <div className="col-md-6 col-12">
               <label>
-                Enquiry Date<span class="text-danger">*</span>
+                Enquiry Date<span className="text-danger">*</span>
               </label>
-              <div class="input-group">
+              <div className="input-group">
                 <input
                   type="date"
                   name="enquiryDate"
@@ -443,11 +443,11 @@ const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {
             </div>
 
             <div className="col-md-6 col-12">
-              <label class="form-label">Remark</label>
-              <div class="">
+              <label className="form-label">Remark</label>
+              <div className="">
                 <textarea
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   name="remark"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

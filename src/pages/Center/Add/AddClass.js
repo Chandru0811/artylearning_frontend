@@ -114,11 +114,11 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
           </DialogTitle>
           <DialogContent>
             <div className="row">
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
                   Classroom Name<span className="text-danger">*</span>
                 </lable>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                   <input
                     type="text"
                     onKeyDown={(e) => e.stopPropagation()}
@@ -138,9 +138,9 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
                     )}
                 </div>
               </div>
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
-                  Classroom Code<span class="text-danger">*</span>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="">
+                  Classroom Code<span className="text-danger">*</span>
                 </lable>
                 <input
                   type="text"
@@ -163,7 +163,7 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
                 <lable className="form-lable">
                   Classroom Type<span className="text-danger">*</span>
                 </lable>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                   <select
                     className={`form-select   ${
                       formik.touched.classRoomType &&
@@ -188,7 +188,7 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">
-                  Capacity<span class="text-danger">*</span>
+                  Capacity<span className="text-danger">*</span>
                 </lable>
                 <input
                   onKeyDown={(e) => e.stopPropagation()}

@@ -108,9 +108,9 @@ const LeadChildEdit = forwardRef(
                 <p className="headColor">Child Ability</p>
               </div>
 
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <label>
-                  Pencil Grip<span class="text-danger">*</span>
+                  Pencil Grip<span className="text-danger">*</span>
                 </label>
                 <div className="input-group">
                   <select
@@ -136,10 +136,10 @@ const LeadChildEdit = forwardRef(
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-2 ">
+              <div className="col-md-6 col-12 mb-2 ">
                 <div className="row">
                   <label>
-                    writing<span class="text-danger">*</span>
+                    writing<span className="text-danger">*</span>
                   </label>
                   <div className="input-group ">
                     <select
@@ -162,10 +162,10 @@ const LeadChildEdit = forwardRef(
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <div className="row">
                   <label>
-                    recognizeAToZ A-Z <span class="text-danger">*</span>
+                    recognizeAToZ A-Z <span className="text-danger">*</span>
                   </label>
                   <div className="input-group ">
                     <select
@@ -191,13 +191,13 @@ const LeadChildEdit = forwardRef(
 
               <div className="col-md-6 col-12 mb-2">
                 <div className="row">
-                  <div class="col-sm-6 col-12 my-3">
+                  <div className="col-sm-6 col-12 my-3">
                     <label>
                       Write A-Z(writeUpperAToZ){" "}
                       <span className="text-danger">*</span>
                     </label>
                     <div className="d-flex">
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="Yes"
@@ -207,9 +207,9 @@ const LeadChildEdit = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">Yes</label>
+                        <label className="form-check-label">Yes</label>
                       </div>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="No"
@@ -219,7 +219,7 @@ const LeadChildEdit = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">No</label>
+                        <label className="form-check-label">No</label>
                       </div>
                     </div>
                     {formik.errors.writeUpperAToZ ? (
@@ -228,13 +228,13 @@ const LeadChildEdit = forwardRef(
                       </div>
                     ) : null}
                   </div>
-                  <div class="col-sm-6 col-12 my-3">
+                  <div className="col-sm-6 col-12 my-3">
                     <label>
                       Write a-z(writeLowerAToZ)
                       <span className="text-danger">*</span>
                     </label>
                     <div className="d-flex">
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="Yes"
@@ -244,9 +244,9 @@ const LeadChildEdit = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">Yes</label>
+                        <label className="form-check-label">Yes</label>
                       </div>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="No"
@@ -256,7 +256,7 @@ const LeadChildEdit = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">No</label>
+                        <label className="form-check-label">No</label>
                       </div>
                     </div>
                     {formik.errors.writeLowerAToZ ? (
@@ -270,13 +270,13 @@ const LeadChildEdit = forwardRef(
 
               <div className="col-md-6 col-12 ">
                 <div className="row">
-                  <div class="col-sm-6 col-12">
+                  <div className="col-sm-6 col-12">
                     <label>
                       Sounds of (a-z)
                       <span className="text-danger">*</span>
                     </label>
                     <div className="d-flex">
-                      <div class="form-check p-0">
+                      <div className="form-check p-0">
                         <input
                           className="form-check-input mx-2"
                           value="Yes"
@@ -286,9 +286,9 @@ const LeadChildEdit = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">Yes</label>
+                        <label className="form-check-label">Yes</label>
                       </div>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="No"
@@ -298,7 +298,7 @@ const LeadChildEdit = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">No</label>
+                        <label className="form-check-label">No</label>
                       </div>
                     </div>
                     {formik.errors.soundOfAToZ ? (
@@ -307,13 +307,13 @@ const LeadChildEdit = forwardRef(
                       </div>
                     ) : null}
                   </div>
-                  <div class="col-sm-6 col-12 p-0">
+                  <div className="col-sm-6 col-12 p-0">
                     <label>
                       Can read simple sentence
                       <span className="text-danger">*</span>
                     </label>
                     <div className="d-flex">
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="Yes"
@@ -325,9 +325,9 @@ const LeadChildEdit = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">Yes</label>
+                        <label className="form-check-label">Yes</label>
                       </div>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="No"
@@ -337,7 +337,7 @@ const LeadChildEdit = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">No</label>
+                        <label className="form-check-label">No</label>
                       </div>
                     </div>
                     {formik.errors.canReadSimpleSentence ? (

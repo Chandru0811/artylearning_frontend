@@ -99,7 +99,7 @@ function CampaignView() {
               </div>
               <div className="col-6 d-flex">
                 <p className="text-muted text-sm">:</p>
-                <img src={DocImg} class="img-fluid  p-1" alt="hhh" />
+                <img src={DocImg} className="img-fluid  p-1" alt="hhh" />
               </div>
             </div>
           </div>
@@ -110,7 +110,7 @@ function CampaignView() {
               </div>
               <div className="col-6  d-flex">
                 <p className="text-muted text-sm">:</p>
-                <img src={DocImg} class="img-fluid p-1" alt="hhh" />
+                <img src={DocImg} className="img-fluid p-1" alt="hhh" />
               </div>
               <div className="col-6  "></div>
               <div className="col-6  ">

@@ -113,10 +113,10 @@ function StaffView() {
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="section-header">EMPLOYMENT CONTRACT</div>
+    <div className="container">
+      <div className="section-header">EMPLOYMENT CONTRACT</div>
       <hr />
-      <div class="section-content">
+      <div className="section-content">
         <p>This Employment Agreement is made as of this 20 day of August, 2024 by
             and between Employee and Employer .The Parties agree and convert to be 
             bound by the terms set forth in this Agreement as follows
@@ -151,7 +151,7 @@ function StaffView() {
         </p
        
       </div>
-      <p class="signature">
+      <p className="signature">
         <strong>Signature</strong>
       </p>
     </div>
@@ -210,7 +210,7 @@ function StaffView() {
   };
 
   return (
-    <div class="container-fluid minHeight mb-5">
+    <div className="container-fluid minHeight mb-5">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -235,13 +235,13 @@ function StaffView() {
           &nbsp;Staff View
         </li>
       </ol>
-      <div class="container-fluid py-4">
-        <div class="row align-items-center">
-          <div class="col">
-            <div class="d-flex align-items-center gap-4"></div>
+      <div className="container-fluid py-4">
+        <div className="row align-items-center">
+          <div className="col">
+            <div className="d-flex align-items-center gap-4"></div>
           </div>
-          <div class="col-auto">
-            <div class="hstack gap-2 justify-content-end">
+          <div className="col-auto">
+            <div className="hstack gap-2 justify-content-end">
               {data.userAccountInfo?.length === 0 ||
               data.userContactInfo?.length === 0 ||
               data.userRequireInformationModels?.length === 0 ||
@@ -261,7 +261,7 @@ function StaffView() {
               <TeacherSummary data={data} />
               {/* {storedScreens?.payrollIndex && (
                 <Link to="/staff/payslip">
-                  <button type="button" class="btn btn-border">
+                  <button type="button" className="btn btn-border">
                     <span>Payroll</span>
                   </button>
                 </Link>
@@ -277,7 +277,7 @@ function StaffView() {
           </div>
         </div>
       </div>
-      <p class="headColor mt-3">Personal Information</p>
+      <p className="headColor mt-3">Personal Information</p>
       <div className="d-flex justify-content-center">
         <p className="my-2 d-flex">
           {data.photo ? (
@@ -401,7 +401,7 @@ function StaffView() {
           </div>
         </div>
       </div>
-      <p class="headColor mt-5">Account Information</p>
+      <p className="headColor mt-5">Account Information</p>
       <div className="row mt-4">
         <div className="col-md-6 col-12">
           <div className="row mb-3">
@@ -605,7 +605,7 @@ function StaffView() {
           </div>
         </div>
       </div>
-      <p class="headColor mt-5">Contact Information</p>
+      <p className="headColor mt-5">Contact Information</p>
       <div className="row mt-4">
         <div className="col-md-6 col-12">
           <div className="row mb-3">
@@ -659,7 +659,7 @@ function StaffView() {
           </div>
         </div>
       </div>
-      <p class="headColor mt-5">Required Documents</p>
+      <p className="headColor mt-5">Required Documents</p>
       <hr></hr>
       <div className="row mt-4">
         <div className="row">
@@ -731,7 +731,7 @@ function StaffView() {
         </div>
       </div>
 
-      <p class="headColor mt-5">Salary Information</p>
+      <p className="headColor mt-5">Salary Information</p>
       <div className="row mt-4">
         <div className="col-md-6 col-12">
           <div className="row mb-3">
@@ -790,7 +790,7 @@ function StaffView() {
           </div>
         </div>
       </div>
-      <p class="headColor mt-5">Leave Information</p>
+      <p className="headColor mt-5">Leave Information</p>
       <div className="row mt-4">
         <div className="col-md-6 col-12">
           <div className="row mb-3">
@@ -879,7 +879,7 @@ function StaffView() {
         </div>
       </div>
 
-      <p class="headColor mt-5">Contract Information</p>
+      <p className="headColor mt-5">Contract Information</p>
       <div className="row mt-4">
         <div className="row mb-4">
           <b>Details of Employer</b>

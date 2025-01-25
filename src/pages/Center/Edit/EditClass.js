@@ -129,11 +129,11 @@ function EditClass({ id, onSuccess }) {
           </Modal.Header>
           <Modal.Body>
             <div className="row">
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
-                  Classroom Name<span class="text-danger">*</span>
+                  Classroom Name<span className="text-danger">*</span>
                 </lable>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                   <input
                     type="text"
                     className={`form-control   ${
@@ -152,9 +152,9 @@ function EditClass({ id, onSuccess }) {
                     )}
                 </div>
               </div>
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
-                  Classroom Code<span class="text-danger">*</span>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="">
+                  Classroom Code<span className="text-danger">*</span>
                 </lable>
                 <input
                   type="text"
@@ -176,7 +176,7 @@ function EditClass({ id, onSuccess }) {
                 <lable className="form-lable">
                   Classroom Type<span className="text-danger">*</span>
                 </lable>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                   <select
                     className={`form-select   ${
                       formik.touched.classRoomType &&
@@ -201,7 +201,7 @@ function EditClass({ id, onSuccess }) {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">
-                  Capacity<span class="text-danger">*</span>
+                  Capacity<span className="text-danger">*</span>
                 </lable>
                 <input
                   type="text"
@@ -219,10 +219,10 @@ function EditClass({ id, onSuccess }) {
                   </div>
                 )}
               </div>
-              <div class="">
+              <div className="">
                 <lable>Description</lable>
                 <textarea
-                  class="form-control"
+                  className="form-control"
                   {...formik.getFieldProps("description")}
                   placeholder=""
                   id="floatingTextarea2"

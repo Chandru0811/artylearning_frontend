@@ -70,7 +70,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
       <div>
         <button
           type="button"
-          class="btn btn-border btn-sm"
+          className="btn btn-border btn-sm"
           onClick={handleGeneratePDF}
           disabled={loadIndicator}
         >
@@ -498,7 +498,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
             <div className="row  m-3">
               <h5 className="headColor mt-5 mb-4">Alphabet</h5>
               <div className="table-responsive">
-                <table class="table">
+                <table className="table">
                   <thead className="table-warning">
                     <tr>
                       <th scope="col">Alphabets</th>
@@ -1826,7 +1826,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                 </table>
               </div>
               <div className="table-responsive">
-                <table class="table">
+                <table className="table">
                   <thead className="table-warning">
                     <tr>
                       <th scope="col">Alphabets</th>
@@ -3244,7 +3244,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
               </div>
               <hr />
               <div className="table-responsive">
-                <table class="table">
+                <table className="table">
                   <thead className="table-warning">
                     <tr>
                       <th scope="col">CVC</th>
@@ -3625,7 +3625,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
               </div>
               <hr />
               <div className="table-responsive">
-                <table class="table">
+                <table className="table">
                   <thead className="table-warning">
                     <tr>
                       <th scope="col">CVC</th>
@@ -4188,7 +4188,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
               </div>
               <hr />
               <div className="table-responsive">
-                <table class="table">
+                <table className="table">
                   <thead className="table-warning">
                     <tr>
                       <th scope="col">H Brothers</th>

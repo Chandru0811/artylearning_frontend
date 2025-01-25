@@ -67,7 +67,7 @@ function ContactLists() {
         >
           <div>
             <input
-              class="form-check-input me-1"
+              className="form-check-input me-1"
               type="checkbox"
               value=""
               aria-label="..."
@@ -122,7 +122,7 @@ function ContactLists() {
           <div className="card-header d-flex justify-content-between">
             <div>
               <input
-                class="form-check-input me-1"
+                className="form-check-input me-1"
                 type="checkbox"
                 value=""
                 aria-label="..."

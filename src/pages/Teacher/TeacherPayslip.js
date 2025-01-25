@@ -6,9 +6,9 @@ function TeacherPayslip() {
     <div className="container-fluid minHeight">
       <div className="container-fluid">
         <div className="row mt-3 d-flex justify-content-end">
-          <div class="col-auto mb-4">
+          <div className="col-auto mb-4">
             <Link to={`/teacher`}>
-              <button type="submit" class="btn btn-sm btn-border">
+              <button type="submit" className="btn btn-sm btn-border">
                 <span>Back</span>
               </button>
             </Link>
@@ -26,8 +26,8 @@ function TeacherPayslip() {
           </div>
         </div>
       </div>
-      <div class="mb-2 mt-4 card">
-        <div class=" p-5">
+      <div className="mb-2 mt-4 card">
+        <div className=" p-5">
           <div className="container">
             <div className="row">
               <div className="col-12 text-start">

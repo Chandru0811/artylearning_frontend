@@ -929,11 +929,11 @@ export default function InvoiceAdd() {
             className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div className="d-flex align-items-center">
+              <div className="d-flex">
+                <div className="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Invoice</span>
+              <span className="me-2 text-muted">Add Invoice</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/invoice">
@@ -962,7 +962,7 @@ export default function InvoiceAdd() {
               <div className="col-lg-6 col-md-6 col-12 px-5">
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Centre<span class="text-danger">*</span>
+                    Centre<span className="text-danger">*</span>
                   </label>
                   <br />
                   <select
@@ -991,7 +991,7 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Student<span class="text-danger">*</span>
+                    Student<span className="text-danger">*</span>
                   </label>
                   <br />
                   <select
@@ -1021,7 +1021,7 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Parent<span class="text-danger">*</span>
+                    Parent<span className="text-danger">*</span>
                   </label>
                   <br />
                   <input
@@ -1041,7 +1041,7 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Course<span class="text-danger">*</span>
+                    Course<span className="text-danger">*</span>
                   </label>
                   <br />
                   <select
@@ -1096,7 +1096,7 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Package<span class="text-danger">*</span>
+                    Package<span className="text-danger">*</span>
                   </label>
                   <br />
                   <select
@@ -1219,7 +1219,7 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Invoice Period From<span class="text-danger">*</span>
+                    Invoice Period From<span className="text-danger">*</span>
                   </label>
                   <br />
                   <input
@@ -1242,7 +1242,7 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Invoice Period To<span class="text-danger">*</span>
+                    Invoice Period To<span className="text-danger">*</span>
                   </label>
                   <br />
                   <input
@@ -1264,7 +1264,7 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Receipt Amount<span class="text-danger">*</span>
+                    Receipt Amount<span className="text-danger">*</span>
                   </label>
                   <br />
                   <input

@@ -202,7 +202,7 @@ const PersonalAdd = forwardRef(
       >
         <div className="pb-4">
           <p className="headColor">Personal Information</p>
-          <div class="container-fluid row d-flex my-4">
+          <div className="container-fluid row d-flex my-4">
             <div className="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Teacher Name<span className="text-danger">*</span>
@@ -363,8 +363,8 @@ const PersonalAdd = forwardRef(
             </div>
             {userId === undefined && (
               <>
-                <div class="col-md-6 col-12 mb-3">
-                  <div class="form-group  col-sm ">
+                <div className="col-md-6 col-12 mb-3">
+                  <div className="form-group  col-sm ">
                     <label>Photo</label>
                     <span className="text-danger">*</span>
                     <input
@@ -384,9 +384,9 @@ const PersonalAdd = forwardRef(
                     )}
                   </div>
                 </div>
-                <div class="col-md-6 col-12 mb-3">
+                <div className="col-md-6 col-12 mb-3">
                   <label>
-                    Email ID<span class="text-danger">*</span>
+                    Email ID<span className="text-danger">*</span>
                   </label>
                   <input
                     type="email"
@@ -402,10 +402,10 @@ const PersonalAdd = forwardRef(
                     </div>
                   )}
                 </div>
-                <div class="col-md-6 col-12 mb-3">
+                <div className="col-md-6 col-12 mb-3">
                   <div className="mb-3">
                     <label>
-                      Password<span class="text-danger">*</span>
+                      Password<span className="text-danger">*</span>
                     </label>
                     <div className={`input-group mb-3`}>
                       <input
@@ -441,9 +441,9 @@ const PersonalAdd = forwardRef(
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6 col-12 mb-3">
+                <div className="col-md-6 col-12 mb-3">
                   <label>
-                    Confirm Password<span class="text-danger">*</span>
+                    Confirm Password<span className="text-danger">*</span>
                   </label>
                   <div className={`input-group mb-3`}>
                     <input
@@ -529,13 +529,13 @@ const PersonalAdd = forwardRef(
                 </div>
               ) : null}
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Status</label>
                 <span className="text-danger">*</span>
                 <select
                   type="text"
-                  class="form-select"
+                  className="form-select"
                   name="status"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

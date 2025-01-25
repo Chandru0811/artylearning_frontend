@@ -133,9 +133,9 @@ function StudentTransferOut() {
         </div>
         <div className="container">
           <div className="row py-4">
-            <div class="col-md-6 col-12 mb-2">
-              <lable class="">
-                Current Course<span class="text-danger">*</span>
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="">
+                Current Course<span className="text-danger">*</span>
               </lable>
               <select
                 {...formik.getFieldProps("courseId")}
@@ -146,7 +146,7 @@ function StudentTransferOut() {
                     : ""
                 }`}
                 aria-label="Default select example"
-                class="form-select "
+                className="form-select "
               >
                 <option></option>
                 {courseData &&
@@ -160,9 +160,9 @@ function StudentTransferOut() {
                 <div className="invalid-feedback">{formik.errors.courseId}</div>
               )}
             </div>
-            {/* <div class="col-md-6 col-12 mb-2">
-              <lable class="">
-                Current Class<span class="text-danger">*</span>
+            {/* <div className="col-md-6 col-12 mb-2">
+              <lable className="">
+                Current Class<span className="text-danger">*</span>
               </lable>
               <select
                 {...formik.getFieldProps("currentClass")}
@@ -173,7 +173,7 @@ function StudentTransferOut() {
                     : ""
                 }`}
                 aria-label="Default select example"
-                class="form-select "
+                className="form-select "
               >
                 <option selected></option>
                 <option value="1">One</option>
@@ -186,9 +186,9 @@ function StudentTransferOut() {
                 </div>
               )}
             </div> */}
-            <div class="col-md-6 col-12 mb-2">
-              <lable class="">
-                Last Lesson Date<span class="text-danger">*</span>
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="">
+                Last Lesson Date<span className="text-danger">*</span>
               </lable>
               <input
                 type="date"
@@ -208,9 +208,9 @@ function StudentTransferOut() {
                   </div>
                 )}
             </div>
-            <div class="col-md-6 col-12 mb-2">
-              <lable class="">
-                Transfer To<span class="text-danger">*</span>
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="">
+                Transfer To<span className="text-danger">*</span>
               </lable>
               <select
                 {...formik.getFieldProps("centerId")}
@@ -221,7 +221,7 @@ function StudentTransferOut() {
                     : ""
                 }`}
                 aria-label="Default select example"
-                class="form-select "
+                className="form-select "
               >
                 <option></option>
                 {centerData &&
@@ -235,27 +235,27 @@ function StudentTransferOut() {
                 <div className="invalid-feedback">{formik.errors.centerId}</div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-2 ">
+            <div className="col-md-6 col-12 mb-2 ">
               <label>Prefer Timing</label>
               <input
-                class="form-control "
+                className="form-control "
                 name="preferTiming"
                 {...formik.getFieldProps("preferTiming")}
                 type="time"
      
               />
             </div>
-            {/* <div class="col-md-6 col-12 mb-2 ">
+            {/* <div className="col-md-6 col-12 mb-2 ">
               <label>Prefer Days </label>
               <input
-                class="form-control "
+                className="form-control "
                 name="preferDays"
                 {...formik.getFieldProps("preferDays")}
                 type="text"
               />
             </div> */}
-            <div class="col-md-6 col-12 mb-2">
-              <lable class="">Prefer Days</lable>
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="">Prefer Days</lable>
               <select
                 {...formik.getFieldProps("preferDays")}
                 name="preferDays"
@@ -265,7 +265,7 @@ function StudentTransferOut() {
                     : ""
                 }`}
                 aria-label="Default select example"
-                class="form-select "
+                className="form-select "
               >
                 <option selected></option>
                 <option value="Monday">Monday</option>
@@ -283,19 +283,19 @@ function StudentTransferOut() {
               )}
             </div>
 
-            <div class="col-md-6 col-12 mb-2">
+            <div className="col-md-6 col-12 mb-2">
               <label>Prefer Start date</label>
               <input
                 type="date"
                 onFocus={(e) => e.target.showPicker()}
                 name="preferStartDate"
-                class="form-control "
+                className="form-control "
                 {...formik.getFieldProps("preferStartDate")}
               />
             </div>
-            <div class="col-md-6 col-12 mb-2">
-              <lable class="">
-                Reason<span class="text-danger">*</span>
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="">
+                Reason<span className="text-danger">*</span>
               </lable>
               <select
                 {...formik.getFieldProps("reason")}
@@ -306,7 +306,7 @@ function StudentTransferOut() {
                     : ""
                 }`}
                 aria-label="Default select example"
-                class="form-select "
+                className="form-select "
               >
                 <option selected></option>
                 <option value="Relocation">Relocation</option>
@@ -321,22 +321,22 @@ function StudentTransferOut() {
                 <div className="invalid-feedback">{formik.errors.reason}</div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-2 ">
+            <div className="col-md-6 col-12 mb-2 ">
               <label>Othet Reason</label>
               <input
-                class="form-control "
+                className="form-control "
                 type="text"
                 {...formik.getFieldProps("otherReason")}
                 name="otherReason"
               />
             </div>
-            <div class="col-md-6 col-12 mb-2 "></div>
-            <div class="col-12 mb-2 ">
+            <div className="col-md-6 col-12 mb-2 "></div>
+            <div className="col-12 mb-2 ">
               <label>
-                Centre Remark<span class="text-danger">*</span>
+                Centre Remark<span className="text-danger">*</span>
               </label>
               <textarea
-                class="form-control "
+                className="form-control "
                 type="text"
                 rows="4"
                 name="centerRemark"
@@ -353,7 +353,7 @@ function StudentTransferOut() {
                 </div>
               )}
             </div>
-            <div class=" col-12 mb-2 ">
+            <div className=" col-12 mb-2 ">
               <lable>Parent Remark</lable>
               <textarea
                 className="form-control"

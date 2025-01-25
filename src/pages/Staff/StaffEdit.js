@@ -95,7 +95,7 @@ function StaffEdit() {
   };
 
   return (
-    <div class="container-fluid minHeight my-5">
+    <div className="container-fluid minHeight my-5">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -134,7 +134,7 @@ function StaffEdit() {
           </Step>
         ))}
       </Stepper>
-      <div class="container-fluid py-3 card shadow border-0 mb-7 mt-5">
+      <div className="container-fluid py-3 card shadow border-0 mb-7 mt-5">
         {activeStep === steps.length ? (
           <React.Fragment>
             <Typography sx={{ mt: 2, mb: 1 }}>

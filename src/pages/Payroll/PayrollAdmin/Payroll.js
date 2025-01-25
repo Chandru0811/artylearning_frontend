@@ -318,11 +318,11 @@ const Payroll = () => {
           className="mb-3 d-flex justify-content-between align-items-center p-1"
           style={{ background: "#f5f7f9" }}
         >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
+          <div className="d-flex align-items-center">
+            <div className="d-flex">
+              <div className="dot active"></div>
             </div>
-            <span class="me-2 text-muted">
+            <span className="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
                 Payroll
@@ -390,7 +390,7 @@ const Payroll = () => {
         </div>
         {loading ? (
           <div className="loader-container">
-            <div class="loading">
+            <div className="loading">
               <span></span>
               <span></span>
               <span></span>

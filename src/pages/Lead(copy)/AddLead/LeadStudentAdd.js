@@ -82,12 +82,12 @@ const LeadStudentAdd = forwardRef(
           }
         }}>
           <div className="container-fluid">
-            <div class="row px-1">
+            <div className="row px-1">
               <div className="py-3">
                 <p className="headColor">Student Information</p>
               </div>
 
-              <div class="col-md-6 col-12 mb-3">
+              <div className="col-md-6 col-12 mb-3">
                 <label>Student Name</label>
                 <span className="text-danger">*</span>
                 <input
@@ -105,7 +105,7 @@ const LeadStudentAdd = forwardRef(
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <label>Date of Birth</label>
                 <span className="text-danger">*</span>
                 <input
@@ -123,7 +123,7 @@ const LeadStudentAdd = forwardRef(
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <label className="mb-3">Gender</label>
                 <span className="text-danger">*</span>
                 <div className="d-flex align-items-center justify-content-start">
@@ -155,7 +155,7 @@ const LeadStudentAdd = forwardRef(
                 ) : null}
               </div>
 
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <label>Subject</label>
                 <span className="text-danger">*</span>
                 <select

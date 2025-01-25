@@ -109,9 +109,9 @@ const Form2 = forwardRef(
                 <p className="headColor">Child Ability</p>
               </div>
 
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <label>
-                  Pencil Grip<span class="text-danger">*</span>
+                  Pencil Grip<span className="text-danger">*</span>
                 </label>
                 <div className="input-group">
                   <select
@@ -134,10 +134,10 @@ const Form2 = forwardRef(
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-2 ">
+              <div className="col-md-6 col-12 mb-2 ">
                 <div className="row">
                   <label>
-                    Writing<span class="text-danger">*</span>
+                    Writing<span className="text-danger">*</span>
                   </label>
                   <div className="input-group ">
                     <select
@@ -165,10 +165,10 @@ const Form2 = forwardRef(
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <div className="row">
                   <label>
-                    Recognize A-Z<span class="text-danger">*</span>
+                    Recognize A-Z<span className="text-danger">*</span>
                   </label>
                   <div className="input-group ">
                     <select
@@ -197,13 +197,13 @@ const Form2 = forwardRef(
 
               <div className="col-md-6 col-12 mb-2">
                 <div className="row">
-                  <div class="col-sm-6 col-12 my-3">
+                  <div className="col-sm-6 col-12 my-3">
                     <label>
                       Write A-Z (Uppercase)
                       <span className="text-danger">*</span>
                     </label>
                     <div className="d-flex">
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="Yes"
@@ -213,9 +213,9 @@ const Form2 = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">Yes</label>
+                        <label className="form-check-label">Yes</label>
                       </div>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="No"
@@ -225,7 +225,7 @@ const Form2 = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">No</label>
+                        <label className="form-check-label">No</label>
                       </div>
                     </div>
                     {formik.touched.writeUpperAToZ &&
@@ -235,13 +235,13 @@ const Form2 = forwardRef(
                       </div>
                     ) : null}
                   </div>
-                  <div class="col-sm-6 col-12 my-3">
+                  <div className="col-sm-6 col-12 my-3">
                     <label>
                       Write A-Z (Lowercase)
                       <span className="text-danger">*</span>
                     </label>
                     <div className="d-flex">
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="Yes"
@@ -251,9 +251,9 @@ const Form2 = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">Yes</label>
+                        <label className="form-check-label">Yes</label>
                       </div>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="No"
@@ -263,7 +263,7 @@ const Form2 = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">No</label>
+                        <label className="form-check-label">No</label>
                       </div>
                     </div>
                     {formik.touched.writeLowerAToZ &&
@@ -278,13 +278,13 @@ const Form2 = forwardRef(
 
               <div className="col-md-6 col-12 ">
                 <div className="row">
-                  <div class="col-sm-6 col-12">
+                  <div className="col-sm-6 col-12">
                     <label>
                       Sounds of (A-Z)
                       <span className="text-danger">*</span>
                     </label>
                     <div className="d-flex">
-                      <div class="form-check p-0">
+                      <div className="form-check p-0">
                         <input
                           className="form-check-input mx-2"
                           value="Yes"
@@ -294,9 +294,9 @@ const Form2 = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">Yes</label>
+                        <label className="form-check-label">Yes</label>
                       </div>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="No"
@@ -306,7 +306,7 @@ const Form2 = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">No</label>
+                        <label className="form-check-label">No</label>
                       </div>
                     </div>
                     {formik.touched.soundOfAToZ && formik.errors.soundOfAToZ ? (
@@ -315,13 +315,13 @@ const Form2 = forwardRef(
                       </div>
                     ) : null}
                   </div>
-                  <div class="col-sm-6 col-12 p-0">
+                  <div className="col-sm-6 col-12 p-0">
                     <label>
                       Can Read Simple Sentence
                       <span className="text-danger">*</span>
                     </label>
                     <div className="d-flex">
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="Yes"
@@ -333,9 +333,9 @@ const Form2 = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">Yes</label>
+                        <label className="form-check-label">Yes</label>
                       </div>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
                           className="form-check-input mx-2"
                           value="No"
@@ -345,7 +345,7 @@ const Form2 = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <label class="form-check-label">No</label>
+                        <label className="form-check-label">No</label>
                       </div>
                     </div>
                     {formik.touched.canReadSimpleSentence &&

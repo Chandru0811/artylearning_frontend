@@ -175,11 +175,11 @@ function SendNotificationAdd() {
             className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div className="d-flex align-items-center">
+              <div className="d-flex">
+                <div className="dot active"></div>
               </div>
-              <span class="me-2 text-muted">School Announcement Add</span>
+              <span className="me-2 text-muted">School Announcement Add</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/sendNotification">
@@ -205,9 +205,9 @@ function SendNotificationAdd() {
           </div>
           <div className="container-fluid">
             <div className="row ">
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
-                  Recipient<span class="text-danger">*</span>
+                  Recipient<span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("recipient")}
@@ -233,9 +233,9 @@ function SendNotificationAdd() {
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
-                  Title <span class="text-danger">*</span>
+                  Title <span className="text-danger">*</span>
                 </label>
                 <input
                   {...formik.getFieldProps("messageTitle")}
@@ -340,9 +340,9 @@ function SendNotificationAdd() {
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
-                  Day<span class="text-danger">*</span>
+                  Day<span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("days")}
@@ -353,7 +353,7 @@ function SendNotificationAdd() {
                       : ""
                   }`}
                   aria-label="Default select example"
-                  class="form-select "
+                  className="form-select "
                 >
                   <option selected></option>
                   <option value="SUNDAY">Sunday</option>
@@ -369,7 +369,7 @@ function SendNotificationAdd() {
                 )}
               </div>
 
-              {/* <div class="col-md-6 col-12 mb-4">
+              {/* <div className="col-md-6 col-12 mb-4">
               <label className="form-label">Attachement</label>
               <span className="text-danger">*</span>
               <input
@@ -413,11 +413,11 @@ function SendNotificationAdd() {
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">Description</label>
                 <textarea
                   name="messageDescription"
-                  class="form-control "
+                  className="form-control "
                   row="5"
                   type="text"
                   className={`form-control  ${

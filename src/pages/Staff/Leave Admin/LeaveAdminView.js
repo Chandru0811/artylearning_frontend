@@ -38,7 +38,7 @@ function LeaveAdminView() {
   }, []);
 
   return (
-    <div class="container-fluid">
+    <div className="container-fluid">
       <ol
         className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -68,11 +68,11 @@ function LeaveAdminView() {
           className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
           style={{ background: "#f5f7f9" }}
         >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
+          <div className="d-flex align-items-center">
+            <div className="d-flex">
+              <div className="dot active"></div>
             </div>
-            <span class="me-2 text-muted">View Leave</span>
+            <span className="me-2 text-muted">View Leave</span>
           </div>
           <div className="my-2 pe-3 d-flex align-items-center">
             <Link to="/leaveadmin">
@@ -220,18 +220,18 @@ function LeaveAdminView() {
               </div>
             </div>
           </div>
-          <p class="headColor mt-5">Attachment</p>
+          <p className="headColor mt-5">Attachment</p>
           <hr></hr>
           <div className="row mt-4">
             <div className="container p-2">
               {data?.attachment && (
-                <div class="card border-0 shadow" style={{ width: "30%" }}>
+                <div className="card border-0 shadow" style={{ width: "30%" }}>
                   <div
                     onClick={(e) => e.stopPropagation()}
                     style={{ cursor: "not-allowed" }}
                   >
                     <img
-                      class="card-img-top img-fluid"
+                      className="card-img-top img-fluid"
                       style={{
                         height: "10rem",
                         pointerEvents: "none",
@@ -242,11 +242,11 @@ function LeaveAdminView() {
                     />
                   </div>
                   <div
-                    class="card-body d-flex justify-content-between align-items-center"
+                    className="card-body d-flex justify-content-between align-items-center"
                     style={{ flexWrap: "wrap" }}
                   >
                     <p
-                      class="card-title fw-semibold mb-0 text-wrap"
+                      className="card-title fw-semibold mb-0 text-wrap"
                       style={{
                         flex: 1,
                         whiteSpace: "nowrap",
@@ -260,7 +260,7 @@ function LeaveAdminView() {
                     <a
                       href={data?.attachment}
                       download
-                      class="btn text-dark ms-2"
+                      className="btn text-dark ms-2"
                       title="Download Resume"
                       style={{ flexShrink: 0 }}
                     >

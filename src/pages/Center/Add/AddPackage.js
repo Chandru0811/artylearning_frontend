@@ -109,11 +109,11 @@ function AddPackage({ id, onSuccess,handleMenuClose }) {
             </DialogTitle>
           <DialogContent>
             <div className="row">
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
                   Package Name<span className="text-danger">*</span>
                 </lable>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                   <input
                     type="text"
                     onKeyDown={(e) => e.stopPropagation()}

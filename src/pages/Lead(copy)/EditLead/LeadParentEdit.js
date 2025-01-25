@@ -73,13 +73,13 @@ const LeadParentEdit = forwardRef(
           }
         }}>
           <div className="container-fluid">
-            <div class="row  px-1">
+            <div className="row  px-1">
               <div className="py-3">
                 <p className="headColor">Parent Information</p>
               </div>
-              <div class="col-md-6 col-12 mb-3">
+              <div className="col-md-6 col-12 mb-3">
                 <label>
-                  Parent Name<span class="text-danger">*</span>
+                  Parent Name<span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
@@ -95,13 +95,13 @@ const LeadParentEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 ">
+              <div className="col-md-6 col-12 ">
                 <label>
-                  Parent Email <span class="text-danger">*</span>
+                  Parent Email <span className="text-danger">*</span>
                 </label>
                 <input
                   type="email"
-                  class="form-control"
+                  className="form-control"
                   name="parentEmail"
                   value={formik.values.parentEmail}
                   onChange={formik.handleChange}
@@ -114,13 +114,13 @@ const LeadParentEdit = forwardRef(
                 )}
               </div>
 
-              <div class="col-md-6 col-12">
+              <div className="col-md-6 col-12">
                 <label>
-                  Parent Mobile Number<span class="text-danger">*</span>
+                  Parent Mobile Number<span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   name="parentMobileNumber"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -133,9 +133,9 @@ const LeadParentEdit = forwardRef(
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12  ">
+              <div className="col-md-6 col-12  ">
                 <label>
-                  Relation<span class="text-danger">*</span>
+                  Relation<span className="text-danger">*</span>
                 </label>
                 <select
                   className="form-select"

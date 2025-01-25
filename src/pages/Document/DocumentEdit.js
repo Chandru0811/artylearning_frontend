@@ -125,13 +125,13 @@ function DocumentEdit({ id, onSuccess, handleMenuClose }) {
           <DialogContent>
             <div className="container">
               <div className="row py-4">
-                <div class="col-12 mb-4 d-flex flex-column justify-content-end">
+                <div className="col-12 mb-4 d-flex flex-column justify-content-end">
                   <label>
-                    Folder Name<span class="text-danger">*</span>
+                    Folder Name<span className="text-danger">*</span>
                   </label>
                   <input
                     name="folderName"
-                    class="form-control "
+                    className="form-control "
                     type="text"
                     onKeyDown={(e) => e.stopPropagation()}
                     className={`form-control  ${

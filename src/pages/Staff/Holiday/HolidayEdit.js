@@ -141,11 +141,11 @@ function HolidayEdit() {
             className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div className="d-flex align-items-center">
+              <div className="d-flex">
+                <div className="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Edit Holiday</span>
+              <span className="me-2 text-muted">Edit Holiday</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/holiday">

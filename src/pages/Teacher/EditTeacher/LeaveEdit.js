@@ -181,10 +181,10 @@ const LeaveEdit = forwardRef(
         <section>
           <div className="container-fluid" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Leave Information</p>
-            <div class="row">
-              <div class="col-md-6 col-12 mb-2">
+            <div className="row">
+              <div className="col-md-6 col-12 mb-2">
                 <label>
-                  Year<span class="text-danger">*</span>
+                  Year<span className="text-danger">*</span>
                 </label>
                 <input
                   type="number"
@@ -203,13 +203,13 @@ const LeaveEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <label>
-                  Annual Leave<span class="text-danger">*</span>
+                  Annual Leave<span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
-                  class="form-control    mt-3"
+                  className="form-control    mt-3"
                   name="annualLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -221,13 +221,13 @@ const LeaveEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3 ">
+              <div className="col-md-6 col-12 mb-2 mt-3 ">
                 <label>
-                  Medical Leave<span class="text-danger">*</span>
+                  Medical Leave<span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
-                  class="form-control    mt-3 "
+                  className="form-control    mt-3 "
                   name="medicalLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -239,13 +239,13 @@ const LeaveEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>
-                  Other Leave<span class="text-danger">*</span>
+                  Other Leave<span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
-                  class="form-control    mt-3"
+                  className="form-control    mt-3"
                   name="otherLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -257,13 +257,13 @@ const LeaveEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>
-                  Carry Forward Leave<span class="text-danger">*</span>
+                  Carry Forward Leave<span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
-                  class="form-control    mt-3"
+                  className="form-control    mt-3"
                   name="carryForwardLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

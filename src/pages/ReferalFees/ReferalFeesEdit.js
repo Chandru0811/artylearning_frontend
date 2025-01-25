@@ -153,9 +153,9 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
           <DialogContent>
             <div className="container">
               <div className="row py-4">
-                <div class="col-md-6 col-12 mb-4">
+                <div className="col-md-6 col-12 mb-4">
                   <lable className="form-label">
-                    Centre<span class="text-danger">*</span>
+                    Centre<span className="text-danger">*</span>
                   </lable>
                   <select
                     {...formik.getFieldProps("centerId")}
@@ -166,7 +166,7 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
                         : ""
                     }`}
                     aria-label="Default select example"
-                    class="form-select "
+                    className="form-select "
                   >
                     <option selected></option>
                     {centerData &&
@@ -223,9 +223,9 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
                     </div>
                   )}
                 </div>
-                <div class="col-md-6 col-12 mb-4">
+                <div className="col-md-6 col-12 mb-4">
                   <lable className="form-label">
-                    Status<span class="text-danger">*</span>
+                    Status<span className="text-danger">*</span>
                   </lable>
                   <select
                     {...formik.getFieldProps("status")}
@@ -236,7 +236,7 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
                         : ""
                     }`}
                     aria-label="Default select example"
-                    class="form-select"
+                    className="form-select"
                   >
                     <option selected></option>
                     <option value="ACTIVE">Active</option>

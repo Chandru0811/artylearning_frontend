@@ -137,11 +137,11 @@ const Datatable = () => {
       data: null,
       render: function (data, type, row) {
         return `
-            <button type="button" class="btn btn-primary btn-sm" onclick="editRow(${row.id})">
-                <i class='bx bxs-balloon'></i>
+            <button type="button" className="btn btn-primary btn-sm" onclick="editRow(${row.id})">
+                <i className='bx bxs-balloon'></i>
             </button>
-            <button type="button" class="btn btn-danger btn-sm" onclick="deleteRow(${row.id})">
-                <i class='bx bx-trash-alt' ></i>
+            <button type="button" className="btn btn-danger btn-sm" onclick="deleteRow(${row.id})">
+                <i className='bx bx-trash-alt' ></i>
             </button>
           `;
       },
@@ -164,7 +164,7 @@ const Datatable = () => {
     <div className="container my-4">
       <div className="my-3">
         <button type="button" className="btn btn-button btn-sm">
-          Add <i class="bx bx-plus"></i>
+          Add <i className="bx bx-plus"></i>
         </button>
         &nbsp;&nbsp;
         <button type="button" className="btn btn-sm btn-border">

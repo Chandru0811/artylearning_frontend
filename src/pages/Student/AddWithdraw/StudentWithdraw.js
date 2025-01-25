@@ -68,10 +68,10 @@ const StudentWithdraw = forwardRef(
     return (
       <section className="studentWithdraw">
         <div className="container">
-          <p class="headColor mb-3">Course Detail</p>
+          <p className="headColor mb-3">Course Detail</p>
           <div className="row">
             <div className="col-md-6 col-12">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Course
                 <span style={{ color: "red" }}>*</span>
               </label>
@@ -90,7 +90,7 @@ const StudentWithdraw = forwardRef(
               )}
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Teacher
                 <span style={{ color: "red" }}>*</span>
               </label>
@@ -109,7 +109,7 @@ const StudentWithdraw = forwardRef(
               )}
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Last Class
                 <span style={{ color: "red" }}>*</span>
               </label>
@@ -128,7 +128,7 @@ const StudentWithdraw = forwardRef(
               )}
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Day Timing
                 <span style={{ color: "red" }}>*</span>
               </label>
@@ -148,7 +148,7 @@ const StudentWithdraw = forwardRef(
               )}
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Class Start Date
                 <span style={{ color: "red" }}>*</span>
               </label>
@@ -169,7 +169,7 @@ const StudentWithdraw = forwardRef(
                 )}
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Class End Date
                 <span style={{ color: "red" }}>*</span>
               </label>
@@ -189,7 +189,7 @@ const StudentWithdraw = forwardRef(
               )}
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Request Date
                 <span style={{ color: "red" }}>*</span>
               </label>
@@ -209,7 +209,7 @@ const StudentWithdraw = forwardRef(
               )}
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Withdraw Reason
                 <span style={{ color: "red" }}>*</span>
               </label>
@@ -233,7 +233,7 @@ const StudentWithdraw = forwardRef(
                 )}
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Other Please Specify
               </label>
               <input
@@ -246,7 +246,7 @@ const StudentWithdraw = forwardRef(
               />
             </div>
             <div className="col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Remark Parent
               </label>
               <div className="form-floating">
@@ -262,7 +262,7 @@ const StudentWithdraw = forwardRef(
               </div>
             </div>
             <div className="col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Remark Centre
                 <span style={{ color: "red" }}>*</span>
               </label>
@@ -284,7 +284,7 @@ const StudentWithdraw = forwardRef(
               </div>
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Last Lesson Date
                 <span style={{ color: "red" }}>*</span>
               </label>
@@ -305,7 +305,7 @@ const StudentWithdraw = forwardRef(
                 )}
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Last Paid Lesson Date
               </label>
               <input
@@ -319,7 +319,7 @@ const StudentWithdraw = forwardRef(
               />
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 No of Lesson Notice
               </label>
               <input
@@ -332,7 +332,7 @@ const StudentWithdraw = forwardRef(
               />
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 No of Lesson Notice for Refund
               </label>
               <input
@@ -345,7 +345,7 @@ const StudentWithdraw = forwardRef(
                />
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+              <label for="exampleInputPassword1" className="form-label">
                 Expected Refund Date
               </label>
               <input
@@ -364,7 +364,7 @@ const StudentWithdraw = forwardRef(
             <div className="col-md-6 col-12 mb-3">
               <div className="form-check">
                 <input
-                   class="form-check-input"
+                   className="form-check-input"
                    type="checkbox"
                    id="inlineCheckbox1"
                    name="decription"
@@ -385,7 +385,7 @@ const StudentWithdraw = forwardRef(
             <div className="col-md-6 col-12 mb-3">
               <div className="form-check">
                 <input
-                  class="form-check-input"
+                  className="form-check-input"
                   type="checkbox"
                   id="inlineCheckbox1"
                   name="decription"
@@ -405,7 +405,7 @@ const StudentWithdraw = forwardRef(
             <div className="col-md-6 col-12 mb-3">
               <div className="form-check">
                 <input
-                  class="form-check-input"
+                  className="form-check-input"
                   type="checkbox"
                   id="inlineCheckbox1"
                   name="decription"
@@ -425,7 +425,7 @@ const StudentWithdraw = forwardRef(
             <div className="col-md-6 col-12 mb-3">
               <div className="form-check">
                 <input
-                  class="form-check-input"
+                  className="form-check-input"
                   type="checkbox"
                   id="inlineCheckbox1"
                   name="decription"
@@ -445,7 +445,7 @@ const StudentWithdraw = forwardRef(
             <div className="col-md-6 col-12 mb-3">
               <div className="form-check">
                 <input
-                  class="form-check-input"
+                  className="form-check-input"
                   type="checkbox"
                   id="inlineCheckbox1"
                   name="decription"
@@ -465,7 +465,7 @@ const StudentWithdraw = forwardRef(
             <div className="col-md-6 col-12 mb-3">
               <div className="form-check">
                 <input
-                 class="form-check-input"
+                 className="form-check-input"
                  type="checkbox"
                  id="inlineCheckbox1"
                  name="decription"

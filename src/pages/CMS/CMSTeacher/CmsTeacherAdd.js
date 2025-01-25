@@ -85,7 +85,7 @@ const CmsTeacherAdd = ({ getData }) => {
           className="btn btn-button btn-sm me-2"
           onClick={handleShowModal}
         >
-          Add <i class="bx bx-plus"></i>
+          Add <i className="bx bx-plus"></i>
         </button>
       </div>
       <Modal show={showModal} onHide={handleCloseModal}>

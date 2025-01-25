@@ -110,7 +110,7 @@ function TransferOutModal({ id, centerId }) {
                 </label>
                 <select
                   {...formik.getFieldProps("courseId")}
-                  class={`form-select  ${
+                  className={`form-select  ${
                     formik.touched.courseId && formik.errors.courseId
                       ? "is-invalid"
                       : ""
@@ -141,7 +141,7 @@ function TransferOutModal({ id, centerId }) {
                 </label>
                 <select
                   {...formik.getFieldProps("currentClass")}
-                  class={`form-select  ${
+                  className={`form-select  ${
                     formik.touched.currentClass && formik.errors.currentClass
                       ? "is-invalid"
                       : ""
@@ -238,7 +238,7 @@ function TransferOutModal({ id, centerId }) {
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">Prefer Timing</label>
                 <input
-                  class={`form-control`}
+                  className={`form-control`}
                   name="preferTiming"
                   {...formik.getFieldProps("preferTiming")}
                   type="time"

@@ -14,9 +14,9 @@ import { Link } from "react-router-dom";
 function CourseDetail() {
   return (
     <div className="container-fluid">
-      <div class="card shadow border-0 mb-5">
-        <div class="container-fluid py-4">
-          <h1 class="h4 ls-tight" style={{ color: "#ff7500" }}>
+      <div className="card shadow border-0 mb-5">
+        <div className="container-fluid py-4">
+          <h1 className="h4 ls-tight" style={{ color: "#ff7500" }}>
             Registration
           </h1>
         </div>

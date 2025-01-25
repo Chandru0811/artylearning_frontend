@@ -173,8 +173,8 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
                   />
                 )}
               </div>
-              <div class=" col-12 mb-2">
-                <lable class="">Heading<span className="text-danger">*</span></lable>
+              <div className=" col-12 mb-2">
+                <lable className="">Heading<span className="text-danger">*</span></lable>
                 <div className="input-group mb-3">
                   <input
                     type="text"
@@ -195,8 +195,8 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
                 </div>
               </div>
 
-              <div class=" col-12 mb-2">
-                <lable class="">Comment<span className="text-danger">*</span></lable>
+              <div className=" col-12 mb-2">
+                <lable className="">Comment<span className="text-danger">*</span></lable>
                 <input
                   type="text"
                   className={`form-control   ${
@@ -213,8 +213,8 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
                 )}
               </div>
 
-              <div class=" col-12 mb-2">
-                <lable class="">Paragraph<span className="text-danger">*</span></lable>
+              <div className=" col-12 mb-2">
+                <lable className="">Paragraph<span className="text-danger">*</span></lable>
                 <textarea
                   type="text"
                   className={`form-control   ${

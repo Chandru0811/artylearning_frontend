@@ -161,11 +161,11 @@ const StaffLoginEdit = forwardRef(
       >
         <div className="container" style={{ minHeight: "50vh" }}>
           <p className="headColor my-4">Login Information</p>
-          <div class="row">
-            <div class="col-md-6 col-12 mb-2">
+          <div className="row">
+            <div className="col-md-6 col-12 mb-2">
               <div className="mb-3">
                 <label>
-                  Password<span class="text-danger">*</span>
+                  Password<span className="text-danger">*</span>
                 </label>
                 <div className={`input-group mb-3`}>
                   <input
@@ -201,10 +201,10 @@ const StaffLoginEdit = forwardRef(
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-2">
+            <div className="col-md-6 col-12 mb-2">
               <div className="mb-3">
                 <label>
-                  Confirm Password<span class="text-danger">*</span>
+                  Confirm Password<span className="text-danger">*</span>
                 </label>
                 <div className={`input-group mb-3`}>
                   <input

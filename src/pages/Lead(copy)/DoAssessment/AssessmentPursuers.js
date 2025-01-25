@@ -41,9 +41,9 @@ const AssessmentPursuers = forwardRef(
     <section>
       <h5 className="headColor py-3">Arty Pursuers</h5>
       <div className="container mt-5 px-4">
-        <div class="row">
+        <div className="row">
           <div className="table-responsive">
-            <table class="table table-borderless">
+            <table className="table table-borderless">
               <tbody>
                 <tr>
                   <th
@@ -54,9 +54,9 @@ const AssessmentPursuers = forwardRef(
                     Sight Words:
                   </th>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         id="inlineCheckbox1"
                         name="singleWords"
@@ -68,15 +68,15 @@ const AssessmentPursuers = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         The
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         id="inlineCheckbox1"
                         name="singleWords"
@@ -88,15 +88,15 @@ const AssessmentPursuers = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         She
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         id="inlineCheckbox1"
                         name="singleWords"
@@ -108,15 +108,15 @@ const AssessmentPursuers = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         See
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                         class="form-check-input"
+                         className="form-check-input"
                          type="checkbox"
                          id="inlineCheckbox1"
                          name="singleWords"
@@ -128,15 +128,15 @@ const AssessmentPursuers = forwardRef(
                          onChange={formik.handleChange}
                          onBlur={formik.handleBlur}
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         He
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                         class="form-check-input"
+                         className="form-check-input"
                          type="checkbox"
                          id="inlineCheckbox1"
                          name="singleWords"
@@ -148,7 +148,7 @@ const AssessmentPursuers = forwardRef(
                          onChange={formik.handleChange}
                          onBlur={formik.handleBlur}
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         On
                       </label>
                     </div>
@@ -157,9 +157,9 @@ const AssessmentPursuers = forwardRef(
                 <tr>
                   <th scope="row"></th>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                         class="form-check-input"
+                         className="form-check-input"
                          type="checkbox"
                          id="inlineCheckbox1"
                          name="singleWords"
@@ -171,15 +171,15 @@ const AssessmentPursuers = forwardRef(
                          onChange={formik.handleChange}
                          onBlur={formik.handleBlur}
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         Could
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         id="inlineCheckbox1"
                         name="singleWords"
@@ -191,15 +191,15 @@ const AssessmentPursuers = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         White
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         id="inlineCheckbox1"
                         name="singleWords"
@@ -211,15 +211,15 @@ const AssessmentPursuers = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         Together
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         id="inlineCheckbox1"
                         name="singleWords"
@@ -231,15 +231,15 @@ const AssessmentPursuers = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         Might
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         id="inlineCheckbox1"
                         name="singleWords"
@@ -251,7 +251,7 @@ const AssessmentPursuers = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         About
                       </label>
                     </div>
@@ -261,7 +261,7 @@ const AssessmentPursuers = forwardRef(
             </table>
           </div>
           <div className="table-responsive">
-            <table class="table table-borderless">
+            <table className="table table-borderless">
               <tbody>
                 <tr style={{ width: "200px" }}>
                   <th scope="row" className="text-end fw-medium">
@@ -313,80 +313,80 @@ const AssessmentPursuers = forwardRef(
                     Real:
                   </th>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis1"
                         />
                         <label
                           for="bopis1"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Hag
                     </div>
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis2"
                         />
                         <label
                           for="bopis2"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>
                       &nbsp; Keg
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis3"
                         />
                         <label
                           for="bopis3"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>
                       &nbsp; Dip
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis4"
                         />
                         <label
                           for="bopis4"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>
                       &nbsp; Lot
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis5"
                         />
                         <label
                           for="bopis5"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Bud
@@ -398,80 +398,80 @@ const AssessmentPursuers = forwardRef(
                     Non sense:
                   </th>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis6"
                         />
                         <label
                           for="bopis6"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Zam
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis7"
                         />
                         <label
                           for="bopis7"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Den
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis8"
                         />
                         <label
                           for="bopis8"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Wip
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis9"
                         />
                         <label
                           for="bopis9"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Sot
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis10"
                         />
                         <label
                           for="bopis10"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Yub
@@ -488,35 +488,35 @@ const AssessmentPursuers = forwardRef(
                   </th>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
@@ -526,7 +526,7 @@ const AssessmentPursuers = forwardRef(
             </table>
           </div>
           <div className="table-responsive">
-            <table class="table table-borderless">
+            <table className="table table-borderless">
               <tbody>
                 <tr>
                   <th
@@ -551,7 +551,7 @@ const AssessmentPursuers = forwardRef(
             </table>
           </div>
           <div className="table-responsive">
-            <table class="table table-borderless">
+            <table className="table table-borderless">
               <tbody>
                 <tr style={{ width: "200px" }}>
                   <th scope="row" className="text-end fw-medium">
@@ -603,80 +603,80 @@ const AssessmentPursuers = forwardRef(
                     L Blend:
                   </th>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis11"
                         />
                         <label
                           for="bopis11"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Claf
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis12"
                         />
                         <label
                           for="bopis12"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Fled
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis13"
                         />
                         <label
                           for="bopis13"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Silm
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis14"
                         />
                         <label
                           for="bopis14"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Glob
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis15"
                         />
                         <label
                           for="bopis15"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Blum
@@ -693,35 +693,35 @@ const AssessmentPursuers = forwardRef(
                   </th>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
@@ -732,80 +732,80 @@ const AssessmentPursuers = forwardRef(
                     R Blend:
                   </th>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis16"
                         />
                         <label
                           for="bopis16"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Drap
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis17"
                         />
                         <label
                           for="bopis17"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Cued
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis18"
                         />
                         <label
                           for="bopis18"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Brim
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis19"
                         />
                         <label
                           for="bopis19"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Trop
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis20"
                         />
                         <label
                           for="bopis20"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Crum
@@ -822,35 +822,35 @@ const AssessmentPursuers = forwardRef(
                   </th>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
@@ -861,80 +861,80 @@ const AssessmentPursuers = forwardRef(
                     R Blend:
                   </th>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis21"
                         />
                         <label
                           for="bopis21"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Snap
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis22"
                         />
                         <label
                           for="bopis22"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Smeg
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis23"
                         />
                         <label
                           for="bopis23"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Spit
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis24"
                         />
                         <label
                           for="bopis24"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Stomp
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis25"
                         />
                         <label
                           for="bopis25"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Swum
@@ -951,35 +951,35 @@ const AssessmentPursuers = forwardRef(
                   </th>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
@@ -989,7 +989,7 @@ const AssessmentPursuers = forwardRef(
             </table>
           </div>
           <div className="table-responsive">
-            <table class="table table-borderless">
+            <table className="table table-borderless">
               <tbody>
                 <tr>
                   <th
@@ -1014,7 +1014,7 @@ const AssessmentPursuers = forwardRef(
             </table>
           </div>
           <div className="table-responsive">
-            <table class="table table-borderless">
+            <table className="table table-borderless">
               <tbody>
                 <tr style={{ width: "200px" }}>
                   <th scope="row" className="text-end fw-medium">
@@ -1068,80 +1068,80 @@ const AssessmentPursuers = forwardRef(
                     L Blend :
                   </th>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis26"
                         />
                         <label
                           for="bopis26"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Shamrock
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis27"
                         />
                         <label
                           for="bopis27"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Choose
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis28"
                         />
                         <label
                           for="bopis28"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Whack
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis29"
                         />
                         <label
                           for="bopis29"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Thrust
                     </div>{" "}
                   </td>
                   <td>
-                    <div class="d-flex">
-                      <div class="on-off-toggle">
+                    <div className="d-flex">
+                      <div className="on-off-toggle">
                         <input
-                          class="on-off-toggle__input"
+                          className="on-off-toggle__input"
                           type="checkbox"
                           id="bopis30"
                         />
                         <label
                           for="bopis30"
-                          class="on-off-toggle__slider"
+                          className="on-off-toggle__slider"
                         ></label>
                       </div>{" "}
                       &nbsp; Phobics
@@ -1158,35 +1158,35 @@ const AssessmentPursuers = forwardRef(
                   </th>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control "
+                      className="form-control "
                       type="text"
                       style={{ width: "px" }}
                     />
@@ -1196,7 +1196,7 @@ const AssessmentPursuers = forwardRef(
             </table>
           </div>
           <div className="table-responsive">
-            <table class="table table-borderless">
+            <table className="table table-borderless">
               <tbody>
                 <tr>
                   <th
@@ -1221,7 +1221,7 @@ const AssessmentPursuers = forwardRef(
             </table>
           </div>
           <div className="table-responsive">
-            <table class="table table-borderless">
+            <table className="table table-borderless">
               <tbody>
                 <tr>
                   <th
@@ -1232,66 +1232,66 @@ const AssessmentPursuers = forwardRef(
                     Sight Words:
                   </th>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         ee
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         ng
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         oo
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         squ
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         scr
                       </label>
                     </div>
@@ -1300,66 +1300,66 @@ const AssessmentPursuers = forwardRef(
                 <tr>
                   <th scope="row"></th>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         ow
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         ou
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         ai
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         ay
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         oa
                       </label>
                     </div>
@@ -1368,66 +1368,66 @@ const AssessmentPursuers = forwardRef(
                 <tr>
                   <th scope="row"></th>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         aw
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         ar
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         ie
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         er
                       </label>
                     </div>
                   </td>
                   <td>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label className="form-check-label" for="flexCheckDefault">
                         wr
                       </label>
                     </div>
@@ -1437,7 +1437,7 @@ const AssessmentPursuers = forwardRef(
             </table>
           </div>
           <div className="table-responsive">
-            <table class="table table-borderless">
+            <table className="table table-borderless">
               <tbody>
                 <tr>
                   <th

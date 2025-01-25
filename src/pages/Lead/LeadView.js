@@ -318,12 +318,12 @@ function Leadview() {
         </ol>
         <div className="container-fluid minHeight">
           <div className=" products">
-            <div class="container-fluid py-4">
-              <div class="row d-flex  justify-content-end">
-                <div class="col-auto ">
-                  <div class="hstack gap-2 ">
+            <div className="container-fluid py-4">
+              <div className="row d-flex  justify-content-end">
+                <div className="col-auto ">
+                  <div className="hstack gap-2 ">
                     <Link to="/lead/lead">
-                      <button type="button" class="btn btn-border btn-sm">
+                      <button type="button" className="btn btn-border btn-sm">
                         <span>Back</span>
                       </button>
                     </Link>
@@ -360,12 +360,12 @@ function Leadview() {
         </div>
 
         <div className="container-fluid">
-          <div class="accordion" id="accordionExample">
+          <div className="accordion" id="accordionExample">
             {/* Lead Information */}
-            <div class="accordion-item">
-              <h2 class="accordion-header">
+            <div className="accordion-item">
+              <h2 className="accordion-header">
                 <button
-                  class="accordion-button"
+                  className="accordion-button"
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapseOne"
@@ -377,10 +377,10 @@ function Leadview() {
               </h2>
               <div
                 id="collapseOne"
-                class="accordion-collapse collapse show"
+                className="accordion-collapse collapse show"
                 data-bs-parent="#accordionExample"
               >
-                <div class="accordion-body">
+                <div className="accordion-body">
                   <div className="container-fluid">
                     <div className="row  m-3">
                       <h5 className="headColor mt-2 mb-4">
@@ -1231,10 +1231,10 @@ function Leadview() {
             arrangeassesmentData.assessmentArrange.length > 0 ? (
               <>
                 {/* Arrange Assessment */}
-                <div class="accordion-item">
-                  <h2 class="accordion-header">
+                <div className="accordion-item">
+                  <h2 className="accordion-header">
                     <button
-                      class="accordion-button collapsed"
+                      className="accordion-button collapsed"
                       type="button"
                       data-bs-toggle="collapse"
                       data-bs-target="#collapseTwo"
@@ -1246,10 +1246,10 @@ function Leadview() {
                   </h2>
                   <div
                     id="collapseTwo"
-                    class="accordion-collapse collapse"
+                    className="accordion-collapse collapse"
                     data-bs-parent="#accordionExample"
                   >
-                    <div class="accordion-body">
+                    <div className="accordion-body">
                       {/* Child Particulars */}
                       <div className="container-fluid">
                         <div className="row  m-3">
@@ -1398,10 +1398,10 @@ function Leadview() {
             doassesmentData.leadDoAssessmentModel.length > 0 ? (
               <>
                 {/* Assessment Information */}
-                <div class="accordion-item">
-                  <h2 class="accordion-header">
+                <div className="accordion-item">
+                  <h2 className="accordion-header">
                     <button
-                      class="accordion-button collapsed"
+                      className="accordion-button collapsed"
                       type="button"
                       data-bs-toggle="collapse"
                       data-bs-target="#collapseThree"
@@ -1413,10 +1413,10 @@ function Leadview() {
                   </h2>
                   <div
                     id="collapseThree"
-                    class="accordion-collapse collapse"
+                    className="accordion-collapse collapse"
                     data-bs-parent="#accordionExample"
                   >
-                    <div class="accordion-body">
+                    <div className="accordion-body">
                       <div className="bg-light rounded-3 text-center text-muted text-sm p-2">
                         <span className="headColor">"</span> Hi parent your
                         childern secured Grade{" "}
@@ -1925,7 +1925,7 @@ function Leadview() {
                           <div className="row  m-3">
                             <h5 className="headColor mt-5 mb-4">Alphabet</h5>
                             <div className="table-responsive">
-                              <table class="table">
+                              <table className="table">
                                 <thead className="table-warning">
                                   <tr>
                                     <th scope="col">Alphabets</th>
@@ -3462,7 +3462,7 @@ function Leadview() {
                               </table>
                             </div>
                             <div className="table-responsive">
-                              <table class="table">
+                              <table className="table">
                                 <thead className="table-warning">
                                   <tr>
                                     <th scope="col">Alphabets</th>
@@ -5095,7 +5095,7 @@ function Leadview() {
                             </div>
                             <hr />
                             <div className="table-responsive">
-                              <table class="table">
+                              <table className="table">
                                 <thead className="table-warning">
                                   <tr>
                                     <th scope="col">CVC</th>
@@ -5570,7 +5570,7 @@ function Leadview() {
                             </div>
                             <hr />
                             <div className="table-responsive">
-                              <table class="table">
+                              <table className="table">
                                 <thead className="table-warning">
                                   <tr>
                                     <th scope="col">CVC</th>
@@ -6273,7 +6273,7 @@ function Leadview() {
                             </div>
                             <hr />
                             <div className="table-responsive">
-                              <table class="table">
+                              <table className="table">
                                 <thead className="table-warning">
                                   <tr>
                                     <th scope="col">H Brothers</th>
@@ -6617,10 +6617,10 @@ function Leadview() {
             doassesmentData.leadDoAssessmentModel.length > 0 ? (
               <>
               
-                <div class="accordion-item">
-                  <h2 class="accordion-header">
+                <div className="accordion-item">
+                  <h2 className="accordion-header">
                     <button
-                      class="accordion-button collapsed"
+                      className="accordion-button collapsed"
                       type="button"
                       data-bs-toggle="collapse"
                       data-bs-target="#collapseFour"
@@ -6632,10 +6632,10 @@ function Leadview() {
                   </h2>
                   <div
                     id="collapseFour"
-                    class="accordion-collapse collapse"
+                    className="accordion-collapse collapse"
                     data-bs-parent="#accordionExample"
                   >
-                    <div class="accordion-body">
+                    <div className="accordion-body">
 
                       {doassesmentData.leadDoAssessmentAlphabet &&
                       doassesmentData.leadDoAssessmentAlphabet.length > 0 ? (

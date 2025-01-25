@@ -530,10 +530,10 @@ function StudentView() {
             </div>
           </div>
           {/* Emergency Contact */}
-          <div class="accordion-item">
-            <h2 class="accordion-header">
+          <div className="accordion-item">
+            <h2 className="accordion-header">
               <button
-                class="accordion-button collapsed  bg-light fs-5 shadow-none"
+                className="accordion-button collapsed  bg-light fs-5 shadow-none"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#panelsStayOpen-collapseTwo"
@@ -545,7 +545,7 @@ function StudentView() {
             </h2>
             <div
               id="panelsStayOpen-collapseTwo"
-              class="accordion-collapse collapse"
+              className="accordion-collapse collapse"
             >
               <div clasclassName="accordion-body row">
                 <div className="container p-3">
@@ -736,10 +736,10 @@ function StudentView() {
             </div>
           </div>
           {/* Parent Details */}
-          <div class="accordion-item">
-            <h2 class="accordion-header">
+          <div className="accordion-item">
+            <h2 className="accordion-header">
               <button
-                class="accordion-button collapsed  bg-light fs-5 shadow-none border-dark"
+                className="accordion-button collapsed  bg-light fs-5 shadow-none border-dark"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#panelsStayOpen-collapseThree"
@@ -754,10 +754,10 @@ function StudentView() {
               data.studentParentsDetails.map((parent, index) => (
                 <div
                   id="panelsStayOpen-collapseThree"
-                  class="accordion-collapse collapse"
+                  className="accordion-collapse collapse"
                   key={index}
                 >
-                  <div class="accordion-body">
+                  <div className="accordion-body">
                     <div className="row pb-3">
                       <div className="d-flex align-items-center justify-content-between">
                         <button
@@ -923,9 +923,9 @@ function StudentView() {
               data.studentParentsDetails.length === 0) && (
               <div
                 id="panelsStayOpen-collapseThree"
-                class="accordion-collapse collapse"
+                className="accordion-collapse collapse"
               >
-                <div class="accordion-body">
+                <div className="accordion-body">
                   <div className="text-muted">
                     No parent/guardian information available
                   </div>
@@ -934,10 +934,10 @@ function StudentView() {
             )}
           </div>
           {/* Relation */}
-          <div class="accordion-item">
-            <h2 class="accordion-header">
+          <div className="accordion-item">
+            <h2 className="accordion-header">
               <button
-                class="accordion-button collapsed bg-light fs-5 shadow-none"
+                className="accordion-button collapsed bg-light fs-5 shadow-none"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#panelsStayOpen-collapseFour"
@@ -949,9 +949,9 @@ function StudentView() {
             </h2>
             <div
               id="panelsStayOpen-collapseFour"
-              class="accordion-collapse collapse"
+              className="accordion-collapse collapse"
             >
-              <div class="accordion-body">
+              <div className="accordion-body">
                 <div className="table-responsive">
                   <table className="table">
                     <thead>
@@ -1004,10 +1004,10 @@ function StudentView() {
             </div>
           </div>
           {/* Course Details */}
-          <div class="accordion-item">
-            <h2 class="accordion-header">
+          <div className="accordion-item">
+            <h2 className="accordion-header">
               <button
-                class="accordion-button collapsed  bg-light fs-5 shadow-none"
+                className="accordion-button collapsed  bg-light fs-5 shadow-none"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#panelsStayOpen-collapseFive"
@@ -1019,9 +1019,9 @@ function StudentView() {
             </h2>
             <div
               id="panelsStayOpen-collapseFive"
-              class="accordion-collapse collapse"
+              className="accordion-collapse collapse"
             >
-              <div class="accordion-body">
+              <div className="accordion-body">
                 <div className="">
                   {data.studentCourseDetailModels &&
                     data.studentCourseDetailModels.map((std) => (
@@ -1184,10 +1184,10 @@ function StudentView() {
             </div>
           </div>
           {/* Terms And Conditions Details */}
-          <div class="accordion-item">
-            <h2 class="accordion-header">
+          <div className="accordion-item">
+            <h2 className="accordion-header">
               <button
-                class="accordion-button collapsed  bg-light fs-5 shadow-none"
+                className="accordion-button collapsed  bg-light fs-5 shadow-none"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#panelsStayOpen-collapseSix"
@@ -1199,9 +1199,9 @@ function StudentView() {
             </h2>
             <div
               id="panelsStayOpen-collapseSix"
-              class="accordion-collapse collapse"
+              className="accordion-collapse collapse"
             >
-              <div class="accordion-body">
+              <div className="accordion-body">
                 <div className="row">
                   <div className="col-md-6 col-12">
                     {data.studentTermsAndConditions &&
@@ -1555,7 +1555,7 @@ function StudentView() {
 
           <h3 className="mt-5 mb-2">Student Relation</h3>
           <div id="panelsStayOpen-collapseFour">
-            <div class="accordion-body">
+            <div className="accordion-body">
               <div className="table-responsive">
                 <table className="table">
                   <thead>

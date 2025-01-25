@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 function StaffLeaveView() {
   return (
-    <div class="container-fluid minHeight mb-5">
-      <div class="container-fluid py-4">
-        <div class="row align-items-center">
-          <div class="hstack gap-2 justify-content-end">
+    <div className="container-fluid minHeight mb-5">
+      <div className="container-fluid py-4">
+        <div className="row align-items-center">
+          <div className="hstack gap-2 justify-content-end">
             <Link to="/staff">
-              <button type="submit" class="btn btn-sm btn-border">
+              <button type="submit" className="btn btn-sm btn-border">
                 <span>Back</span>
               </button>
             </Link>
@@ -118,7 +118,7 @@ function StaffLeaveView() {
         </div>
       </div>
 
-      <p class="headColor mt-5">Attachment</p>
+      <p className="headColor mt-5">Attachment</p>
 
       <hr></hr>
       <div className="row mt-4">

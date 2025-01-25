@@ -199,11 +199,11 @@ function DocumentFile() {
               className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
               style={{ background: "#f5f7f9" }}
             >
-              <div class="d-flex align-items-center">
-                <div class="d-flex">
-                  <div class="dot active"></div>
+              <div className="d-flex align-items-center">
+                <div className="d-flex">
+                  <div className="dot active"></div>
                 </div>
-                <span class="me-2 text-muted">Add Document</span>
+                <span className="me-2 text-muted">Add Document</span>
               </div>
               <div className="my-2 pe-3 d-flex align-items-center">
                 <Link to="/document">
@@ -235,7 +235,7 @@ function DocumentFile() {
 
                 <div className="col-md-6 col-12 mb-2">
                   <label>
-                    Centre<span class="text-danger">*</span>
+                    Centre<span className="text-danger">*</span>
                   </label>
                   <div className="input-group">
                     <select
@@ -262,7 +262,7 @@ function DocumentFile() {
 
                 <div className="col-md-6 col-12 mb-2 ">
                   <label>
-                    Course<span class="text-danger">*</span>
+                    Course<span className="text-danger">*</span>
                   </label>
                   <div className="input-group">
                     <select
@@ -290,7 +290,7 @@ function DocumentFile() {
                 <div className="col-md-6 col-12 mb-2 ">
                   <div className="row">
                     <label>
-                      Class<span class="text-danger">*</span>
+                      Class<span className="text-danger">*</span>
                     </label>
                     <div className="input-group">
                       <select
@@ -323,7 +323,7 @@ function DocumentFile() {
                 <div className="col-md-6 col-12 mb-2 ">
                   <div>
                     <label>
-                      Folder Name<span class="text-danger">*</span>
+                      Folder Name<span className="text-danger">*</span>
                     </label>
                     <div className="input-group">
                       <select

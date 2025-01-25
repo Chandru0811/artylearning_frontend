@@ -237,10 +237,10 @@ const AccountEdit = forwardRef(
       >
         <div className="container-fluid courseAdd">
           <p className="headColor my-4">Account Information</p>
-          <div class="row">
-            <div class="col-md-6 col-12 mb-2 mt-2">
+          <div className="row">
+            <div className="col-md-6 col-12 mb-2 mt-2">
               <label>
-                Start Date<span class="text-danger">*</span>
+                Start Date<span className="text-danger">*</span>
               </label>
               <input
                 type="date"
@@ -287,9 +287,9 @@ const AccountEdit = forwardRef(
                 </div>
               )}
             </div>
-            {/* <div class="col-md-6 col-12 mb-2 mt-3">
+            {/* <div className="col-md-6 col-12 mb-2 mt-3">
               <label>
-                Teacher ID<span class="text-danger">*</span>
+                Teacher ID<span className="text-danger">*</span>
               </label>
               <input
                 type="text"
@@ -305,9 +305,9 @@ const AccountEdit = forwardRef(
                 </div>
               )}
             </div> */}
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            <div className="col-md-6 col-12 mb-2 mt-3">
               <label>
-                Teacher Type<span class="text-danger">*</span>
+                Teacher Type<span className="text-danger">*</span>
               </label>
               <select
                 type="text"
@@ -328,7 +328,7 @@ const AccountEdit = forwardRef(
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            <div className="col-md-6 col-12 mb-2 mt-3">
               <label>SHG(s) Type</label>
               <select
                 type="text"
@@ -349,7 +349,7 @@ const AccountEdit = forwardRef(
                   ))}
               </select>
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            <div className="col-md-6 col-12 mb-2 mt-3">
               <label>SHG Amount</label>
               <input
                 type="readOnly"
@@ -362,12 +362,12 @@ const AccountEdit = forwardRef(
               />
             </div>
 
-            {/* <div class="col-md-6 col-12 mb-2 mt-3">
-            <lable class="">
-              Status<span class="text-danger">*</span>
+            {/* <div className="col-md-6 col-12 mb-2 mt-3">
+            <lable className="">
+              Status<span className="text-danger">*</span>
             </lable>
             <select
-              class="form-select "
+              className="form-select "
               name="status"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -383,7 +383,7 @@ const AccountEdit = forwardRef(
               </div>
             )}
           </div> */}
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            <div className="col-md-6 col-12 mb-2 mt-3">
               <label>End Date</label>
               <input
                 type="date"
@@ -439,12 +439,12 @@ const AccountEdit = forwardRef(
                 </div>
               ) : null}
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            <div className="col-md-6 col-12 mb-2 mt-3">
               <label>
-                Working Days<span class="text-danger">*</span>
+                Working Days<span className="text-danger">*</span>
               </label>
-              <div class="mt-2 d-flex justify-content-between mt-3">
-                <div class="checkbox-container">
+              <div className="mt-2 d-flex justify-content-between mt-3">
+                <div className="checkbox-container">
                   <input
                     type="checkbox"
                     className="form-check-input"
@@ -458,14 +458,14 @@ const AccountEdit = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label for="myCheckbox1" class="custom-checkbox">
-                    <div class="inner-square"></div>
+                  <label for="myCheckbox1" className="custom-checkbox">
+                    <div className="inner-square"></div>
                   </label>
                   <label for="myCheckbox1" className="mx-1">
                     Mon
                   </label>
                 </div>
-                <div class="checkbox-container">
+                <div className="checkbox-container">
                   <input
                     type="checkbox"
                     className="form-check-input"
@@ -479,14 +479,14 @@ const AccountEdit = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label for="myCheckbox2" class="custom-checkbox">
-                    <div class="inner-square"></div>
+                  <label for="myCheckbox2" className="custom-checkbox">
+                    <div className="inner-square"></div>
                   </label>
                   <label for="myCheckbox2" className="mx-1">
                     Tue
                   </label>
                 </div>
-                <div class="checkbox-container">
+                <div className="checkbox-container">
                   <input
                     type="checkbox"
                     className="form-check-input"
@@ -500,14 +500,14 @@ const AccountEdit = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label for="myCheckbox3" class="custom-checkbox">
-                    <div class="inner-square"></div>
+                  <label for="myCheckbox3" className="custom-checkbox">
+                    <div className="inner-square"></div>
                   </label>
                   <label for="myCheckbox3" className="mx-1">
                     Wed
                   </label>
                 </div>
-                <div class="checkbox-container">
+                <div className="checkbox-container">
                   <input
                     type="checkbox"
                     className="form-check-input"
@@ -521,14 +521,14 @@ const AccountEdit = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label for="myCheckbox4" class="custom-checkbox">
-                    <div class="inner-square"></div>
+                  <label for="myCheckbox4" className="custom-checkbox">
+                    <div className="inner-square"></div>
                   </label>
                   <label for="myCheckbox4" className="mx-1">
                     Thu
                   </label>
                 </div>
-                <div class="checkbox-container">
+                <div className="checkbox-container">
                   <input
                     type="checkbox"
                     className="form-check-input"
@@ -542,14 +542,14 @@ const AccountEdit = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label for="myCheckbox5" class="custom-checkbox">
-                    <div class="inner-square"></div>
+                  <label for="myCheckbox5" className="custom-checkbox">
+                    <div className="inner-square"></div>
                   </label>
                   <label for="myCheckbox5" className="mx-1">
                     Fri
                   </label>
                 </div>
-                <div class="checkbox-container">
+                <div className="checkbox-container">
                   <input
                     type="checkbox"
                     className="form-check-input"
@@ -563,14 +563,14 @@ const AccountEdit = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label for="myCheckbox6" class="custom-checkbox">
-                    <div class="inner-square"></div>
+                  <label for="myCheckbox6" className="custom-checkbox">
+                    <div className="inner-square"></div>
                   </label>
                   <label for="myCheckbox6" className="mx-1">
                     Sat
                   </label>
                 </div>
-                <div class="checkbox-container">
+                <div className="checkbox-container">
                   <input
                     type="checkbox"
                     className="form-check-input"
@@ -584,8 +584,8 @@ const AccountEdit = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  <label for="myCheckbox7" class="custom-checkbox">
-                    <div class="inner-square"></div>
+                  <label for="myCheckbox7" className="custom-checkbox">
+                    <div className="inner-square"></div>
                   </label>
                   <label for="myCheckbox7" className="mx-1">
                     Sun

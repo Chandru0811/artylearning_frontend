@@ -52,7 +52,7 @@ function Products() {
 
   return (
     <>
-      <div class="container">
+      <div className="container">
         <div className="row">
           <div className="offset-md-3 col-md-6 col-12">
             <div>

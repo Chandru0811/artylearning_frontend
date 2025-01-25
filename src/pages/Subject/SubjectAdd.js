@@ -189,11 +189,11 @@ function SubjectAdd({ onSuccess }) {
                     )}
                   </div>
                 </div>
-                <div class="col-md-6 col-12 mb-2">
-                  <lable class="">
-                    Status<span class="text-danger">*</span>
+                <div className="col-md-6 col-12 mb-2">
+                  <lable className="">
+                    Status<span className="text-danger">*</span>
                   </lable>
-                  <div class="input-group mb-3">
+                  <div className="input-group mb-3">
                     <select
                       {...formik.getFieldProps("status")}
                       className={`form-select  ${
@@ -220,7 +220,7 @@ function SubjectAdd({ onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("levelId")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.levelId && formik.errors.levelId
                         ? "is-invalid"
                         : ""

@@ -137,7 +137,7 @@ const Datatable2 = () => {
     <div className="container my-4">
       <div className="my-3">
         <button type="button" className="btn btn-button btn-sm">
-          Add <i class="bx bx-plus"></i>
+          Add <i className="bx bx-plus"></i>
         </button>
         &nbsp;&nbsp;
         <button type="button" className="btn btn-sm btn-border">

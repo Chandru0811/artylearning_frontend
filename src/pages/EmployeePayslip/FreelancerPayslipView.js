@@ -156,7 +156,7 @@ pdf.text(String(data.netPay || ""), amountColumnX + 5, tableStartY + 7); // Tabl
       <div className="container">
         {loading ? (
           <div className="loader-container">
-            <div class="loading">
+            <div className="loading">
               <span></span>
               <span></span>
               <span></span>
@@ -283,7 +283,7 @@ pdf.text(String(data.netPay || ""), amountColumnX + 5, tableStartY + 7); // Tabl
                       </div>
                       <div className="row paysliptable ">
                         <div className="col-12">
-                          <table class="table ">
+                          <table className="table ">
                             <thead className="table-bordered">
                               <tr>
                                 <th

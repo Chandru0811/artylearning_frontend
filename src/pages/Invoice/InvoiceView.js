@@ -320,11 +320,11 @@ function InvoiceView() {
           className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
           style={{ background: "#f5f7f9" }}
         >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
+          <div className="d-flex align-items-center">
+            <div className="d-flex">
+              <div className="dot active"></div>
             </div>
-            <span class="me-2 text-muted">View Invoice</span>
+            <span className="me-2 text-muted">View Invoice</span>
           </div>
           <div className="my-2 pe-3 d-flex align-items-center">
             <Link to="/invoice">
@@ -460,7 +460,7 @@ function InvoiceView() {
               </div>
             </div>
           </div>
-          <div class="table-responsive px-3 mt-5">
+          <div className="table-responsive px-3 mt-5">
             <table id="invoice-table" className="table table-nowrap ">
               <thead className="table-secondary">
                 <tr>

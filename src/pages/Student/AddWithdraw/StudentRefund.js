@@ -89,10 +89,10 @@ const StudentRefund = forwardRef(
   return (
     <section className="studentRefund">
       <div className="container">
-        <p class="headColor mb-3">Refund details</p>
+        <p className="headColor mb-3">Refund details</p>
         <div className="row">
           <div className="col-md-6 col-12">
-            <label for="exampleInputPassword1" class="form-label">
+            <label for="exampleInputPassword1" className="form-label">
               Refund Name
             </label>
             <input
@@ -105,7 +105,7 @@ const StudentRefund = forwardRef(
             />
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label for="exampleInputPassword1" class="form-label">
+            <label for="exampleInputPassword1" className="form-label">
               Refund Address
             </label>
             <input
@@ -118,7 +118,7 @@ const StudentRefund = forwardRef(
             />
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label for="exampleInputPassword1" class="form-label">
+            <label for="exampleInputPassword1" className="form-label">
               Refund Mode
             </label>
             <select
@@ -135,7 +135,7 @@ const StudentRefund = forwardRef(
             </select>
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label for="exampleInputPassword1" class="form-label">
+            <label for="exampleInputPassword1" className="form-label">
               Refund Amount
             </label>
             <input
@@ -148,7 +148,7 @@ const StudentRefund = forwardRef(
             />
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label for="exampleInputPassword1" class="form-label">
+            <label for="exampleInputPassword1" className="form-label">
               Forfeit Amount
             </label>
             <input
@@ -163,7 +163,7 @@ const StudentRefund = forwardRef(
         </div>
         <div className="row">
           <div className="col-md-6 col-12">
-            <label for="exampleInputPassword1" class="form-label">
+            <label for="exampleInputPassword1" className="form-label">
               Registration Fees
               <span style={{ color: "red" }}>*</span>
             </label>
@@ -182,7 +182,7 @@ const StudentRefund = forwardRef(
             )}
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label for="exampleInputPassword1" class="form-label">
+            <label for="exampleInputPassword1" className="form-label">
               Deposit Amount 
               <span style={{ color: "red" }}>*</span>
             </label>
@@ -201,7 +201,7 @@ const StudentRefund = forwardRef(
              )}
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label for="exampleInputPassword1" class="form-label">
+            <label for="exampleInputPassword1" className="form-label">
               Deposit Offset Amount
               <span style={{ color: "red" }}>*</span>
             </label>
@@ -220,7 +220,7 @@ const StudentRefund = forwardRef(
            )}
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label for="exampleInputPassword1" class="form-label">
+            <label for="exampleInputPassword1" className="form-label">
               No of Lesson to Refund
               <span style={{ color: "red" }}>*</span>
             </label>
@@ -239,7 +239,7 @@ const StudentRefund = forwardRef(
              )}
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label for="exampleInputPassword1" class="form-label">
+            <label for="exampleInputPassword1" className="form-label">
               Course Fees Amount
               <span style={{ color: "red" }}>*</span>
             </label>
@@ -258,7 +258,7 @@ const StudentRefund = forwardRef(
             )}
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label for="exampleInputPassword1" class="form-label">
+            <label for="exampleInputPassword1" className="form-label">
               Material Fees Amount
               <span style={{ color: "red" }}>*</span>
             </label>
@@ -277,7 +277,7 @@ const StudentRefund = forwardRef(
             )}
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label for="exampleInputPassword1" class="form-label">
+            <label for="exampleInputPassword1" className="form-label">
               Total Refundable Amount
             </label>
             <input

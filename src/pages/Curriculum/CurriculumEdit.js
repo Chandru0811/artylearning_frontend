@@ -146,7 +146,7 @@ function CurriculumEdit({
                   </label>
                   <select
                     {...formik.getFieldProps("lessonNo")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.lessonNo && formik.errors.lessonNo
                         ? "is-invalid"
                         : ""
@@ -215,7 +215,7 @@ function CurriculumEdit({
                   </label>
                   <select
                     {...formik.getFieldProps("status")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""

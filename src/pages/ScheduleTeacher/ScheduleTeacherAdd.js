@@ -309,7 +309,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
           className="btn btn-button btn-sm"
           onClick={handleShow}
         >
-          Add <i class="bx bx-plus"></i>
+          Add <i className="bx bx-plus"></i>
         </button>
       </div>
       <Modal
@@ -368,7 +368,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("courseId")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.courseId && formik.errors.courseId
                         ? "is-invalid"
                         : ""
@@ -395,7 +395,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("classId")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.classId && formik.errors.classId
                         ? "is-invalid"
                         : ""
@@ -443,7 +443,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("userId")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.userId && formik.errors.userId
                         ? "is-invalid"
                         : ""
@@ -470,7 +470,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   </label>
                   <input
                     {...formik.getFieldProps("days")}
-                    class={`form-control  ${
+                    className={`form-control  ${
                       formik.touched.days && formik.errors.days
                         ? "is-invalid"
                         : ""
@@ -487,7 +487,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("days")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.days && formik.errors.days
                         ? "is-invalid"
                         : ""
@@ -517,7 +517,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("classRoom")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.classRoom && formik.errors.classRoom
                         ? "is-invalid"
                         : ""

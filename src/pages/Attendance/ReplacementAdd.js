@@ -296,7 +296,7 @@ function ReplacementAdd({
                   <label className="form-label">Preferred Day</label>
                   <select
                     {...formik.getFieldProps("preferredDay")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.preferredDay && formik.errors.preferredDay
                         ? "is-invalid"
                         : ""
@@ -323,7 +323,7 @@ function ReplacementAdd({
                   <label className="form-label">Preferred Timing</label>
                   <select
                     {...formik.getFieldProps("preferredTiming")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.preferredTiming &&
                       formik.errors.preferredTiming
                         ? "is-invalid"
@@ -382,7 +382,7 @@ function ReplacementAdd({
                   </label>
                   <select
                     {...formik.getFieldProps("absentReason")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.absentReason && formik.errors.absentReason
                         ? "is-invalid"
                         : ""

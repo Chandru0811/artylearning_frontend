@@ -61,7 +61,7 @@ const Lead = () => {
     <div>
       {loading ? (
         <div className="loader-container">
-          <div class="loading">
+          <div className="loading">
             <span></span>
             <span></span>
             <span></span>
@@ -74,7 +74,7 @@ const Lead = () => {
           <div className="my-3 d-flex justify-content-end mb-5">
             <Link to="/lead/lead/add">
               <button type="button" className="btn btn-button btn-sm">
-                Add <i class="bx bx-plus"></i>
+                Add <i className="bx bx-plus"></i>
               </button>
             </Link>
           </div>

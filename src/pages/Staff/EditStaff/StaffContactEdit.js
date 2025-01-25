@@ -182,10 +182,10 @@ const StaffContactEdit = forwardRef(
         <section>
           <div className="container-fluid">
             <p className="headColor my-4">Contact Information</p>
-            <div class="row">
-              {/* <div class="col-md-6 col-12 mb-2 mt-3">
+            <div className="row">
+              {/* <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>
-                  Email Id<span class="text-danger">*</span>
+                  Email Id<span className="text-danger">*</span>
                 </label>
 
                 <input
@@ -204,9 +204,9 @@ const StaffContactEdit = forwardRef(
                 )}
               </div> */}
 
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>
-                  Contact Number<span class="text-danger">*</span>
+                  Contact Number<span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
@@ -223,9 +223,9 @@ const StaffContactEdit = forwardRef(
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>
-                  Address<span class="text-danger">*</span>
+                  Address<span className="text-danger">*</span>
                 </label>
                 <textarea
                   type="text"
@@ -242,9 +242,9 @@ const StaffContactEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>
-                  Postal Code<span class="text-danger">*</span>
+                  Postal Code<span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"

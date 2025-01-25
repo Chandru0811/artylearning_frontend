@@ -2,22 +2,22 @@ import React from 'react'
 
 function LastView() {
   return (
-    <div class="container-fluid minHeight">
-      <div class="card shadow border-0 mb-5 products">
-        <div class="container-fluid py-4">
-          <div class="row align-items-center">
-            <div class="col">
-              <div class="d-flex align-items-center gap-4">
-                <h1 class="h4 ls-tight headingColor">View Detailes Attendance</h1>
+    <div className="container-fluid minHeight">
+      <div className="card shadow border-0 mb-5 products">
+        <div className="container-fluid py-4">
+          <div className="row align-items-center">
+            <div className="col">
+              <div className="d-flex align-items-center gap-4">
+                <h1 className="h4 ls-tight headingColor">View Detailes Attendance</h1>
               </div>
             </div>
-            <div class="col-auto">
+            <div className="col-auto">
             </div>
           </div>
         </div>
       </div>
-      <div class="card shadow border-0 mb-7">
-        <div class="card-header">
+      <div className="card shadow border-0 mb-7">
+        <div className="card-header">
         </div>
         <div className="row mt-5">
           <div className="col-md-6 col-12">

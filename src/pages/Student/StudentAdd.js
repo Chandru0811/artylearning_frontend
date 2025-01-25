@@ -81,7 +81,7 @@ export default function StudentAdd() {
   };
 
   return (
-    <div class="container-fluid minHeight">
+    <div className="container-fluid minHeight">
       <ol
         className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -120,7 +120,7 @@ export default function StudentAdd() {
           </Step>
         ))}
       </Stepper>
-      <div class="container-fluid py-3 mb-5 card shadow border-0 mb-7">
+      <div className="container-fluid py-3 mb-5 card shadow border-0 mb-7">
         <React.Fragment>
           {activeStep === 0 && (
             <AddStudentDetails

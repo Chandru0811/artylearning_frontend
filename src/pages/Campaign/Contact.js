@@ -71,9 +71,9 @@ const Contact = () => {
         </Link>
       </div>
       <div className="mb-5 mt-3 d-flex justify-content-end">
-        <div class="dropdown">
+        <div className="dropdown">
           <button
-            class="btn dropdown-toggle"
+            className="btn dropdown-toggle"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
@@ -81,7 +81,7 @@ const Contact = () => {
             <GiHamburgerMenu style={{ fontSize: "xx-large" }} />
           </button>
           <div
-            class="dropdown-menu pt-0 pb-3"
+            className="dropdown-menu pt-0 pb-3"
             style={{ minWidth: "18rem", backgroundColor: "f5f5f5" }}
           >
             <p

@@ -7,7 +7,7 @@ function DontMakeUpClass() {
   const handleShow = () => setShow(true);
   return (
     <>
-      <button type="button" class="btn btn-light btn-sm" onClick={handleShow}>
+      <button type="button" className="btn btn-light btn-sm" onClick={handleShow}>
         Do Not MakeUp Class
       </button>
       <Modal

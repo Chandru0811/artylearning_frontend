@@ -115,7 +115,7 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
           className="btn btn-button btn-sm"
           onClick={handleShow}
         >
-          Add <i class="bx bx-plus"></i>
+          Add <i className="bx bx-plus"></i>
         </button>
       </div>
       <Modal
@@ -146,7 +146,7 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
                   </label>
                   <select
                     {...formik.getFieldProps("lessonNo")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.lessonNo && formik.errors.lessonNo
                         ? "is-invalid"
                         : ""
@@ -213,7 +213,7 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
                   </label>
                   <select
                     {...formik.getFieldProps("status")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""

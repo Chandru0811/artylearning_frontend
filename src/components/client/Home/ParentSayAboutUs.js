@@ -71,7 +71,7 @@ function ParentSayAboutUs() {
                 <div className="row">
                   <div className="offset-md-1 col-md-10 col-12 px-4 slidePaddings">
                     <div className="row">
-                      <div class="col-md-3 col-12 d-flex align-items-center jusify-content-center">
+                      <div className="col-md-3 col-12 d-flex align-items-center jusify-content-center">
                         <div className="d-flex align-items-center jusify-content-center p-2">
                           <img
                             src={data.parentImage}

@@ -15,7 +15,7 @@ function StaffLeave() {
       fromdate: "05-04-2022",
       todate: "07-04-2022",
       noofdays: "04",
-      action: `<div><button className="btn"><i class="fa-solid fa-eye"></i></button>
+      action: `<div><button className="btn"><i className="fa-solid fa-eye"></i></button>
         </div>`,
     },
     {
@@ -24,7 +24,7 @@ function StaffLeave() {
       fromdate: "17-05-2022",
       todate: "21-05-2022",
       noofdays: "05",
-      action: `<div><button className="btn"><i class="fa-solid fa-eye"></i></button>
+      action: `<div><button className="btn"><i className="fa-solid fa-eye"></i></button>
         </div>`,
     },
     {
@@ -33,7 +33,7 @@ function StaffLeave() {
       fromdate: "17-06-2022",
       todate: "23-06-2022",
       noofdays: "07",
-      action: `<div><button className="btn"><i class="fa-solid fa-eye"></i></button>
+      action: `<div><button className="btn"><i className="fa-solid fa-eye"></i></button>
         </div>`,
     },
   ];

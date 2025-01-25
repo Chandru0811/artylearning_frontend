@@ -136,7 +136,7 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable>
-                  From Date<span class="text-danger">*</span>
+                  From Date<span className="text-danger">*</span>
                 </lable>
                 <input
                   type="date"
@@ -153,11 +153,11 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
                   To Date<span className="text-danger">*</span>
                 </lable>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                   <input
                     type="date"
                     className={`form-control   ${

@@ -266,7 +266,7 @@ const AccountAdd = forwardRef(
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            <div className="col-md-6 col-12 mb-2 mt-3">
               <label>SHG(s) Type</label>
               <select
                 type="text"
@@ -285,7 +285,7 @@ const AccountAdd = forwardRef(
                   ))}
               </select>
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            <div className="col-md-6 col-12 mb-2 mt-3">
               <label>SHG Amount</label>
               <input
                 type="readOnly"

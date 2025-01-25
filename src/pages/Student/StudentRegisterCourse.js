@@ -535,11 +535,11 @@ function StudentRegisterCourse() {
             className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div className="d-flex align-items-center">
+              <div className="d-flex">
+                <div className="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Course Detail</span>
+              <span className="me-2 text-muted">Course Detail</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to={`/student/view/${id}`}>
@@ -597,7 +597,7 @@ function StudentRegisterCourse() {
               <div className="col-md-4">
                 <select
                   {...formik.getFieldProps("courseId")}
-                  class={`form-select  ${
+                  className={`form-select  ${
                     formik.touched.courseId && formik.errors.courseId
                       ? "is-invalid"
                       : ""
@@ -619,7 +619,7 @@ function StudentRegisterCourse() {
               <div className="col-md-4">
                 <select
                   {...formik.getFieldProps("days")}
-                  class={`form-select  ${
+                  className={`form-select  ${
                     formik.touched.days && formik.errors.days
                       ? "is-invalid"
                       : ""
@@ -722,7 +722,7 @@ function StudentRegisterCourse() {
               <div className="col-md-4">
                 <select
                   {...formik.getFieldProps("packageId")}
-                  class={`form-select  ${
+                  className={`form-select  ${
                     formik.touched.packageId && formik.errors.packageId
                       ? "is-invalid"
                       : ""

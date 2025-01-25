@@ -176,7 +176,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <lable className="">
-                    Occupation<span class="text-danger">*</span>
+                    Occupation<span className="text-danger">*</span>
                   </lable>
                   <input
                     type="text"
@@ -195,7 +195,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <lable className="">
-                    Date Of Birth<span class="text-danger">*</span>
+                    Date Of Birth<span className="text-danger">*</span>
                   </lable>
                   <input
                     type="date"
@@ -263,7 +263,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <lable className="">
-                    Email<span class="text-danger">*</span>
+                    Email<span className="text-danger">*</span>
                   </lable>
                   <input
                     type="email"
@@ -283,7 +283,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <lable className="">
-                    Mobile No<span class="text-danger">*</span>
+                    Mobile No<span className="text-danger">*</span>
                   </lable>
                   <input
                     type="text"
@@ -304,7 +304,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <lable className="">
-                    Relation<span class="text-danger">*</span>
+                    Relation<span className="text-danger">*</span>
                   </lable>
                   <select
                     className={`form-select ${
@@ -329,7 +329,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <lable className="">
-                    Postal Code<span class="text-danger">*</span>
+                    Postal Code<span className="text-danger">*</span>
                   </lable>
                   <input
                     type="text"
@@ -349,7 +349,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                 </div>
                 <div className="col-md-12 col-12 mb-2">
                   <lable className="">
-                    Address<span class="text-danger">*</span>
+                    Address<span className="text-danger">*</span>
                   </lable>
                   <textarea
                     type="text"

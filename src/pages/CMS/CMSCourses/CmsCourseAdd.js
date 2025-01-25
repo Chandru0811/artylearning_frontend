@@ -233,11 +233,11 @@ function CmsCourseAdd() {
             className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div className="d-flex align-items-center">
+              <div className="d-flex">
+                <div className="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Course</span>
+              <span className="me-2 text-muted">Course</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/cms/CmsCourses">
@@ -316,7 +316,7 @@ function CmsCourseAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    First Content<span class="text-danger">*</span>
+                    First Content<span className="text-danger">*</span>
                   </label>
                   <br />
                   <textarea
@@ -381,7 +381,7 @@ function CmsCourseAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Second Content<span class="text-danger">*</span>
+                    Second Content<span className="text-danger">*</span>
                   </label>
                   <br />
                   <textarea
@@ -456,7 +456,7 @@ function CmsCourseAdd() {
               <div className="col-lg-12 col-md-12 col-12 px-5">
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Card Content<span class="text-danger">*</span>
+                    Card Content<span className="text-danger">*</span>
                   </label>
                   <br />
                   <textarea
@@ -533,7 +533,7 @@ function CmsCourseAdd() {
               <div className="col-lg-12 col-md-12 col-12 px-5">
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Card Content<span class="text-danger">*</span>
+                    Card Content<span className="text-danger">*</span>
                   </label>
                   <br />
                   <textarea
@@ -612,7 +612,7 @@ function CmsCourseAdd() {
               <div className="col-lg-12 col-md-12 col-12 px-5">
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Card Content<span class="text-danger">*</span>
+                    Card Content<span className="text-danger">*</span>
                   </label>
                   <br />
                   <textarea
@@ -640,7 +640,7 @@ function CmsCourseAdd() {
               <div className="col-lg-12 col-md-12 col-12 px-5">
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Final Content<span class="text-danger">*</span>
+                    Final Content<span className="text-danger">*</span>
                   </label>
                   <br />
                   <textarea

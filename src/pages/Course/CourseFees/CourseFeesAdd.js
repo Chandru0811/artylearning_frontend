@@ -153,7 +153,7 @@ function CourseFeesAdd({ onSuccess, centerId }) {
           className="btn btn-button btn-sm"
           onClick={handleShow}
         >
-          Add <i class="bx bx-plus"></i>
+          Add <i className="bx bx-plus"></i>
         </button>
       </div>
       <Modal
@@ -205,7 +205,7 @@ function CourseFeesAdd({ onSuccess, centerId }) {
                   </label>
                   <select
                     {...formik.getFieldProps("packageId")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.packageId && formik.errors.packageId
                         ? "is-invalid"
                         : ""

@@ -317,7 +317,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("courseId")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.courseId && formik.errors.courseId
                         ? "is-invalid"
                         : ""
@@ -346,7 +346,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("classId")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.classId && formik.errors.classId
                         ? "is-invalid"
                         : ""
@@ -398,7 +398,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("days")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.days && formik.errors.days
                         ? "is-invalid"
                         : ""
@@ -423,7 +423,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("userId")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.userId && formik.errors.userId
                         ? "is-invalid"
                         : ""
@@ -449,7 +449,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("classRoom")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.classRoom && formik.errors.classRoom
                         ? "is-invalid"
                         : ""
@@ -476,7 +476,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   <input
                     type="date"
                     {...formik.getFieldProps("startDate")}
-                    class={`form-control  ${
+                    className={`form-control  ${
                       formik.touched.startDate && formik.errors.startDate
                         ? "is-invalid"
                         : ""
@@ -495,7 +495,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   <input
                     type="date"
                     {...formik.getFieldProps("endDate")}
-                    class={`form-control  ${
+                    className={`form-control  ${
                       formik.touched.endDate && formik.errors.endDate
                         ? "is-invalid"
                         : ""

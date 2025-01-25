@@ -145,12 +145,12 @@ const StaffRequiredAdd = forwardRef(
       >
         <div className="container-fluid" style={{ minHeight: "60vh" }}>
           <p className="headColor my-4">Required Information</p>
-          <div class="row">
-            <div class="col-md-6 col-12 mb-2">
+          <div className="row">
+            <div className="col-md-6 col-12 mb-2">
               <label>Resume / CV</label>
               <input
                 type="file"
-                class="form-control mt-3"
+                className="form-control mt-3"
                 accept=".pdf"
                 name="resume"
                 onChange={(event) => {
@@ -158,15 +158,15 @@ const StaffRequiredAdd = forwardRef(
                 }}
                 onBlur={formik.handleBlur}
               />
-              <p class="mt-4">Note: File must be PDF, Max Size 2 MB</p>
+              <p className="mt-4">Note: File must be PDF, Max Size 2 MB</p>
               {datas?.resume && (
-                <div class="card border-0 shadow" style={{ width: "70%" }}>
+                <div className="card border-0 shadow" style={{ width: "70%" }}>
                   <div
                     onClick={(e) => e.stopPropagation()}
                     style={{ cursor: "not-allowed" }}
                   >
                     <img
-                      class="card-img-top img-fluid"
+                      className="card-img-top img-fluid"
                       style={{
                         height: "10rem",
                         pointerEvents: "none",
@@ -177,11 +177,11 @@ const StaffRequiredAdd = forwardRef(
                     />
                   </div>
                   <div
-                    class="card-body d-flex justify-content-between align-items-center"
+                    className="card-body d-flex justify-content-between align-items-center"
                     style={{ flexWrap: "wrap" }}
                   >
                     <p
-                      class="card-title fw-semibold mb-0 text-wrap"
+                      className="card-title fw-semibold mb-0 text-wrap"
                       style={{
                         flex: 1,
                         whiteSpace: "nowrap",
@@ -195,7 +195,7 @@ const StaffRequiredAdd = forwardRef(
                     <a
                       href={datas?.resume}
                       download
-                      class="btn text-dark ms-2"
+                      className="btn text-dark ms-2"
                       title="Download Resume"
                       style={{ flexShrink: 0 }}
                     >
@@ -206,11 +206,11 @@ const StaffRequiredAdd = forwardRef(
               )}
             </div>
 
-            <div class="col-md-6 col-12 mb-2">
+            <div className="col-md-6 col-12 mb-2">
               <label>Education Certificate</label>
               <input
                 type="file"
-                class="form-control mt-3"
+                className="form-control mt-3"
                 accept=".pdf"
                 name="educationCertificate"
                 onChange={(event) => {
@@ -221,15 +221,15 @@ const StaffRequiredAdd = forwardRef(
                 }}
                 onBlur={formik.handleBlur}
               />
-              <p class="mt-4">Note: File must be PDF, Max Size 2 MB</p>
+              <p className="mt-4">Note: File must be PDF, Max Size 2 MB</p>
               {datas?.educationCertificate && (
-                <div class="card border-0 shadow" style={{ width: "70%" }}>
+                <div className="card border-0 shadow" style={{ width: "70%" }}>
                   <div
                     onClick={(e) => e.stopPropagation()}
                     style={{ cursor: "not-allowed" }}
                   >
                     <img
-                      class="card-img-top img-fluid"
+                      className="card-img-top img-fluid"
                       style={{
                         height: "10rem",
                         pointerEvents: "none",
@@ -240,11 +240,11 @@ const StaffRequiredAdd = forwardRef(
                     />
                   </div>
                   <div
-                    class="card-body d-flex justify-content-between align-items-center"
+                    className="card-body d-flex justify-content-between align-items-center"
                     style={{ flexWrap: "wrap" }}
                   >
                     <p
-                      class="card-title fw-semibold mb-0 text-wrap"
+                      className="card-title fw-semibold mb-0 text-wrap"
                       style={{
                         flex: 1,
                         whiteSpace: "nowrap",
@@ -258,7 +258,7 @@ const StaffRequiredAdd = forwardRef(
                     <a
                       href={datas?.educationCertificate}
                       download
-                      class="btn text-dark ms-2"
+                      className="btn text-dark ms-2"
                       title="Download Certificate"
                       style={{ flexShrink: 0 }}
                     >

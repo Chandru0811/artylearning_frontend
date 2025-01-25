@@ -201,15 +201,15 @@ const StaffPersonalAdd = forwardRef(
         }}
       >
         <div className="pb-4">
-          <p class="headColor">Personal Information</p>
-          <div class="container-fluid row d-flex my-4">
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group  col-sm ">
+          <p className="headColor">Personal Information</p>
+          <div className="container-fluid row d-flex my-4">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group  col-sm ">
                 <label>Staff Name</label>
                 <span className="text-danger">*</span>
                 <input
                   type="text"
-                  class="form-control "
+                  className="form-control "
                   name="teacherName"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -222,13 +222,13 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Date of Birth</label>
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  class="form-control"
+                  className="form-control"
                   name="dateOfBirth"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -241,8 +241,8 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>ID Type</label>
                 <span className="text-danger">*</span>
                 <select
@@ -268,13 +268,13 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm ">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm ">
                 <label>ID No</label>
                 <span className="text-danger">*</span>
                 <input
                   type="text"
-                  class="form-control "
+                  className="form-control "
                   name="idNo"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -287,8 +287,8 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Country</label>
                 <span className="text-danger">*</span>
                 <select
@@ -314,8 +314,8 @@ const StaffPersonalAdd = forwardRef(
               </div>
             </div>
 
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Nationality</label>
                 <span className="text-danger">*</span>
                 <select
@@ -341,8 +341,8 @@ const StaffPersonalAdd = forwardRef(
                   )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Citizenship</label>
                 <span className="text-danger">*</span>
                 <select
@@ -375,8 +375,8 @@ const StaffPersonalAdd = forwardRef(
             </div>
             {userId === undefined && (
               <>
-                <div class="col-md-6 col-12 mb-3">
-                  <div class="form-group  col-sm ">
+                <div className="col-md-6 col-12 mb-3">
+                  <div className="form-group  col-sm ">
                     <label>Photo</label>
                     <span className="text-danger">*</span>
                     <input
@@ -396,9 +396,9 @@ const StaffPersonalAdd = forwardRef(
                     )}
                   </div>
                 </div>
-                <div class="col-md-6 col-12 mb-3">
+                <div className="col-md-6 col-12 mb-3">
                   <label>
-                    Email ID<span class="text-danger">*</span>
+                    Email ID<span className="text-danger">*</span>
                   </label>
                   <input
                     type="email"
@@ -414,10 +414,10 @@ const StaffPersonalAdd = forwardRef(
                     </div>
                   )}
                 </div>
-                <div class="col-md-6 col-12 mb-3">
+                <div className="col-md-6 col-12 mb-3">
                   <div className="mb-3">
                     <label>
-                      Password<span class="text-danger">*</span>
+                      Password<span className="text-danger">*</span>
                     </label>
                     <div className={`input-group mb-3`}>
                       <input
@@ -453,9 +453,9 @@ const StaffPersonalAdd = forwardRef(
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6 col-12 mb-3">
+                <div className="col-md-6 col-12 mb-3">
                   <label>
-                    Confirm Password<span class="text-danger">*</span>
+                    Confirm Password<span className="text-danger">*</span>
                   </label>
                   <div className={`input-group mb-3`}>
                     <input
@@ -499,13 +499,13 @@ const StaffPersonalAdd = forwardRef(
               </>
             )}
 
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Role</label>
                 <span className="text-danger">*</span>
                 <select
                   type="text"
-                  class="form-select"
+                  className="form-select"
                   name="role"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -524,13 +524,13 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Status</label>
                 <span className="text-danger">*</span>
                 <select
                   type="text"
-                  class="form-select"
+                  className="form-select"
                   name="status"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -547,8 +547,8 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group  col-sm ms-2">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group  col-sm ms-2">
                 <label className="mb-3">Gender</label>
                 <div className="d-flex align-items-center justify-content-start">
                   <div className="me-4">
@@ -567,7 +567,7 @@ const StaffPersonalAdd = forwardRef(
                     </label>
                   </div>
                   <input
-                    class="form-check-input mx-2"
+                    className="form-check-input mx-2"
                     type="radio"
                     name="gender"
                     value="Male"
@@ -581,11 +581,11 @@ const StaffPersonalAdd = forwardRef(
                 </div>
               </div>
             </div>
-            <div class="col-md-12 col-12 mb-3">
-              <div class="form-group  col-sm ">
+            <div className="col-md-12 col-12 mb-3">
+              <div className="form-group  col-sm ">
                 <label
                   for="exampleFormControlTextarea1 "
-                  class="form-label d-flex "
+                  className="form-label d-flex "
                 >
                   Short Introduction
                 </label>

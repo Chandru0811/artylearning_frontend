@@ -111,9 +111,9 @@ function CenterManagerEdit() {
         </div>
         <div className="container">
           <div className="row py-4">
-            {/* <div class="col-md-6 col-12 mb-4">
-              <lable class="">
-                Centre<span class="text-danger">*</span>
+            {/* <div className="col-md-6 col-12 mb-4">
+              <lable className="">
+                Centre<span className="text-danger">*</span>
               </lable>
               <select
                 {...formik.getFieldProps("centerId")}
@@ -123,7 +123,7 @@ function CenterManagerEdit() {
                     : ""
                   }`}
                 aria-label="Default select example"
-                class="form-select "
+                className="form-select "
               >
                 <option selected></option>
                 {centerData &&
@@ -137,9 +137,9 @@ function CenterManagerEdit() {
                 <div className="invalid-feedback">{formik.errors.centerId}</div>
               )}
             </div> */}
-            {/* <div class="col-md-6 col-12 mb-4">
+            {/* <div className="col-md-6 col-12 mb-4">
               <label>
-                Course<span class="text-danger">*</span>
+                Course<span className="text-danger">*</span>
               </label>
               <select
                 {...formik.getFieldProps("courseId")}
@@ -149,7 +149,7 @@ function CenterManagerEdit() {
                     : ""
                   }`}
                 aria-label="Default select example"
-                class="form-select "
+                className="form-select "
               >
                 <option selected></option>
                 {courseData &&
@@ -163,13 +163,13 @@ function CenterManagerEdit() {
                 <div className="invalid-feedback">{formik.errors.courseId}</div>
               )}
             </div> */}
-            <div class="col-md-6 col-12 mb-4">
+            <div className="col-md-6 col-12 mb-4">
               <label>
-               Centre Manager Name<span class="text-danger">*</span>
+               Centre Manager Name<span className="text-danger">*</span>
               </label>
               <input
                 name="className"
-                class="form-control "
+                className="form-control "
                 type="text"
                 className={`form-control  ${formik.touched.className && formik.errors.className
                     ? "is-invalid"
@@ -183,13 +183,13 @@ function CenterManagerEdit() {
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-4">
+            <div className="col-md-6 col-12 mb-4">
               <label>
-                Email<span class="text-danger">*</span>
+                Email<span className="text-danger">*</span>
               </label>
               <input
                 name="className"
-                class="form-control "
+                className="form-control "
                 type="text"
                 className={`form-control  ${formik.touched.className && formik.errors.className
                     ? "is-invalid"
@@ -203,13 +203,13 @@ function CenterManagerEdit() {
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-4">
+            <div className="col-md-6 col-12 mb-4">
               <label>
-                Phone<span class="text-danger">*</span>
+                Phone<span className="text-danger">*</span>
               </label>
               <input
                 name="className"
-                class="form-control "
+                className="form-control "
                 type="text"
                 className={`form-control  ${formik.touched.className && formik.errors.className
                     ? "is-invalid"
@@ -223,13 +223,13 @@ function CenterManagerEdit() {
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-4">
+            <div className="col-md-6 col-12 mb-4">
               <label>
-                Desigination<span class="text-danger">*</span>
+                Desigination<span className="text-danger">*</span>
               </label>
               <input
                 name="className"
-                class="form-control "
+                className="form-control "
                 type="text"
                 className={`form-control  ${formik.touched.className && formik.errors.className
                     ? "is-invalid"

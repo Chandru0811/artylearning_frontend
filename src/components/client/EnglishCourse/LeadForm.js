@@ -930,7 +930,7 @@ function LeadForm({Id}) {
           <div className="col-12 mb-3">
             <label className="form-label">Remarks /附注</label>
             <textarea
-              class="form-control"
+              className="form-control"
               id="exampleFormControlTextarea1"
               rows="3"
               name="remark"

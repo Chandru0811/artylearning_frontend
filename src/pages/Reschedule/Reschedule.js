@@ -97,9 +97,9 @@ function Reschedule() {
           {isChecked && (
             <div className="row">
               <div className="col-md-6 col-12">
-                <div class="dropdown">
+                <div className="dropdown">
                   <button
-                    class="btn btn-btn dropdown-toggle mx-2 mb-3"
+                    className="btn btn-btn dropdown-toggle mx-2 mb-3"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -108,7 +108,7 @@ function Reschedule() {
                     Michelle Sng
                   </button>
                   <ul
-                    class="dropdown-menu px-2 text-center"
+                    className="dropdown-menu px-2 text-center"
                     style={{ width: "100%" }}
                   >
                     <Link to="/reschedule/studentlist" className="notLink">
@@ -135,9 +135,9 @@ function Reschedule() {
                 </div>
               </div>
               <div className="col-md-6 col-12">
-                <div class="dropdown">
+                <div className="dropdown">
                   <button
-                    class="btn btn-btn dropdown-toggle mx-2 mb-3"
+                    className="btn btn-btn dropdown-toggle mx-2 mb-3"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -146,7 +146,7 @@ function Reschedule() {
                     Amanda Sng
                   </button>
                   <ul
-                    class="dropdown-menu px-2 text-center"
+                    className="dropdown-menu px-2 text-center"
                     style={{ width: "100%" }}
                   >
                     <Link to="/reschedule/studentlist" className="notLink">
@@ -173,9 +173,9 @@ function Reschedule() {
                 </div>
               </div>
               <div className="col-md-6 col-12">
-                <div class="dropdown">
+                <div className="dropdown">
                   <button
-                    class="btn btn-btn dropdown-toggle mx-2 mb-3"
+                    className="btn btn-btn dropdown-toggle mx-2 mb-3"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -184,7 +184,7 @@ function Reschedule() {
                     Sisi Laoshi
                   </button>
                   <ul
-                    class="dropdown-menu px-2 text-center"
+                    className="dropdown-menu px-2 text-center"
                     style={{ width: "100%" }}
                   >
                     <Link to="/reschedule/studentlist" className="notLink">
@@ -211,9 +211,9 @@ function Reschedule() {
                 </div>
               </div>
               <div className="col-md-6 col-12">
-                <div class="dropdown">
+                <div className="dropdown">
                   <button
-                    class="btn btn-btn dropdown-toggle mx-2 mb-3"
+                    className="btn btn-btn dropdown-toggle mx-2 mb-3"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -222,7 +222,7 @@ function Reschedule() {
                     Natalie
                   </button>
                   <ul
-                    class="dropdown-menu px-2 text-center"
+                    className="dropdown-menu px-2 text-center"
                     style={{ width: "100%" }}
                   >
                     <Link to="/reschedule/studentlist" className="notLink">

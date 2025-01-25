@@ -9,10 +9,10 @@ function ViewAction() {
       <div className="container-fluid">
         <div className="card shadow border mb-5 products">
           <div className="container-fluid py-4">
-            <div class="row align-items-center ">
-              <div class="col">
-                <div class="d-flex justify-content-between">
-                  <h1 class="h4 ls-tight my-4" style={{ color: "#d48a22" }}>
+            <div className="row align-items-center ">
+              <div className="col">
+                <div className="d-flex justify-content-between">
+                  <h1 className="h4 ls-tight my-4" style={{ color: "#d48a22" }}>
                     View Staff
                   </h1>
                   <div className="justify-content-end">

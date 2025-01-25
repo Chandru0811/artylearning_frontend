@@ -122,9 +122,9 @@ function AttendancesCourse() {
             </div>
 
               <div className="col-md-6 col-12">
-                <div class="dropdown">
+                <div className="dropdown">
                   <button
-                    class="btn btn-btn dropdown-toggle mx-2 mb-3"
+                    className="btn btn-btn dropdown-toggle mx-2 mb-3"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -133,7 +133,7 @@ function AttendancesCourse() {
                     Science
                   </button>
                   <ul
-                    class="dropdown-menu px-2 text-center"
+                    className="dropdown-menu px-2 text-center"
                     style={{ width: "100%" }}
                   >
                     <Link to="/attendance" className="notLink">
@@ -160,9 +160,9 @@ function AttendancesCourse() {
                 </div>
               </div>
               <div className="col-md-6 col-12">
-                <div class="dropdown">
+                <div className="dropdown">
                   <button
-                    class="btn btn-btn dropdown-toggle mx-2 mb-3"
+                    className="btn btn-btn dropdown-toggle mx-2 mb-3"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -171,7 +171,7 @@ function AttendancesCourse() {
                     English
                   </button>
                   <ul
-                    class="dropdown-menu px-2 text-center"
+                    className="dropdown-menu px-2 text-center"
                     style={{ width: "100%" }}
                   >
                     <Link to="/attendance" className="notLink">
@@ -198,9 +198,9 @@ function AttendancesCourse() {
                 </div>
               </div>
               <div className="col-md-6 col-12">
-                <div class="dropdown">
+                <div className="dropdown">
                   <button
-                    class="btn btn-btn dropdown-toggle mx-2 mb-3"
+                    className="btn btn-btn dropdown-toggle mx-2 mb-3"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -209,7 +209,7 @@ function AttendancesCourse() {
                     Chinese
                   </button>
                   <ul
-                    class="dropdown-menu px-2 text-center"
+                    className="dropdown-menu px-2 text-center"
                     style={{ width: "100%" }}
                   >
                     <Link to="/attendance" className="notLink">

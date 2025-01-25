@@ -131,9 +131,9 @@ function ReferalFeesAdd({ onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
-                <div class="col-md-6 col-12 mb-4">
-                  <lable class="">
-                    Centre<span class="text-danger">*</span>
+                <div className="col-md-6 col-12 mb-4">
+                  <lable className="">
+                    Centre<span className="text-danger">*</span>
                   </lable>
                   <select
                     {...formik.getFieldProps("centerId")}
@@ -144,7 +144,7 @@ function ReferalFeesAdd({ onSuccess }) {
                         : ""
                     }`}
                     aria-label="Default select example"
-                    class="form-select "
+                    className="form-select "
                   >
                     <option selected></option>
                     {centerData &&

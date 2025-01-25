@@ -289,7 +289,7 @@ const AddStudentDetails = forwardRef(
         >
           <div className=" border-0 mb-5">
             <div className="mb-3">
-              <p class="headColor">Student Details</p>
+              <p className="headColor">Student Details</p>
               <div className="container">
                 <div className="row mt-3">
                   <div className="col-lg-6 col-md-6 col-12">

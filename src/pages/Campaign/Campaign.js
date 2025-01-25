@@ -69,7 +69,7 @@ const Campaign = () => {
       <div className="my-3 d-flex justify-content-end mb-5">
         <Link to="/campaign/add">
           <button type="button" className="btn btn-button btn-sm">
-            Add <i class="bx bx-plus"></i>
+            Add <i className="bx bx-plus"></i>
           </button>
         </Link>
       </div>

@@ -534,12 +534,12 @@ const AddcourseDetail = forwardRef(
           <div className="border-0 mb-5">
             <div className="mb-5">
               <div className="border-0 my-2">
-                <p class="headColor">Course Detail</p>
+                <p className="headColor">Course Detail</p>
                 <div className="row mt-2">
                   <div className="col-md-4">
                     <select
                       {...formik.getFieldProps("courseId")}
-                      class={`form-select  ${
+                      className={`form-select  ${
                         formik.touched.courseId && formik.errors.courseId
                           ? "is-invalid"
                           : ""
@@ -561,7 +561,7 @@ const AddcourseDetail = forwardRef(
                   <div className="col-md-4">
                     <select
                       {...formik.getFieldProps("days")}
-                      class={`form-select  ${
+                      className={`form-select  ${
                         formik.touched.days && formik.errors.days
                           ? "is-invalid"
                           : ""
@@ -661,7 +661,7 @@ const AddcourseDetail = forwardRef(
                   <div className="col-md-4">
                     <select
                       {...formik.getFieldProps("packageId")}
-                      class={`form-select  ${
+                      className={`form-select  ${
                         formik.touched.packageId && formik.errors.packageId
                           ? "is-invalid"
                           : ""

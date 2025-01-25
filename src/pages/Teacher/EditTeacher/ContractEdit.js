@@ -368,8 +368,8 @@ const ContractEdit = forwardRef(
           <p className="headColor my-4">Contract Information</p>
           <div className="container-fluid mt-5" style={{ minHeight: "95vh" }}>
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
-            <div class="row mt-4">
-              <div class="col-md-6 col-12 mb-2 mt-3">
+            <div className="row mt-4">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Employer</label>
                 <span className="text-danger">*</span>
                 <select
@@ -398,7 +398,7 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>UEN</label>
                 <span className="text-danger">*</span>
                 <input
@@ -419,7 +419,7 @@ const ContractEdit = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            <div className="col-md-6 col-12 mb-2 mt-3">
               <label>Address of Employment</label>
               <span className="text-danger">*</span>
               <input
@@ -439,9 +439,9 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
             </div>
-            <div class="row mt-3 ">
+            <div className="row mt-3 ">
               <span className="mt-3 fw-bold ">Details of EMPLOYEE</span>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Employee</label>
                 <span className="text-danger">*</span>
                 <input
@@ -460,7 +460,7 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>NRIC</label>
                 <span className="text-danger">*</span>
                 <input
@@ -478,7 +478,7 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Address</label>
                 <span className="text-danger">*</span>
                 <input
@@ -498,7 +498,7 @@ const ContractEdit = forwardRef(
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Job Title</label>
                 <span className="text-danger">*</span>
                 <input
@@ -516,7 +516,7 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Main Duties</label>
                 <span className="text-danger">*</span>
                 <input
@@ -534,7 +534,7 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Start Date of Employment</label>
                 <span className="text-danger">*</span>
                 <input
@@ -556,7 +556,7 @@ const ContractEdit = forwardRef(
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Training</label>
                 <span className="text-danger">*</span>
                 <input
@@ -574,7 +574,7 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Allowance</label>
                 <input
                   type="text"
@@ -668,7 +668,7 @@ const ContractEdit = forwardRef(
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Probation (Day)</label>
                 <input
                   type="text"
@@ -788,7 +788,7 @@ const ContractEdit = forwardRef(
               </div>
 
               {empRole !== "freelancer" && (
-                <div class="col-md-6 col-12 mb-2 mt-3">
+                <div className="col-md-6 col-12 mb-2 mt-3">
                   <label>Salary</label>
                   <span className="text-danger">*</span>
                   <input
@@ -809,7 +809,7 @@ const ContractEdit = forwardRef(
                 </div>
               )}
               {empRole !== "freelancer" && (
-                <div class="col-md-6 col-12 mb-2 mt-3">
+                <div className="col-md-6 col-12 mb-2 mt-3">
                   <label>Salary Start Date</label>
                   <span className="text-danger">*</span>
                   <input
@@ -831,9 +831,9 @@ const ContractEdit = forwardRef(
                 </div>
               )}
 
-              <div class="row mt-3">
+              <div className="row mt-3">
                 <span className="mt-3 fw-bold">Bank Account Details</span>
-                <div class="col-md-6 col-12 mb-2 mt-3">
+                <div className="col-md-6 col-12 mb-2 mt-3">
                   <label>Pay Now</label>
                   <input
                     type="text"
@@ -845,7 +845,7 @@ const ContractEdit = forwardRef(
                     // value={contactId?.payNow}
                   />
                 </div>
-                <div class="col-md-6 col-12 mb-2 mt-3">
+                <div className="col-md-6 col-12 mb-2 mt-3">
                   <label>Internet Banking</label>
                   <input
                     type="text"
@@ -879,7 +879,7 @@ const ContractEdit = forwardRef(
                       )}
                   </div>
                 )}
-                <div class="col-md-6 col-12 mb-2 mt-3">
+                <div className="col-md-6 col-12 mb-2 mt-3">
                   <label>Termination Notice (Month)</label>
                   <span className="text-danger">*</span>
                   <input

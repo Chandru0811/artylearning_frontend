@@ -115,7 +115,7 @@ function Payslip() {
         </div>
         {loading ? (
           <div className="loader-container">
-            <div class="loading">
+            <div className="loading">
               <span></span>
               <span></span>
               <span></span>
