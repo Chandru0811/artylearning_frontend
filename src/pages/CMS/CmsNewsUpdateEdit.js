@@ -12,8 +12,32 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
-  const handleShow = () => setShow(true);
+  const handleShow = async () => {
+    setShow(true);
+    try {
+      const response = await api.get(`/getNewsUpdatedSavesById/${id}`);
+      formik.setValues(response.data);
+      setDatas(response.data);
+    } catch (error) {
+      toast.error("Error fetching data ", error);
+    }
+  };
+  const refreshData = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get("/getAllNewsUpdatedSave");
+      const sortedData = response.data.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+      setDatas(sortedData);
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    }
+    setLoading(false);
+    setShow(false);
+  };
   const currentData = new Date().toISOString().split("T")[0];
   const userName = localStorage.getItem("userName");
 
@@ -84,18 +108,11 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
   });
 
   const handleClose = () => {
+    formik.resetForm();
     setShow(false);
   };
 
-  const getData = async () => {
-    try {
-      const response = await api.get(`/getNewsUpdatedSavesById/${id}`);
-      formik.setValues(response.data);
-      setDatas(response.data);
-    } catch (error) {
-      toast.error("Error fetching data ", error);
-    }
-  };
+  const getData = async () => {};
 
   useEffect(() => {
     getData();
@@ -135,7 +152,9 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
           >
             <div className="row">
               <div className="col-12 mb-2">
-                <label className="form-label">Upload Image File<span className="text-danger">*</span></label>
+                <label className="form-label">
+                  Upload Image File<span className="text-danger">*</span>
+                </label>
                 <div className="input-group mb-3">
                   <input
                     type="file"
@@ -174,7 +193,9 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
                 )}
               </div>
               <div className=" col-12 mb-2">
-                <lable className="">Heading<span className="text-danger">*</span></lable>
+                <lable className="">
+                  Heading<span className="text-danger">*</span>
+                </lable>
                 <div className="input-group mb-3">
                   <input
                     type="text"
@@ -196,7 +217,9 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
               </div>
 
               <div className=" col-12 mb-2">
-                <lable className="">Comment<span className="text-danger">*</span></lable>
+                <lable className="">
+                  Comment<span className="text-danger">*</span>
+                </lable>
                 <input
                   type="text"
                   className={`form-control   ${
@@ -214,7 +237,9 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
               </div>
 
               <div className=" col-12 mb-2">
-                <lable className="">Paragraph<span className="text-danger">*</span></lable>
+                <lable className="">
+                  Paragraph<span className="text-danger">*</span>
+                </lable>
                 <textarea
                   type="text"
                   className={`form-control   ${
@@ -235,7 +260,12 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
           {storedScreens?.newsUpdatesDelete && (
             <Delete
               path={`/deleteNewsUpdatedSave/${id}`}
-              onSuccess={onSuccess}
+              onSuccess={() => {
+                refreshData();
+                if (onSuccess) {
+                  onSuccess();
+                }
+              }}
             />
           )}
           <Button

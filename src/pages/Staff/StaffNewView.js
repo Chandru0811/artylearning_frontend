@@ -203,7 +203,7 @@ function StaffNewView() {
                 </li>
                 <li className="stdList">
                   <b>Email</b>
-                  <span>{data.email || "--"}</span>
+                  <span className="text-break">{data.email || "--"}</span>
                 </li>
                 <li className="stdList">
                   <b>Role</b>
