@@ -286,7 +286,7 @@ function Admin({ handleLogout }) {
     // Set timeout to call hideButton again after 2 seconds (2000ms)
     const timer = setTimeout(() => {
       hideButton();
-    }, 1000);
+    }, 2000);
 
     // Cleanup function to clear timeout if the component unmounts before 2 seconds
     return () => {
