@@ -261,14 +261,37 @@ function Admin({ handleLogout }) {
     console.log("centerChange", centerChange);
   };
 
+  // useEffect(() => {
+  //   const hideButton = () => {
+  //     const buttons = document.querySelectorAll(".MuiButton-containedPrimary");
+  //     buttons.forEach((button) => {
+  //       button.style.display = "none";
+  //     });
+  //   };
+  //   hideButton();
+  // }, []);
+
   useEffect(() => {
+    // Initial hide of button when page loads
     const hideButton = () => {
       const buttons = document.querySelectorAll(".MuiButton-containedPrimary");
       buttons.forEach((button) => {
         button.style.display = "none";
       });
     };
+
+    // First hide action on page load
     hideButton();
+
+    // Set timeout to call hideButton again after 2 seconds (2000ms)
+    const timer = setTimeout(() => {
+      hideButton();
+    }, 1000);
+
+    // Cleanup function to clear timeout if the component unmounts before 2 seconds
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   return (
