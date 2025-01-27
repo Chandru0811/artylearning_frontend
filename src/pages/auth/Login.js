@@ -22,12 +22,10 @@ function Login({ onLogin }) {
     email: Yup.string()
       .email("*Invalid email address")
       .required("*Email is required"),
-    password: Yup
-    .string()
-    .matches(/^\S*$/, "*Password must not contain spaces.")
-    .required("*Enter the valid Password"),
-});
-
+    password: Yup.string()
+      .matches(/^\S*$/, "*Password must not contain spaces.")
+      .required("*Enter the valid Password"),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -55,7 +53,13 @@ function Login({ onLogin }) {
             localStorage.setItem("token", response.data.accessToken);
             localStorage.setItem("userId", response.data.userId);
             localStorage.setItem("userName", response.data.role); // Role name
-            localStorage.setItem("LoginUserName", response.data.userInfo[0].teacherName);
+            if (response.data.userInfo[0]) {
+              localStorage.setItem(
+                "LoginUserName",
+                response.data.userInfo[0].teacherName
+              );
+            }
+
             localStorage.setItem("loginUserId", response.data.loginUserId);
             localStorage.setItem("email", values.email);
             localStorage.setItem("centerId", response.data.centerIds[0]);
