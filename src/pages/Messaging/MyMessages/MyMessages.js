@@ -216,6 +216,7 @@ const MyMessages = () => {
                         senderId: row.original.senderId,
                         receiverId: row.original.receiverId,
                         senderName: row.original.senderName,
+                        senderRole: row.original.senderRole,
                         receiverName: row.original.receiverName,
                         message: row.original.message,
                       },

@@ -54,7 +54,8 @@ function Login({ onLogin }) {
             localStorage.setItem("roleId", response.data.roleId);
             localStorage.setItem("token", response.data.accessToken);
             localStorage.setItem("userId", response.data.userId);
-            localStorage.setItem("userName", response.data.role);
+            localStorage.setItem("userName", response.data.role); // Role name
+            localStorage.setItem("LoginUserName", response.data.userInfo[0].teacherName);
             localStorage.setItem("loginUserId", response.data.loginUserId);
             localStorage.setItem("email", values.email);
             localStorage.setItem("centerId", response.data.centerIds[0]);
