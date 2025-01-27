@@ -28,7 +28,6 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
     setLoading(true);
     try {
       const response = await api.get("/getAllNewsUpdatedSave");
-
       setDatas(response.data);
     } catch (error) {
       console.error("Error refreshing data:", error);

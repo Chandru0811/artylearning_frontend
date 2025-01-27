@@ -184,7 +184,7 @@ function Contact() {
                     </label>
                     <textarea
                       rows={5}
-                      style={{ height: "50px" }}
+                      style={{ height: "50px",backgroundColor:"#f9fafb",borderColor:"rgb(175, 175, 175)" }}
                       className={`form-control  ${
                         formik.touched.message && formik.errors.message
                           ? "is-invalid"

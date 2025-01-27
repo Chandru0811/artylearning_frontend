@@ -18,7 +18,6 @@ const ContractEdit = forwardRef(
     const [submitted, setSubmitted] = useState(false);
     const [contactId, setContactId] = useState(null);
     const [empRole, setEmpRole] = useState(null);
-    const [workingDays, setWorkingDays] = useState([]);
     console.log("object", formData);
     const validationSchema = Yup.object().shape({
       employer: Yup.string().required("*Employer is required"),
@@ -63,107 +62,14 @@ const ContractEdit = forwardRef(
             : Yup.string().notRequired(),
       }),
       workingDays: Yup.array()
-         .min(1, "*Working days are required")
-         .required("*Working days are required"),
+        .min(1, "*Working days are required")
+        .required("*Working days are required"),
       terminationNotice: Yup.string().required("*Notice is required"),
       allowance: Yup.number()
         .typeError("*Allowance Must be numbers")
         .notRequired(),
     });
     const navigate = useNavigate();
-    // const formik = useFormik({
-    //   initialValues: {
-    //     employer: formData.employer || "",
-    //     employee: formData.teacherName || "",
-    //     uen: formData.uen || "",
-    //     addressOfEmployment: formData.addressOfEmployment || "",
-    //     detailsEmployee: formData.detailsEmployee || "",
-    //     nric: formData.nric || "",
-    //     userContractAddress: formData.address || "",
-    //     jobTitle: formData.jobTitle || "",
-    //     mainDuties: formData.mainDuties || "",
-    //     startDateOfEmployment: formData.startDate || "",
-    //     training: formData.training || "",
-    //     allowance: formData.allowance || "",
-    //     // userContractStartDate: formData.startDate || "",
-    //     userContractStartDate:
-    //       empRole !== "freelancer" ? formData.startDate || "" : "",
-    //     contactPeriod:
-    //       empRole !== "freelancer" ? formData.contactPeriod || "" : "",
-    //     // contactPeriod: formData.contactPeriod || "",
-    //     probation: formData.probation || "",
-    //     workingDays: formData.workingDays || "",
-    //     userContractSalary:
-    //       empRole !== "freelancer" ? formData.salary || "" : "",
-    //     salaryStartDate:
-    //       empRole !== "freelancer" ? formData.effectiveDate || "" : "",
-    //     // userContractSalary: formData.salary || "",
-    //     // salaryStartDate: formData.effectiveDate || "",
-    //     // userContractEndDate: formData.endDate || "",
-    //     userContractEndDate:
-    //       empRole !== "freelancer" ? formData.endDate || "" : "",
-    //     payNow: formData.payNow || "",
-    //     internetBanking: formData.internetBanking || "",
-    //     contractDate:
-    //       empRole !== "freelancer"
-    //         ? formData.startDate || formData.userContractStartDate
-    //         : "",
-    //     // contractDate: formData.contractDate || "",
-    //     terminationNotice: formData.terminationNotice || "",
-    //     updatedBy: userName,
-    //   },
-    //   validationSchema: validationSchema,
-    //   onSubmit: async (values) => {
-    //     setLoadIndicators(true);
-    //     values.updatedBy = userName;
-    //     console.log("Api Data:", values);
-    //     values.workingDays = contactId.workingDays;
-    //     try {
-    //       if (contactId !== null) {
-    //         const response = await api.put(
-    //           `/updateUserContractCreation/${contactId.id}`,
-    //           values,
-    //           {
-    //             headers: {
-    //               "Content-Type": "application/json",
-    //             },
-    //           }
-    //         );
-    //         if (response.status === 200) {
-    //           toast.success(response.data.message);
-    //           setFormData((prv) => ({ ...prv, ...values }));
-    //           navigate("/teacher");
-    //         } else {
-    //           toast.error(response.data.message);
-    //         }
-    //       } else {
-    //         const response = await api.post(
-    //           `/createUserContractCreation/${formData.staff_id}`,
-    //           values,
-    //           {
-    //             headers: {
-    //               "Content-Type": "application/json",
-    //             },
-    //           }
-    //         );
-    //         if (response.status === 201) {
-    //           toast.success(response.data.message);
-    //           setFormData((prv) => ({ ...prv, ...values }));
-    //           navigate("/teacher");
-    //         } else {
-    //           toast.error(response.data.message);
-    //         }
-    //       }
-    //     } catch (error) {
-    //       toast.error(error);
-    //     } finally {
-    //       setLoadIndicators(false);
-    //     }
-    //   },
-    //   validateOnChange: false,
-    //   validateOnBlur: true,
-    // });
-
     const formik = useFormik({
       initialValues: {
         employer: formData.employer || "",
@@ -178,9 +84,12 @@ const ContractEdit = forwardRef(
         startDateOfEmployment: formData.startDate || "",
         training: formData.training || "",
         allowance: formData.allowance || "",
+        // userContractStartDate: formData.startDate || "",
         userContractStartDate:
           empRole !== "freelancer" ? formData.startDate || "" : "",
-        contactPeriod: empRole !== "freelancer" ? formData.contactPeriod || "" : "",
+        contactPeriod:
+          empRole !== "freelancer" ? formData.contactPeriod || "" : "",
+        // contactPeriod: formData.contactPeriod || "",
         probation: formData.probation || "",
         workingDays: formData.workingDays || "",
         userContractSalary:
@@ -195,38 +104,55 @@ const ContractEdit = forwardRef(
           empRole !== "freelancer"
             ? formData.startDate || formData.userContractStartDate
             : "",
+        // contractDate: formData.contractDate || "",
         terminationNotice: formData.terminationNotice || "",
         updatedBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
-        // Start loader
         setLoadIndicators(true);
-    
+        values.updatedBy = userName;
+        console.log("Api Data:", values);
+        values.workingDays = contactId.workingDays;
         try {
-          values.updatedBy = userName;
-    
-          const apiCall = contactId
-            ? api.put(`/updateUserContractCreation/${contactId.id}`, values, {
-                headers: { "Content-Type": "application/json" },
-              })
-            : api.post(`/createUserContractCreation/${formData.staff_id}`, values, {
-                headers: { "Content-Type": "application/json" },
-              });
-    
-          const response = await apiCall;
-    
-          if (response.status === 200 || response.status === 201) {
-            toast.success(response.data.message);
-            setFormData((prev) => ({ ...prev, ...values }));
-            navigate("/teacher");
+          if (contactId !== null) {
+            const response = await api.put(
+              `/updateUserContractCreation/${contactId.id}`,
+              values,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              setFormData((prv) => ({ ...prv, ...values }));
+              navigate("/teacher");
+            } else {
+              toast.error(response.data.message);
+            }
           } else {
-            toast.error(response.data.message);
+            const response = await api.post(
+              `/createUserContractCreation/${formData.staff_id}`,
+              values,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 201) {
+              toast.success(response.data.message);
+              setFormData((prv) => ({ ...prv, ...values }));
+              navigate("/teacher");
+            } else {
+              toast.error(response.data.message);
+            }
           }
         } catch (error) {
-          toast.error(error?.response?.data?.message || "Something went wrong!");
+          toast.error(error);
         } finally {
-          // Stop loader
           setLoadIndicators(false);
         }
       },
@@ -234,7 +160,6 @@ const ContractEdit = forwardRef(
       validateOnBlur: true,
     });
 
-    
     const scrollToError = (errors) => {
       const errorField = Object.keys(errors)[0];
       const errorElement = document.querySelector(`[name="${errorField}"]`);
@@ -257,7 +182,6 @@ const ContractEdit = forwardRef(
             `/getAllUserById/${formData.staff_id}`
           );
           setEmployerData(response.data.userAccountInfo[0].centers || []);
-          setWorkingDays(response.data.userAccountInfo[0].workingDays);
           if (response.data.userContractCreationModels?.length) {
             const contractData = response.data.userContractCreationModels[0];
             setContactId(contractData);
@@ -274,14 +198,6 @@ const ContractEdit = forwardRef(
                 0,
                 10
               ),
-              workingDays:
-                formData.workingDays ||
-                response.data.userAccountInfo[0].workingDays ||
-                "",
-                userContractSalary:
-                formData.salary ||
-                response.data.userSalaryCreationModels[0].salary ||
-                "",
               userContractStartDate:
                 contractData.userContractStartDate.slice(0, 10) ||
                 contractData.contractDate.slice(0, 10),
@@ -298,7 +214,6 @@ const ContractEdit = forwardRef(
 
       fetchEmployerData();
     }, [formData.staff_id]);
-    
     const getData1 = async (id) => {
       try {
         const response = await api.get(`/getAllCenterById/${id}`);
@@ -368,8 +283,8 @@ const ContractEdit = forwardRef(
           <p className="headColor my-4">Contract Information</p>
           <div className="container-fluid mt-5" style={{ minHeight: "95vh" }}>
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
-            <div className="row mt-4">
-              <div className="col-md-6 col-12 mb-2 mt-3">
+            <div class="row mt-4">
+              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Employer</label>
                 <span className="text-danger">*</span>
                 <select
@@ -385,7 +300,7 @@ const ContractEdit = forwardRef(
                   value={formik.values.employer}
                   // value={contactId?.employer}
                 >
-                  <option selected disabled></option>
+                  <option selected></option>
                   {employerData?.map((center) => (
                     <option key={center.id} value={center.id}>
                       {center.centerName}
@@ -398,7 +313,7 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-2 mt-3">
+              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>UEN</label>
                 <span className="text-danger">*</span>
                 <input
@@ -419,7 +334,7 @@ const ContractEdit = forwardRef(
                 )}
               </div>
             </div>
-            <div className="col-md-6 col-12 mb-2 mt-3">
+            <div class="col-md-6 col-12 mb-2 mt-3">
               <label>Address of Employment</label>
               <span className="text-danger">*</span>
               <input
@@ -439,9 +354,9 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
             </div>
-            <div className="row mt-3 ">
+            <div class="row mt-3 ">
               <span className="mt-3 fw-bold ">Details of EMPLOYEE</span>
-              <div className="col-md-6 col-12 mb-2 mt-3">
+              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Employee</label>
                 <span className="text-danger">*</span>
                 <input
@@ -460,7 +375,7 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-2 mt-3">
+              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>NRIC</label>
                 <span className="text-danger">*</span>
                 <input
@@ -478,7 +393,7 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-2 mt-3">
+              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Address</label>
                 <span className="text-danger">*</span>
                 <input
@@ -498,7 +413,7 @@ const ContractEdit = forwardRef(
                     </div>
                   )}
               </div>
-              <div className="col-md-6 col-12 mb-2 mt-3">
+              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Job Title</label>
                 <span className="text-danger">*</span>
                 <input
@@ -516,7 +431,7 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-2 mt-3">
+              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Main Duties</label>
                 <span className="text-danger">*</span>
                 <input
@@ -534,7 +449,7 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-2 mt-3">
+              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Start Date of Employment</label>
                 <span className="text-danger">*</span>
                 <input
@@ -556,7 +471,7 @@ const ContractEdit = forwardRef(
                     </div>
                   )}
               </div>
-              <div className="col-md-6 col-12 mb-2 mt-3">
+              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Training</label>
                 <span className="text-danger">*</span>
                 <input
@@ -574,7 +489,7 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-2 mt-3">
+              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Allowance</label>
                 <input
                   type="text"
@@ -668,7 +583,7 @@ const ContractEdit = forwardRef(
                     </div>
                   )}
               </div>
-              <div className="col-md-6 col-12 mb-2 mt-3">
+              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Probation (Day)</label>
                 <input
                   type="text"
@@ -682,58 +597,6 @@ const ContractEdit = forwardRef(
                 />
               </div>
 
-              {/* <div className="col-md-6 col-12 mb-2 mt-3">
-                <label>
-                  Working Days<span className="text-danger">*</span>
-                </label>
-                <div className="mt-2 d-flex justify-content-between mt-3">
-                  {[
-                    "MONDAY",
-                    "TUESDAY",
-                    "WEDNESDAY",
-                    "THURSDAY",
-                    "FRIDAY",
-                    "SATURDAY",
-                    "SUNDAY",
-                  ].map((day, index) => (
-                    <div className="checkbox-container" key={day}>
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        id={`myCheckbox${index + 1}`}
-                        value={day}
-                        name="workingDays"
-                        checked={
-                          formik.values.workingDays &&
-                          formik.values.workingDays.includes(day)
-                        }
-                        onChange={(e) => {
-                          formik.handleChange(e);
-                        }}
-                        onBlur={formik.handleBlur}
-                        disabled={workingDays && workingDays.length > 0}
-                      />
-                      <label
-                        htmlFor={`myCheckbox${index + 1}`}
-                        className="custom-checkbox"
-                      >
-                        <div className="inner-square"></div>
-                      </label>
-                      <label
-                        htmlFor={`myCheckbox${index + 1}`}
-                        className="mx-1"
-                      >
-                        {day.slice(0, 3)}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-                {formik.touched.workingDays && formik.errors.workingDays && (
-                  <div className="error text-danger">
-                    <small>{formik.errors.workingDays}</small>
-                  </div>
-                )}
-              </div> */}
               <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Working Days<span className="text-danger">*</span>
@@ -753,17 +616,18 @@ const ContractEdit = forwardRef(
                         type="checkbox"
                         className="form-check-input"
                         id={`myCheckbox${index + 1}`}
-                        value={day}
+                        value={contactId?.day}
                         name="workingDays"
                         checked={
-                          formik.values.workingDays &&
-                          formik.values.workingDays.includes(day)
+                          contactId?.workingDays &&
+                          contactId?.workingDays.includes(day)
                         }
                         onChange={(e) => {
                           formik.handleChange(e);
                         }}
                         onBlur={formik.handleBlur}
-                        disabled={workingDays && workingDays.length > 0}
+                        // disabled={formik.isSubmitting}
+                        disabled
                       />
                       <label
                         htmlFor={`myCheckbox${index + 1}`}
@@ -788,7 +652,7 @@ const ContractEdit = forwardRef(
               </div>
 
               {empRole !== "freelancer" && (
-                <div className="col-md-6 col-12 mb-2 mt-3">
+                <div class="col-md-6 col-12 mb-2 mt-3">
                   <label>Salary</label>
                   <span className="text-danger">*</span>
                   <input
@@ -809,7 +673,7 @@ const ContractEdit = forwardRef(
                 </div>
               )}
               {empRole !== "freelancer" && (
-                <div className="col-md-6 col-12 mb-2 mt-3">
+                <div class="col-md-6 col-12 mb-2 mt-3">
                   <label>Salary Start Date</label>
                   <span className="text-danger">*</span>
                   <input
@@ -831,9 +695,9 @@ const ContractEdit = forwardRef(
                 </div>
               )}
 
-              <div className="row mt-3">
+              <div class="row mt-3">
                 <span className="mt-3 fw-bold">Bank Account Details</span>
-                <div className="col-md-6 col-12 mb-2 mt-3">
+                <div class="col-md-6 col-12 mb-2 mt-3">
                   <label>Pay Now</label>
                   <input
                     type="text"
@@ -845,7 +709,7 @@ const ContractEdit = forwardRef(
                     // value={contactId?.payNow}
                   />
                 </div>
-                <div className="col-md-6 col-12 mb-2 mt-3">
+                <div class="col-md-6 col-12 mb-2 mt-3">
                   <label>Internet Banking</label>
                   <input
                     type="text"
@@ -879,7 +743,7 @@ const ContractEdit = forwardRef(
                       )}
                   </div>
                 )}
-                <div className="col-md-6 col-12 mb-2 mt-3">
+                <div class="col-md-6 col-12 mb-2 mt-3">
                   <label>Termination Notice (Month)</label>
                   <span className="text-danger">*</span>
                   <input

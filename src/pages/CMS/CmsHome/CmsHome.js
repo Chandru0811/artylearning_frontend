@@ -701,9 +701,7 @@ function CmsHome() {
         </section>
 
         {/* YouTube Video Section */}
-        <div className="container mt-3 edit-container">
-          <div className="d-flex flex-column justify-content-center align-items-center m-3">
-            {editingField ? (
+        {editingField ? (
               <div className="w-100">
                 <input
                   type="text"
@@ -732,7 +730,7 @@ function CmsHome() {
                 {storedScreens?.homeIndex && (
                   <button
                     type="button"
-                    className="btn btn-sm border-transparent position-absolute top-0 end-0 m-2"
+                    className="btn btn-sm border-transparent position-absolute top-0 end-0"
                     onClick={toggleEdit}
                   >
                     <FaEdit className="text-warning fs-6" />
@@ -740,6 +738,10 @@ function CmsHome() {
                 )}
               </div>
             )}
+        <div className="container mt-3 edit-container">
+          
+          <div className="d-flex flex-column justify-content-center align-items-center m-3">
+        
             {/* YouTube Embed or Default Fallback */}
             <iframe
               src={

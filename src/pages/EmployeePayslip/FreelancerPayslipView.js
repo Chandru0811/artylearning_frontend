@@ -117,7 +117,13 @@ pdf.text("AMOUNT", amountColumnX + 5, tableStartY - 3); // Table header
 
 pdf.setFont("helvetica", "normal");
 pdf.text("Net Pay", tableMarginX + 5, tableStartY + 7); // Table row
-pdf.text(String(data.netPay || ""), amountColumnX + 5, tableStartY + 7); // Table row
+const netPayText = String(data.netPay || "");
+const columnWidth = pageWidth - tableMarginX * 2; // Total column width for "AMOUNT"
+const netPayTextWidth = pdf.getTextWidth(netPayText); // Get the width of the text
+const netPayCenterX = amountColumnX + (columnWidth / 2 - netPayTextWidth / 2); // Centered X position
+
+pdf.text(netPayText, netPayCenterX, tableStartY + 7); 
+
 
 
   
