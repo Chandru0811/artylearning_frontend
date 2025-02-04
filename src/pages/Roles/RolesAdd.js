@@ -13,13 +13,13 @@ function RolesAdd() {
   const [roleName, setRoleName] = useState("SMS_ADMIN");
 
   const roleMapping = {
-    "1": "SMS_ADMIN",
-    "2": "SMS_BRANCH_ADMIN",
-    "4": "SMS_STAFF",
-    "5": "SMS_STAFF_ADMIN",
-    "6": "SMS_TEACHER",
-    "7":"CENTER_MANAGER",
-    "8": "SMS_FREELANCER",
+    1: "SMS_ADMIN",
+    2: "SMS_BRANCH_ADMIN",
+    4: "SMS_STAFF",
+    5: "SMS_STAFF_ADMIN",
+    6: "SMS_TEACHER",
+    7: "CENTER_MANAGER",
+    8: "SMS_FREELANCER",
   };
 
   const handleRoleChange = (e) => {
@@ -210,6 +210,18 @@ function RolesAdd() {
       paymentCreate: true,
       paymentUpdate: true,
       paymentDelete: true,
+
+      referalFeesIndex: true,
+      referalFeesRead: true,
+      referalFeesCreate: true,
+      referalFeesUpdate: true,
+      referalFeesDelete: true,
+      referalHistoryIndex: true,
+      referalHistoryRead: true,
+      referalHistoryCreate: true,
+      referalHistoryUpdate: true,
+      referalHistoryDelete: true,
+
       scheduleTeacherIndex: true,
       scheduleTeacherRead: true,
       scheduleTeacherCreate: true,
@@ -414,7 +426,7 @@ function RolesAdd() {
         updatedBy: userName,
         createdBy: userName,
         createdAt: "2025-01-10",
-        updatedAt: "2025-01-10"
+        updatedAt: "2025-01-10",
       };
 
       try {
@@ -469,7 +481,7 @@ function RolesAdd() {
       curriculumOutlineCreate: true,
       centerListingCreate: true,
       leadListingCreate: true,
-      leadListingUpdate:true,
+      leadListingUpdate: true,
       enrollmentCreate: true,
       staffCreate: true,
       teacherCreate: true,
@@ -495,6 +507,7 @@ function RolesAdd() {
       documentFileCreate: true,
       invoiceCreate: true,
       paymentCreate: true,
+      referalFeesCreate: true,
       scheduleTeacherCreate: true,
       documentReportCreate: true,
       attendanceReportCreate: true,
@@ -570,6 +583,8 @@ function RolesAdd() {
       documentFileRead: true,
       invoiceRead: true,
       paymentRead: true,
+      referalFeesRead: true,
+      referalHistoryRead: true,
       scheduleTeacherRead: true,
       documentReportRead: true,
       attendanceReportRead: true,
@@ -645,6 +660,7 @@ function RolesAdd() {
       documentFileUpdate: true,
       invoiceUpdate: true,
       paymentUpdate: true,
+      referalFeesUpdate: true,
       scheduleTeacherUpdate: true,
       documentReportUpdate: true,
       attendanceReportUpdate: true,
@@ -720,6 +736,7 @@ function RolesAdd() {
       documentFileDelete: true,
       invoiceDelete: true,
       paymentDelete: true,
+      referalFeesDelete: true,
       scheduleTeacherDelete: true,
       documentReportDelete: true,
       attendanceReportDelete: true,
@@ -795,6 +812,8 @@ function RolesAdd() {
       documentFileIndex: true,
       invoiceIndex: true,
       paymentIndex: true,
+      referalFeesIndex: true,
+      referalHistoryIndex: true,
       scheduleTeacherIndex: true,
       documentReportIndex: true,
       attendanceReportIndex: true,
@@ -900,7 +919,11 @@ function RolesAdd() {
           </div>
           <div>
             <div className="d-flex justify-content-start align-items-center p-2">
-              <div className="btn-group" role="group" aria-label="Basic example">
+              <div
+                className="btn-group"
+                role="group"
+                aria-label="Basic example"
+              >
                 <button
                   type="button"
                   className="btn find_roll"
@@ -1619,7 +1642,7 @@ function RolesAdd() {
                             />
                           </td>
                         </tr>
-                        
+
                         {/* User Management  */}
                         <tr>
                           <th colspan="6">User Management</th>
@@ -2982,6 +3005,134 @@ function RolesAdd() {
                               checked={formik.values.paymentCreate}
                               onChange={handleCheckboxChange(`paymentCreate`)}
                             />
+                          </td>
+                          <td>
+                            {/* <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="invoiceUpdate"
+                          checked={formik.values.invoiceUpdate}
+                          onChange={handleCheckboxChange}
+                        /> */}
+                          </td>
+                          <td>
+                            {/* <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="invoiceDelete"
+                          checked={formik.values.invoiceDelete}
+                          onChange={handleCheckboxChange}
+                        /> */}
+                          </td>
+                        </tr>
+                        {/* Referal Management */}
+                        <tr>
+                          <th colspan="6">Referal Management</th>
+                        </tr>
+                        <tr>
+                          <td>
+                            <p
+                              style={{
+                                marginLeft: "30px",
+                                marginBottom: "0px",
+                              }}
+                            >
+                              Set Referal Fees
+                            </p>
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="referalFeesIndex"
+                              checked={formik.values.referalFeesIndex}
+                              onChange={handleCheckboxChange(
+                                `referalFeesIndex`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="referalFeesRead"
+                              checked={formik.values.referalFeesRead}
+                              onChange={handleCheckboxChange(`referalFeesRead`)}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="referalFeesCreate"
+                              checked={formik.values.referalFeesCreate}
+                              onChange={handleCheckboxChange(
+                                `referalFeesCreate`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="referalFeesUpdate"
+                              checked={formik.values.referalFeesUpdate}
+                              onChange={handleCheckboxChange(
+                                `referalFeesUpdate`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="referalFeesDelete"
+                              checked={formik.values.referalFeesDelete}
+                              onChange={handleCheckboxChange(
+                                `referalFeesDelete`
+                              )}
+                            />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <p
+                              style={{
+                                marginLeft: "30px",
+                                marginBottom: "0px",
+                              }}
+                            >
+                              Referal History
+                            </p>
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="referalHistoryIndex"
+                              checked={formik.values.referalHistoryIndex}
+                              onChange={handleCheckboxChange(
+                                `referalHistoryIndex`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            {/* <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="invoiceRead"
+                          checked={formik.values.invoiceRead}
+                          onChange={handleCheckboxChange(`paymentIndex`)}
+                        /> */}
+                          </td>
+                          <td>
+                            {/* <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="paymentCreate"
+                              checked={formik.values.paymentCreate}
+                              onChange={handleCheckboxChange(`paymentCreate`)}
+                            /> */}
                           </td>
                           <td>
                             {/* <input
