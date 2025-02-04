@@ -585,7 +585,7 @@ function StudentRegisterCourse() {
                       <td>{stdCourse.course || "--"}</td>
                       <td>{stdCourse.batch || "--"}</td>
                       <td>{stdCourse.days || "--"}</td>
-                      <td>{stdCourse.packageId || "--"}</td>
+                      <td>{stdCourse.packageName || "--"}</td>
                       <td>{stdCourse.lessonName || "--"}</td>
                     </tr>
                   ))}

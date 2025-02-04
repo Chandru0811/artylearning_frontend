@@ -272,7 +272,7 @@ function Sidebar() {
           {
             title: "Referal History",
             path: "/referalHistory",
-            access: storedScreens.paymentIndex,
+            access: storedScreens.invoiceIndex,
           },
         ],
       },
