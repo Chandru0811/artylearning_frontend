@@ -13,13 +13,12 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
 import GlobalDelete from "../../components/common/GlobalDelete";
-import fetchAllCoursesWithIds from "../List/CourseList";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 
-const Invoice = () => {
+const Invoice = ({ selectedCenter }) => {
   const [filters, setFilters] = useState({
     centerId: "",
     courseId: "",
@@ -27,7 +26,7 @@ const Invoice = () => {
     packageId: "",
   });
   const [centerData, setCenterData] = useState([]);
-  const centerIDLocal = localStorage.getItem("selectedCenterId");
+  const centerLocalId = localStorage.getItem("selectedCenterId");
   const [centerManagerData, setCenterManagerData] = useState([]);
   const [packageData, setPackageData] = useState(null);
   const [studentData, setStudentData] = useState(null);
@@ -151,36 +150,6 @@ const Invoice = () => {
     fetchCenterManagerData();
   }, []);
 
-  // const fetchData = async () => {
-  //   try {
-  //     // const centerData = await fetchAllCentersWithIds();
-  //     const courseData = await fetchAllCoursesWithIds();
-  //     // const studentData = await fetchAllStudentsWithIds();
-  //     // const packageData = await api.get("getAllCentersPackageWithIds");
-  //     // setPackageData(packageData.data);
-  //     // setCenterData(centerData);
-  //     setCourseData(courseData);
-  //     // setStudentData(studentData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get("/getAllGenerateInvoices");
-  //       setData(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   getData();
-  //   fetchData();
-  // }, []);
-
   const theme = createTheme({
     components: {
       MuiTableCell: {
@@ -230,10 +199,15 @@ const Invoice = () => {
       // Dynamically construct query parameters based on filters
       const queryParams = new URLSearchParams();
       if (!isClearFilterClicked) {
-        if (filters.centerId) {
+        // Only append centerId if it's NOT 0
+        if (filters.centerId && filters.centerId !== "0") {
           queryParams.append("centerId", filters.centerId);
-        } else if (centerIDLocal && centerIDLocal !== "undefined") {
-          queryParams.append("centerId", centerIDLocal);
+        } else if (
+          centerLocalId &&
+          centerLocalId !== "undefined" &&
+          centerLocalId !== "0"
+        ) {
+          queryParams.append("centerId", centerLocalId);
         }
       }
 
@@ -261,28 +235,6 @@ const Invoice = () => {
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerIDLocal,
-        }));
-        fetchListData(centerIDLocal);
-      } else if (centerData !== null && centerData.length > 0) {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerData[0].id,
-        }));
-        fetchListData(centerData[0].id);
-      }
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   const clearFilters = () => {
     setFilters({
       centerId: "",
@@ -293,12 +245,47 @@ const Invoice = () => {
     getInvoiceData();
     setIsClearFilterClicked(true);
   };
+
+  const fetchCenterData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      if (centerLocalId !== null && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData !== null && centerData.length > 0) {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchDatas = async () => {
-      await fetchData(); // Fetch center data
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data and subjects
+
+      // Check if local storage has center ID
+      if (centerLocalId && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData && centerData.length > 0) {
+        // Use the first center's ID as the default if no center is in local storage
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
     };
-    fetchDatas();
-  }, []);
+    fetchData();
+  }, [selectedCenter]);
 
   const fetchListData = async (centerId) => {
     try {
@@ -317,11 +304,11 @@ const Invoice = () => {
     if (filters.centerId) {
       fetchListData(filters.centerId);
     }
-  }, [filters]);
+  }, [filters, selectedCenter]);
 
-    useEffect(() => {
-      getInvoiceData();
-    }, [filters]);
+  useEffect(() => {
+    getInvoiceData();
+  }, [filters]);
 
   const handleMenuClose = () => {
     setMenuAnchor(null);
@@ -360,8 +347,10 @@ const Invoice = () => {
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
+            <div className="form-group mb-0 mb-1">
+              <input type="hidden" name="centerId" value={filters.centerId} />
+
+              {/* <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
                 style={{ width: "100%" }}
@@ -374,7 +363,7 @@ const Invoice = () => {
                     {center.centerNames}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <select
@@ -491,13 +480,16 @@ const Invoice = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/invoice/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem
+                onClick={() => navigate(`/invoice/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteGenerateInvoice/${selectedId}`}
-                  onDeleteSuccess={fetchData}
+                  onDeleteSuccess={getInvoiceData}
                   onOpen={handleMenuClose}
                 />
               </MenuItem>

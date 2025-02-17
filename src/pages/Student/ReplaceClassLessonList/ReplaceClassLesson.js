@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllCoursesWithIdsC from "../../List/CourseListByCenter";
 
-const ReplaceClassLesson = () => {
+const ReplaceClassLesson = ({ selectedCenter }) => {
   const [filters, setFilters] = useState({
     centerId: "",
     studentName: "",
@@ -19,6 +19,8 @@ const ReplaceClassLesson = () => {
   const [centerData, setCenterData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const navigate = useNavigate();
+  const centerLocalId = localStorage.getItem("selectedCenterId");
+  const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
 
   const columns = useMemo(
     () => [
@@ -107,33 +109,62 @@ const ReplaceClassLesson = () => {
     []
   );
 
-  const fetchData = async () => {
+  const fetchReplaceData = async () => {
     try {
       setLoading(true);
-      const filteredFilters = Object.fromEntries(
-        Object.entries(filters).filter(([key, value]) => value !== "")
+      // Dynamically construct query parameters based on filters
+      const queryParams = new URLSearchParams();
+      if (!isClearFilterClicked) {
+        // Only append centerId if it's NOT 0
+        if (filters.centerId && filters.centerId !== "0") {
+          queryParams.append("centerId", filters.centerId);
+        } else if (
+          centerLocalId &&
+          centerLocalId !== "undefined" &&
+          centerLocalId !== "0"
+        ) {
+          queryParams.append("centerId", centerLocalId);
+        }
+      }
+
+      // Loop through other filters and add key-value pairs if they have a value
+      for (let key in filters) {
+        if (filters[key] && key !== "centerId") {
+          queryParams.append(key, filters[key]);
+        }
+      }
+
+      const response = await api.get(
+        `/getReplacementWithCustomInfo?${queryParams.toString()}`
       );
 
-      const queryParams = new URLSearchParams(filteredFilters).toString();
-      const response = await api.get(
-        `/getReplacementWithCustomInfo?${queryParams}`
-      );
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
+      setIsClearFilterClicked(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
+    fetchReplaceData();
+  }, [filters, selectedCenter]);
 
-  const getCenter = async () => {
+  const fetchCenterData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
+      if (centerLocalId !== null && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData !== null && centerData.length > 0) {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
       setCenterData(centerData);
     } catch (error) {
       toast.error(error);
@@ -141,8 +172,25 @@ const ReplaceClassLesson = () => {
   };
 
   useEffect(() => {
-    getCenter();
-  }, []);
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data and subjects
+
+      // Check if local storage has center ID
+      if (centerLocalId && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData && centerData.length > 0) {
+        // Use the first center's ID as the default if no center is in local storage
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
+    };
+    fetchData();
+  }, [selectedCenter]);
 
   const fetchListData = async (centerId) => {
     try {
@@ -158,31 +206,6 @@ const ReplaceClassLesson = () => {
       fetchListData(filters.centerId);
     }
   }, [filters]);
-
-  // const handleStatusChange = async (id, newStatus) => {
-  //   try {
-  //     const response = await api.put(
-  //       `/updateStatus/${id}?id=${id}&leaveStatus=${newStatus}`,
-  //       { headers: { "Content-Type": "application/json" } }
-  //     );
-  //     if (response.status === 200) {
-  //       toast.success("Status updated successfully");
-  //       setDatas((prevDatas) =>
-  //         prevDatas.map((data) =>
-  //           data.id === id ? { ...data, status: newStatus } : data
-  //         )
-  //       );
-  //     } else {
-  //       toast.error(response.data.message);
-  //     }
-  //   } catch (error) {
-  //     if (error.response?.status === 409) {
-  //       toast.warning(error?.response?.data?.message);
-  //     } else {
-  //       toast.error(error?.response?.data?.message);
-  //     }
-  //   }
-  // };
 
   const theme = createTheme({
     components: {
@@ -240,6 +263,7 @@ const ReplaceClassLesson = () => {
       studentUniqueId: "",
       courseId: "",
     });
+    setIsClearFilterClicked(true);
   };
 
   return (
@@ -277,7 +301,8 @@ const ReplaceClassLesson = () => {
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
-              <select
+              <input type="hidden" name="centerId" value={filters.centerId} />
+              {/* <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
                 style={{ width: "100%" }}
@@ -290,7 +315,7 @@ const ReplaceClassLesson = () => {
                     {center.centerNames}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <select
@@ -373,7 +398,8 @@ const ReplaceClassLesson = () => {
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
-                  onClick: () => navigate(`/replaceclasslesson/view/${row.original.id}`),
+                  onClick: () =>
+                    navigate(`/replaceclasslesson/view/${row.original.id}`),
                   style: { cursor: "pointer" },
                 })}
               />

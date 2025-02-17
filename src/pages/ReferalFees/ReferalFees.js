@@ -16,7 +16,7 @@ import ReferalFeesEdit from "./ReferalFeesEdit";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 
-const ReferalFees = () => {
+const ReferalFees = ({ selectedCenter }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -25,11 +25,12 @@ const ReferalFees = () => {
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const [centerData, setCenterData] = useState([]);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-
   const centerLocalId = localStorage.getItem("selectedCenterId");
   const [filters, setFilters] = useState({
-    centerName: "",
+    centerId: "",
   });
+
+  console.log("selectedCenter", selectedCenter);
 
   const columns = useMemo(
     () => [
@@ -111,18 +112,31 @@ const ReferalFees = () => {
     []
   );
 
-  const fetchData = async () => {
+  const fetchReferalData = async () => {
     try {
       setLoading(true);
-
-      const centerId =
-        !isClearFilterClicked &&
-        (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
-          ? filters.centerId || centerLocalId
-          : "";
+      const queryParams = new URLSearchParams();
+      if (!isClearFilterClicked) {
+        // Only append centerId if it's NOT 0
+        if (filters.centerId && filters.centerId !== "0") {
+          queryParams.append("centerId", filters.centerId);
+        } else if (
+          centerLocalId &&
+          centerLocalId !== "undefined" &&
+          centerLocalId !== "0"
+        ) {
+          queryParams.append("centerId", centerLocalId);
+        }
+      }
+      // Loop through other filters and add key-value pairs if they have a value
+      for (let key in filters) {
+        if (filters[key] && key !== "centerId") {
+          queryParams.append(key, filters[key]);
+        }
+      }
 
       const response = await api.get(
-        `/getReferralFeeByCenterId?centerId=${centerId}`
+        `/getReferralFeeByCenterId?${queryParams.toString()}`
       );
       setData(response.data);
     } catch (error) {
@@ -141,14 +155,13 @@ const ReferalFees = () => {
           ...prevFilters,
           centerId: centerLocalId,
         }));
-        setCenterData(centerData);
       } else if (centerData !== null && centerData.length > 0) {
         setFilters((prevFilters) => ({
           ...prevFilters,
           centerId: centerData[0].id,
         }));
-        setCenterData(centerData);
       }
+      setCenterData(centerData);
     } catch (error) {
       toast.error(error);
     }
@@ -156,14 +169,28 @@ const ReferalFees = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetchCenterData(); // Fetch center data
+      await fetchCenterData(); // Fetch center data and subjects
+
+      // Check if local storage has center ID
+      if (centerLocalId && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData && centerData.length > 0) {
+        // Use the first center's ID as the default if no center is in local storage
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
     };
     fetchData();
-  }, []);
-  console.log("centerData", centerData);
+  }, [selectedCenter]);
+
   useEffect(() => {
-    fetchData();
-  }, [filters]);
+    fetchReferalData();
+  }, [filters, selectedCenter]);
 
   const theme = createTheme({
     components: {
@@ -211,8 +238,7 @@ const ReferalFees = () => {
   const clearFilter = () => {
     localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
     setFilters({
-      centerId: "", // Reset filters
-      centerName: "",
+      centerId: "",
     });
     setCenterId(""); // Clear local state for center ID
     setIsClearFilterClicked(true); // Trigger fetch with no filters
@@ -255,42 +281,12 @@ const ReferalFees = () => {
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                style={{ width: "100%" }}
-                onChange={(e) => {
-                  const { value } = e.target;
-                  setFilters((prevFilters) => ({
-                    ...prevFilters,
-                    centerId: value,
-                  }));
-                  setCenterId(value);
-                }}
-                name="centerId"
-                value={filters.centerId}
-              >
-                <option value="">All Center</option>
-                {Array.isArray(centerData) &&
-                  centerData?.map((center) => (
-                    <option key={center.id} value={center.id}>
-                      {center.centerNames}
-                    </option>
-                  ))}
-              </select>
-            </div>
-            <div className="form-group mb-2 ms-2">
-              <button
-                type="button"
-                onClick={clearFilter}
-                className="btn btn-sm btn-border"
-              >
-                Clear
-              </button>
+            <div className="form-group mb-0 mb-1">
+              <input type="hidden" name="centerId" value={filters.centerId} />
             </div>
           </div>
           {storedScreens?.referalFeesCreate && (
-            <ReferalFeesAdd onSuccess={fetchData} />
+            <ReferalFeesAdd onSuccess={fetchReferalData} />
           )}
         </div>
         {loading ? (
@@ -336,7 +332,7 @@ const ReferalFees = () => {
                 <MenuItem>
                   <ReferalFeesEdit
                     id={selectedId}
-                    onSuccess={fetchData}
+                    onSuccess={fetchReferalData}
                     onOpen={handleMenuClose}
                   />
                 </MenuItem>
@@ -345,7 +341,7 @@ const ReferalFees = () => {
                 <MenuItem>
                   <GlobalDelete
                     path={`/deleteReferralFees/${selectedId}`}
-                    onDeleteSuccess={fetchData}
+                    onDeleteSuccess={fetchReferalData}
                     onOpen={handleMenuClose}
                   />
                 </MenuItem>

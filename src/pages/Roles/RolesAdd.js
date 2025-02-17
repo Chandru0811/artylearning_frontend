@@ -211,16 +211,17 @@ function RolesAdd() {
       paymentUpdate: true,
       paymentDelete: true,
 
-      referalFeesIndex: true,
-      referalFeesRead: true,
-      referalFeesCreate: true,
-      referalFeesUpdate: true,
-      referalFeesDelete: true,
-      referalHistoryIndex: true,
-      referalHistoryRead: true,
-      referalHistoryCreate: true,
-      referalHistoryUpdate: true,
-      referalHistoryDelete: true,
+      referralFeesIndex: true,
+      referralFeesRead: true,
+      referralFeesCreate: true,
+      referralFeesUpdate: true,
+      referralFeesDelete: true,
+
+      referralHistoryIndex: true,
+      referralHistoryRead: true,
+      referralHistoryCreate: true,
+      referralHistoryUpdate: true,
+      referralHistoryDelete: true,
 
       scheduleTeacherIndex: true,
       scheduleTeacherRead: true,
@@ -507,7 +508,7 @@ function RolesAdd() {
       documentFileCreate: true,
       invoiceCreate: true,
       paymentCreate: true,
-      referalFeesCreate: true,
+      referralFeesCreate: true,
       scheduleTeacherCreate: true,
       documentReportCreate: true,
       attendanceReportCreate: true,
@@ -583,8 +584,8 @@ function RolesAdd() {
       documentFileRead: true,
       invoiceRead: true,
       paymentRead: true,
-      referalFeesRead: true,
-      referalHistoryRead: true,
+      referralFeesRead: true,
+      referralHistoryRead: true,
       scheduleTeacherRead: true,
       documentReportRead: true,
       attendanceReportRead: true,
@@ -660,7 +661,7 @@ function RolesAdd() {
       documentFileUpdate: true,
       invoiceUpdate: true,
       paymentUpdate: true,
-      referalFeesUpdate: true,
+      referralFeesUpdate: true,
       scheduleTeacherUpdate: true,
       documentReportUpdate: true,
       attendanceReportUpdate: true,
@@ -736,7 +737,7 @@ function RolesAdd() {
       documentFileDelete: true,
       invoiceDelete: true,
       paymentDelete: true,
-      referalFeesDelete: true,
+      referralFeesDelete: true,
       scheduleTeacherDelete: true,
       documentReportDelete: true,
       attendanceReportDelete: true,
@@ -812,8 +813,8 @@ function RolesAdd() {
       documentFileIndex: true,
       invoiceIndex: true,
       paymentIndex: true,
-      referalFeesIndex: true,
-      referalHistoryIndex: true,
+      referralFeesIndex: true,
+      referralHistoryIndex: true,
       scheduleTeacherIndex: true,
       documentReportIndex: true,
       attendanceReportIndex: true,
@@ -3044,10 +3045,10 @@ function RolesAdd() {
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="referalFeesIndex"
-                              checked={formik.values.referalFeesIndex}
+                              name="referralFeesIndex"
+                              checked={formik.values.referralFeesIndex}
                               onChange={handleCheckboxChange(
-                                `referalFeesIndex`
+                                `referralFeesIndex`
                               )}
                             />
                           </td>
@@ -3055,19 +3056,19 @@ function RolesAdd() {
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="referalFeesRead"
-                              checked={formik.values.referalFeesRead}
-                              onChange={handleCheckboxChange(`referalFeesRead`)}
+                              name="referralFeesRead"
+                              checked={formik.values.referralFeesRead}
+                              onChange={handleCheckboxChange(`referralFeesRead`)}
                             />
                           </td>
                           <td>
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="referalFeesCreate"
-                              checked={formik.values.referalFeesCreate}
+                              name="referralFeesCreate"
+                              checked={formik.values.referralFeesCreate}
                               onChange={handleCheckboxChange(
-                                `referalFeesCreate`
+                                `referralFeesCreate`
                               )}
                             />
                           </td>
@@ -3075,10 +3076,10 @@ function RolesAdd() {
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="referalFeesUpdate"
-                              checked={formik.values.referalFeesUpdate}
+                              name="referralFeesUpdate"
+                              checked={formik.values.referralFeesUpdate}
                               onChange={handleCheckboxChange(
-                                `referalFeesUpdate`
+                                `referralFeesUpdate`
                               )}
                             />
                           </td>
@@ -3086,10 +3087,10 @@ function RolesAdd() {
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="referalFeesDelete"
-                              checked={formik.values.referalFeesDelete}
+                              name="referralFeesDelete"
+                              checked={formik.values.referralFeesDelete}
                               onChange={handleCheckboxChange(
-                                `referalFeesDelete`
+                                `referralFeesDelete`
                               )}
                             />
                           </td>
@@ -3109,10 +3110,10 @@ function RolesAdd() {
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="referalHistoryIndex"
-                              checked={formik.values.referalHistoryIndex}
+                              name="referralHistoryIndex"
+                              checked={formik.values.referralHistoryIndex}
                               onChange={handleCheckboxChange(
-                                `referalHistoryIndex`
+                                `referralHistoryIndex`
                               )}
                             />
                           </td>

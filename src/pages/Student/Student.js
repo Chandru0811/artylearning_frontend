@@ -14,7 +14,7 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 
-const Student = () => {
+const Student = ({selectedCenter}) => {
   const [filters, setFilters] = useState({
     centerId: "",
     studentName: "",
@@ -29,7 +29,7 @@ const Student = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [centerId, setCenterId] = useState("");
-  const centerIDLocal = localStorage.getItem("selectedCenterId");
+  const centerLocalId = localStorage.getItem("selectedCenterId");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const columns = useMemo(
@@ -190,10 +190,15 @@ const Student = () => {
       // Dynamically construct query parameters based on filters
       const queryParams = new URLSearchParams();
       if (!isClearFilterClicked) {
-        if (filters.centerId) {
+        // Only append centerId if it's NOT 0
+        if (filters.centerId && filters.centerId !== "0") {
           queryParams.append("centerId", filters.centerId);
-        } else if (centerIDLocal && centerIDLocal !== "undefined") {
-          queryParams.append("centerId", centerIDLocal);
+        } else if (
+          centerLocalId &&
+          centerLocalId !== "undefined" &&
+          centerLocalId !== "0"
+        ) {
+          queryParams.append("centerId", centerLocalId);
         }
       }
 
@@ -220,10 +225,10 @@ const Student = () => {
   const fetchCenterData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
+      if (centerLocalId !== null && centerLocalId !== "undefined") {
         setFilters((prevFilters) => ({
           ...prevFilters,
-          centerId: centerIDLocal,
+          centerId: centerLocalId,
         }));
       } else if (centerData !== null && centerData.length > 0) {
         setFilters((prevFilters) => ({
@@ -236,6 +241,27 @@ const Student = () => {
       toast.error(error);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data and subjects
+
+      // Check if local storage has center ID
+      if (centerLocalId && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData && centerData.length > 0) {
+        // Use the first center's ID as the default if no center is in local storage
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
+    };
+    fetchData();
+  }, [selectedCenter]);
 
   const theme = createTheme({
     components: {
@@ -287,15 +313,8 @@ const Student = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchCenterData(); // Fetch center data
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     fetchStudentData();
-  }, [filters]);
+  }, [filters ,selectedCenter]);
 
   const clearFilter = () => {
     setFilters({
@@ -350,8 +369,9 @@ const Student = () => {
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
+            <div className="form-group mb-0 mb-1">
+            <input type="hidden" name="centerId" value={filters.centerId} />
+              {/* <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
                 style={{ width: "100%" }}
@@ -371,7 +391,7 @@ const Student = () => {
                     {center.centerNames}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
@@ -397,10 +417,6 @@ const Student = () => {
                 autoComplete="off"
               />
             </div>
-          </div>
-        </div>
-        <div className="mb-3 d-flex justify-content-between">
-          <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
@@ -434,8 +450,9 @@ const Student = () => {
                 Clear
               </button>
             </div>
+           
           </div>
-          <div>
+          <div className="mb-2 ms-2 d-flex justify-content-end">
             {storedScreens?.studentListingCreate && (
               <Link to="/student/add">
                 <button

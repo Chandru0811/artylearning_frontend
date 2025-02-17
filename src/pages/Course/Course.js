@@ -12,27 +12,21 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 import { MaterialReactTable } from "material-react-table";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import fetchAllCentersWithIds from "../List/CenterList";
-import fetchAllLevelsWithIds from "../List/LevelList";
-import fetchAllSubjectsWithIds from "../List/SubjectList";
 import { toast } from "react-toastify";
 
-const Course = () => {
+const Course = ({ selectedCenter }) => {
   const [filters, setFilters] = useState({
     centerId: "",
     courseName: "",
     courseCode: "",
   });
+
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [subjectData, setSubjectData] = useState(null);
-  const [levelData, setLevelData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const centerLocalId = localStorage.getItem("selectedCenterId");
   const [centerData, setCenterData] = useState([]);
-  const [centerId, setCenterId] = useState("");
-  const [code, setCode] = useState("");
-  const [course, setCourse] = useState("");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
@@ -159,14 +153,20 @@ const Course = () => {
     []
   );
 
-  const fetchData = async () => {
+  const getData = async () => {
     try {
       setLoading(true);
       const queryParams = new URLSearchParams();
+
       if (!isClearFilterClicked) {
-        if (filters.centerId) {
+        // Only append centerId if it's NOT 0
+        if (filters.centerId && filters.centerId !== "0") {
           queryParams.append("centerId", filters.centerId);
-        } else if (centerLocalId && centerLocalId !== "undefined") {
+        } else if (
+          centerLocalId &&
+          centerLocalId !== "undefined" &&
+          centerLocalId !== "0"
+        ) {
           queryParams.append("centerId", centerLocalId);
         }
       }
@@ -177,6 +177,7 @@ const Course = () => {
           queryParams.append(key, filters[key]);
         }
       }
+
       const response = await api.get(`/getCourseWithCustomInfo?${queryParams}`);
       setData(response.data);
     } catch (error) {
@@ -186,17 +187,6 @@ const Course = () => {
       setIsClearFilterClicked(false);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchCenterData(); // Fetch center data
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [filters]);
 
   const fetchCenterData = async () => {
     try {
@@ -217,32 +207,6 @@ const Course = () => {
       toast.error(error);
     }
   };
-
-  // useEffect(() => {
-  //   if (centerData.length > 0) {
-  //     const defaultCenterId = centerData[0].id;
-  //     setCenterId(defaultCenterId);
-  //     setFilters((prevFilters) => ({
-  //       ...prevFilters,
-  //       centerId: defaultCenterId,
-  //     }));
-  //   }
-  // }, [centerData]);
-
-  const fetchSubData = async () => {
-    try {
-      const subjects = await fetchAllSubjectsWithIds();
-      const levels = await fetchAllLevelsWithIds();
-      setSubjectData(subjects);
-      setLevelData(levels);
-    } catch (error) {
-      toast.error(`Error loading additional data: ${error.message}`);
-    }
-  };
-
-  useEffect(() => {
-    fetchSubData();
-  }, []);
 
   const theme = createTheme({
     components: {
@@ -292,6 +256,31 @@ const Course = () => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data and subjects
+
+      // Check if local storage has center ID
+      if (centerLocalId && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData && centerData.length > 0) {
+        // Use the first center's ID as the default if no center is in local storage
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
+    };
+    fetchData();
+  }, [selectedCenter]);
+
+  useEffect(() => {
+    getData();
+  }, [filters, selectedCenter]);
 
   const clearFilter = () => {
     setFilters({
@@ -343,8 +332,10 @@ const Course = () => {
         </div>
         <div className="d-flex justify-content-between mb-3 px-2">
           <div className="individual_fliters d-lg-flex">
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
+            <div className="form-group mb-0 mb-1">
+              <input type="hidden" name="centerId" value={filters.centerId} />
+
+              {/* <select
                 className="form-select form-select-sm center_list"
                 style={{ width: "100%" }}
                 onChange={(e) => {
@@ -364,7 +355,7 @@ const Course = () => {
                     {center.centerNames}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
@@ -459,12 +450,14 @@ const Course = () => {
               onClose={handleMenuClose}
             >
               <MenuItem
-                onClick={() => navigate(`/course/coursefees/${selectedId}`)} className="text-start mb-0 menuitem-style"
+                onClick={() => navigate(`/course/coursefees/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
               >
                 Course Fees
               </MenuItem>
               <MenuItem
-                onClick={() => navigate(`/course/coursedeposit/${selectedId}`)} className="text-start mb-0 menuitem-style"
+                onClick={() => navigate(`/course/coursedeposit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
               >
                 Course Deposit Fees
               </MenuItem>
@@ -479,14 +472,17 @@ const Course = () => {
               {/* <MenuItem onClick={() => navigate(`/course/view/${selectedId}`)}>
                 View
               </MenuItem> */}
-              <MenuItem onClick={() => navigate(`/course/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem
+                onClick={() => navigate(`/course/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteCourse/${selectedId}`}
                   onOpen={handleMenuClose}
-                  onDeleteSuccess={fetchData}
+                  onDeleteSuccess={getData}
                 />
               </MenuItem>
             </Menu>

@@ -18,7 +18,7 @@ import {
   IconButton,
 } from "@mui/material";
 
-const Lead = () => {
+const Lead = ({selectedCenter}) => {
   const navigate = useNavigate();
   const [confirmationMessage, setConfirmationMessage] = useState("");
   const [datas, setDatas] = useState([]);
@@ -47,15 +47,12 @@ const Lead = () => {
   });
 
   const handleShow = () => {
-    // fetchCenterData();
     setShowDialog(true);
   };
   const handleClose = () => {
-    // fetchCenterData();
     setShowDialog(false);
   };
   const handleEditShowDialog = () => {
-    // fetchCenterData();
     setShowEditDialog(true);
   };
   const handleEditCloseDialog = () => {
@@ -154,7 +151,7 @@ const Lead = () => {
       ? filters.centerId || centerLocalId
       : "";
 
-    if (centerId !== "") {
+    if (centerId !== "" && centerId !== "0") {
       params.centerId = centerId;
     }
 
@@ -221,11 +218,11 @@ const Lead = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [selectedCenter]);
 
   useEffect(() => {
     getData();
-  }, [filters]);
+  }, [filters, selectedCenter]);
 
   const ResetFilter = () => {
   localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
@@ -967,7 +964,8 @@ const Lead = () => {
           <div className="d-flex justify-content-between mb-3 px-2">
             <div className="individual_fliters d-lg-flex ">
               <div className="form-group mb-0 ms-2 mb-1">
-                <select
+                <input type="hidden" name="centerId" value={filters.centerId} />
+                {/* <select
                   className="form-select form-select-sm mb-2 mb-md-0 me-md-3"
                   name="centerId"
                   value={filters.centerId}
@@ -984,9 +982,9 @@ const Lead = () => {
                         {center.centerNames}
                       </option>
                     ))}
-                </select>
+                </select> */}
               </div>
-              <div className="form-group mb-0 ms-2 mb-1">
+              <div className="form-group mb-0 mb-1">
                 <select
                   className="form-select form-select-sm mb-2 mb-md-0"
                   name="subjectId"

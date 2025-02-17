@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import fetchAllCentersWithIds from "../../pages/List/CenterList";
-import { toast } from "react-toastify";
+
 import ChangePassword from "./ChangePassword";
 import { BiLogOut } from "react-icons/bi";
 import { CiCalendarDate } from "react-icons/ci";
 
-function Header({ onLogout, centerChange }) {
+function Header({ onLogout, handleCenterChange, centerData, selectedCenter }) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("email");
-  const selectedCenterId = localStorage.getItem("selectedCenterId");
-  const [centerData, setCenterData] = useState(null);
-  const [selectedCenter, setSelectedCenter] = useState("");
 
   const handleLogOutClick = () => {
     document.body.classList.remove("offcanvas-backdrop", "modal-open");
@@ -22,32 +18,8 @@ function Header({ onLogout, centerChange }) {
     navigate("/login");
   };
 
-  const handleCenterChange = (e) => {
-    const centerId = e.target.value; // Get the selected value
-    setSelectedCenter(centerId); // Update the component state
-    localStorage.setItem("selectedCenterId", centerId); // Store in localStorage
-    console.log("Selected Center:", centerId); // Log for debugging
-  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const centerData = await fetchAllCentersWithIds();
-        setCenterData(centerData);
-        if (selectedCenterId !== null && selectedCenterId !== "undefined") {
-          setSelectedCenter(selectedCenterId);
-          localStorage.setItem("selectedCenterId", selectedCenterId);
-        } else if (centerData && centerData.length > 0) {
-          setSelectedCenter(centerData[0].id);
-          localStorage.setItem("selectedCenterId", centerData[0].id); // Set in localStorage
-        }
-      } catch (error) {
-        toast.error(error.message);
-      }
-    };
 
-    fetchData();
-  }, [centerChange]);
 
   return (
     <nav>
@@ -86,6 +58,9 @@ function Header({ onLogout, centerChange }) {
             >
               <option value="" selected disabled>
                 Select a Centre
+              </option>
+              <option value="0">
+                All Center
               </option>
               {centerData &&
                 centerData.map((studentRelationCenter) => (

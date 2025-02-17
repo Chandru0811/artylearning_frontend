@@ -243,9 +243,15 @@ import BatchTime from "../pages/Settings/BatchTime/BatchTime";
 import BatchTimeEdit from "../pages/Settings/BatchTime/BatchTimeEdit";
 import LeadNewView from "../pages/Lead/LeadNewView";
 import TimeTable from "../pages/TimeTable";
+import { toast } from "react-toastify";
+import fetchAllCentersWithIds from "../pages/List/CenterList";
 
 function Admin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState(0);
+  const selectedCenterId = localStorage.getItem("selectedCenterId");
+  const [centerData, setCenterData] = useState(null);
+  const [selectedCenter, setSelectedCenter] = useState("");
+
   useEffect(() => {
     let sidebar = document.querySelector(".sidebar");
     let sidebarBtn = document.querySelector(".sidebarBtn");
@@ -261,38 +267,64 @@ function Admin({ handleLogout }) {
     console.log("centerChange", centerChange);
   };
 
+  const handleCenterChange = (e) => {
+    const centerId = e.target.value;
+    setSelectedCenter(centerId);
+    localStorage.setItem("selectedCenterId", centerId);
+    console.log("Selected Center:", centerId);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const centerData = await fetchAllCentersWithIds();
+        setCenterData(centerData);
+        if (selectedCenterId !== null && selectedCenterId !== "undefined") {
+          setSelectedCenter(selectedCenterId);
+          localStorage.setItem("selectedCenterId", selectedCenterId);
+        } else if (centerData && centerData.length > 0) {
+          setSelectedCenter(centerData[0].id);
+          localStorage.setItem("selectedCenterId", centerData[0].id); // Set in localStorage
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+
+    fetchData();
+  }, [centerChange]);
+
   // useEffect(() => {
+  //   // Initial hide of button when page loads
   //   const hideButton = () => {
   //     const buttons = document.querySelectorAll(".MuiButton-containedPrimary");
   //     buttons.forEach((button) => {
   //       button.style.display = "none";
   //     });
   //   };
+
+  //   // First hide action on page load
   //   hideButton();
   // }, []);
 
   useEffect(() => {
-    // Initial hide of button when page loads
     const hideButton = () => {
       const buttons = document.querySelectorAll(".MuiButton-containedPrimary");
       buttons.forEach((button) => {
-        button.style.display = "none";
+        button.style.display = "none"; // Hide button
       });
     };
-
-    // First hide action on page load
+  
+    // Hide the button initially
     hideButton();
-
-    // Set timeout to call hideButton again after 2 seconds (2000ms)
-    const timer = setTimeout(() => {
-      hideButton();
-    }, 2000);
-
-    // Cleanup function to clear timeout if the component unmounts before 2 seconds
-    return () => {
-      clearTimeout(timer);
-    };
+  
+    // Observe DOM changes to ensure button stays hidden
+    const observer = new MutationObserver(() => hideButton());
+    observer.observe(document.body, { childList: true, subtree: true });
+  
+    return () => observer.disconnect(); // Cleanup observer on unmount
   }, []);
+
 
   return (
     <div>
@@ -300,7 +332,7 @@ function Admin({ handleLogout }) {
         <ToastContainer position="top-center" />
         <Sidebar />
         <section className="home-section">
-          <Header onLogout={handleLogout} centerChange={centerChange} />
+          <Header onLogout={handleLogout} handleCenterChange={handleCenterChange} centerData={centerData} selectedCenter={selectedCenter}/>
           <ScrollToTop />
           <div className="home-content" style={{ minHeight: "95vh" }}>
             <Routes>
@@ -320,7 +352,7 @@ function Admin({ handleLogout }) {
               <Route path="/calendar" element={<Calendar />} />
 
               {/* Lead */}
-              <Route path="/lead/lead" element={<Lead />} />
+              <Route path="/lead/lead" element={<Lead selectedCenter={selectedCenter}/>} />
               <Route path="/lead/lead/add" element={<EnrollmentAdd />} />
               <Route path="/lead/lead/edit/:id" element={<EnrollmentEdit />} />
               {/* <Route path="/lead/lead/view/:id" element={<LeadView />} /> */}
@@ -335,7 +367,7 @@ function Admin({ handleLogout }) {
               <Route path="lead/contacted" element={<Contacted />} />
 
               {/* {/ Student /} */}
-              <Route path="/student" element={<Student />} />
+              <Route path="/student" element={<Student selectedCenter={selectedCenter}/>} />
               <Route path="/student/add" element={<StudentAdd />} />
               <Route path="/student/edit/:id" element={<StudentEdit />} />
               {/* <Route path="/student/view/:id" element={<StudentView />} /> */}
@@ -363,7 +395,7 @@ function Admin({ handleLogout }) {
               />
               <Route
                 path="/replaceclasslesson"
-                element={<ReplaceClassLesson />}
+                element={<ReplaceClassLesson selectedCenter={selectedCenter}/>}
               />
               <Route
                 path="/replaceclasslessonList"
@@ -507,7 +539,7 @@ function Admin({ handleLogout }) {
               <Route path="/staff/payslip" element={<StaffPayslip />} />
 
               {/* Course  */}
-              <Route path="/course" element={<Course />} />
+              <Route path="/course" element={<Course selectedCenter={selectedCenter}/>} />
               <Route path="/course/add" element={<CourseAdd />} />
               <Route path="/course/edit/:id" element={<CourseEdit />} />
               <Route path="/course/view/:id" element={<CourseView />} />
@@ -580,14 +612,14 @@ function Admin({ handleLogout }) {
               <Route path="/payment" element={<Payment />} />
 
               {/* Invoice  */}
-              <Route path="/invoice" element={<Invoice />} />
+              <Route path="/invoice" element={<Invoice selectedCenter={selectedCenter}/>} />
               <Route path="/invoice/add" element={<InvoiceAdd />} />
               <Route path="/invoice/edit/:id" element={<InvoiceEdit />} />
               <Route path="/invoice/view/:id" element={<InvoiceView />} />
               <Route path="/invoice/payment" element={<InvoicePayment />} />
 
               {/* Document  */}
-              <Route path="/document" element={<Document />} />
+              <Route path="/document" element={<Document selectedCenter={selectedCenter}/>} />
               <Route path="/document/add" element={<DocumentAdd />} />
               <Route path="/document/edit" element={<DocumentEdit />} />
               <Route path="/document/view/:id" element={<DocumentView />} />
@@ -606,7 +638,7 @@ function Admin({ handleLogout }) {
               <Route path="/level/view/:id" element={<LevelView />} />
 
               {/* Class */}
-              <Route path="/class" element={<Class />} />
+              <Route path="/class" element={<Class selectedCenter={selectedCenter}/>} />
               <Route path="/class/add" element={<ClassAdd />} />
               <Route path="/class/edit/:id" element={<ClassEdit />} />
               <Route path="/class/view/:id" element={<ClassView />} />
@@ -735,7 +767,7 @@ function Admin({ handleLogout }) {
               />
 
               {/* Referal Management  */}
-              <Route path="/referalFees" element={<ReferalFees />} />
+              <Route path="/referalFees" element={<ReferalFees selectedCenter={selectedCenter}/>} />
               <Route path="/referalFees/Add" element={<ReferalFeesAdd />} />
 
               <Route path="/referalHistory" element={<ReferalHistory />} />

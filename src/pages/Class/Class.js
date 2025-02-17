@@ -16,9 +16,8 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 import TeacherReplacement from "./TeacherReplacement";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
-import ClassReplacement from "./ClassReplacement";
 
-const Class = () => {
+const Class = ({ selectedCenter }) => {
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
@@ -30,7 +29,7 @@ const Class = () => {
   });
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const centerIDLocal = localStorage.getItem("selectedCenterId");
+  const centerLocalId = localStorage.getItem("selectedCenterId");
   const [centerData, setCenterData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
@@ -167,10 +166,15 @@ const Class = () => {
       // Dynamically construct query parameters based on filters
       const queryParams = new URLSearchParams();
       if (!isClearFilterClicked) {
-        if (filters.centerId) {
+        // Only append centerId if it's NOT 0
+        if (filters.centerId && filters.centerId !== "0") {
           queryParams.append("centerId", filters.centerId);
-        } else if (centerIDLocal && centerIDLocal !== "undefined") {
-          queryParams.append("centerId", centerIDLocal);
+        } else if (
+          centerLocalId &&
+          centerLocalId !== "undefined" &&
+          centerLocalId !== "0"
+        ) {
+          queryParams.append("centerId", centerLocalId);
         }
       }
 
@@ -193,28 +197,6 @@ const Class = () => {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerIDLocal,
-        }));
-        fetchListData(centerIDLocal);
-      } else if (centerData !== null && centerData.length > 0) {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerData[0].id,
-        }));
-        fetchListData(centerData[0].id);
-      }
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
@@ -231,16 +213,51 @@ const Class = () => {
     getClassData();
     setIsClearFilterClicked(true);
   };
+
+  const fetchCenterData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      if (centerLocalId !== null && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData !== null && centerData.length > 0) {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchDatas = async () => {
-      await fetchData(); // Fetch center data
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data and subjects
+
+      // Check if local storage has center ID
+      if (centerLocalId && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData && centerData.length > 0) {
+        // Use the first center's ID as the default if no center is in local storage
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
     };
-    fetchDatas();
-  }, []);
+    fetchData();
+  }, [selectedCenter]);
 
   useEffect(() => {
     getClassData();
-  }, [filters]);
+  }, [filters , selectedCenter]);
 
   const fetchListData = async (centerId) => {
     try {
@@ -301,8 +318,10 @@ const Class = () => {
         </div>
         <div className="mb-3">
           <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
+            <div className="form-group mb-0 mb-1">
+            <input type="hidden" name="centerId" value={filters.centerId} />
+
+              {/* <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
                 style={{ width: "100%" }}
@@ -315,7 +334,7 @@ const Class = () => {
                     {center.centerNames}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <select

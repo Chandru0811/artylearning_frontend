@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import GlobalDelete from "../../components/common/GlobalDelete";
 
-const Document = () => {
+const Document = ({ selectedCenter }) => {
   const [filters, setFilters] = useState({
     centerId: "",
     courseId: "",
@@ -29,7 +29,7 @@ const Document = () => {
   });
   const [data, setData] = useState([]);
   const [centerData, setCenterData] = useState([]);
-  const centerIDLocal = localStorage.getItem("selectedCenterId");
+  const centerLocalId = localStorage.getItem("selectedCenterId");
   const [courseData, setCourseData] = useState([]);
   const [classData, setClassData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
@@ -184,28 +184,48 @@ const Document = () => {
     }
   };
 
-  const fetchData = async () => {
+  const fetchCenterData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
+      if (centerLocalId !== null && centerLocalId !== "undefined") {
         setFilters((prevFilters) => ({
           ...prevFilters,
-          centerId: centerIDLocal,
+          centerId: centerLocalId,
         }));
-        fetchListData(centerIDLocal);
+        fetchListData(centerLocalId);
       } else if (centerData !== null && centerData.length > 0) {
         setFilters((prevFilters) => ({
           ...prevFilters,
           centerId: centerData[0].id,
         }));
-        fetchListData(centerData[0].id);
       }
-      
       setCenterData(centerData);
     } catch (error) {
       toast.error(error);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data and subjects
+
+      // Check if local storage has center ID
+      if (centerLocalId && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData && centerData.length > 0) {
+        // Use the first center's ID as the default if no center is in local storage
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
+    };
+    fetchData();
+    // fetchListData();
+  }, [selectedCenter]);
 
   const handleCenterChange = async (event) => {
   const centerId = event.target.value;
@@ -232,7 +252,6 @@ const Document = () => {
   }
 };
 
-
   const handleCourseChange = async (event) => {
     const courseId = event.target.value;
     setFilters((prevFilters) => ({ ...prevFilters, courseId })); // Update filter state
@@ -250,10 +269,15 @@ const Document = () => {
       // Dynamically construct query parameters based on filters
       const queryParams = new URLSearchParams();
       if (!isClearFilterClicked) {
-        if (filters.centerId) {
+        // Only append centerId if it's NOT 0
+        if (filters.centerId && filters.centerId !== "0") {
           queryParams.append("centerId", filters.centerId);
-        } else if (centerIDLocal && centerIDLocal !== "undefined") {
-          queryParams.append("centerId", centerIDLocal);
+        } else if (
+          centerLocalId &&
+          centerLocalId !== "undefined" &&
+          centerLocalId !== "0"
+        ) {
+          queryParams.append("centerId", centerLocalId);
         }
       }
 
@@ -275,10 +299,6 @@ const Document = () => {
       setIsClearFilterClicked(false);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -302,7 +322,7 @@ const Document = () => {
   
   useEffect(() => {
       getDocumentData();
-  }, [filters]);
+  }, [filters , selectedCenter]);
   
 
   const handleMenuClose = () => setMenuAnchor(null);
@@ -346,8 +366,10 @@ const Document = () => {
         </div>
         <div className="mb-3">
           <div className="individual_fliters d-lg-flex">
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
+            <div className="form-group mb-0 mb-1">
+            <input type="hidden" name="centerId" value={filters.centerId} />
+
+              {/* <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
                 style={{ width: "100%" }}
@@ -360,7 +382,7 @@ const Document = () => {
                     {center.centerNames}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <select
@@ -520,7 +542,7 @@ const Document = () => {
             >
               <MenuItem>
                 <DocumentEdit
-                  onSuccess={fetchData}
+                  onSuccess={getDocumentData}
                   id={selectedId}
                   handleMenuClose={handleMenuClose}
                 />
@@ -528,7 +550,7 @@ const Document = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteDocumentFolder/${selectedId}`}
-                  onDeleteSuccess={fetchData}
+                  onDeleteSuccess={getDocumentData}
                   onOpen={handleMenuClose}
                 />
               </MenuItem>
