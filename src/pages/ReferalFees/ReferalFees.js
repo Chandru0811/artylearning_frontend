@@ -24,6 +24,7 @@ const ReferalFees = () => {
   const [centerId, setCenterId] = useState("");
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const [centerData, setCenterData] = useState([]);
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   const centerLocalId = localStorage.getItem("selectedCenterId");
   const [filters, setFilters] = useState({
@@ -120,7 +121,9 @@ const ReferalFees = () => {
           ? filters.centerId || centerLocalId
           : "";
 
-      const response = await api.get(`/getReferralFeeByCenterId?centerId=${centerId}`);
+      const response = await api.get(
+        `/getReferralFeeByCenterId?centerId=${centerId}`
+      );
       setData(response.data);
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
@@ -138,31 +141,29 @@ const ReferalFees = () => {
           ...prevFilters,
           centerId: centerLocalId,
         }));
-      setCenterData(centerData);
+        setCenterData(centerData);
       } else if (centerData !== null && centerData.length > 0) {
         setFilters((prevFilters) => ({
           ...prevFilters,
           centerId: centerData[0].id,
         }));
-      setCenterData(centerData);
+        setCenterData(centerData);
       }
     } catch (error) {
       toast.error(error);
     }
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       await fetchCenterData(); // Fetch center data
     };
     fetchData();
   }, []);
-console.log("centerData",centerData);
+  console.log("centerData", centerData);
   useEffect(() => {
     fetchData();
   }, [filters]);
-
-
 
   const theme = createTheme({
     components: {
@@ -208,14 +209,14 @@ console.log("centerData",centerData);
   });
 
   const clearFilter = () => {
-  localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
-  setFilters({
-    centerId: "", // Reset filters
-    centerName: "",
-  });
-  setCenterId(""); // Clear local state for center ID
-  setIsClearFilterClicked(true); // Trigger fetch with no filters
-};
+    localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
+    setFilters({
+      centerId: "", // Reset filters
+      centerName: "",
+    });
+    setCenterId(""); // Clear local state for center ID
+    setIsClearFilterClicked(true); // Trigger fetch with no filters
+  };
 
   const handleMenuClose = () => {
     setMenuAnchor(null);
@@ -270,11 +271,12 @@ console.log("centerData",centerData);
                 value={filters.centerId}
               >
                 <option value="">All Center</option>
-                { Array.isArray(centerData) && centerData?.map((center) => (
-                  <option key={center.id} value={center.id}>
-                    {center.centerNames}
-                  </option>
-                ))}
+                {Array.isArray(centerData) &&
+                  centerData?.map((center) => (
+                    <option key={center.id} value={center.id}>
+                      {center.centerNames}
+                    </option>
+                  ))}
               </select>
             </div>
             <div className="form-group mb-2 ms-2">
@@ -287,7 +289,9 @@ console.log("centerData",centerData);
               </button>
             </div>
           </div>
-          <ReferalFeesAdd onSuccess={fetchData} />
+          {storedScreens?.referalFeesCreate && (
+            <ReferalFeesAdd onSuccess={fetchData} />
+          )}
         </div>
         {loading ? (
           <div className="loader-container">
@@ -328,20 +332,24 @@ console.log("centerData",centerData);
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem>
-                <ReferalFeesEdit
-                  id={selectedId}
-                  onSuccess={fetchData}
-                  onOpen={handleMenuClose}
-                />
-              </MenuItem>
-              <MenuItem>
-                <GlobalDelete
-                  path={`/deleteReferralFees/${selectedId}`}
-                  onDeleteSuccess={fetchData}
-                  onOpen={handleMenuClose}
-                />
-              </MenuItem>
+              {storedScreens?.referalFeesUpdate && (
+                <MenuItem>
+                  <ReferalFeesEdit
+                    id={selectedId}
+                    onSuccess={fetchData}
+                    onOpen={handleMenuClose}
+                  />
+                </MenuItem>
+              )}
+              {storedScreens?.referalFeesDelete && (
+                <MenuItem>
+                  <GlobalDelete
+                    path={`/deleteReferralFees/${selectedId}`}
+                    onDeleteSuccess={fetchData}
+                    onOpen={handleMenuClose}
+                  />
+                </MenuItem>
+              )}
             </Menu>
           </>
         )}

@@ -144,7 +144,6 @@ function ReferalFeesAdd({ onSuccess }) {
                         : ""
                     }`}
                     aria-label="Default select example"
-                    className="form-select "
                   >
                     <option selected></option>
                     {centerData &&

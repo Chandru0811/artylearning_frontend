@@ -267,12 +267,12 @@ function Sidebar() {
           {
             title: "Set Referal Fees",
             path: "/referalFees",
-            access: storedScreens.invoiceIndex,
+            access: storedScreens.referalFeesIndex,
           },
           {
             title: "Referal History",
             path: "/referalHistory",
-            access: storedScreens.invoiceIndex,
+            access: storedScreens.referalHistoryIndex,
           },
         ],
       },

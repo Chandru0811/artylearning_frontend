@@ -165,8 +165,6 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
                         ? "is-invalid"
                         : ""
                     }`}
-                    aria-label="Default select example"
-                    className="form-select "
                   >
                     <option selected></option>
                     {centerData &&
@@ -235,8 +233,6 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
                         ? "is-invalid"
                         : ""
                     }`}
-                    aria-label="Default select example"
-                    className="form-select"
                   >
                     <option selected></option>
                     <option value="ACTIVE">Active</option>
