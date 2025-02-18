@@ -134,6 +134,7 @@ function MyMessagesView() {
         isSender: msg.messageType === "Sent",
         messageType: msg.messageType, // Add message type
         attachments: msg.attachments,
+        senderRole: msg.senderRole,
         time: new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       }));
       setMessages(combinedMessages);
@@ -142,22 +143,22 @@ function MyMessagesView() {
     }
   };
   
-  const handleDeleteMessage = async (messageId) => {
-    try {
-      const response = await api.delete(`/deleteMessage/${id}`);
-      if (response.status === 200) {
-        toast.success("Message deleted successfully!");
-        getData();
-        setMessages((prevMessages) =>
-          prevMessages.filter((msg) => msg.messageId !== messageId)
-        );
-      } else {
-        toast.error("Failed to delete the message.");
-      }
-    } catch (error) {
-      toast.error(`Error: ${error.message}`);
-    }
-  };
+  // const handleDeleteMessage = async (messageId) => {
+  //   try {
+  //     const response = await api.delete(`/deleteMessage/${id}`);
+  //     if (response.status === 200) {
+  //       toast.success("Message deleted successfully!");
+  //       getData();
+  //       setMessages((prevMessages) =>
+  //         prevMessages.filter((msg) => msg.messageId !== messageId)
+  //       );
+  //     } else {
+  //       toast.error("Failed to delete the message.");
+  //     }
+  //   } catch (error) {
+  //     toast.error(`Error: ${error.message}`);
+  //   }
+  // };
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -248,8 +249,15 @@ function MyMessagesView() {
   }, [messages]);
 
   useEffect(() => {
-    getData();
-  }, [userId, id]);
+    const timer = setTimeout(() => {
+      getData(); // Trigger the getData function after 2 seconds
+    }, 1000); // 2000ms = 2 seconds
+  
+    // Cleanup the timeout in case the component unmounts or the effect runs again
+    return () => clearTimeout(timer);
+  }); // Only run this effect when `id` changes
+  
+  
 
   return (
     <>
@@ -302,30 +310,30 @@ function MyMessagesView() {
                   </div>
                 ))} */}
                  {messages.map((msg, index) => (
-                  <div key={index} className={`message ${msg.isSender ? "right" : "left"}`}>
-                    <div className={`message-bubble my-2 w-75 ${msg.isSender ? "align-self-end" : "align-self-start"}`}>
+                  <div key={index} className={`message ${msg.senderRole === "SMS_BRANCH_ADMIN" ? "right" : "left"}`}>
+                    <div className={`message-bubble my-2 w-75 ${msg.senderRole === "SMS_BRANCH_ADMIN" ? "align-self-end" : "align-self-start"}`}>
                       {msg.content}
                     </div>
                     {msg.attachments?.length > 0 &&
                       msg.attachments.map((attachment, attIndex) => (
                         <div
                           key={attIndex}
-                          className={`message-bubble w-75 mt-2 ${msg.isSender ? "align-self-end" : "align-self-start"}`}
+                          className={`message-bubble w-75 mt-2 ${msg.senderRole === "SMS_BRANCH_ADMIN" ? "align-self-end" : "align-self-start"}`}
                         >
                           {renderAttachment(attachment, attIndex)}
                         </div>
                       ))}
                     <div
-                      className={`message-bubble my-2 w-75 ${msg.isSender ? "align-self-end" : "align-self-start"}`}
+                      className={`message-bubble my-2 w-75 ${msg.senderRole === "SMS_BRANCH_ADMIN" ? "align-self-end" : "align-self-start"}`}
                       style={{ fontSize: "11px", background: "transparent" }}
                     >
                       {msg.time}
                     </div>
-                    {msg.isSender && (
+                    {/* {msg.senderRole === "SMS_BRANCH_ADMIN" && (
                       <div className="text-end message-bubble">
                         <MdDelete style={{ cursor: "pointer" }} onClick={() => handleDeleteMessage(msg.messageId)} />
                       </div>
-                    )}
+                    )} */}
                   </div>
                 ))}
               </div>
