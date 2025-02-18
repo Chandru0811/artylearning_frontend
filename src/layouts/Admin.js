@@ -349,7 +349,7 @@ function Admin({ handleLogout }) {
                 path="/changepassword"
                 element={<ChangePassword onLogout={handleLogout} />}
               />
-              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/calendar" element={<Calendar selectedCenter={selectedCenter}/>} />
 
               {/* Lead */}
               <Route path="/lead/lead" element={<Lead selectedCenter={selectedCenter}/>} />

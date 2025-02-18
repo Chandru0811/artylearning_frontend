@@ -13,9 +13,8 @@ import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { FaChalkboardUser } from "react-icons/fa6";
 import { BsBuildings } from "react-icons/bs";
-import { filter } from "jszip";
 
-function Calendar() {
+function Calendar({selectedCenter}) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);
@@ -26,7 +25,7 @@ function Calendar() {
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [teacherData, setTeachereData] = useState(null);
-  const centerIDLocal = localStorage.getItem("selectedCenterId");
+  const centerLocalId = localStorage.getItem("selectedCenterId");
   const [filters, setFilters] = useState({
     centerId: "",
     courseId: "",
@@ -60,23 +59,52 @@ function Calendar() {
     setEvents(filteredEvents);
   };
 
+  // const SearchShedule = async () => {
+  //   try {
+  //     setLoading(true);
+
+  //     // Dynamically construct query parameters based on filters
+  //     const queryParams = new URLSearchParams();
+
+  //     // Loop through the filters and add key-value pairs if they have a value
+  //     for (let key in filters) {
+  //       if (filters[key]) {
+  //         queryParams.append(key, filters[key]);
+  //       }
+  //     }
+
+  //     const response = await api.get(
+  //       `/getAllScheduleInfo?${queryParams.toString()}`
+  //     );
+  //     setData(response.data);
+  //     processEventData(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const SearchShedule = async () => {
     try {
       setLoading(true);
-
-      // Dynamically construct query parameters based on filters
+  
+      let response;
       const queryParams = new URLSearchParams();
-
-      // Loop through the filters and add key-value pairs if they have a value
+  
+      // Loop through filters and add only non-empty and non-zero values
       for (let key in filters) {
-        if (filters[key]) {
+        if (filters[key] && !(key === "centerId" && filters[key] === "0")) {
           queryParams.append(key, filters[key]);
         }
       }
-
-      const response = await api.get(
-        `/getAllScheduleInfo?${queryParams.toString()}`
-      );
+  
+      if (queryParams.toString()) {
+        response = await api.get(`/getAllScheduleInfo?${queryParams.toString()}`);
+      } else {
+        response = await api.get("/getAllScheduleInfo");
+      }
+  
       setData(response.data);
       processEventData(response.data);
     } catch (error) {
@@ -85,28 +113,47 @@ function Calendar() {
       setLoading(false);
     }
   };
-
-  const fetchData = async () => {
+  
+  const fetchCenterData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
+      if (centerLocalId !== null && centerLocalId !== "undefined") {
         setFilters((prevFilters) => ({
           ...prevFilters,
-          centerId: centerIDLocal,
+          centerId: centerLocalId,
         }));
-        fetchListData(centerIDLocal);
       } else if (centerData !== null && centerData.length > 0) {
         setFilters((prevFilters) => ({
           ...prevFilters,
           centerId: centerData[0].id,
         }));
-        fetchListData(centerData[0].id);
       }
       setCenterData(centerData);
     } catch (error) {
       toast.error(error);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data and subjects
+
+      // Check if local storage has center ID
+      if (centerLocalId && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData && centerData.length > 0) {
+        // Use the first center's ID as the default if no center is in local storage
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
+    };
+    fetchData();
+  }, [selectedCenter]);
 
   const fetchListData = async (centerId) => {
     try {
@@ -119,19 +166,17 @@ function Calendar() {
     }
   };
 
- 
-
   useEffect(() => {
     SearchShedule();
-    fetchData();
   }, []);
 
   useEffect(() => {
-    if (filters.centerId !== "" && initialLoad === true) {
+    if (initialLoad || filters.centerId === "0") {
       SearchShedule();
       SetInitialLoad(false);
     }
-  }, [filters, initialLoad]);
+  }, [selectedCenter, filters, initialLoad]);
+  
 
   useEffect(() => {
     if (filters.centerId) {

@@ -48,6 +48,51 @@ const MyMessages = () => {
     getData();
   }, []);
 
+  // const columns = useMemo(
+  //   () => [
+  //     {
+  //       accessorFn: (row, index) => index + 1,
+  //       header: "S.NO",
+  //       size: 20,
+  //       cell: ({ cell }) => (
+  //         <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+  //       ),
+  //     },
+  //     {
+  //       accessorKey: "studentProfile",
+  //       header: "Profile",
+  //       size: 20,
+  //     },
+  //     {
+  //       accessorKey: "studentUniqueId",
+  //       header: "Student ID",
+  //       size: 20,
+  //     },
+  //     {
+  //       accessorKey: "studentName",
+  //       header: "Student Name",
+  //       size: 20,
+  //     },
+  //     {
+  //       accessorKey: "message",
+  //       enableHiding: false,
+  //       header: "Message",
+  //       size: 40,
+  //     },
+  //     {
+  //       accessorKey: "createdAt",
+  //       header: "Created At",
+  //       Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+  //     },
+  //     {
+  //       accessorKey: "updatedAt",
+  //       header: "Updated At",
+  //       Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+  //     },
+  //   ],
+  //   []
+  // );
+
   const columns = useMemo(
     () => [
       {
@@ -58,40 +103,41 @@ const MyMessages = () => {
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
       },
-      // {
-      //   accessorKey: "id",
-      //   header: "",
-      //   enableHiding: false,
-      //   enableSorting: false,
-      //   size: 20,
-      //   Cell: ({ cell }) => (
-      //     <IconButton
-      //       onClick={(e) => {
-      //         e.stopPropagation();
-      //         setMenuAnchor(e.currentTarget);
-      //         setSelectedId(cell.getValue());
-      //       }}
-      //     >
-      //       <MoreVertIcon />
-      //     </IconButton>
-      //   ),
-      // },
       {
-        accessorKey: "senderName",
+        accessorKey: "studentProfile",
+        header: "Profile",
+        size: 50,
+        Cell: ({ cell }) => (
+          <img
+            src={cell.getValue()}
+            alt="Student"
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
+          />
+        ),
+      },
+      {
+        accessorKey: "studentUniqueId",
+        header: "Student ID",
+        size: 100,
+        Cell: ({ cell }) => <span style={{ fontWeight: "bold" }}>{cell.getValue()}</span>,
+      },
+      {
+        accessorKey: "studentName",
         header: "Student Name",
-        size: 20,
+        size: 150,
+        Cell: ({ cell }) => <span>{cell.getValue()}</span>,
       },
-      {
-        accessorKey: "receiverName",
-        header: "Receiver Name",
-        size: 20,
-      },
-      {
-        accessorKey: "message",
-        enableHiding: false,
-        header: "Message",
-        size: 40,
-      },
+      // {
+      //   accessorKey: "message",
+      //   enableHiding: false,
+      //   header: "Message",
+      //   size: 200,
+      // },
       {
         accessorKey: "createdAt",
         header: "Created At",
@@ -106,6 +152,7 @@ const MyMessages = () => {
     []
   );
 
+  
   const theme = createTheme({
     components: {
       MuiTableCell: {
