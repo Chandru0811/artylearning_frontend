@@ -130,7 +130,11 @@ function Datatable2() {
         });
       }
     } catch (error) {
-      toast.error("Error fetching data:", error);
+      if(selectedCenterId === "0"){
+      toast.warning("Please Selecte a Centre");
+      }else{
+        toast.error("Error fetching data:", error);
+      }
     }
   };
 
@@ -212,6 +216,7 @@ function Datatable2() {
                   onChange={handleCenterChange}
                   aria-label="Default select example"
                 >
+                  <option value="">Selected Centre</option>
                   {centerData &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>

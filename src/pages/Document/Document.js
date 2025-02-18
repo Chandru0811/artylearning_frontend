@@ -17,6 +17,8 @@ import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import GlobalDelete from "../../components/common/GlobalDelete";
+import fetchAllCoursesWithIds from "../List/CourseList";
+import fetchAllTeachersWithIds from "../List/TeacherList";
 
 const Document = ({ selectedCenter }) => {
   const [filters, setFilters] = useState({
@@ -33,6 +35,8 @@ const Document = ({ selectedCenter }) => {
   const [courseData, setCourseData] = useState([]);
   const [classData, setClassData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
+  const [courseListData, setCourseListData] = useState([]);
+  const [teacherListData, setTeacherListData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -173,12 +177,23 @@ const Document = ({ selectedCenter }) => {
     },
   });
 
-  const fetchListData = async (centerId) => {
+  const fetchListWithCenterIdData = async (centerId) => {
     try {
       const courseDatas = await fetchAllCoursesWithIdsC(centerId);
       const teacherDatas = await fetchAllTeacherListByCenter(centerId);
       setTeacherData(teacherDatas);
       setCourseData(courseDatas);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const fetchListData = async () => {
+    try {
+      const courseAllListDatas = await fetchAllCoursesWithIds();
+      const teacherAllListDatas = await fetchAllTeachersWithIds();
+      setTeacherListData(teacherAllListDatas);
+      setCourseListData(courseAllListDatas);
     } catch (error) {
       toast.error(error.message);
     }
@@ -192,7 +207,7 @@ const Document = ({ selectedCenter }) => {
           ...prevFilters,
           centerId: centerLocalId,
         }));
-        fetchListData(centerLocalId);
+        fetchListWithCenterIdData(centerLocalId);
       } else if (centerData !== null && centerData.length > 0) {
         setFilters((prevFilters) => ({
           ...prevFilters,
@@ -224,33 +239,33 @@ const Document = ({ selectedCenter }) => {
       }
     };
     fetchData();
-    // fetchListData();
+    fetchListData();
   }, [selectedCenter]);
 
   const handleCenterChange = async (event) => {
-  const centerId = event.target.value;
+    const centerId = event.target.value;
 
-  // Update the filters state
-  setFilters((prevFilters) => ({ ...prevFilters, centerId }));
+    // Update the filters state
+    setFilters((prevFilters) => ({ ...prevFilters, centerId }));
 
-  if (centerId) {
-    try {
-      // Fetch the associated data
-      const courseDatas = await fetchAllCoursesWithIdsC(centerId);
-      const teacherDatas = await fetchAllTeacherListByCenter(centerId);
+    if (centerId) {
+      try {
+        // Fetch the associated data
+        const courseDatas = await fetchAllCoursesWithIdsC(centerId);
+        const teacherDatas = await fetchAllTeacherListByCenter(centerId);
 
-      // Update the respective state variables
-      setCourseData(courseDatas);
-      setTeacherData(teacherDatas);
-    } catch (error) {
-      toast.error("Error fetching data: " + error.message);
+        // Update the respective state variables
+        setCourseData(courseDatas);
+        setTeacherData(teacherDatas);
+      } catch (error) {
+        toast.error("Error fetching data: " + error.message);
+      }
+    } else {
+      // Clear dependent data if no center is selected
+      setCourseData([]);
+      setTeacherData([]);
     }
-  } else {
-    // Clear dependent data if no center is selected
-    setCourseData([]);
-    setTeacherData([]);
-  }
-};
+  };
 
   const handleCourseChange = async (event) => {
     const courseId = event.target.value;
@@ -315,15 +330,14 @@ const Document = ({ selectedCenter }) => {
       date: "",
       day: "",
     });
-  
+
     // Fetch data without filters
     setIsClearFilterClicked(true); // Set flag to trigger data fetch without filters
   };
-  
+
   useEffect(() => {
-      getDocumentData();
-  }, [filters , selectedCenter]);
-  
+    getDocumentData();
+  }, [filters, selectedCenter]);
 
   const handleMenuClose = () => setMenuAnchor(null);
 
@@ -367,8 +381,7 @@ const Document = ({ selectedCenter }) => {
         <div className="mb-3">
           <div className="individual_fliters d-lg-flex">
             <div className="form-group mb-0 mb-1">
-            <input type="hidden" name="centerId" value={filters.centerId} />
-
+              <input type="hidden" name="centerId" value={filters.centerId} />
               {/* <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
@@ -393,12 +406,19 @@ const Document = ({ selectedCenter }) => {
                 value={filters.courseId}
               >
                 <option>Select the Course</option>
-                {courseData &&
-                  courseData.map((course) => (
-                    <option key={course.id} value={course.id}>
-                      {course.courseNames}
-                    </option>
-                  ))}
+                {selectedCenter === "0"
+                  ? courseListData &&
+                    courseListData.map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.courseNames}
+                      </option>
+                    ))
+                  : courseData &&
+                    courseData.map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.courseNames}
+                      </option>
+                    ))}
               </select>
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
@@ -437,12 +457,19 @@ const Document = ({ selectedCenter }) => {
                 value={filters.userId}
               >
                 <option>Select the Teacher</option>
-                {teacherData &&
-                  teacherData.map((teacher) => (
-                    <option key={teacher.id} value={teacher.id}>
-                      {teacher.teacherNames}
-                    </option>
-                  ))}
+                {selectedCenter === "0"
+                  ? teacherListData &&
+                    teacherListData.map((teacher) => (
+                      <option key={teacher.id} value={teacher.id}>
+                        {teacher.teacherNames}
+                      </option>
+                    ))
+                  : teacherData &&
+                    teacherData.map((teacher) => (
+                      <option key={teacher.id} value={teacher.id}>
+                        {teacher.teacherNames}
+                      </option>
+                    ))}
               </select>
             </div>
           </div>

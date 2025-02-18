@@ -17,6 +17,9 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
+import fetchAllCoursesWithIds from "../List/CourseList";
+import fetchAllStudentsWithIds from "../List/StudentList";
+import fetchAllPackageList from "../List/PackageList";
 
 const Invoice = ({ selectedCenter }) => {
   const [filters, setFilters] = useState({
@@ -28,15 +31,18 @@ const Invoice = ({ selectedCenter }) => {
   const [centerData, setCenterData] = useState([]);
   const centerLocalId = localStorage.getItem("selectedCenterId");
   const [centerManagerData, setCenterManagerData] = useState([]);
+  const [courseData, setCourseData] = useState(null);
   const [packageData, setPackageData] = useState(null);
   const [studentData, setStudentData] = useState(null);
+  const [courseListData, setCourseListData] = useState([]);
+  const [packageListData, setPackageListData] = useState([]);
+  const [studentListData, setStudentListData] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
-  const [courseData, setCourseData] = useState(null);
 
   const columns = useMemo(
     () => [
@@ -287,7 +293,7 @@ const Invoice = ({ selectedCenter }) => {
     fetchData();
   }, [selectedCenter]);
 
-  const fetchListData = async (centerId) => {
+  const fetchListWithCenterIdData = async (centerId) => {
     try {
       const courseDatas = await fetchAllCoursesWithIdsC(centerId);
       const student = await fetchAllStudentListByCenter(centerId);
@@ -300,9 +306,24 @@ const Invoice = ({ selectedCenter }) => {
     }
   };
 
+  const fetchListData = async () => {
+    try {
+      const courseListDatas = await fetchAllCoursesWithIds();
+      const studentList = await fetchAllStudentsWithIds();
+      const packageListData = await fetchAllPackageList();
+      setPackageListData(packageListData);
+      setStudentListData(studentList);
+      setCourseListData(courseListDatas);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     if (filters.centerId) {
-      fetchListData(filters.centerId);
+      fetchListWithCenterIdData(filters.centerId);
+    } else {
+      fetchListData();
     }
   }, [filters, selectedCenter]);
 
@@ -374,12 +395,19 @@ const Invoice = ({ selectedCenter }) => {
                 value={filters.courseId}
               >
                 <option selected>Select a Course</option>
-                {courseData &&
-                  courseData.map((courseId) => (
-                    <option key={courseId.id} value={courseId.id}>
-                      {courseId.courseNames}
-                    </option>
-                  ))}
+                {selectedCenter === "0"
+                  ? courseListData &&
+                    courseListData.map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.courseNames}
+                      </option>
+                    ))
+                  : courseData &&
+                    courseData.map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.courseNames}
+                      </option>
+                    ))}
               </select>
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
@@ -391,12 +419,19 @@ const Invoice = ({ selectedCenter }) => {
                 value={filters.studentId}
               >
                 <option selected>Select a Student</option>
-                {studentData &&
-                  studentData.map((student) => (
-                    <option key={student.id} value={student.id}>
-                      {student.studentNames}
-                    </option>
-                  ))}
+                {selectedCenter === "0"
+                  ? studentListData &&
+                    studentListData.map((std) => (
+                      <option key={std.id} value={std.id}>
+                        {std.studentNames}
+                      </option>
+                    ))
+                  : studentData &&
+                    studentData.map((std) => (
+                      <option key={std.id} value={std.id}>
+                        {std.studentNames}
+                      </option>
+                    ))}
               </select>
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
@@ -408,12 +443,19 @@ const Invoice = ({ selectedCenter }) => {
                 value={filters.packageId}
               >
                 <option selected>Select a Package</option>
-                {packageData &&
-                  packageData.map((packages) => (
-                    <option key={packages.id} value={packages.id}>
-                      {packages.packageNames}
-                    </option>
-                  ))}
+                  {selectedCenter === "0"
+                  ? packageListData &&
+                    packageListData.map((pkg) => (
+                      <option key={pkg.id} value={pkg.id}>
+                        {pkg.packageNames}
+                      </option>
+                    ))
+                  : packageData &&
+                    packageData.map((pkg) => (
+                      <option key={pkg.id} value={pkg.id}>
+                        {pkg.packageNames}
+                      </option>
+                    ))}
               </select>
             </div>
             <div className="form-group mb-2 ms-2">

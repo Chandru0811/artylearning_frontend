@@ -103,6 +103,7 @@ function RolesAdd() {
       attendanceCreate: true,
       attendanceUpdate: true,
       attendanceDelete: true,
+      checkAttendanceIndex:true,
       staffAttendanceCreate: true,
       staffAttendanceIndex: true,
       staffAttendanceRead: true,
@@ -285,6 +286,9 @@ function RolesAdd() {
       smsMessageIndex: true,
       smsMessageRead: true,
       smsMessageCreate: true,
+      otherMessageIndex: true,
+      otherMessageRead: true,
+      otherMessageCreate: true,
       account_read: true,
       headerIndex: true,
       headerRead: true,
@@ -487,6 +491,7 @@ function RolesAdd() {
       staffCreate: true,
       teacherCreate: true,
       attendanceCreate: true,
+      checkAttendanceIndex:true,
       staffAttendanceCreate: true,
       leaveAdminCreate: true,
       leaveCreate: true,
@@ -522,6 +527,7 @@ function RolesAdd() {
       timeScheduleAdd: true,
       sendNotificationCreate: true,
       smsMessageCreate: true,
+      otherMessageCreate: true,
       account_create: true,
       headerCreate: true,
       homeCreate: true,
@@ -599,6 +605,7 @@ function RolesAdd() {
       timeScheduleBlock: true,
       sendNotificationRead: true,
       smsMessageRead: true,
+      otherMessageRead: true,
       account_read: true,
       headerRead: true,
       homeRead: true,
@@ -828,6 +835,7 @@ function RolesAdd() {
       timeScheduleBlockIndex: true,
       sendNotificationIndex: true,
       smsMessageIndex: true,
+      otherMessageIndex: true,
       account_index: true,
       headerIndex: true,
       homeIndex: true,
@@ -1829,7 +1837,41 @@ function RolesAdd() {
                             />
                           </td>
                         </tr>
-
+                        <tr>
+                          <td>
+                            <p
+                              style={{
+                                marginLeft: "30px",
+                                marginBottom: "0px",
+                              }}
+                            >
+                              Check Attendance
+                            </p>
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="checkAttendanceIndex"
+                              checked={formik.values.checkAttendanceIndex}
+                              onChange={handleCheckboxChange(
+                                `checkAttendanceIndex`
+                              )}
+                            />
+                          </td>
+                          <td>
+                           
+                          </td>
+                          <td>
+                           
+                          </td>
+                          <td>
+                            
+                          </td>
+                          <td>
+                           
+                          </td>
+                        </tr>
                         <tr>
                           <td>
                             <p
@@ -3917,28 +3959,28 @@ function RolesAdd() {
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="smsMessageIndex"
-                              checked={formik.values.smsMessageIndex}
-                              onChange={handleCheckboxChange(`smsMessageIndex`)}
+                              name="otherMessageIndex"
+                              checked={formik.values.otherMessageIndex}
+                              onChange={handleCheckboxChange(`otherMessageIndex`)}
                             />
                           </td>
                           <td>
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="smsMessageRead"
-                              checked={formik.values.smsMessageRead}
-                              onChange={handleCheckboxChange(`smsMessageRead`)}
+                              name="otherMessageRead"
+                              checked={formik.values.otherMessageRead}
+                              onChange={handleCheckboxChange(`otherMessageRead`)}
                             />
                           </td>
                           <td>
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="smsMessageCreate"
-                              checked={formik.values.smsMessageCreate}
+                              name="otherMessageCreate"
+                              checked={formik.values.otherMessageCreate}
                               onChange={handleCheckboxChange(
-                                `smsMessageCreate`
+                                `otherMessageCreate`
                               )}
                             />
                           </td>

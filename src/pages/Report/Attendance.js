@@ -29,7 +29,7 @@ const Attendance = () => {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: centerLocalId || "",
       courseId: "",
       attendanceDate: "",
       attendanceStatus: "",
@@ -62,26 +62,50 @@ const Attendance = () => {
     },
   });
 
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCentersWithIds();
-      if (centers.length > 0) {
-        const defaultCenterId = centers[0].id;
-        if (centerLocalId !== null && centerLocalId !== "undefined") {
-          formik.setFieldValue("centerId", centerLocalId);
-          await fetchCourses(centerLocalId);
-        } else if (centerData !== null && centerData.length > 0) {
+  // const fetchData = async () => {
+  //   try {
+  //     const centers = await fetchAllCentersWithIds();
+  //     if (centers.length > 0) {
+  //       const defaultCenterId = centers[0].id;
+  //       if (centerLocalId !== null && centerLocalId !== "undefined") {
+  //         formik.setFieldValue("centerId", centerLocalId);
+  //         await fetchCourses(centerLocalId);
+  //       } else if (centerData !== null && centerData.length > 0) {
+  //         formik.setFieldValue("centerId", defaultCenterId);
+  //         await fetchCourses(defaultCenterId);
+  //       }
+  //       setCenterData(centers);
+  //     } else {
+  //       console.error("No centers found!");
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message || "Error fetching centers.");
+  //   }
+  // };
+
+  // Fetch centers on component mount
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const centers = await fetchAllCentersWithIds();
+        setCenterData(centers);
+
+        if (centers.length > 0) {
+          const defaultCenterId = centerLocalId && centerLocalId !== "undefined" ? centerLocalId : centers[0].id;
+
           formik.setFieldValue("centerId", defaultCenterId);
           await fetchCourses(defaultCenterId);
+        } else {
+          console.error("No centers found!");
         }
-        setCenterData(centers);
-      } else {
-        console.error("No centers found!");
+      } catch (error) {
+        toast.error(error.message || "Error fetching centers.");
       }
-    } catch (error) {
-      toast.error(error.message || "Error fetching centers.");
-    }
-  };
+    };
+
+    fetchData();
+  }, []); 
 
   const fetchCourses = async (centerId) => {
     try {
@@ -91,7 +115,7 @@ const Attendance = () => {
         formik.setFieldValue("courseId", defaultCourseId);
         setCourseData(courses);
       } else {
-        toast.error("No courses found for the selected center.");
+        // toast.warning("No courses found for the selected centre.");
       }
     } catch (error) {
       toast.error(error.message || "Error fetching courses.");
@@ -108,11 +132,6 @@ const Attendance = () => {
   const clearFilter = () => {
     formik.resetForm();
   };
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <div className="container-fluid my-3">
@@ -168,7 +187,7 @@ const Attendance = () => {
                   aria-label="Default select example"
                   onChange={handleCenterChange}
                 >
-                  <option></option>
+                  <option value="0">Selected Centre</option>
                   {centerData &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>

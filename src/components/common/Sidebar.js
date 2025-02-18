@@ -463,19 +463,16 @@ function Sidebar() {
             title: "My Messages",
             path: "/messaging",
             access: storedScreens.smsMessageIndex,
-            // access:true
           },
           {
             title: "Other Messages",
             path: "/othermessaging",
-            access: storedScreens.smsMessageIndex,
-            // access:true
+            access: storedScreens.otherMessageIndex,
           },
           {
             title: "School Announcement",
             path: "/sendNotification",
             access: storedScreens.sendNotificationIndex,
-            // access:true
           },
         ],
       },

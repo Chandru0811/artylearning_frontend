@@ -16,6 +16,8 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 import TeacherReplacement from "./TeacherReplacement";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
+import fetchAllCoursesWithIds from "../List/CourseList";
+import fetchAllTeachersWithIds from "../List/TeacherList";
 
 const Class = ({ selectedCenter }) => {
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
@@ -33,6 +35,8 @@ const Class = ({ selectedCenter }) => {
   const [centerData, setCenterData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
+  const [courseListData, setCourseListData] = useState([]);
+  const [teacherListData, setTeacherListData] = useState([]);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
@@ -71,7 +75,7 @@ const Class = ({ selectedCenter }) => {
       { accessorKey: "centerName", header: "Center Name", enableHiding: false },
       { accessorKey: "courseName", header: "Course Name", enableHiding: false },
       { accessorKey: "classCode", header: "Class Code", enableHiding: false },
- 
+
       { accessorKey: "classType", header: "Class Type", enableHiding: false },
       {
         accessorKey: "teacherName",
@@ -257,9 +261,9 @@ const Class = ({ selectedCenter }) => {
 
   useEffect(() => {
     getClassData();
-  }, [filters , selectedCenter]);
+  }, [filters, selectedCenter]);
 
-  const fetchListData = async (centerId) => {
+  const fetchListWithCenterIdData = async (centerId) => {
     try {
       const courseDatas = await fetchAllCoursesWithIdsC(centerId);
       const teacherDatas = await fetchAllTeacherListByCenter(centerId);
@@ -270,9 +274,22 @@ const Class = ({ selectedCenter }) => {
     }
   };
 
+  const fetchListData = async () => {
+    try {
+      const courseAllListDatas = await fetchAllCoursesWithIds();
+      const teacherAllListDatas = await fetchAllTeachersWithIds();
+      setTeacherListData(teacherAllListDatas);
+      setCourseListData(courseAllListDatas);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     if (filters.centerId) {
-      fetchListData(filters.centerId);
+      fetchListWithCenterIdData(filters.centerId);
+    } else {
+      fetchListData();
     }
   }, [filters]);
 
@@ -319,7 +336,7 @@ const Class = ({ selectedCenter }) => {
         <div className="mb-3">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 mb-1">
-            <input type="hidden" name="centerId" value={filters.centerId} />
+              <input type="hidden" name="centerId" value={filters.centerId} />
 
               {/* <select
                 className="form-select form-select-sm center_list"
@@ -344,15 +361,23 @@ const Class = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.courseId}
               >
-                <option selected>Select a Course</option>
-                {courseData &&
-                  courseData.map((courseId) => (
-                    <option key={courseId.id} value={courseId.id}>
-                      {courseId.courseNames}
-                    </option>
-                  ))}
+                <option value="">Select a Course</option>
+                {selectedCenter === "0"
+                  ? courseListData &&
+                    courseListData.map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.courseNames}
+                      </option>
+                    ))
+                  : courseData &&
+                    courseData.map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.courseNames}
+                      </option>
+                    ))}
               </select>
             </div>
+
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
@@ -373,12 +398,20 @@ const Class = ({ selectedCenter }) => {
                 value={filters.userId}
               >
                 <option selected>Select a Teacher</option>
-                {teacherData &&
-                  teacherData.map((teacher) => (
-                    <option key={teacher.id} value={teacher.id}>
-                      {teacher.teacherNames}
-                    </option>
-                  ))}
+
+                {selectedCenter === "0"
+                  ? teacherListData &&
+                    teacherListData.map((teacher) => (
+                      <option key={teacher.id} value={teacher.id}>
+                        {teacher.teacherNames}
+                      </option>
+                    ))
+                  : teacherData &&
+                    teacherData.map((teacher) => (
+                      <option key={teacher.id} value={teacher.id}>
+                        {teacher.teacherNames}
+                      </option>
+                    ))}
               </select>
             </div>
           </div>
@@ -476,16 +509,22 @@ const Class = ({ selectedCenter }) => {
               {/* <MenuItem onClick={() => navigate(`/class/view/${selectedId}`)}>
                 View
               </MenuItem> */}
-              
+
               {/* <MenuItem >
                 <ClassReplacement classId={selectedId} onDeleteSuccess={getClassData}
                   onOpen={handleMenuClose}/>
               </MenuItem> */}
-              <MenuItem >
-                <TeacherReplacement classId={selectedId} onDeleteSuccess={getClassData}
-                  onOpen={handleMenuClose}/>
+              <MenuItem>
+                <TeacherReplacement
+                  classId={selectedId}
+                  onDeleteSuccess={getClassData}
+                  onOpen={handleMenuClose}
+                />
               </MenuItem>
-              <MenuItem onClick={() => navigate(`/class/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem
+                onClick={() => navigate(`/class/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>
