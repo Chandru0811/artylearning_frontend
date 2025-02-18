@@ -7,7 +7,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 // import { LuDownload } from "react-icons/lu";
 import { IoChevronBackOutline } from "react-icons/io5";
-import { MdDelete } from "react-icons/md";
+// import { MdDelete } from "react-icons/md";
 import document from "../../../assets/images/Blue and Peach Gradient Facebook Profile Picture.png";
 
 function MyMessagesView() {
@@ -109,14 +109,20 @@ function MyMessagesView() {
   // };
 
   // Process Messages Function
-  
+
   const processMessages = (messages, currentUserId, currentRole) => {
     return messages.map((msg) => {
       if (msg.senderId === msg.receiverId) {
         return { ...msg, messageType: "Self-Message" };
-      } else if (msg.senderId === currentUserId && msg.senderRole === currentRole) {
+      } else if (
+        msg.senderId === currentUserId &&
+        msg.senderRole === currentRole
+      ) {
         return { ...msg, messageType: "Sent" };
-      } else if (msg.receiverId === currentUserId && msg.receiverRole === currentRole) {
+      } else if (
+        msg.receiverId === currentUserId &&
+        msg.receiverRole === currentRole
+      ) {
         return { ...msg, messageType: "Received" };
       } else {
         return { ...msg, messageType: "Other" };
@@ -126,7 +132,9 @@ function MyMessagesView() {
 
   const getData = async () => {
     try {
-      const response = await api.get(`getSingleChatConversation?transcriptOne=${senderId}&transcriptTwo=${receiverId}`);
+      const response = await api.get(
+        `getSingleChatConversation?transcriptOne=${senderId}&transcriptTwo=${receiverId}`
+      );
       setData(response.data);
       const messages = processMessages(response.data, userId, LoginUserRole); // Process Messages
       const combinedMessages = messages.map((msg) => ({
@@ -135,14 +143,17 @@ function MyMessagesView() {
         messageType: msg.messageType, // Add message type
         attachments: msg.attachments,
         senderRole: msg.senderRole,
-        time: new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        time: new Date(msg.createdAt).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       }));
       setMessages(combinedMessages);
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
     }
   };
-  
+
   // const handleDeleteMessage = async (messageId) => {
   //   try {
   //     const response = await api.delete(`/deleteMessage/${id}`);
@@ -252,12 +263,10 @@ function MyMessagesView() {
     const timer = setTimeout(() => {
       getData(); // Trigger the getData function after 2 seconds
     }, 1000); // 2000ms = 2 seconds
-  
+
     // Cleanup the timeout in case the component unmounts or the effect runs again
     return () => clearTimeout(timer);
   }); // Only run this effect when `id` changes
-  
-  
 
   return (
     <>
@@ -309,22 +318,44 @@ function MyMessagesView() {
                     </div>
                   </div>
                 ))} */}
-                 {messages.map((msg, index) => (
-                  <div key={index} className={`message ${msg.senderRole === "SMS_BRANCH_ADMIN" ? "right" : "left"}`}>
-                    <div className={`message-bubble my-2 w-75 ${msg.senderRole === "SMS_BRANCH_ADMIN" ? "align-self-end" : "align-self-start"}`}>
+                {messages.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`message ${
+                      msg.senderRole === "SMS_BRANCH_ADMIN" ? "right" : "left"
+                    }`}
+                  >
+                    <div
+                      className={`message-bubble my-2 w-75 ${
+                        msg.senderRole === "SMS_BRANCH_ADMIN"
+                          ? "align-self-end"
+                          : "align-self-start"
+                      }`}
+                    >
                       {msg.content}
                     </div>
                     {msg.attachments?.length > 0 &&
                       msg.attachments.map((attachment, attIndex) => (
                         <div
                           key={attIndex}
-                          className={`message-bubble w-75 mt-2 ${msg.senderRole === "SMS_BRANCH_ADMIN" ? "align-self-end" : "align-self-start"}`}
+                          className={`message-bubble w-75 mt-2 ${
+                            msg.senderRole === "SMS_BRANCH_ADMIN" ||
+                            msg.senderRole === "SMS_STAFF" ||
+                            msg.senderRole === "SMS_TEACHER" ||
+                            msg.senderRole === "SMS_FREELANCER"
+                              ? "align-self-end"
+                              : "align-self-start"
+                          }`}
                         >
                           {renderAttachment(attachment, attIndex)}
                         </div>
                       ))}
                     <div
-                      className={`message-bubble my-2 w-75 ${msg.senderRole === "SMS_BRANCH_ADMIN" ? "align-self-end" : "align-self-start"}`}
+                      className={`message-bubble my-2 w-75 ${
+                        msg.senderRole === "SMS_BRANCH_ADMIN"
+                          ? "align-self-end"
+                          : "align-self-start"
+                      }`}
                       style={{ fontSize: "11px", background: "transparent" }}
                     >
                       {msg.time}
