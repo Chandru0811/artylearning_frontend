@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import ChangePassword from "./ChangePassword";
@@ -17,9 +17,6 @@ function Header({ onLogout, handleCenterChange, centerData, selectedCenter }) {
     onLogout();
     navigate("/login");
   };
-
-
-
 
   return (
     <nav>

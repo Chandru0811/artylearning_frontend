@@ -13,8 +13,10 @@ import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { FaChalkboardUser } from "react-icons/fa6";
 import { BsBuildings } from "react-icons/bs";
+import fetchAllCoursesWithIds from "../List/CourseList";
+import fetchAllTeachersWithIds from "../List/TeacherList";
 
-function Calendar({selectedCenter}) {
+function Calendar({ selectedCenter }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);
@@ -25,6 +27,8 @@ function Calendar({selectedCenter}) {
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [teacherData, setTeachereData] = useState(null);
+  const [courseListData, setCourseListData] = useState([]);
+  const [teacherListData, setTeacherListData] = useState([]);
   const centerLocalId = localStorage.getItem("selectedCenterId");
   const [filters, setFilters] = useState({
     centerId: "",
@@ -32,8 +36,7 @@ function Calendar({selectedCenter}) {
     userId: "",
     date: "",
   });
-  console.log("filters:",filters.centerId);
-  
+
   // Process event data for calendar rendering
   const processEventData = (apiData) => {
     const filteredEvents = apiData.map((item) => ({
@@ -88,23 +91,25 @@ function Calendar({selectedCenter}) {
   const SearchShedule = async () => {
     try {
       setLoading(true);
-  
+
       let response;
       const queryParams = new URLSearchParams();
-  
+
       // Loop through filters and add only non-empty and non-zero values
       for (let key in filters) {
         if (filters[key] && !(key === "centerId" && filters[key] === "0")) {
           queryParams.append(key, filters[key]);
         }
       }
-  
+
       if (queryParams.toString()) {
-        response = await api.get(`/getAllScheduleInfo?${queryParams.toString()}`);
+        response = await api.get(
+          `/getAllScheduleInfo?${queryParams.toString()}`
+        );
       } else {
         response = await api.get("/getAllScheduleInfo");
       }
-  
+
       setData(response.data);
       processEventData(response.data);
     } catch (error) {
@@ -113,7 +118,7 @@ function Calendar({selectedCenter}) {
       setLoading(false);
     }
   };
-  
+
   const fetchCenterData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -155,12 +160,23 @@ function Calendar({selectedCenter}) {
     fetchData();
   }, [selectedCenter]);
 
-  const fetchListData = async (centerId) => {
+  const fetchCenterIdListData = async (centerId) => {
     try {
       const courseDatas = await fetchAllCoursesWithIdsC(centerId);
       const teacherDatas = await fetchAllTeacherListByCenter(centerId);
       setTeachereData(teacherDatas);
       setCourseData(courseDatas);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const fetchListData = async () => {
+    try {
+      const courseAllListDatas = await fetchAllCoursesWithIds();
+      const teacherAllListDatas = await fetchAllTeachersWithIds();
+      setTeacherListData(teacherAllListDatas);
+      setCourseListData(courseAllListDatas);
     } catch (error) {
       toast.error(error.message);
     }
@@ -176,11 +192,12 @@ function Calendar({selectedCenter}) {
       SetInitialLoad(false);
     }
   }, [selectedCenter, filters, initialLoad]);
-  
 
   useEffect(() => {
     if (filters.centerId) {
-      fetchListData(filters.centerId);
+      fetchCenterIdListData(filters.centerId);
+    } else {
+      fetchListData();
     }
   }, [filters]);
 
@@ -267,13 +284,20 @@ function Calendar({selectedCenter}) {
             onChange={handleFilterChange}
             value={filters.courseId}
           >
-            <option selected>Select a Course</option>
-            {courseData &&
-              courseData.map((courseId) => (
-                <option key={courseId.id} value={courseId.id}>
-                  {courseId.courseNames}
-                </option>
-              ))}
+            <option>Select the Course</option>
+            {selectedCenter === "0"
+              ? courseListData &&
+                courseListData.map((course) => (
+                  <option key={course.id} value={course.id}>
+                    {course.courseNames}
+                  </option>
+                ))
+              : courseData &&
+                courseData.map((course) => (
+                  <option key={course.id} value={course.id}>
+                    {course.courseNames}
+                  </option>
+                ))}
           </select>
         </div>
 
@@ -285,13 +309,21 @@ function Calendar({selectedCenter}) {
             value={filters.userId}
             onChange={handleFilterChange}
           >
-            <option selected>Select a Teacher</option>
-            {teacherData &&
-              teacherData.map((teacher) => (
-                <option key={teacher.id} value={teacher.id}>
-                  {teacher.teacherNames}
-                </option>
-              ))}
+            <option>Select the Teacher</option>
+
+            {selectedCenter === "0"
+              ? teacherListData &&
+                teacherListData.map((teacher) => (
+                  <option key={teacher.id} value={teacher.id}>
+                    {teacher.teacherNames}
+                  </option>
+                ))
+              : teacherData &&
+                teacherData.map((teacher) => (
+                  <option key={teacher.id} value={teacher.id}>
+                    {teacher.teacherNames}
+                  </option>
+                ))}
           </select>
         </div>
 

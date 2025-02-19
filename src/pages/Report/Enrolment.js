@@ -131,7 +131,7 @@ function Datatable2() {
       }
     } catch (error) {
       if(selectedCenterId === "0"){
-      toast.warning("Please Selecte a Centre");
+      return <></>;
       }else{
         toast.error("Error fetching data:", error);
       }
@@ -212,11 +212,9 @@ function Datatable2() {
                 <label className="form-label">Centre</label>
                 <select
                   className="form-select"
-                  value={selectedCenterId || ""}
+                  value={selectedCenterId}
                   onChange={handleCenterChange}
-                  aria-label="Default select example"
                 >
-                  <option value="">Selected Centre</option>
                   {centerData &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>

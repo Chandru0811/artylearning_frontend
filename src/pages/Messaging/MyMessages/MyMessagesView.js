@@ -81,35 +81,6 @@ function MyMessagesView() {
     },
   });
 
-  // const getData = async () => {
-  //   try {
-  //     const response = await api.get(
-  //       `getSingleChatConversation?transcriptOne=${senderId}&transcriptTwo=${receiverId}`
-  //     );
-  //     setData(response.data);
-  //     const messages = response.data;
-  //     console.log("messages", messages);
-
-  //     const combinedMessages = messages.map((msg) => ({
-  //       content: msg.message,
-  //       isSender: msg.senderId === userId,
-  //       attachments: msg.attachments,
-  //       time: new Date(msg.createdAt).toLocaleTimeString([], {
-  //         hour: "2-digit",
-  //         minute: "2-digit",
-  //       }),
-  //       // time: msg.createdAt
-  //     }));
-
-  //     setMessages(combinedMessages);
-  //     console.log("Messages:", combinedMessages);
-  //   } catch (error) {
-  //     toast.error(`Error Fetching Data: ${error.message}`);
-  //   }
-  // };
-
-  // Process Messages Function
-
   const processMessages = (messages, currentUserId, currentRole) => {
     return messages.map((msg) => {
       if (msg.senderId === msg.receiverId) {
@@ -154,23 +125,6 @@ function MyMessagesView() {
     }
   };
 
-  // const handleDeleteMessage = async (messageId) => {
-  //   try {
-  //     const response = await api.delete(`/deleteMessage/${id}`);
-  //     if (response.status === 200) {
-  //       toast.success("Message deleted successfully!");
-  //       getData();
-  //       setMessages((prevMessages) =>
-  //         prevMessages.filter((msg) => msg.messageId !== messageId)
-  //       );
-  //     } else {
-  //       toast.error("Failed to delete the message.");
-  //     }
-  //   } catch (error) {
-  //     toast.error(`Error: ${error.message}`);
-  //   }
-  // };
-
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     setFileCount(files.length);
@@ -201,11 +155,6 @@ function MyMessagesView() {
                 className="img-fluid"
               />
             </a>
-            {/* <a href={fileUrl} download>
-              <button className="btn ">
-                <LuDownload color="#e60504" />
-              </button>
-            </a> */}
           </div>
         </div>
       );
@@ -221,11 +170,6 @@ function MyMessagesView() {
                 className="img-fluid "
               />
             </a>
-            {/* <a href={fileUrl} download>
-              <button className="btn ">
-                <LuDownload size={18} color="#e60504" />
-              </button>
-            </a> */}
           </div>
         </div>
       );
@@ -237,13 +181,6 @@ function MyMessagesView() {
               <source src={fileUrl} type={`video/${extension}`} />
               Your browser does not support the video tag.
             </video>
-            <div>
-              {/* <a href={fileUrl} download>
-                <button className="btn">
-                  <LuDownload size={18} color="#e60504" />
-                </button>
-              </a> */}
-            </div>
           </div>
         </div>
       );
@@ -259,14 +196,18 @@ function MyMessagesView() {
     }
   }, [messages]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      getData(); // Trigger the getData function after 2 seconds
-    }, 1000); // 2000ms = 2 seconds
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     getData(); // Trigger the getData function after 2 seconds
+  //   }, 1000); // 2000ms = 2 seconds
 
-    // Cleanup the timeout in case the component unmounts or the effect runs again
-    return () => clearTimeout(timer);
-  }); // Only run this effect when `id` changes
+  //   // Cleanup the timeout in case the component unmounts or the effect runs again
+  //   return () => clearTimeout(timer);
+  // }); 
+  
+  useEffect(() => {
+    getData();
+  },[id]);
 
   return (
     <>
