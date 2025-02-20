@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import ChangePassword from "./ChangePassword";
 import { BiLogOut } from "react-icons/bi";
@@ -7,6 +7,7 @@ import { CiCalendarDate } from "react-icons/ci";
 
 function Header({ onLogout, handleCenterChange, centerData, selectedCenter }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("email");
 
@@ -17,6 +18,10 @@ function Header({ onLogout, handleCenterChange, centerData, selectedCenter }) {
     onLogout();
     navigate("/login");
   };
+
+  // Condition to hide the select dropdown
+  const hideCenterSelect =
+    location.pathname === "/sms/calendar" || location.pathname === "/calendar" || location.pathname === "/sms/timetable" || location.pathname === "/timetable";
 
   return (
     <nav>
@@ -38,37 +43,39 @@ function Header({ onLogout, handleCenterChange, centerData, selectedCenter }) {
             </button>
           </Link>
           <div className="position-relative">
-            <select
-              value={selectedCenter}
-              name="studentRelationCenter"
-              className="form-select shadow-none"
-              onChange={handleCenterChange}
-              style={{
-                border: "none",
-                outline: "none",
-                fontSize: "14px", // Readable size
-                width: "auto", // Automatically adjust width based on content
-                minWidth: "150px", // Ensure the dropdown is not too small
-                maxWidth: "100%", // Allow full width on smaller screens
-                padding: "0 10px", // Add some padding for a neat look
-              }}
-            >
-              <option value="" selected disabled>
-                Select a Centre
-              </option>
-              <option value="0">
-                All Center
-              </option>
-              {centerData &&
-                centerData.map((studentRelationCenter) => (
-                  <option
-                    key={studentRelationCenter.id}
-                    value={studentRelationCenter.id}
-                  >
-                    {studentRelationCenter.centerNames}
+            {!hideCenterSelect && (
+              <div className="position-relative">
+                <select
+                  value={selectedCenter}
+                  name="studentRelationCenter"
+                  className="form-select shadow-none"
+                  onChange={handleCenterChange}
+                  style={{
+                    border: "none",
+                    outline: "none",
+                    fontSize: "14px",
+                    width: "auto",
+                    minWidth: "150px",
+                    maxWidth: "100%",
+                    padding: "0 10px",
+                  }}
+                >
+                  <option value="" disabled>
+                    Select a Centre
                   </option>
-                ))}
-            </select>
+                  <option value="0">All Center</option>
+                  {centerData &&
+                    centerData.map((studentRelationCenter) => (
+                      <option
+                        key={studentRelationCenter.id}
+                        value={studentRelationCenter.id}
+                      >
+                        {studentRelationCenter.centerNames}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            )}
           </div>
           <button
             className="btn border border-1 rounded-circle"

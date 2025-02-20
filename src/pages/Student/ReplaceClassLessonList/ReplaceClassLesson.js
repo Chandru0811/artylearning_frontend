@@ -6,6 +6,7 @@ import { ThemeProvider, createTheme, IconButton } from "@mui/material";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllCoursesWithIdsC from "../../List/CourseListByCenter";
+import fetchAllCoursesWithIds from "../../List/CourseList";
 
 const ReplaceClassLesson = ({ selectedCenter }) => {
   const [filters, setFilters] = useState({
@@ -18,6 +19,7 @@ const ReplaceClassLesson = ({ selectedCenter }) => {
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState([]);
   const [courseData, setCourseData] = useState([]);
+  const [courseListData, setCourseListData] = useState([]);
   const navigate = useNavigate();
   const centerLocalId = localStorage.getItem("selectedCenterId");
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
@@ -192,7 +194,7 @@ const ReplaceClassLesson = ({ selectedCenter }) => {
     fetchData();
   }, [selectedCenter]);
 
-  const fetchListData = async (centerId) => {
+  const fetchCenterListCourseData = async (centerId) => {
     try {
       const courseDatas = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courseDatas);
@@ -201,9 +203,20 @@ const ReplaceClassLesson = ({ selectedCenter }) => {
     }
   };
 
+  const fetchListData = async () => {
+    try {
+      const courseDatas = await fetchAllCoursesWithIds();
+      setCourseListData(courseDatas);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     if (filters.centerId) {
-      fetchListData(filters.centerId);
+      fetchCenterListCourseData(filters.centerId);
+    } else {
+      fetchListData();
     }
   }, [filters]);
 
@@ -325,13 +338,20 @@ const ReplaceClassLesson = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.courseId}
               >
-                <option selected>Select a Course</option>
-                {courseData &&
-                  courseData.map((courseId) => (
-                    <option key={courseId.id} value={courseId.id}>
-                      {courseId.courseNames}
-                    </option>
-                  ))}
+                 <option value="">Select a Course</option>
+                {selectedCenter === "0"
+                  ? courseListData &&
+                    courseListData.map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.courseNames}
+                      </option>
+                    ))
+                  : courseData &&
+                    courseData.map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.courseNames}
+                      </option>
+                    ))}
               </select>
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
