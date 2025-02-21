@@ -410,7 +410,7 @@ const Document = ({ selectedCenter }) => {
                 onChange={handleCourseChange}
                 value={filters.courseId}
               >
-                <option selected value="">Select the Course</option>
+                <option value="" disabled>Select the Course</option>
                 {selectedCenter === "0"
                   ? courseListData &&
                     courseListData.map((course) => (
@@ -434,7 +434,7 @@ const Document = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.classId}
               >
-                <option selected value="">Select the Class</option>
+                <option value="" disabled>Select the Class</option>
                 {classData &&
                   classData.map((classes) => (
                     <option key={classes.id} value={classes.id}>
@@ -461,7 +461,7 @@ const Document = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.userId}
               >
-                <option selected value="">Select the Teacher</option>
+                <option value="" disabled>Select the Teacher</option>
                 {selectedCenter === "0"
                   ? teacherListData &&
                     teacherListData.map((teacher) => (
@@ -488,7 +488,7 @@ const Document = ({ selectedCenter }) => {
                   onChange={handleFilterChange}
                   value={filters.day}
                 >
-                  <option>Select a Day</option>
+                  <option value="" disabled>Select a Day</option>
                   <option value="SUNDAY">Sunday</option>
                   <option value="MONDAY">Monday</option>
                   <option value="TUESDAY">Tuesday</option>

@@ -370,7 +370,6 @@ const Invoice = ({ selectedCenter }) => {
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 mb-1">
               <input type="hidden" name="centerId" value={filters.centerId} />
-
               {/* <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
@@ -394,7 +393,7 @@ const Invoice = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.courseId}
               >
-                <option selected>Select a Course</option>
+                <option value="" disabled>Select a Course</option>
                 {selectedCenter === "0"
                   ? courseListData &&
                     courseListData.map((course) => (
@@ -418,7 +417,7 @@ const Invoice = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.studentId}
               >
-                <option selected>Select a Student</option>
+                <option value="" disabled>Select a Student</option>
                 {selectedCenter === "0"
                   ? studentListData &&
                     studentListData.map((std) => (
@@ -442,7 +441,7 @@ const Invoice = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.packageId}
               >
-                <option selected>Select a Package</option>
+                <option value="" disabled>Select a Package</option>
                   {selectedCenter === "0"
                   ? packageListData &&
                     packageListData.map((pkg) => (
