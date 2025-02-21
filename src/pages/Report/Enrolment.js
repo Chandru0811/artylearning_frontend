@@ -25,17 +25,6 @@ function Datatable2() {
     dayData: [],
     labels: [],
   });
-  console.log("chartData", chartData);
-
-  // const fetchData = async () => {
-  //   try {
-  //     const centerData = await fetchAllCentersWithIds();
-  //     setCenterData(centerData);
-  //     setSelectedCenterId(centerData[0]?.id || null);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
 
   const fetchData = async () => {
     try {
@@ -67,7 +56,7 @@ function Datatable2() {
 
   const fetchEnrollmentData = async (centerId, week, day) => {
     const queryParams = new URLSearchParams({
-      center: centerId,
+      center: centerId === "0" ? "" : centerId,
       week: week,
       day: day,
     });
@@ -137,6 +126,7 @@ function Datatable2() {
       }
     }
   };
+
 
   useEffect(() => {
     if (selectedCenterId) {

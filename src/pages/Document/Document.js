@@ -242,41 +242,46 @@ const Document = ({ selectedCenter }) => {
     fetchListData();
   }, [selectedCenter]);
 
-  const handleCenterChange = async (event) => {
-    const centerId = event.target.value;
+  // const handleCenterChange = async (event) => {
+  //   const centerId = event.target.value;
 
-    // Update the filters state
-    setFilters((prevFilters) => ({ ...prevFilters, centerId }));
+  //   // Update the filters state
+  //   setFilters((prevFilters) => ({ ...prevFilters, centerId }));
 
-    if (centerId) {
-      try {
-        // Fetch the associated data
-        const courseDatas = await fetchAllCoursesWithIdsC(centerId);
-        const teacherDatas = await fetchAllTeacherListByCenter(centerId);
+  //   if (centerId) {
+  //     try {
+  //       // Fetch the associated data
+  //       const courseDatas = await fetchAllCoursesWithIdsC(centerId);
+  //       const teacherDatas = await fetchAllTeacherListByCenter(centerId);
 
-        // Update the respective state variables
-        setCourseData(courseDatas);
-        setTeacherData(teacherDatas);
-      } catch (error) {
-        toast.error("Error fetching data: " + error.message);
-      }
-    } else {
-      // Clear dependent data if no center is selected
-      setCourseData([]);
-      setTeacherData([]);
-    }
-  };
+  //       // Update the respective state variables
+  //       setCourseData(courseDatas);
+  //       setTeacherData(teacherDatas);
+  //     } catch (error) {
+  //       toast.error("Error fetching data: " + error.message);
+  //     }
+  //   } else {
+  //     // Clear dependent data if no center is selected
+  //     setCourseData([]);
+  //     setTeacherData([]);
+  //   }
+  // };
 
   const handleCourseChange = async (event) => {
     const courseId = event.target.value;
     setFilters((prevFilters) => ({ ...prevFilters, courseId })); // Update filter state
-    try {
-      const classes = await fetchAllClassesWithIdsC(courseId); // Fetch class list based on courseId
-      setClassData(classes);
-    } catch (error) {
-      toast.error(error.message);
+  
+    // Only trigger API call if courseId is not empty
+    if (courseId) {
+      try {
+        const classes = await fetchAllClassesWithIdsC(courseId); // Fetch class list based on courseId
+        setClassData(classes);
+      } catch (error) {
+        toast.error(error.message);
+      }
     }
   };
+  
 
   const getDocumentData = async () => {
     try {
@@ -405,7 +410,7 @@ const Document = ({ selectedCenter }) => {
                 onChange={handleCourseChange}
                 value={filters.courseId}
               >
-                <option>Select the Course</option>
+                <option selected value="">Select the Course</option>
                 {selectedCenter === "0"
                   ? courseListData &&
                     courseListData.map((course) => (
@@ -429,7 +434,7 @@ const Document = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.classId}
               >
-                <option>Select the Class</option>
+                <option selected value="">Select the Class</option>
                 {classData &&
                   classData.map((classes) => (
                     <option key={classes.id} value={classes.id}>
@@ -456,7 +461,7 @@ const Document = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.userId}
               >
-                <option>Select the Teacher</option>
+                <option selected value="">Select the Teacher</option>
                 {selectedCenter === "0"
                   ? teacherListData &&
                     teacherListData.map((teacher) => (

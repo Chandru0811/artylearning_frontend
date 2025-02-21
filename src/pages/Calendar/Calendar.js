@@ -62,32 +62,6 @@ function Calendar({ selectedCenter }) {
     setEvents(filteredEvents);
   };
 
-  // const SearchShedule = async () => {
-  //   try {
-  //     setLoading(true);
-
-  //     // Dynamically construct query parameters based on filters
-  //     const queryParams = new URLSearchParams();
-
-  //     // Loop through the filters and add key-value pairs if they have a value
-  //     for (let key in filters) {
-  //       if (filters[key]) {
-  //         queryParams.append(key, filters[key]);
-  //       }
-  //     }
-
-  //     const response = await api.get(
-  //       `/getAllScheduleInfo?${queryParams.toString()}`
-  //     );
-  //     setData(response.data);
-  //     processEventData(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const SearchShedule = async () => {
     try {
       setLoading(true);
@@ -267,7 +241,7 @@ function Calendar({ selectedCenter }) {
             onChange={handleFilterChange}
             value={filters.centerId}
           >
-            <option value="">Select a Center</option>
+            <option value="" disabled>Select a Center</option>
             {centerData?.map((center) => (
               <option key={center.id} value={center.id}>
                 {center.centerNames}
@@ -284,7 +258,7 @@ function Calendar({ selectedCenter }) {
             onChange={handleFilterChange}
             value={filters.courseId}
           >
-            <option>Select the Course</option>
+            <option value="" disabled>Select the Course</option>
             {selectedCenter === "0"
               ? courseListData &&
                 courseListData.map((course) => (
@@ -309,7 +283,7 @@ function Calendar({ selectedCenter }) {
             value={filters.userId}
             onChange={handleFilterChange}
           >
-            <option>Select the Teacher</option>
+            <option value="" disabled>Select the Teacher</option>
 
             {selectedCenter === "0"
               ? teacherListData &&

@@ -337,7 +337,6 @@ const Class = ({ selectedCenter }) => {
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 mb-1">
               <input type="hidden" name="centerId" value={filters.centerId} />
-
               {/* <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
@@ -361,7 +360,7 @@ const Class = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.courseId}
               >
-                <option value="">Select a Course</option>
+                <option value="" selected>Select a Course</option>
                 {selectedCenter === "0"
                   ? courseListData &&
                     courseListData.map((course) => (
@@ -397,7 +396,7 @@ const Class = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.userId}
               >
-                <option selected>Select a Teacher</option>
+                <option selected value="">Select a Teacher</option>
 
                 {selectedCenter === "0"
                   ? teacherListData &&
