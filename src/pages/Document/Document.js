@@ -493,7 +493,7 @@ const Document = ({ selectedCenter }) => {
                   <option value="MONDAY">Monday</option>
                   <option value="TUESDAY">Tuesday</option>
                   <option value="WEDNESDAY">Wednesday</option>
-                  <option value="THURDAY">Thursday</option>
+                  <option value="THURSDAY">Thursday</option>
                   <option value="FRIDAY">Friday</option>
                   <option value="SATURDAY">Saturday</option>
                 </select>
