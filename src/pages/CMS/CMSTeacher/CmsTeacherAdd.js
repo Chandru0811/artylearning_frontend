@@ -128,7 +128,8 @@ const CmsTeacherAdd = ({ getData }) => {
                 >
                   {" "}
                   <option value="">Select a role</option>
-                  <option value="ADMIN">Admin</option>
+                  <option value="ADMIN">Operations Executive
+                  </option>
                   <option value="ENGLISH">English Teacher</option>
                   <option value="CHINESE">Chinese Teacher</option>
                 </select>
