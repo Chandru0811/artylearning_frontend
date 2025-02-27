@@ -48,50 +48,6 @@ const MyMessages = () => {
     getData();
   }, []);
 
-  // const columns = useMemo(
-  //   () => [
-  //     {
-  //       accessorFn: (row, index) => index + 1,
-  //       header: "S.NO",
-  //       size: 20,
-  //       cell: ({ cell }) => (
-  //         <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
-  //       ),
-  //     },
-  //     {
-  //       accessorKey: "studentProfile",
-  //       header: "Profile",
-  //       size: 20,
-  //     },
-  //     {
-  //       accessorKey: "studentUniqueId",
-  //       header: "Student ID",
-  //       size: 20,
-  //     },
-  //     {
-  //       accessorKey: "studentName",
-  //       header: "Student Name",
-  //       size: 20,
-  //     },
-  //     {
-  //       accessorKey: "message",
-  //       enableHiding: false,
-  //       header: "Message",
-  //       size: 40,
-  //     },
-  //     {
-  //       accessorKey: "createdAt",
-  //       header: "Created At",
-  //       Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
-  //     },
-  //     {
-  //       accessorKey: "updatedAt",
-  //       header: "Updated At",
-  //       Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
-  //     },
-  //   ],
-  //   []
-  // );
 
   const columns = useMemo(
     () => [
@@ -260,12 +216,10 @@ const MyMessages = () => {
                   muiTableBodyRowProps={({ row }) => ({
                     onClick: () => navigate(`/messaging/view/${row.original.id}`, {
                       state: {
-                        senderId: row.original.senderId,
-                        receiverId: row.original.receiverId,
-                        senderName: row.original.senderName,
-                        senderRole: row.original.senderRole,
-                        receiverName: row.original.receiverName,
-                        message: row.original.message,
+                        studentId: row.original.studentId,
+                        studentName: row.original.studentName,
+                        studentRole: row.original.receiverRole,
+                        studentUniqueId: row.original.studentUniqueId,
                       },
                     }),
                     style: { cursor: "pointer" },

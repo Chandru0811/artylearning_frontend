@@ -7,7 +7,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 // import { LuDownload } from "react-icons/lu";
 import { IoChevronBackOutline } from "react-icons/io5";
-// import { MdDelete } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import document from "../../../assets/images/Blue and Peach Gradient Facebook Profile Picture.png";
 
 function MyMessagesView() {
@@ -16,19 +16,12 @@ function MyMessagesView() {
   const [messages, setMessages] = useState([]);
   const [data, setData] = useState(null);
   const location = useLocation();
-  const {
-    senderId,
-    receiverId,
-    senderName,
-    senderRole,
-    receiverName,
-    message,
-  } = location.state || {};
+  const { studentId, studentName, studentRole, studentUniqueId } =
+    location.state || {};
   const [fileCount, setFileCount] = useState(0);
   const userId = localStorage.getItem("userId");
   const LoginUserName = localStorage.getItem("LoginUserName");
   const LoginUserRole = localStorage.getItem("userName");
-  const { id } = useParams();
 
   const formik = useFormik({
     initialValues: {
@@ -44,14 +37,14 @@ function MyMessagesView() {
         formData.append("senderRole", LoginUserRole);
         formData.append("messageTo", "PARENT");
 
-        if (senderId === userId) {
+        if (studentId === userId) {
           formData.append("recipientId", data.receiverId);
           formData.append("recipientName", data.receiverName);
           formData.append("recipientRole", data.receiverRole);
         } else {
-          formData.append("recipientId", senderId);
-          formData.append("recipientName", senderName);
-          formData.append("recipientRole", senderRole);
+          formData.append("recipientId", studentId);
+          formData.append("recipientName", studentName);
+          formData.append("recipientRole", studentRole);
         }
         formData.append("message", values.message);
 
@@ -79,47 +72,47 @@ function MyMessagesView() {
         }
       }
     },
-  });
+  });  
 
-  const processMessages = (messages, currentUserId, currentRole) => {
+  const processMessages = (messages, currentUserId) => {
     return messages.map((msg) => {
-      if (msg.senderId === msg.receiverId) {
-        return { ...msg, messageType: "Self-Message" };
-      } else if (
-        msg.senderId === currentUserId &&
-        msg.senderRole === currentRole
-      ) {
-        return { ...msg, messageType: "Sent" };
-      } else if (
-        msg.receiverId === currentUserId &&
-        msg.receiverRole === currentRole
-      ) {
-        return { ...msg, messageType: "Received" };
-      } else {
-        return { ...msg, messageType: "Other" };
-      }
+      const isSender = String(msg.senderId).trim() === String(currentUserId).trim();
+      const isReceiver = !isSender;
+  
+      console.log("isSender Message::", msg.senderId, currentUserId, isSender, isReceiver);
+      return {
+        ...msg,
+        messageType: isSender ? "sent" : "received",
+        isSender: isSender,
+        isReceiver: isReceiver,
+      };
     });
   };
-
+  
   const getData = async () => {
     try {
       const response = await api.get(
-        `getSingleChatConversation?transcriptOne=${senderId}&transcriptTwo=${receiverId}`
+        `getSingleChatConversation?transcriptOne=${userId}&transcriptTwo=${studentId}`
       );
-      setData(response.data);
-      const messages = processMessages(response.data, userId, LoginUserRole); // Process Messages
+      const data = response.data;
+      setData(data);
+      console.log("Data MSG:", data);
+  
+      const messages = processMessages(data, userId);
       const combinedMessages = messages.map((msg) => ({
         content: msg.message,
-        isSender: msg.messageType === "Sent",
-        messageType: msg.messageType, // Add message type
+        isSender: msg.isSender,
+        messageType: msg.messageType,
         attachments: msg.attachments,
-        senderRole: msg.senderRole,
+        senderId: msg.senderId, // Ensure this is included
         time: new Date(msg.createdAt).toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
       }));
+  
       setMessages(combinedMessages);
+      console.log("combinedMessages::", combinedMessages);
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
     }
@@ -155,6 +148,11 @@ function MyMessagesView() {
                 className="img-fluid"
               />
             </a>
+            {/* <a href={fileUrl} download>
+              <button className="btn ">
+                <LuDownload color="#e60504" />
+              </button>
+            </a> */}
           </div>
         </div>
       );
@@ -170,6 +168,11 @@ function MyMessagesView() {
                 className="img-fluid "
               />
             </a>
+            {/* <a href={fileUrl} download>
+              <button className="btn ">
+                <LuDownload size={18} color="#e60504" />
+              </button>
+            </a> */}
           </div>
         </div>
       );
@@ -181,6 +184,13 @@ function MyMessagesView() {
               <source src={fileUrl} type={`video/${extension}`} />
               Your browser does not support the video tag.
             </video>
+            <div>
+              {/* <a href={fileUrl} download>
+                <button className="btn">
+                  <LuDownload size={18} color="#e60504" />
+                </button>
+              </a> */}
+            </div>
           </div>
         </div>
       );
@@ -196,30 +206,14 @@ function MyMessagesView() {
     }
   }, [messages]);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     getData(); // Trigger the getData function after 2 seconds
-  //   }, 1000); // 2000ms = 2 seconds
-
-  //   // Cleanup the timeout in case the component unmounts or the effect runs again
-  //   return () => clearTimeout(timer);
-  // }); 
-  
   useEffect(() => {
     getData();
-  },[id]);
+  }, [userId,studentId]);
 
   return (
     <>
       <section className="chat-section">
         <div className="container-fluid">
-          {/* <div className="text-end bg-light p-1">
-            <Link to={"/messaging"}>
-              <button type="button" className="btn btn-border btn-sm">
-                Back
-              </button>
-            </Link>
-          </div> */}
           <div className="row message-list">
             <div className="col-12">
               {/* Message List */}
@@ -232,45 +226,14 @@ function MyMessagesView() {
                   overflowX: "hidden",
                 }}
               >
-                {/* {messages.map((msg, index) => (
-                  <div key={index}>
-                    <div className={`message ${msg.isSender ? "right" : "left"}`}>
-                      <div className="message-bubble my-2 w-75">
-                        {msg.content}
-                      </div>
-                      {msg.attachments.length > 0 ? (
-                        msg.attachments.map((attachment, attIndex) => (
-                          <div
-                            key={attIndex}
-                            className="message-bubble w-75 mt-2"
-                          >
-                            {renderAttachment(attachment, attIndex)}
-                          </div>
-                        ))
-                      ) : (
-                        <></>
-                      )}
-                      <div
-                        className="message-bubble my-2 w-75"
-                        style={{ fontSize: "11px", background: "transparent" }}
-                      >
-                        {msg.time}
-                      </div>
-                    </div>
-                  </div>
-                ))} */}
                 {messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`message ${
-                      msg.senderRole === "SMS_BRANCH_ADMIN" ? "right" : "left"
-                    }`}
+                    className={`message ${msg.isSender ? "right" : "left"}`}
                   >
                     <div
                       className={`message-bubble my-2 w-75 ${
-                        msg.senderRole === "SMS_BRANCH_ADMIN"
-                          ? "align-self-end"
-                          : "align-self-start"
+                        msg.isSender ? "align-self-end" : "align-self-start"
                       }`}
                     >
                       {msg.content}
@@ -280,12 +243,7 @@ function MyMessagesView() {
                         <div
                           key={attIndex}
                           className={`message-bubble w-75 mt-2 ${
-                            msg.senderRole === "SMS_BRANCH_ADMIN" ||
-                            msg.senderRole === "SMS_STAFF" ||
-                            msg.senderRole === "SMS_TEACHER" ||
-                            msg.senderRole === "SMS_FREELANCER"
-                              ? "align-self-end"
-                              : "align-self-start"
+                            msg.isSender ? "align-self-end" : "align-self-start"
                           }`}
                         >
                           {renderAttachment(attachment, attIndex)}
@@ -293,19 +251,12 @@ function MyMessagesView() {
                       ))}
                     <div
                       className={`message-bubble my-2 w-75 ${
-                        msg.senderRole === "SMS_BRANCH_ADMIN"
-                          ? "align-self-end"
-                          : "align-self-start"
+                        msg.isSender ? "align-self-end" : "align-self-start"
                       }`}
                       style={{ fontSize: "11px", background: "transparent" }}
                     >
                       {msg.time}
                     </div>
-                    {/* {msg.senderRole === "SMS_BRANCH_ADMIN" && (
-                      <div className="text-end message-bubble">
-                        <MdDelete style={{ cursor: "pointer" }} onClick={() => handleDeleteMessage(msg.messageId)} />
-                      </div>
-                    )} */}
                   </div>
                 ))}
               </div>
