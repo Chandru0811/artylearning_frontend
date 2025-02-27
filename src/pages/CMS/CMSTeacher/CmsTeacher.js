@@ -159,7 +159,7 @@ export const CmsTeacher = () => {
                 ))}
             </div>
           </Tab>
-          <Tab eventKey="longer-tab" title="Admin">
+          <Tab eventKey="longer-tab" title="Operations Executive">
             <div className="row mt-5">
               {adminData &&
                 adminData.map((data, i) => (

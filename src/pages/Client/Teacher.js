@@ -118,12 +118,12 @@ function Teacher() {
                 ))}
             </div>
           </Tab>
-          <Tab eventKey="longer-tab" title="Admin">
+          <Tab eventKey="longer-tab" title="Operations Executive">
             <div className="row mt-5">
               {adminData &&
                 adminData.map((data, i) => (
                   <>
-                    <div className="col-md-6 col-12">
+                    <div className="col-md-6 col-12 mb-4">
                       <div className="row">
                         <div className="col-md-6 col-12">
                           <img
@@ -135,7 +135,7 @@ function Teacher() {
                         </div>
                         <div className="col-md-6 col-12">
                           <div className="mx-2">
-                            <h1 className="fw-bold">{data.teacherName}</h1>
+                            <h1 className="fw-bold text-break">{data.teacherName}</h1>
                             <h4 className="text-danger">
                               {data.teacherRoleName}
                             </h4>
