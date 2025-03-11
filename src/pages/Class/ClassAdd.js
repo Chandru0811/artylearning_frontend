@@ -7,11 +7,12 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
+import Select from "react-select";
 
 function ClassAdd() {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
-  const [courseData, setCourseData] = useState(null);
+  const [courseOptions, setCourseOptions] = useState([]);
   const [classRoomData, setClassRoomData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
   const [batchData, setBatchData] = useState(null);
@@ -111,12 +112,27 @@ function ClassAdd() {
     }
   };
 
+  // const fetchCourses = async (centerId) => {
+  //   try {
+  //     const courseData = await fetchAllCoursesWithIdsC(centerId);
+  //     setCourseData(courseData);
+  //     setOptions(courseData);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
+
   const fetchCourses = async (centerId) => {
     try {
-      const courseData = await fetchAllCoursesWithIdsC(centerId);
-      setCourseData(courseData);
+      const courses = await fetchAllCoursesWithIdsC(centerId);
+      // Format courses for react-select
+      const formattedCourses = courses.map((course) => ({
+        value: course.id,
+        label: course.courseNames,
+      }));
+      setCourseOptions(formattedCourses);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -130,9 +146,11 @@ function ClassAdd() {
     }
   };
 
-  const fetchBatchandTeacherData = async (day ,centerId) => {
+  const fetchBatchandTeacherData = async (day, centerId) => {
     try {
-      const response = await api.get(`getTeacherWithBatchListByDay?day=${day}&centerId=${centerId}`);
+      const response = await api.get(
+        `getTeacherWithBatchListByDay?day=${day}&centerId=${centerId}`
+      );
       setTeacherData(response.data.teacherList);
       setBatchData(response.data.batchList);
     } catch (error) {
@@ -146,7 +164,6 @@ function ClassAdd() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.day, formik.values.centerId]);
-  
 
   useEffect(() => {
     const getData = async () => {
@@ -171,7 +188,7 @@ function ClassAdd() {
     formik.setFieldValue("centerId", center);
     formik.setFieldValue("classId", "");
     formik.setFieldValue("userId", "");
-    setCourseData(null);
+    setCourseOptions([]);
     setClassRoomData(null);
     setTeacherData(null);
     fetchCourses(center);
@@ -330,7 +347,6 @@ function ClassAdd() {
                       : ""
                   }`}
                   aria-label="Default select example"
-                  className="form-select "
                   onChange={handleCenterChange}
                 >
                   <option selected></option>
@@ -347,29 +363,26 @@ function ClassAdd() {
                   </div>
                 )}
               </div>
+              {/* Course Selection (Using react-select) */}
               <div className="col-md-6 col-12 mb-4">
                 <label>
                   Course<span className="text-danger">*</span>
                 </label>
-                <select
-                  {...formik.getFieldProps("courseId")}
+                <Select
+                  options={courseOptions}
                   name="courseId"
-                  className={`form-select   ${
-                    formik.touched.courseId && formik.errors.courseId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                  className="form-select "
-                >
-                  <option selected></option>
-                  {courseData &&
-                    courseData.map((courseId) => (
-                      <option key={courseId.id} value={courseId.id}>
-                        {courseId.courseNames}
-                      </option>
-                    ))}
-                </select>
+                  value={courseOptions.find(
+                    (option) => option.value === formik.values.courseId
+                  )}
+                  onChange={(selectedOption) =>
+                    formik.setFieldValue(
+                      "courseId",
+                      selectedOption ? selectedOption.value : ""
+                    )
+                  }
+                  placeholder="Select Course"
+                  isSearchable
+                />
                 {formik.touched.courseId && formik.errors.courseId && (
                   <div className="invalid-feedback">
                     {formik.errors.courseId}
@@ -382,7 +395,6 @@ function ClassAdd() {
                 </label>
                 <input
                   name="className"
-                  className="form-control "
                   type="text"
                   className={`form-control  ${
                     formik.touched.className && formik.errors.className

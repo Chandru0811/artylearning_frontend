@@ -334,7 +334,6 @@ function ClassEdit() {
                       : ""
                   }`}
                   aria-label="Default select example"
-                  className="form-select "
                   onChange={handleCenterChange}
                   disabled
                 >
@@ -365,7 +364,6 @@ function ClassEdit() {
                       : ""
                   }`}
                   aria-label="Default select example"
-                  className="form-select"
                   disabled
                 >
                   <option selected></option>
@@ -388,7 +386,6 @@ function ClassEdit() {
                 </label>
                 <input
                   name="className"
-                  className="form-control "
                   type="text"
                   className={`form-control  ${
                     formik.touched.className && formik.errors.className
