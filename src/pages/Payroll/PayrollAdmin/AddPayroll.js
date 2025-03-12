@@ -7,6 +7,7 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
+import Select from "react-select";
 
 function AddPayroll() {
   const [centerData, setCenterData] = useState(null);
@@ -18,6 +19,7 @@ function AddPayroll() {
   const [bonus, setBonus] = useState(0);
   const [netPay, setNetPay] = useState(0);
   console.log("NET PAY:", netPay);
+  const [employeeOptions, setEmployeeOptions] = useState([]);
 
   console.log("empRole", empRole);
   const navigate = useNavigate();
@@ -126,7 +128,7 @@ function AddPayroll() {
       });
 
       userNamesData.forEach((employee) => {
-        if (parseInt(values.userId) === employee.id) {
+        if (parseInt(values.userId) === employee.value) {
           selectedEmployeeName = employee.userNames || "--";
         }
       });
@@ -198,6 +200,8 @@ function AddPayroll() {
     formik.setFieldValue("centerId", centerId);
     formik.setFieldValue("deductionAmount", "");
     formik.setFieldValue("grossPay", "");
+    setEmployeeOptions([]);
+
     try {
       await fetchUserName(centerId);
     } catch (error) {
@@ -226,7 +230,12 @@ function AddPayroll() {
   const fetchUserName = async (centerId) => {
     try {
       const userNames = await fetchAllEmployeeListByCenter(centerId);
-      setUserNameData(userNames);
+      const formattedEmployee = userNames.map((employee) => ({
+        value: employee.id,
+        label: employee.userNames,
+      }));
+      setEmployeeOptions(formattedEmployee);
+      setUserNameData(formattedEmployee);
     } catch (error) {
       toast.error(error);
     }
@@ -471,7 +480,23 @@ function AddPayroll() {
               <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">Employee Name</lable>{" "}
                 <span className="text-danger">*</span>
-                <select
+                <Select
+                  options={employeeOptions}
+                  name="userId"
+                  value={employeeOptions.find(
+                    (option) => option.value === formik.values.userId
+                  )}
+                  onChange={(selectedOption) =>
+                    formik.setFieldValue(
+                      "userId",
+                      selectedOption ? selectedOption.value : ""
+                    )
+                  }
+                  placeholder="Select Employee"
+                  isSearchable
+                  isClearable
+                />
+                {/* <select
                   {...formik.getFieldProps("userId")}
                   className={`form-select  ${
                     formik.touched.userId && formik.errors.userId
@@ -487,7 +512,7 @@ function AddPayroll() {
                         {userName.userNames} &nbsp;({userName.role})
                       </option>
                     ))}
-                </select>
+                </select> */}
                 {formik.touched.userId && formik.errors.userId && (
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}

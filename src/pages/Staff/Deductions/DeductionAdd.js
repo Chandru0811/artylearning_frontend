@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import { format } from "date-fns";
 import fetchUserListWithoutFreelancerByCenterId from "../../List/UserListWithoutFreelancer";
+import Select from "react-select";
 
 const validationSchema = Yup.object({
   centerId: Yup.number().required("*Center Name is required"),
@@ -25,6 +26,7 @@ function DeductionAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
   const navigate = useNavigate();
+  const [employeeOptions, setEmployeeOptions] = useState([]);
 
   const formik = useFormik({
     initialValues: {
@@ -89,6 +91,8 @@ function DeductionAdd() {
     setUserNameData(null);
     const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
+    setEmployeeOptions([]);
+
     try {
       await fetchUserName(centerId);
     } catch (error) {
@@ -114,7 +118,13 @@ function DeductionAdd() {
       const userNames = await fetchUserListWithoutFreelancerByCenterId(
         centerId
       );
-      setUserNameData(userNames);
+      const formattedEmployee = userNames.map((employee) => ({
+        value: employee.id,
+        label: employee.userNames,
+      }));
+      setEmployeeOptions(formattedEmployee);
+
+      setUserNameData(formattedEmployee);
     } catch (error) {
       toast.error(error);
     }
@@ -224,7 +234,23 @@ function DeductionAdd() {
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">Employee Name</label>{" "}
                 <span className="text-danger">*</span>
-                <select
+                <Select
+                  options={employeeOptions}
+                  name="userId"
+                  value={employeeOptions.find(
+                    (option) => option.value === formik.values.userId
+                  )}
+                  onChange={(selectedOption) =>
+                    formik.setFieldValue(
+                      "userId",
+                      selectedOption ? selectedOption.value : ""
+                    )
+                  }
+                  placeholder="Select Employee"
+                  isSearchable
+                  isClearable
+                />
+                {/* <select
                   {...formik.getFieldProps("userId")}
                   className={`form-select  ${
                     formik.touched.userId && formik.errors.userId
@@ -239,7 +265,7 @@ function DeductionAdd() {
                         {userName.userNames}
                       </option>
                     ))}
-                </select>
+                </select> */}
                 {formik.touched.userId && formik.errors.userId && (
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}

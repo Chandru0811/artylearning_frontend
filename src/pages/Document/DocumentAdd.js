@@ -10,6 +10,7 @@ import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import fetchAllCentersWithScheduleStudentList from "../List/CenterAvailableScheduleStudentLidt";
 import fetchAllCentersWithIds from "../List/CenterList";
+import Select from "react-select";
 
 const validationSchema = Yup.object({
   center: Yup.string().required("*Centre is required"),
@@ -17,7 +18,7 @@ const validationSchema = Yup.object({
   userId: Yup.string().required("*Teacher is required"),
   day: Yup.string().required("*Days is required"),
   batchTime: Yup.string().required("*Batch Time is required"),
-  classListing: Yup.string().required("*Class Listing is required"),
+  classId: Yup.string().required("*Class Listing is required"),
   folderCategoryListing: Yup.string().required("*FolderCategory is required"),
   date: Yup.string().required("*Date is required"),
   expiredDate: Yup.string().required("*Expired Date is required"),
@@ -34,6 +35,10 @@ function DocumentAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
   const [batchData, setBatchData] = useState(null);
+  const [courseOptions, setCourseOptions] = useState([]);
+  const [classOptions, setClassOptions] = useState([]);
+  const [teacherOptions, setTeacherOptions] = useState([]);
+  const [studentOptions, setStudentOptions] = useState([]);
 
   const formik = useFormik({
     initialValues: {
@@ -58,6 +63,8 @@ function DocumentAdd() {
         let selectedOptionName = "";
         let selectedClassName = "";
         let selectedCourseName = "";
+        let selectedTeacherName = "";
+        let selectedStudentName = "";
 
         centerData.forEach((center) => {
           if (parseInt(selectedValue) === center.id) {
@@ -79,9 +86,21 @@ function DocumentAdd() {
           }
         });
 
+        userData.forEach((user) => {
+          if (parseInt(values.user) === user.id) {
+            selectedTeacherName = user.teacherNames || "--";
+          }
+        });
+        studentData.forEach((studentName) => {
+          if (parseInt(values.studentName) === studentName.id) {
+            selectedStudentName = studentName.studentNames || "--";
+          }
+        });
+
         let requestBody = {
           centerId: values.center,
           userId: values.userId,
+          user: selectedTeacherName,
           day: values.day,
           center: selectedOptionName,
           classListing: selectedClassName,
@@ -100,6 +119,8 @@ function DocumentAdd() {
         } else {
           requestBody.isGroupUpload = false;
           requestBody.studentId = values.studentSelect;
+          requestBody.studentId = values.studentId;
+          requestBody.studentName = selectedStudentName;
         }
         // console.log(requestBody);
 
@@ -115,7 +136,10 @@ function DocumentAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if (error?.response?.status === 409 || error?.response?.status === 404) {
+        if (
+          error?.response?.status === 409 ||
+          error?.response?.status === 404
+        ) {
           toast.warning(error?.response?.data?.message);
         } else {
           toast.error("Error deleting data:", error);
@@ -162,6 +186,11 @@ function DocumentAdd() {
   const fetchCourses = async (centerId) => {
     try {
       const courses = await fetchAllCoursesWithIdsC(centerId);
+      const formattedCourses = courses.map((course) => ({
+        value: course.id,
+        label: course.courseNames,
+      }));
+      setCourseOptions(formattedCourses);
       setCourseData(courses);
     } catch (error) {
       toast.error(error);
@@ -171,6 +200,11 @@ function DocumentAdd() {
   const fetchTeacher = async (centerId) => {
     try {
       const teacher = await fetchAllTeacherListByCenter(centerId);
+      const formattedTeacher = teacher.map((user) => ({
+        value: user.id,
+        label: user.teacherNames,
+      }));
+      setTeacherOptions(formattedTeacher);
       setUserData(teacher);
     } catch (error) {
       toast.error(error);
@@ -180,6 +214,12 @@ function DocumentAdd() {
   const fetchStudent = async (centerId) => {
     try {
       const teacher = await fetchAllStudentListByCenter(centerId);
+      const formattedTeacher = teacher.map((studentName) => ({
+        value: studentName.id,
+        label: studentName.studentNames,
+      }));
+      setStudentOptions(formattedTeacher);
+
       setStudentData(teacher);
     } catch (error) {
       toast.error(error);
@@ -189,6 +229,11 @@ function DocumentAdd() {
   const fetchClasses = async (courseId) => {
     try {
       const classes = await fetchAllClassesWithIdsC(courseId);
+      const formattedClasses = classes.map((classListing) => ({
+        value: classListing.id,
+        label: classListing.classNames,
+      }));
+      setClassOptions(formattedClasses);
       setClassData(classes);
     } catch (error) {
       toast.error(error);
@@ -223,6 +268,11 @@ function DocumentAdd() {
     setClassData(null);
     setUserData(null);
     setStudentData(null);
+    setCourseOptions([]);
+    setClassOptions([]);
+    setTeacherOptions([]);
+    setStudentOptions([]);
+
     const center = event.target.value;
     formik.setFieldValue("center", center);
     fetchCourses(center);
@@ -285,11 +335,11 @@ function DocumentAdd() {
     )}`;
   };
 
-  const handleCourseChange = (event) => {
+  const handleCourseChange = (selectedOption) => {
     setClassData(null);
-    const course = event.target.value;
+    const course = selectedOption ? selectedOption.value : "";
     formik.setFieldValue("course", course);
-    fetchClasses(course); // Fetch class for the selected center
+    fetchClasses(course); // Fetch class for the selected course
   };
 
   return (
@@ -394,7 +444,24 @@ function DocumentAdd() {
                 <lable className="">
                   Course<span className="text-danger">*</span>
                 </lable>
-                <select
+                <Select
+                  options={courseOptions}
+                  name="course"
+                  value={courseOptions.find(
+                    (option) => option.value === formik.values.course
+                  )}
+                  onChange={handleCourseChange}
+                  // onChange={(selectedOption) =>
+                  //   formik.setFieldValue(
+                  //     "course",
+                  //     selectedOption ? selectedOption.value : ""
+                  //   )
+                  // }
+                  placeholder="Select Course"
+                  isSearchable
+                  isClearable
+                />
+                {/* <select
                   {...formik.getFieldProps("course")}
                   name="course"
                   className={`form-select    ${
@@ -412,7 +479,7 @@ function DocumentAdd() {
                         {courses.courseNames}
                       </option>
                     ))}
-                </select>
+                </select> */}
                 {formik.touched.course && formik.errors.course && (
                   <div className="invalid-feedback">{formik.errors.course}</div>
                 )}
@@ -422,7 +489,23 @@ function DocumentAdd() {
                 <lable className="">
                   Class Listing<span className="text-danger">*</span>
                 </lable>
-                <select
+                <Select
+                  options={classOptions}
+                  name="classId"
+                  value={classOptions.find(
+                    (option) => option.value === formik.values.classId
+                  )}
+                  onChange={(selectedOption) =>
+                    formik.setFieldValue(
+                      "classId",
+                      selectedOption ? selectedOption.value : ""
+                    )
+                  }
+                  placeholder="Select Class"
+                  isSearchable
+                  isClearable
+                />
+                {/* <select
                   {...formik.getFieldProps("classListing")}
                   name="classListing"
                   className={`form-select    ${
@@ -439,10 +522,10 @@ function DocumentAdd() {
                         {classes.classNames}
                       </option>
                     ))}
-                </select>
-                {formik.touched.classListing && formik.errors.classListing && (
+                </select> */}
+                {formik.touched.classId && formik.errors.classId && (
                   <div className="invalid-feedback">
-                    {formik.errors.classListing}
+                    {formik.errors.classId}
                   </div>
                 )}
               </div>
@@ -451,7 +534,23 @@ function DocumentAdd() {
                 <lable className="">
                   Teacher<span className="text-danger">*</span>
                 </lable>
-                <select
+                <Select
+                  options={teacherOptions}
+                  name="userId"
+                  value={teacherOptions.find(
+                    (option) => option.value === formik.values.userId
+                  )}
+                  onChange={(selectedOption) =>
+                    formik.setFieldValue(
+                      "userId",
+                      selectedOption ? selectedOption.value : ""
+                    )
+                  }
+                  placeholder="Select Teacher"
+                  isSearchable
+                  isClearable
+                />
+                {/* <select
                   {...formik.getFieldProps("userId")}
                   name="userId"
                   className={`form-select  ${
@@ -468,7 +567,7 @@ function DocumentAdd() {
                         {userId.teacherNames}
                       </option>
                     ))}
-                </select>
+                </select> */}
                 {formik.touched.userId && formik.errors.userId && (
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
@@ -478,25 +577,38 @@ function DocumentAdd() {
                 <label className="">
                   Days<span className="text-danger">*</span>
                 </label>
-                <select
-                  {...formik.getFieldProps("day")}
-                  className={`form-select  ${
-                    formik.touched.day && formik.errors.day ? "is-invalid" : ""
-                  }`}
+                <Select
+                  options={[
+                    { value: "MONDAY", label: "Monday" },
+                    { value: "TUESDAY", label: "Tuesday" },
+                    { value: "WEDNESDAY", label: "Wednesday" },
+                    { value: "THURSDAY", label: "Thursday" },
+                    { value: "FRIDAY", label: "Friday" },
+                    { value: "SATURDAY", label: "Saturday" },
+                    { value: "SUNDAY", label: "Sunday" },
+                  ]}
                   name="day"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.day}
-                >
-                  <option></option>
-                  <option value="MONDAY">Monday</option>
-                  <option value="TUESDAY">Tuesday</option>
-                  <option value="WEDNESDAY">Wednesday</option>
-                  <option value="THURSDAY">Thursday</option>
-                  <option value="FRIDAY">Friday</option>
-                  <option value="SATURDAY">Saturday</option>
-                  <option value="SUNDAY">Sunday</option>
-                </select>
+                  value={{
+                    value: formik.values.day,
+                    label:
+                      formik.values.day.charAt(0) +
+                      formik.values.day.slice(1).toLowerCase(),
+                  }}
+                  onChange={(selectedOption) =>
+                    formik.setFieldValue(
+                      "day",
+                      selectedOption ? selectedOption.value : ""
+                    )
+                  }
+                  onBlur={() => formik.setFieldTouched("day", true)}
+                  placeholder="Select Day"
+                  isSearchable
+                  isClearable
+                  className={
+                    formik.touched.day && formik.errors.day ? "is-invalid" : ""
+                  }
+                />
+
                 {formik.touched.day && formik.errors.day && (
                   <div className="invalid-feedback">{formik.errors.day}</div>
                 )}
@@ -506,30 +618,51 @@ function DocumentAdd() {
                 <label className="">
                   Batch Time<span className="text-danger">*</span>
                 </label>
-                <select
-                  {...formik.getFieldProps("batchTime")}
-                  className={`form-select ${
+                <Select
+                  options={
+                    batchData
+                      ? batchData.map((time) => ({
+                          value:
+                            time.includes("AM") || time.includes("PM")
+                              ? convertTo24Hour(time)
+                              : time,
+                          label: normalizeTime(time),
+                        }))
+                      : []
+                  }
+                  name="batchTime"
+                  value={
+                    batchData
+                      ? batchData
+                          .map((time) => ({
+                            value:
+                              time.includes("AM") || time.includes("PM")
+                                ? convertTo24Hour(time)
+                                : time,
+                            label: normalizeTime(time),
+                          }))
+                          .find(
+                            (option) => option.value === formik.values.batchTime
+                          )
+                      : null
+                  }
+                  onChange={(selectedOption) =>
+                    formik.setFieldValue(
+                      "batchTime",
+                      selectedOption ? selectedOption.value : ""
+                    )
+                  }
+                  onBlur={() => formik.setFieldTouched("batchTime", true)}
+                  placeholder="Select Batch Time"
+                  isSearchable
+                  isClearable
+                  className={
                     formik.touched.batchTime && formik.errors.batchTime
                       ? "is-invalid"
                       : ""
-                  }`}
-                >
-                  <option></option>
-                  {batchData &&
-                    batchData.map((time) => {
-                      const displayTime = normalizeTime(time);
-                      const valueTime =
-                        time.includes("AM") || time.includes("PM")
-                          ? convertTo24Hour(time)
-                          : time;
+                  }
+                />
 
-                      return (
-                        <option key={time} value={valueTime}>
-                          {displayTime}
-                        </option>
-                      );
-                    })}
-                </select>
                 {formik.touched.batchTime && formik.errors.batchTime && (
                   <div className="invalid-feedback">
                     {formik.errors.batchTime}
@@ -585,7 +718,23 @@ function DocumentAdd() {
                 ) : (
                   <div className="">
                     <label className="form-label">Student Name</label>
-                    <select
+                    <Select
+                      options={studentOptions}
+                      name="studentId"
+                      value={studentOptions.find(
+                        (option) => option.value === formik.values.studentId
+                      )}
+                      onChange={(selectedOption) =>
+                        formik.setFieldValue(
+                          "studentId",
+                          selectedOption ? selectedOption.value : ""
+                        )
+                      }
+                      placeholder="Select Student"
+                      isSearchable
+                      isClearable
+                    />
+                    {/* <select
                       {...formik.getFieldProps("studentSelect")}
                       className={`form-select   ${
                         formik.touched.studentSelect &&
@@ -601,13 +750,12 @@ function DocumentAdd() {
                             {student.studentNames}
                           </option>
                         ))}
-                    </select>
-                    {formik.touched.studentSelect &&
-                      formik.errors.studentSelect && (
-                        <div className="invalid-feedback">
-                          {formik.errors.studentSelect}
-                        </div>
-                      )}
+                    </select> */}
+                    {formik.touched.studentId && formik.errors.studentId && (
+                      <div className="invalid-feedback">
+                        {formik.errors.studentId}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

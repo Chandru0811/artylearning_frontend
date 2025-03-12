@@ -13,6 +13,7 @@ function ClassAdd() {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   const [courseOptions, setCourseOptions] = useState([]);
+  console.log("first", courseOptions);
   const [classRoomData, setClassRoomData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
   const [batchData, setBatchData] = useState(null);
@@ -382,6 +383,7 @@ function ClassAdd() {
                   }
                   placeholder="Select Course"
                   isSearchable
+                  isClearable
                 />
                 {formik.touched.courseId && formik.errors.courseId && (
                   <div className="invalid-feedback">

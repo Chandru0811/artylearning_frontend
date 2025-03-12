@@ -75,17 +75,20 @@ const Invoice = ({ selectedCenter }) => {
         ),
       },
       {
-        accessorKey: "status",
+        accessorKey: "invoiceStatus",
         enableHiding: false,
         header: "Status",
-        Cell: ({ row }) =>
-          row.original.status === "APPROVED" ? (
-            <span className="badge badges-Green fw-light">Approved</span>
-          ) : row.original.status === "REJECTED" ? (
-            <span className="badge badges-danger fw-light">Rejected</span>
+        Cell: ({ row }) => {
+          const status = row.original.invoiceStatus?.trim().toUpperCase();
+
+          return status === "PAID" ? (
+            <span className="badge bg-success fw-light">Paid</span>
+          ) : status === "CANCELLED" ? (
+            <span className="badge bg-danger fw-light">Cancelled</span>
           ) : (
-            <span className="badge badges-orange fw-light">Pending</span>
-          ),
+            <span className="badge bg-warning fw-light">Pending</span>
+          );
+        },
       },
       {
         accessorKey: "centerName",
@@ -393,7 +396,9 @@ const Invoice = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.courseId}
               >
-                <option value="" disabled>Select a Course</option>
+                <option value="" disabled>
+                  Select a Course
+                </option>
                 {selectedCenter === "0"
                   ? courseListData &&
                     courseListData.map((course) => (
@@ -417,7 +422,9 @@ const Invoice = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.studentId}
               >
-                <option value="" disabled>Select a Student</option>
+                <option value="" disabled>
+                  Select a Student
+                </option>
                 {selectedCenter === "0"
                   ? studentListData &&
                     studentListData.map((std) => (
@@ -441,8 +448,10 @@ const Invoice = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.packageId}
               >
-                <option value="" disabled>Select a Package</option>
-                  {selectedCenter === "0"
+                <option value="" disabled>
+                  Select a Package
+                </option>
+                {selectedCenter === "0"
                   ? packageListData &&
                     packageListData.map((pkg) => (
                       <option key={pkg.id} value={pkg.id}>

@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import api from "../../config/URL";
 import fetchAllEmployeeListByCenter from "../List/EmployeeList";
 import { format } from "date-fns";
+import Select from "react-select";
 
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Centre name is required"),
@@ -53,6 +54,9 @@ function StaffingAttendanceAdd() {
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName");
+  const [employeeOptions, setEmployeeOptions] = useState([]);
+  console.log("first", employeeOptions);
+
   // const timestamp = 1723141800000;
   // const date = new Date(timestamp).toISOString().substring(0, 10);
 
@@ -185,6 +189,8 @@ function StaffingAttendanceAdd() {
     setUserNameData(null);
     const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
+    setEmployeeOptions([]);
+
     try {
       await fetchUserName(centerId);
     } catch (error) {
@@ -208,7 +214,12 @@ function StaffingAttendanceAdd() {
   const fetchUserName = async (centerId) => {
     try {
       const userNames = await fetchAllEmployeeListByCenter(centerId);
-      setUserNameData(userNames);
+      const formattedEmployee = userNames.map((employee) => ({
+        value: employee.id,
+        label: employee.userNames,
+      }));
+      setEmployeeOptions(formattedEmployee);
+      setUserNameData(formattedEmployee);
     } catch (error) {
       toast.error(error);
     }
@@ -315,7 +326,23 @@ function StaffingAttendanceAdd() {
                 <div className="col-md-6 col-12 mb-3 ">
                   <lable className="">Employee Name</lable>
                   <span className="text-danger">*</span>
-                  <select
+                  <Select
+                    options={employeeOptions}
+                    name="userId"
+                    value={employeeOptions.find(
+                      (option) => option.value === formik.values.userId
+                    )}
+                    onChange={(selectedOption) =>
+                      formik.setFieldValue(
+                        "userId",
+                        selectedOption ? selectedOption.value : ""
+                      )
+                    }
+                    placeholder="Select Employee"
+                    isSearchable
+                    isClearable
+                  />
+                  {/* <select
                     {...formik.getFieldProps("userId")}
                     className={`form-select  ${
                       formik.touched.userId && formik.errors.userId
@@ -330,7 +357,7 @@ function StaffingAttendanceAdd() {
                           {userName.userNames}
                         </option>
                       ))}
-                  </select>
+                  </select> */}
                   {formik.touched.userId && formik.errors.userId && (
                     <div className="invalid-feedback">
                       {formik.errors.userId}
