@@ -245,6 +245,7 @@ import LeadNewView from "../pages/Lead/LeadNewView";
 import TimeTable from "../pages/TimeTable";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../pages/List/CenterList";
+import ScheduleReport from "../pages/ScheduleReport";
 
 function Admin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState(0);
@@ -639,8 +640,8 @@ function Admin({ handleLogout }) {
 
               {/* Class */}
               <Route path="/class" element={<Class selectedCenter={selectedCenter}/>} />
-              <Route path="/class/add" element={<ClassAdd />} />
-              <Route path="/class/edit/:id" element={<ClassEdit />} />
+              <Route path="/class/add" element={<ClassAdd selectedCenter={selectedCenter}/>} />
+              <Route path="/class/edit/:id" element={<ClassEdit selectedCenter={selectedCenter}/>} />
               <Route path="/class/view/:id" element={<ClassView />} />
 
               {/* {/ Attendance /} */}
@@ -841,6 +842,7 @@ function Admin({ handleLogout }) {
                 path="/othermessaging/view/:id"
                 element={<OtherMessagesView />}
               />
+              <Route path="/scheduleReport" element={<ScheduleReport />} />
               <Route path="/timetable" element={<TimeTable />} />
             </Routes>
           </div>
