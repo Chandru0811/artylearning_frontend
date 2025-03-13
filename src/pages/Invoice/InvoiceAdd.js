@@ -10,6 +10,7 @@ import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import fetchAllCentersWithStudentList from "../List/CenterAvailableStudentLidt";
 import { ImCancelCircle } from "react-icons/im";
+import Select from "react-select";
 
 const invoiceItemSchema = Yup.object().shape({
   item: Yup.string().required("Item name is required"),
@@ -56,6 +57,10 @@ export default function InvoiceAdd() {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
+  const [courseOptions, setCourseOptions] = useState([]);
+  const [studentOptions, setStudentOptions] = useState([]);
+  const [packageOptions, setPackageOptions] = useState([]);
+
   const userName = localStorage.getItem("userName");
   const [studentData, setStudentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -89,7 +94,7 @@ export default function InvoiceAdd() {
       totalAmount: "",
       invoiceStatus: "PENDING",
       createdBy: userName,
-      referralId: "",
+      referralId: [],
       invoiceItems: [
         {
           item: "",
@@ -118,7 +123,7 @@ export default function InvoiceAdd() {
             noOfLessons: values.noOfLessons,
             invoicePeriodFrom: values.invoicePeriodFrom,
             invoicePeriodTo: values.invoicePeriodTo,
-            referralId: values.referralId,
+            referralId: values.referralId[{}],
             gst: parseFloat(values.gst), // Ensure numerical values are parsed correctly
             creditAdviceOffset: parseFloat(values.creditAdviceOffset || 0.0), // Ensure numerical values are parsed correctly
             totalAmount: parseFloat(values.totalAmount), // Ensure numerical values are parsed correctly
@@ -193,6 +198,11 @@ export default function InvoiceAdd() {
   const fetchCourses = async (centerId) => {
     try {
       const courseData = await fetchAllCoursesWithIdsC(centerId);
+      const formattedCourses = courseData.map((course) => ({
+        value: course.id,
+        label: course.courseNames,
+      }));
+      setCourseOptions(formattedCourses);
       setCourseData(courseData);
     } catch (error) {
       toast.error(error);
@@ -202,6 +212,11 @@ export default function InvoiceAdd() {
   const fetchPackage = async (centerId) => {
     try {
       const packageData = await fetchAllPackageListByCenter(centerId);
+      const formattedPackage = packageData.map((packageId) => ({
+        value: packageId.id,
+        label: packageId.packageNames,
+      }));
+      setPackageOptions(formattedPackage);
       setPackageData(packageData);
     } catch (error) {
       toast.error(error);
@@ -211,6 +226,11 @@ export default function InvoiceAdd() {
   const fetchStudent = async (centerId) => {
     try {
       const student = await fetchAllStudentListByCenter(centerId);
+      const formattedTeacher = student.map((studentName) => ({
+        value: studentName.id,
+        label: studentName.studentNames,
+      }));
+      setStudentOptions(formattedTeacher);
       setStudentData(student);
     } catch (error) {
       toast.error(error);
@@ -235,6 +255,10 @@ export default function InvoiceAdd() {
     setCourseData(null);
     setPackageData(null);
     setStudentData(null);
+    setCourseOptions([]);
+    setStudentOptions([]);
+    setPackageOptions([]);
+
     const center = event.target.value;
     formik.setFieldValue("center", center);
     fetchCourses(center); // Fetch courses for the selected center
@@ -358,11 +382,11 @@ export default function InvoiceAdd() {
       console.log("Selected Package ID:", packageId);
       setSelectedPackageId(packageId);
       formik.setFieldValue("packageId", packageId);
-  
+
       const selectedPackage = packageData?.find(
         (pkg) => pkg.id === parseInt(packageId)
       );
-  
+
       if (selectedPackage) {
         const { noOfLesson } = selectedPackage;
         console.log("Setting noOfLessons to:", noOfLesson);
@@ -371,26 +395,26 @@ export default function InvoiceAdd() {
         console.warn("No package matched the selected packageId!");
         formik.setFieldValue("noOfLessons", "");
       }
-  
+
       const response1 = await api.get(
         `/getAllStudentById/${formik.values.student}`
       );
       const studentCourseDetails =
         response1?.data?.studentCourseDetailModels?.[0];
-  
+
       if (!studentCourseDetails) {
         console.error("Student course details not found!");
         return;
       }
-  
+
       const courseId = studentCourseDetails.courseId;
       let invoiceItems = formik.values.invoiceItems || [];
-  
+
       if (!courseId) {
         console.error("Course ID is missing!");
         return;
       }
-  
+
       if (packageId || selectedPackageId) {
         try {
           const response2 = await api.get(
@@ -398,12 +422,16 @@ export default function InvoiceAdd() {
               packageId || selectedPackageId
             }&courseId=${courseId}`
           );
-  
+
           const feeData = response2?.data || null;
-          const feeItem = invoiceItems.find(item => item.item === "Course Fee");
-  
+          const feeItem = invoiceItems.find(
+            (item) => item.item === "Course Fee"
+          );
+
           if (!feeData) {
-            console.warn("No fee data found for the selected course and package.");
+            console.warn(
+              "No fee data found for the selected course and package."
+            );
             if (feeItem) {
               feeItem.itemAmount = 0;
               feeItem.taxType = "";
@@ -422,13 +450,15 @@ export default function InvoiceAdd() {
             const selectedTax = taxData.find(
               (tax) => parseInt(feeData.taxType) === tax.id
             );
-  
-            const amount = studentCourseDetails.days.includes("SATURDAY") || studentCourseDetails.days.includes("SUNDAY")
-              ? feeData.weekendFee
-              : feeData.weekdayFee;
+
+            const amount =
+              studentCourseDetails.days.includes("SATURDAY") ||
+              studentCourseDetails.days.includes("SUNDAY")
+                ? feeData.weekendFee
+                : feeData.weekdayFee;
             const gstAmount = (amount * selectedTax?.rate) / 100 || 0;
             const amountBeforeGST = amount - gstAmount || 0;
-  
+
             if (feeItem) {
               feeItem.itemAmount = amountBeforeGST;
               feeItem.taxType = feeData.taxTypeId || "";
@@ -450,13 +480,13 @@ export default function InvoiceAdd() {
       } else {
         console.error("Package ID or selected package is missing!");
       }
-  
+
       formik.setFieldValue("invoiceItems", invoiceItems);
     } catch (error) {
       console.error("Error processing package change:", error);
     }
   };
-  
+
   useEffect(() => {
     const fetchStudentData = async () => {
       if (!formik.values.student) return;
@@ -483,7 +513,8 @@ export default function InvoiceAdd() {
           );
 
           if (selectedPackage || packageId) {
-            noOfLessonsValue = selectedPackage.noOfLesson || packageId.noOfLesson;
+            noOfLessonsValue =
+              selectedPackage.noOfLesson || packageId.noOfLesson;
             console.log("Found Package ID:", findPackageId);
             console.log("No of Lessons Value:", noOfLessonsValue);
           } else {
@@ -994,25 +1025,27 @@ export default function InvoiceAdd() {
                     Student<span className="text-danger">*</span>
                   </label>
                   <br />
-                  <select
-                    {...formik.getFieldProps("student")}
-                    className={`form-select ${
+                  <Select
+                    options={studentOptions}
+                    name="student"
+                    value={studentOptions.find(
+                      (option) => option.value === formik.values.student
+                    )}
+                    onChange={(selectedOption) =>
+                      formik.setFieldValue(
+                        "student",
+                        selectedOption ? selectedOption.value : ""
+                      )
+                    }
+                    placeholder="Select Student"
+                    isSearchable
+                    isClearable
+                    className={`${
                       formik.touched.student && formik.errors.student
                         ? "is-invalid"
                         : ""
                     }`}
-                    onChange={(event) =>
-                      handleStudentChange(event.target.value)
-                    }
-                  >
-                    <option selected></option>
-                    {studentData &&
-                      studentData.map((student) => (
-                        <option key={student.id} value={student.id}>
-                          {student.studentNames}
-                        </option>
-                      ))}
-                  </select>
+                  />
                   {formik.touched.student && formik.errors.student && (
                     <div className="invalid-feedback">
                       {formik.errors.student}
@@ -1044,22 +1077,27 @@ export default function InvoiceAdd() {
                     Course<span className="text-danger">*</span>
                   </label>
                   <br />
-                  <select
-                    {...formik.getFieldProps("course")}
-                    className={`form-select ${
+                  <Select
+                    options={courseOptions}
+                    name="course"
+                    value={courseOptions.find(
+                      (option) => option.value === formik.values.course
+                    )}
+                    onChange={(selectedOption) =>
+                      formik.setFieldValue(
+                        "course",
+                        selectedOption ? selectedOption.value : ""
+                      )
+                    }
+                    placeholder="Select Course"
+                    isSearchable
+                    isClearable
+                    className={`${
                       formik.touched.course && formik.errors.course
                         ? "is-invalid"
                         : ""
                     }`}
-                  >
-                    <option selected></option>
-                    {courseData &&
-                      courseData.map((course) => (
-                        <option key={course.id} value={course.id}>
-                          {course.courseNames}
-                        </option>
-                      ))}
-                  </select>
+                  />
                   {formik.touched.course && formik.errors.course && (
                     <div className="invalid-feedback">
                       {formik.errors.course}
@@ -1099,27 +1137,27 @@ export default function InvoiceAdd() {
                     Package<span className="text-danger">*</span>
                   </label>
                   <br />
-                  <select
+                  <Select
+                    options={packageOptions}
                     name="packageId"
-                    {...formik.getFieldProps("packageId")}
-                    className={`form-select ${
+                    value={packageOptions.find(
+                      (option) => option.value === formik.values.packageId
+                    )}
+                    onChange={(selectedOption) =>
+                      formik.setFieldValue(
+                        "packageId",
+                        selectedOption ? selectedOption.value : ""
+                      )
+                    }
+                    placeholder="Select Package"
+                    isSearchable
+                    isClearable
+                    className={`${
                       formik.touched.packageId && formik.errors.packageId
                         ? "is-invalid"
                         : ""
                     }`}
-                    onChange={(e) => {
-                      formik.handleChange(e);
-                      handlePackageChange(e);
-                    }}
-                  >
-                    <option selected></option>
-                    {packageData &&
-                      packageData.map((packages) => (
-                        <option key={packages.id} value={packages.id}>
-                          {packages.packageNames}
-                        </option>
-                      ))}
-                  </select>
+                  />
                   {formik.touched.packageId && formik.errors.packageId && (
                     <div className="invalid-feedback">
                       {formik.errors.packageId}
@@ -1433,6 +1471,7 @@ export default function InvoiceAdd() {
                                   </div>
                                 )}
                             </td>
+
                             <td>
                               <input
                                 {...formik.getFieldProps(

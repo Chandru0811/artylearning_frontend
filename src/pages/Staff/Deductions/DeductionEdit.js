@@ -222,9 +222,15 @@ function DeductionEdit() {
                       selectedOption ? selectedOption.value : ""
                     )
                   }
+                  onBlur={() => formik.setFieldTouched("userId", true)}
                   placeholder="Select Employee"
                   isSearchable
                   isClearable
+                  className={`${
+                    formik.touched.userId && formik.errors.userId
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
                 {/* <select
                   {...formik.getFieldProps("userId")}

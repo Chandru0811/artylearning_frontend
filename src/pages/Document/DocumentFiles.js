@@ -7,6 +7,7 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import { Link, useNavigate } from "react-router-dom";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
+import Select from "react-select";
 
 function DocumentFile() {
   const [centerData, setCenterData] = useState(null);
@@ -14,6 +15,9 @@ function DocumentFile() {
   const [classData, setClassListtingData] = useState(null);
   const [documentData, setDocumentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [courseOptions, setCourseOptions] = useState([]);
+  const [classOptions, setClassOptions] = useState([]);
+
   const navigate = useNavigate();
 
   const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
@@ -36,6 +40,11 @@ function DocumentFile() {
   const fetchCourses = async (centerId) => {
     try {
       const courses = await fetchAllCoursesWithIdsC(centerId);
+      const formattedCourses = courses.map((course) => ({
+        value: course.id,
+        label: course.courseNames,
+      }));
+      setCourseOptions(formattedCourses);
       setCourseData(courses);
     } catch (error) {
       toast.error(error);
@@ -45,6 +54,11 @@ function DocumentFile() {
   const fetchClasses = async (courseId) => {
     try {
       const classes = await fetchAllClassesWithIdsC(courseId);
+      const formattedClasses = classes.map((classListing) => ({
+        value: classListing.id,
+        label: classListing.classNames,
+      }));
+      setClassOptions(formattedClasses);
       setClassListtingData(classes);
     } catch (error) {
       toast.error(error);
@@ -70,7 +84,7 @@ function DocumentFile() {
   const validationSchema = Yup.object().shape({
     centerName: Yup.string().required("*Centre is required"),
     course: Yup.string().required("*Course is required"),
-    classListing: Yup.string().required("*Class is required"),
+    classId: Yup.string().required("*Class is required"),
     folder: Yup.string().required("*Folder Name is required"),
     files: Yup.array()
       .of(
@@ -103,6 +117,7 @@ function DocumentFile() {
     initialValues: {
       centerName: "",
       course: "",
+      classId: "",
       classListing: "",
       folder: "",
       files: [],
@@ -145,17 +160,28 @@ function DocumentFile() {
     setCourseData(null);
     setClassListtingData(null);
     setDocumentData(null);
+    setCourseOptions([]);
+    setClassOptions([]);
+
     const centerName = event.target.value;
     formik.setFieldValue("centerName", centerName);
     fetchCourses(centerName); // Fetch courses for the selected center
   };
 
-  const handleCourseChange = (event) => {
+  // const handleCourseChange = (event) => {
+  //   setClassListtingData(null);
+  //   setDocumentData(null);
+  //   const course = event.target?.value;
+  //   formik.setFieldValue("course", course);
+  //   fetchClasses(course); // Fetch class for the selected center
+  // };
+  const handleCourseChange = (selectedOption) => {
     setClassListtingData(null);
     setDocumentData(null);
-    const course = event.target.value;
+
+    const course = selectedOption ? selectedOption.value : "";
     formik.setFieldValue("course", course);
-    fetchClasses(course); // Fetch class for the selected center
+    fetchClasses(course); // Fetch class for the selected course
   };
 
   const handleClassChange = (event) => {
@@ -264,21 +290,26 @@ function DocumentFile() {
                   <label>
                     Course<span className="text-danger">*</span>
                   </label>
-                  <div className="input-group">
-                    <select
-                      className="form-select"
+                  <div className="">
+                    <Select
+                      options={courseOptions}
                       name="course"
-                      {...formik.getFieldProps("course")}
+                      value={
+                        courseOptions.find(
+                          (option) => option.value === formik.values.course
+                        ) || null
+                      }
                       onChange={handleCourseChange}
-                    >
-                      <option></option>
-                      {courseData &&
-                        courseData.map((course) => (
-                          <option key={course.id} value={course.id}>
-                            {course.courseNames}
-                          </option>
-                        ))}
-                    </select>
+                      placeholder="Select Course"
+                      isSearchable
+                      isClearable
+                      className={
+                        formik.touched.course && formik.errors.course
+                          ? "is-invalid"
+                          : ""
+                      }
+                      onBlur={formik.handleBlur}
+                    />
                   </div>
                   {formik.touched.course && formik.errors.course && (
                     <small className="text-danger">
@@ -292,32 +323,36 @@ function DocumentFile() {
                     <label>
                       Class<span className="text-danger">*</span>
                     </label>
-                    <div className="input-group">
-                      <select
-                        className="form-select"
-                        name="classListing"
-                        {...formik.getFieldProps("classListing")}
-                        onChange={handleClassChange}
-                      >
-                        <option></option>
-                        {classData &&
-                          classData.map((classListing) => (
-                            <option
-                              key={classListing.id}
-                              value={classListing.id}
-                            >
-                              {classListing.classNames}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
+
+                    <Select
+                      options={classOptions}
+                      name="classId"
+                      value={classOptions.find(
+                        (option) => option.value === formik.values.classId
+                      )}
+                      onChange={(selectedOption) =>
+                        formik.setFieldValue(
+                          "classId",
+                          selectedOption ? selectedOption.value : ""
+                        )
+                      }
+                      placeholder="Select Class"
+                      isSearchable
+                      isClearable
+                      className={`${
+                        formik.touched.classId && formik.errors.classId
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      onBlur={formik.handleBlur}
+                      // {...formik.getFieldProps("classId")}
+                    />
                   </div>
-                  {formik.touched.classListing &&
-                    formik.errors.classListing && (
-                      <small className="text-danger">
-                        {formik.errors.classListing}
-                      </small>
-                    )}
+                  {formik.touched.classId && formik.errors.classId && (
+                    <small className="text-danger">
+                      {formik.errors.classId}
+                    </small>
+                  )}
                 </div>
 
                 <div className="col-md-6 col-12 mb-2 ">
