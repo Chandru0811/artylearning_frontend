@@ -18,7 +18,7 @@ const validationSchema = Yup.object({
   userId: Yup.string().required("*Teacher is required"),
   day: Yup.string().required("*Days is required"),
   batchTime: Yup.string().required("*Batch Time is required"),
-  classId: Yup.string().required("*Class Listing is required"),
+  classListing: Yup.string().required("*Class Listing is required"),
   folderCategoryListing: Yup.string().required("*FolderCategory is required"),
   date: Yup.string().required("*Date is required"),
   expiredDate: Yup.string().required("*Expired Date is required"),
@@ -45,6 +45,7 @@ function DocumentAdd() {
       center: "",
       course: "",
       userId: "",
+      classId: "",
       classListing: "",
       date: "",
       day: "",
@@ -441,91 +442,64 @@ function DocumentAdd() {
               </div>
 
               <div className="col-md-6 col-12 mb-4">
-                <lable className="">
+                <label className="">
                   Course<span className="text-danger">*</span>
-                </lable>
+                </label>
                 <Select
                   options={courseOptions}
                   name="course"
-                  value={courseOptions.find(
-                    (option) => option.value === formik.values.course
-                  )}
+                  value={
+                    courseOptions.find(
+                      (option) => option.value === formik.values.course
+                    ) || null
+                  }
                   onChange={handleCourseChange}
-                  // onChange={(selectedOption) =>
-                  //   formik.setFieldValue(
-                  //     "course",
-                  //     selectedOption ? selectedOption.value : ""
-                  //   )
-                  // }
                   placeholder="Select Course"
                   isSearchable
                   isClearable
-                />
-                {/* <select
-                  {...formik.getFieldProps("course")}
-                  name="course"
-                  className={`form-select    ${
+                  className={
                     formik.touched.course && formik.errors.course
                       ? "is-invalid"
                       : ""
-                  }`}
-                  aria-label="Default select example"
-                  onChange={handleCourseChange}
-                >
-                  <option disabled></option>
-                  {courseData &&
-                    courseData.map((courses) => (
-                      <option key={courses.id} value={courses.id}>
-                        {courses.courseNames}
-                      </option>
-                    ))}
-                </select> */}
+                  }
+                  onBlur={formik.handleBlur}
+                />
                 {formik.touched.course && formik.errors.course && (
                   <div className="invalid-feedback">{formik.errors.course}</div>
                 )}
               </div>
 
-              <div className="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
+              <div className="col-md-6 col-12 mb-4 ">
                 <lable className="">
                   Class Listing<span className="text-danger">*</span>
                 </lable>
                 <Select
                   options={classOptions}
-                  name="classId"
+                  name="classListing"
                   value={classOptions.find(
-                    (option) => option.value === formik.values.classId
+                    (option) => option.value === formik.values.classListing
                   )}
                   onChange={(selectedOption) =>
                     formik.setFieldValue(
-                      "classId",
+                      "classListing",
                       selectedOption ? selectedOption.value : ""
                     )
                   }
                   placeholder="Select Class"
                   isSearchable
                   isClearable
-                />
-                {/* <select
-                  {...formik.getFieldProps("classListing")}
-                  name="classListing"
-                  className={`form-select    ${
+                  className={`${
                     formik.touched.classListing && formik.errors.classListing
                       ? "is-invalid"
                       : ""
                   }`}
-                  aria-label="Default select example"
-                >
-                  <option disabled></option>
-                  {classData &&
-                    classData.map((classes) => (
-                      <option key={classes.id} value={classes.id}>
-                        {classes.classNames}
-                      </option>
-                    ))}
-                </select> */}
-                {formik.touched.classId && formik.errors.classId && (
+                  onBlur={formik.handleBlur}
+                  // {...formik.getFieldProps("classListing")}
+                />
+
+                {formik.touched.classListing && formik.errors.classListing && (
                   <div className="invalid-feedback">
-                    {formik.errors.classId}
+                    {formik.errors.classListing}
                   </div>
                 )}
               </div>
@@ -537,9 +511,11 @@ function DocumentAdd() {
                 <Select
                   options={teacherOptions}
                   name="userId"
-                  value={teacherOptions.find(
-                    (option) => option.value === formik.values.userId
-                  )}
+                  value={
+                    teacherOptions.find(
+                      (option) => option.value === formik.values.userId
+                    ) || null
+                  }
                   onChange={(selectedOption) =>
                     formik.setFieldValue(
                       "userId",
@@ -549,25 +525,15 @@ function DocumentAdd() {
                   placeholder="Select Teacher"
                   isSearchable
                   isClearable
-                />
-                {/* <select
-                  {...formik.getFieldProps("userId")}
-                  name="userId"
-                  className={`form-select  ${
+                  className={`${
                     formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
                   }`}
-                  aria-label="Default select example"
-                >
-                  <option disabled></option>
-                  {userData &&
-                    userData.map((userId) => (
-                      <option key={userId.id} value={userId.id}>
-                        {userId.teacherNames}
-                      </option>
-                    ))}
-                </select> */}
+                  onBlur={formik.handleBlur}
+                  // {...formik.getFieldProps("userId")}
+                />
+
                 {formik.touched.userId && formik.errors.userId && (
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}

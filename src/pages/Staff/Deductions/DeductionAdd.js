@@ -249,6 +249,12 @@ function DeductionAdd() {
                   placeholder="Select Employee"
                   isSearchable
                   isClearable
+                  className={`${
+                    formik.touched.userId && formik.errors.userId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("userId")}
                 />
                 {/* <select
                   {...formik.getFieldProps("userId")}

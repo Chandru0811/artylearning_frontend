@@ -346,42 +346,31 @@ function StaffingAttendanceEdit() {
                     </div>
                   )}
                 </div>
-
-                <div className="col-md-6 col-12 mb-3 ">
-                  <lable className="">Employee Name</lable>
+                <div className="col-md-6 col-12 mb-3">
+                  <label className="">Employee Name</label>
                   <span className="text-danger">*</span>
                   <Select
                     options={employeeOptions}
                     name="userId"
                     value={employeeOptions.find(
                       (option) => option.value === formik.values.userId
-                    )}
+                    )} // Ensure value is properly set
                     onChange={(selectedOption) =>
                       formik.setFieldValue(
                         "userId",
                         selectedOption ? selectedOption.value : ""
                       )
                     }
+                    onBlur={() => formik.setFieldTouched("userId", true)} // Manually handle blur
                     placeholder="Select Employee"
                     isSearchable
                     isClearable
-                  />
-                  {/* <select
-                    {...formik.getFieldProps("userId")}
-                    className={`form-select  ${
+                    className={`${
                       formik.touched.userId && formik.errors.userId
                         ? "is-invalid"
                         : ""
                     }`}
-                  >
-                    <option selected value={""}></option>
-                    {userNamesData &&
-                      userNamesData.map((userName) => (
-                        <option key={userName.id} value={userName.id}>
-                          {userName.userNames}
-                        </option>
-                      ))}
-                  </select> */}
+                  />
                   {formik.touched.userId && formik.errors.userId && (
                     <div className="invalid-feedback">
                       {formik.errors.userId}
