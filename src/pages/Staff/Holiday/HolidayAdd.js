@@ -6,7 +6,7 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-function HolidayAdd() {
+function HolidayAdd({ selectedCenter }) {
   const validationSchema = Yup.object({
     centerId: Yup.string().required("*Centre Name is required"),
     holidayName: Yup.string().required("*Holiday Name is required"),
@@ -30,9 +30,10 @@ function HolidayAdd() {
   const userName = localStorage.getItem("userName");
 
   const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: selectedCenter,
       holidayName: "",
       startDate: "",
       endDate: "",
@@ -41,52 +42,91 @@ function HolidayAdd() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      console.log(values);
+
       try {
-        const payload = {
-          centerId: values.centerId,
-          holidayName: values.holidayName,
-          startDate: values.startDate,
-          endDate: values.endDate,
-          holidayDescription: values.holidayDescription,
-          createdBy: userName,
-        };
-        const response = await api.post("/createUserHoliday", payload, {
-          headers: {
-            "Content-Type": "application/json",
-          },
+        const apiCalls = centerData.map(async (center) => {
+          try {
+            const payload = {
+              holidayName: values.holidayName,
+              startDate: values.startDate,
+              endDate: values.endDate,
+              holidayDescription: values.holidayDescription,
+              createdBy: userName,
+              centerId: String(center.id),
+            };
+
+            const response = await api.post(`/createUserHoliday`, payload, {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+
+            return { success: true, centerId: center.id };
+          } catch (error) {
+            if (error.response?.status === 409) {
+              toast.warning(
+                `${error?.response?.data?.message} - ${center.centerNames}`
+              );
+            } else {
+              toast.error(error.response?.data?.message);
+            }
+            return { success: false, centerId: center.id };
+          }
         });
 
-        if (response.status === 201) {
-          toast.success(response.data.message);
+        const results = await Promise.all(apiCalls);
+        const allSuccess = results.every((result) => result.success);
+
+        if (allSuccess) {
+          toast.success("Holiday added successfully!");
           navigate("/holiday");
         } else {
-          toast.error(response.data.message);
+          toast.error("error");
         }
       } catch (error) {
-        if (error.response.status === 409) {
-          toast.warning(error?.response?.data?.message);
-        } else {
-          toast.error(error?.response?.data?.message);
-        }
+        toast.error(error.message);
       } finally {
         setLoadIndicator(false);
       }
     },
   });
+  console.log("object", formik.values.centerId);
 
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
+      const response = await fetchAllCentersWithIds();
+
+      let formattedCenters = response.map((center) => ({
+        id: center.id,
+        centerNames: center.centerNames,
+      }));
+
+      if (selectedCenter === "0" || selectedCenter === 0) {
+        setCenterData(formattedCenters);
+      } else {
+        const filteredCenter = formattedCenters.filter(
+          (center) => center.id === parseInt(selectedCenter)
+        );
+        setCenterData(filteredCenter);
+      }
+
+      formik.setFieldValue("centerId", selectedCenter);
     } catch (error) {
-      toast.error(error);
+      toast.error("Failed to fetch center data");
+      console.error(error);
     }
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [selectedCenter]);
+
+  useEffect(() => {
+    fetchData();
+    if (selectedCenter) {
+      formik.setFieldValue("center", selectedCenter);
+    }
+  }, [selectedCenter]);
 
   return (
     <div className="container-fluid">
@@ -157,7 +197,7 @@ function HolidayAdd() {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              <div className="col-lg-6 col-md-6 col-12">
+              <div className="col-lg-6 col-md-6 col-12 d-none">
                 <div className="text-start mt-2 mb-3">
                   <label className="form-label m-0">
                     Centre Name<span className="text-danger">*</span>

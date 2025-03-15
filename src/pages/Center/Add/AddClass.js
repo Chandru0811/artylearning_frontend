@@ -59,43 +59,43 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       console.log("Form values:", values);
-      try {
-        const response = await api.post(
-          `/createCenterClassRooms/${id}`,
-          values,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
+      const apiCalls = selectedCenters.map(async (center) => {
+        try {
+          const payload = {
+            classRoomName: values.classRoomName,
+            classRoomType: values.classRoomType,
+            classRoomCode: values.classRoomCode,
+            capacity: values.capacity,
+            description: values.description,
+          };
+          const response = await api.post(
+            `/createCenterClassRooms/${center.value}`,
+            { ...payload, centerId: center.value },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+        } catch (error) {
+          if (error.response?.status === 409) {
+            toast.warning(`${error?.response?.data?.message}$${center.label}`);
+          } else {
+            toast.error(error.response?.data?.message || "API Error");
           }
-        );
-        if (response.status === 201) {
-          toast.success(response.data.message);
-          onSuccess();
-          handleClose();
-        } else {
-          toast.error(response.data.message);
         }
-      } catch (error) {
-        if (error.response.status === 409) {
-          toast.warning(error?.response?.data?.message);
-        } else {
-          toast.error(error.response.data.message);
-        }
-      } finally {
-        setLoadIndicator(false);
-      }
+      });
+
+      await Promise.all(apiCalls);
+      toast.success(`Class added Successfully`);
+
+      setLoadIndicator(false);
+      onSuccess();
+      handleClose();
     },
-    enableReinitialize: true,
-    validateOnChange: true,
-    validateOnBlur: true,
-    validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
-        setIsModified(true);
-      } else {
-        setIsModified(false);
-      }
-    },
+    // enableReinitialize: true,
+    // validateOnChange: true,
+    // validateOnBlur: true,
   });
   const fetchData = async () => {
     try {

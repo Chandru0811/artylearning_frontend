@@ -83,14 +83,9 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
               },
             }
           );
-          if (response.status === 201) {
-            toast.success(`Break added for Center: ${center.label}`);
-          } else {
-            toast.error(`Failed for Center: ${center.label}`);
-          }
         } catch (error) {
           if (error.response?.status === 409) {
-            toast.warning(error?.response?.data?.message);
+            toast.warning(`${error?.response?.data?.message}$${center.label}`);
           } else {
             toast.error(error.response?.data?.message || "API Error");
           }
@@ -98,6 +93,7 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
       });
 
       await Promise.all(apiCalls);
+      toast.success(`Break added Successfully`);
 
       setLoadIndicator(false);
       onSuccess();

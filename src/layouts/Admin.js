@@ -474,8 +474,8 @@ function Admin({ handleLogout }) {
 
               {/* {/ {/ Holiday /} /} */}
               <Route path="/holiday" element={<Holiday />} />
-              <Route path="/holiday/add" element={<HolidayAdd />} />
-              <Route path="/holiday/edit/:id" element={<HolidayEdit />} />
+              <Route path="/holiday/add" element={<HolidayAdd selectedCenter={selectedCenter}/>} />
+              <Route path="/holiday/edit/:id" element={<HolidayEdit selectedCenter={selectedCenter}/>} />
               <Route path="/holiday/list/:id" element={<HolidayView />} />
 
               {/* {/ {/ Deduction /} /} */}
@@ -614,7 +614,7 @@ function Admin({ handleLogout }) {
 
               {/* Invoice  */}
               <Route path="/invoice" element={<Invoice selectedCenter={selectedCenter}/>} />
-              <Route path="/invoice/add" element={<InvoiceAdd />} />
+              <Route path="/invoice/add" element={<InvoiceAdd selectedCenter={selectedCenter}/>} />
               <Route path="/invoice/edit/:id" element={<InvoiceEdit />} />
               <Route path="/invoice/view/:id" element={<InvoiceView />} />
               <Route path="/invoice/payment" element={<InvoicePayment />} />

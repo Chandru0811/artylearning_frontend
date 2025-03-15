@@ -31,9 +31,7 @@ function DocumentAdd({ selectedCenter }) {
   const [folderCategory, setFolderCategory] = useState("group");
   const [centerData, setCenterData] = useState(null);
   const [classData, setClassData] = useState(null);
-  const [courseData, setCourseData] = useState(null);
-  const [studentData, setStudentData] = useState(false);
-  const [userData, setUserData] = useState(null);
+  const [classCenter, setClassCenter] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
   const [batchData, setBatchData] = useState(null);
@@ -41,7 +39,7 @@ function DocumentAdd({ selectedCenter }) {
   const [classOptions, setClassOptions] = useState([]);
   const [teacherOptions, setTeacherOptions] = useState([]);
   const [studentOptions, setStudentOptions] = useState([]);
-  console.log("courseOptions ::", courseOptions);
+  console.log("courseOptions ::", teacherOptions);
 
   const formik = useFormik({
     initialValues: {
@@ -62,61 +60,74 @@ function DocumentAdd({ selectedCenter }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+
       try {
-        const selectedValue = formik.values.center; // Assuming formik is in scope
         let selectedOptionName = "";
         let selectedClassName = "";
         let selectedCourseName = "";
         let selectedTeacherName = "";
         let selectedStudentName = "";
 
-        centerData.forEach((center) => {
-          if (parseInt(selectedValue) === center.id) {
-            selectedOptionName = center.centerNames || "--";
+        console.log("Selected Center Object:", values.center);
+
+        let classCenterData = classCenter; // Store initial value
+
+        if (!selectedCenter || selectedCenter === "0") {
+          try {
+            const response = await api.get(
+              `/getAllCourseClassListingsById/${values.classListing}`
+            );
+            classCenterData = response.data; // Assign fetched data
+            setClassCenter(response.data); // Update state
+          } catch (error) {
+            toast.error("Error Fetching Data");
+            setLoadIndicator(false);
+            return; // Stop execution
           }
-        });
+        }
+
+        selectedOptionName = classCenterData?.centerName || "--";
 
         // Find selected class name
-        classData.forEach((cls) => {
-          if (parseInt(values.classListing) === cls.id) {
-            selectedClassName = cls.classNames || "--";
-          }
-        });
+        selectedClassName =
+          classOptions.find(
+            (cls) => parseInt(values.classListing) === cls.value
+          )?.label || "--";
 
         // Find selected course name
-        courseData.forEach((course) => {
-          if (parseInt(values.course) === course.id) {
-            selectedCourseName = course.courseNames || "--";
-          }
-        });
+        selectedCourseName =
+          courseOptions.find(
+            (course) => parseInt(values.course) === course.value
+          )?.label || "--";
 
-        userData.forEach((user) => {
-          if (parseInt(values.user) === user.id) {
-            selectedTeacherName = user.teacherNames || "--";
-          }
-        });
-        studentData.forEach((studentName) => {
-          if (parseInt(values.studentName) === studentName.id) {
-            selectedStudentName = studentName.studentNames || "--";
-          }
-        });
+        // Find selected teacher name
+        selectedTeacherName =
+          teacherOptions.find((user) => parseInt(values.userId) === user.value)
+            ?.label || "--";
 
-        let requestBody = {
-          centerId: values.center || selectedCenter,
-          userId: values.userId,
-          user: selectedTeacherName,
-          day: values.day,
-          center: selectedOptionName,
-          classListing: selectedClassName,
-          course: selectedCourseName,
-          courseId: values.course,
-          classId: values.classListing,
-          folderCategory: folderCategory,
-          batchTime: values.batchTime,
-          date: values.date,
-          expiredDate: values.expiredDate,
-          createdBy: userName,
-        };
+        // Find selected student name
+        selectedStudentName =
+          studentOptions.find(
+            (student) => parseInt(values.studentName) === student.value
+          )?.label || "--";
+
+          let requestBody = {
+            centerId: classCenterData?.centerId || selectedCenter,
+            userId: values.userId,
+            user: selectedTeacherName,
+            day: values.day,
+            center: selectedOptionName,
+            classListing: selectedClassName,
+            course: selectedCourseName,
+            courseId: values.course,
+            classId: values.classListing,
+            folderCategory: folderCategory,
+            batchTime: values.batchTime,
+            date: values.date,
+            expiredDate: values.expiredDate,
+            createdBy: userName,
+            isGroupUpload: folderCategory === "group",
+          };
 
         if (folderCategory === "group") {
           requestBody.isGroupUpload = true;
@@ -269,7 +280,6 @@ function DocumentAdd({ selectedCenter }) {
   };
 
   const fetchStudent = async (centerId) => {
-
     try {
       let student = [];
       const numericCenterId = Number(centerId);
@@ -300,7 +310,6 @@ function DocumentAdd({ selectedCenter }) {
         label: classListing.classNames,
       }));
       setClassOptions(formattedClasses);
-      setClassData(classes);
     } catch (error) {
       toast.error(error);
     }
@@ -406,6 +415,7 @@ function DocumentAdd({ selectedCenter }) {
     formik.setFieldValue("course", course);
     fetchClasses(course); // Fetch class for the selected course
   };
+  console.log("formik.values.center", formik.values.center);
 
   return (
     <div className="container">
