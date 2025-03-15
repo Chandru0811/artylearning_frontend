@@ -5,7 +5,6 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import { MdOutlineFreeBreakfast } from "react-icons/md";
 import {
   Dialog,
   DialogActions,
@@ -18,7 +17,6 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 function AddBreak({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [isModified, setIsModified] = useState(false);
   const [selectedCenters, setSelectedCenters] = useState([]);
   const [centerData, setCenterData] = useState([]);
 
@@ -26,15 +24,17 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
     label: center.centerNames,
     value: center.id,
   }));
+
   const handleClose = () => {
     handleMenuClose();
     formik.resetForm();
     setShow(false);
   };
+
   const handleShow = () => {
     setShow(true);
-    setIsModified(false);
   };
+
   const validationSchema = yup.object().shape({
     breakName: yup.string().required("*Break Name is required"),
     fromDate: yup.string().required("*From Date is required"),
@@ -51,51 +51,60 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
             : true;
         }
       ),
+    centerId: yup
+      .array()
+      .min(1, "*At least one center must be selected")
+      .required("*Center selection is required"),
   });
+
   const formik = useFormik({
     initialValues: {
       breakName: "",
       fromDate: "",
       toDate: "",
+      centerId: [],
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      console.log("Form values:", values);
-      try {
-        const response = await api.post(`/createCenterBreaks/${id}`, values, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (response.status === 201) {
-          toast.success(response.data.message);
-          onSuccess();
-          handleClose();
-        } else {
-          toast.error(response.data.message);
+      const payload = {
+        breakName: values.breakName,
+        fromDate: values.fromDate,
+        toDate: values.toDate,
+      };
+      const apiCalls = selectedCenters.map(async (center) => {
+        try {
+          const response = await api.post(
+            `/createCenterBreaks/${center.value}`,
+            { ...payload, centerId: center.value },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (response.status === 201) {
+            toast.success(`Break added for Center: ${center.label}`);
+          } else {
+            toast.error(`Failed for Center: ${center.label}`);
+          }
+        } catch (error) {
+          if (error.response?.status === 409) {
+            toast.warning(error?.response?.data?.message);
+          } else {
+            toast.error(error.response?.data?.message || "API Error");
+          }
         }
-      } catch (error) {
-        if (error.response.status === 409) {
-          toast.warning(error?.response?.data?.message);
-        } else {
-          toast.error(error.response.data.message);
-        }
-      } finally {
-        setLoadIndicator(false);
-      }
-    },
-    enableReinitialize: true,
-    validateOnChange: true,
-    validateOnBlur: true,
-    validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
-        setIsModified(true);
-      } else {
-        setIsModified(false);
-      }
+      });
+
+      await Promise.all(apiCalls);
+
+      setLoadIndicator(false);
+      onSuccess();
+      handleClose();
     },
   });
+
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -104,9 +113,11 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
       toast.error(error);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
+
   return (
     <>
       <p
@@ -122,7 +133,7 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
+              e.preventDefault();
             }
           }}
         >
@@ -137,92 +148,57 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
                 </label>
                 <MultiSelect
                   options={centerOptions}
-                  value={selectedCenters}
+                  value={centerOptions.filter((center) =>
+                    formik.values.centerId.includes(center.value)
+                  )}
                   onChange={(selected) => {
                     setSelectedCenters(selected);
                     formik.setFieldValue(
                       "centerId",
-                      selected.map((option) => option.value)
+                      selected.map((center) => center.value)
                     );
                   }}
                   labelledBy="Select Centers"
-                  className={`form-multi-select ${
-                    formik.touched.centerId && formik.errors.centerId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  style={{
-                    height: "37.6px !important", // Set the desired height
-                    minHeight: "37.6px", // Ensure the height doesn't shrink
-                  }}
+                  className="form-multi-select"
                 />
                 {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="invalid-feedback">
+                  <div className="text-danger mt-1">
                     {formik.errors.centerId}
                   </div>
                 )}
               </div>
+
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
+                <label className="form-label">
                   Break Name<span className="text-danger">*</span>
-                </lable>
-                <div className="input-group mb-3">
-                  <input
-                    onKeyDown={(e) => e.stopPropagation()}
-                    type="data"
-                    className={`form-control   ${
-                      formik.touched.breakName && formik.errors.breakName
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("breakName")}
-                  />
-                  {formik.touched.breakName && formik.errors.breakName && (
-                    <div className="invalid-feedback">
-                      {formik.errors.breakName}
-                    </div>
-                  )}
-                </div>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  {...formik.getFieldProps("breakName")}
+                />
               </div>
+
               <div className="col-md-6 col-12 mb-2">
-                <lable>
+                <label className="form-label">
                   From Date<span className="text-danger">*</span>
-                </lable>
+                </label>
                 <input
                   type="date"
-                  className={`form-control   ${
-                    formik.touched.fromDate && formik.errors.fromDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className="form-control"
                   {...formik.getFieldProps("fromDate")}
                 />
-                {formik.touched.fromDate && formik.errors.fromDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.fromDate}
-                  </div>
-                )}
               </div>
+
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
+                <label className="form-label">
                   To Date<span className="text-danger">*</span>
-                </lable>
-                <div className="input-group mb-3">
-                  <input
-                    type="date"
-                    className={`form-control   ${
-                      formik.touched.toDate && formik.errors.toDate
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("toDate")}
-                  />
-                  {formik.touched.toDate && formik.errors.toDate && (
-                    <div className="invalid-feedback">
-                      {formik.errors.toDate}
-                    </div>
-                  )}
-                </div>
+                </label>
+                <input
+                  type="date"
+                  className="form-control"
+                  {...formik.getFieldProps("toDate")}
+                />
               </div>
             </div>
           </DialogContent>
@@ -239,10 +215,7 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
               disabled={loadIndicator}
             >
               {loadIndicator && (
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  aria-hidden="true"
-                ></span>
+                <span className="spinner-border spinner-border-sm me-2"></span>
               )}
               Submit
             </Button>
