@@ -131,7 +131,6 @@ function DocumentEdit({ id, onSuccess, handleMenuClose }) {
                   </label>
                   <input
                     name="folderName"
-                    className="form-control "
                     type="text"
                     onKeyDown={(e) => e.stopPropagation()}
                     className={`form-control  ${

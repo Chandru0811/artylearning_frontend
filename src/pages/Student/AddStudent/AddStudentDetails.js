@@ -496,23 +496,38 @@ const AddStudentDetails = forwardRef(
                     </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
-                        <small>Refered By Parent</small>
+                        <small>Refer By Student</small>
                         {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
-                      <input
-                        name="referByParent"
-                        className="form-control"
+                      {/* <input
+                        className="form-control "
                         type="text"
+                        name="referByStudent"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.referByParent}
+                        value={formik.values.referByStudent}
                         readOnly
-                      />
-                      {formik.touched.referByParent &&
-                        formik.errors.referByParent && (
+                      /> */}
+                      <select
+                        name="referByStudent"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.referByStudent}
+                        className="form-select"
+                      >
+                        <option selected></option>
+                        {studentData &&
+                          studentData.map((student) => (
+                            <option key={student.id} value={student.id}>
+                              {student.studentNames}
+                            </option>
+                          ))}
+                      </select>
+                      {formik.touched.referByStudent &&
+                        formik.errors.referByStudent && (
                           <div className="error text-danger ">
-                            <small>{formik.errors.referByParent}</small>
+                            <small>{formik.errors.referByStudent}</small>
                           </div>
                         )}
                     </div>
@@ -691,40 +706,26 @@ const AddStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
+               
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
-                        <small>Refer By Student</small>
+                        <small>Refered By Parent</small>
                         {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input
-                        className="form-control "
+                        name="referByParent"
+                        className="form-control"
                         type="text"
-                        name="referByStudent"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.referByStudent}
+                        value={formik.values.referByParent}
                         readOnly
                       />
-                      {/* <select
-                        name="referByStudent"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.referByStudent}
-                        className="form-select"
-                      >
-                        <option selected></option>
-                        {studentData &&
-                          studentData.map((student) => (
-                            <option key={student.id} value={student.id}>
-                              {student.studentNames}
-                            </option>
-                          ))}
-                      </select> */}
-                      {formik.touched.referByStudent &&
-                        formik.errors.referByStudent && (
+                      {formik.touched.referByParent &&
+                        formik.errors.referByParent && (
                           <div className="error text-danger ">
-                            <small>{formik.errors.referByStudent}</small>
+                            <small>{formik.errors.referByParent}</small>
                           </div>
                         )}
                     </div>

@@ -76,16 +76,36 @@ function AddPackage({ id, onSuccess, handleMenuClose }) {
       } finally {
         setLoadIndicator(false);
       }
-    },
-    enableReinitialize: true,
-    validateOnChange: true,
-    validateOnBlur: true,
-    validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
-        setIsModified(true);
-      } else {
-        setIsModified(false);
-      }
+      const apiCalls = selectedCenters.map(async (center) => {
+        try {
+          const payload = {
+            packageName: values.packageName,
+            noOfLesson: values.noOfLesson,
+          };
+          const response = await api.post(
+            `/createCenterPackages/${center.value}`,
+            { ...payload, centerId: center.value },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+        } catch (error) {
+          if (error.response?.status === 409) {
+            toast.warning(`${error?.response?.data?.message}$${center.label}`);
+          } else {
+            toast.error(error.response?.data?.message || "API Error");
+          }
+        }
+      });
+
+      await Promise.all(apiCalls);
+      toast.success(`Package added Successfully`);
+
+      setLoadIndicator(false);
+      onSuccess();
+      handleClose();
     },
   });
   const fetchData = async () => {

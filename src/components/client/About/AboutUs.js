@@ -2,6 +2,7 @@ import React from "react";
 import logo from "../../../assets/clientimage/Arty_Learning_Logo-2023-tp-400.png";
 import image from "../../../assets/clientimage/IMG_6872-scaled.jpg";
 function AboutUs({datas}) {
+  console.log("datas",datas)
   // console.log("object",datas)
   return (
     <div className="container-fluid about">
