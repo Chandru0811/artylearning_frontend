@@ -621,10 +621,10 @@ function Admin({ handleLogout }) {
 
               {/* Document  */}
               <Route path="/document" element={<Document selectedCenter={selectedCenter}/>} />
-              <Route path="/document/add" element={<DocumentAdd />} />
+              <Route path="/document/add" element={<DocumentAdd selectedCenter={selectedCenter}/>} />
               <Route path="/document/edit" element={<DocumentEdit />} />
               <Route path="/document/view/:id" element={<DocumentView />} />
-              <Route path="/documentfile" element={<DocumentFiles />} />
+              <Route path="/documentfile" element={<DocumentFiles selectedCenter={selectedCenter}/>} />
 
               {/* Subject  */}
               <Route path="/subject" element={<Subject />} />

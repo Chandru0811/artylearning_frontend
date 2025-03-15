@@ -8,9 +8,11 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
-import fetchAllCentersWithScheduleStudentList from "../List/CenterAvailableScheduleStudentLidt";
 import fetchAllCentersWithIds from "../List/CenterList";
 import Select from "react-select";
+import fetchAllCoursesWithIds from "../List/CourseList";
+import fetchAllTeachersWithIds from "../List/TeacherList";
+import fetchAllStudentsWithIds from "../List/StudentList";
 
 const validationSchema = Yup.object({
   center: Yup.string().required("*Centre is required"),
@@ -24,7 +26,7 @@ const validationSchema = Yup.object({
   expiredDate: Yup.string().required("*Expired Date is required"),
 });
 
-function DocumentAdd() {
+function DocumentAdd({ selectedCenter }) {
   const navigate = useNavigate();
   const [folderCategory, setFolderCategory] = useState("group");
   const [centerData, setCenterData] = useState(null);
@@ -39,10 +41,11 @@ function DocumentAdd() {
   const [classOptions, setClassOptions] = useState([]);
   const [teacherOptions, setTeacherOptions] = useState([]);
   const [studentOptions, setStudentOptions] = useState([]);
+  console.log("courseOptions ::", courseOptions);
 
   const formik = useFormik({
     initialValues: {
-      center: "",
+      center: selectedCenter,
       course: "",
       userId: "",
       classId: "",
@@ -99,7 +102,7 @@ function DocumentAdd() {
         });
 
         let requestBody = {
-          centerId: values.center,
+          centerId: values.center || selectedCenter,
           userId: values.userId,
           user: selectedTeacherName,
           day: values.day,
@@ -172,58 +175,120 @@ function DocumentAdd() {
 
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
-
-      setCenterData(centerData);
+      const response = await fetchAllCentersWithIds();
+      if (Array.isArray(response)) {
+        setCenterData(response);
+        formik.setFieldValue("center", selectedCenter);
+        fetchCourses(selectedCenter);
+        fetchTeacher(selectedCenter);
+        fetchStudent(selectedCenter);
+      } else {
+        console.error("Invalid data format:", response);
+        setCenterData([]);
+      }
     } catch (error) {
-      toast.error(error);
+      toast.error("Failed to fetch center data");
+      console.error(error);
     }
   };
 
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await fetchAllCentersWithIds();
+
+  //     if (Array.isArray(response)) { // Ensure response is an array
+  //       setCenterData(response);
+
+  //       // Check if selectedCenter exists in the fetched centerData
+  //       if (selectedCenter && response.some(center => center.id === selectedCenter)) {
+  //         setCenterData(selectedCenter);
+  //       } else if (response.length > 0) {
+  //         setCenterData(response[0].id); // Set first center as default
+  //       }
+  //     } else {
+  //       console.error("Invalid data format:", response);
+  //       setCenterData([]); // Prevent .map() errors by defaulting to an empty array
+  //     }
+  //   } catch (error) {
+  //     toast.error("Failed to fetch center data");
+  //     console.error(error);
+  //   }
+  // };
+
   useEffect(() => {
     fetchData();
-  }, []);
+    if (selectedCenter) {
+      formik.setFieldValue("center", selectedCenter);
+    }
+  }, [selectedCenter]);
 
   const fetchCourses = async (centerId) => {
     try {
-      const courses = await fetchAllCoursesWithIdsC(centerId);
+      let courses = [];
+      const numericCenterId = Number(centerId);
+      if (numericCenterId === 0) {
+        courses = await fetchAllCoursesWithIds();
+      } else {
+        courses = await fetchAllCoursesWithIdsC(numericCenterId);
+      }
+      if (!Array.isArray(courses)) {
+        throw new Error("API did not return an array");
+      }
       const formattedCourses = courses.map((course) => ({
         value: course.id,
         label: course.courseNames,
       }));
       setCourseOptions(formattedCourses);
-      setCourseData(courses);
     } catch (error) {
-      toast.error(error);
+      console.error("Error fetching courses:", error);
+      toast.error(error.message || "Failed to fetch courses");
     }
   };
 
   const fetchTeacher = async (centerId) => {
     try {
-      const teacher = await fetchAllTeacherListByCenter(centerId);
-      const formattedTeacher = teacher.map((user) => ({
-        value: user.id,
-        label: user.teacherNames,
+      let teacherList = [];
+      const numericCenterId = Number(centerId);
+      if (numericCenterId === 0) {
+        teacherList = await fetchAllTeachersWithIds();
+      } else {
+        teacherList = await fetchAllTeacherListByCenter(numericCenterId);
+      }
+      if (!Array.isArray(teacherList)) {
+        throw new Error("API did not return an array");
+      }
+      const formattedCourses = teacherList.map((teacher) => ({
+        value: teacher.id,
+        label: teacher.teacherNames,
       }));
-      setTeacherOptions(formattedTeacher);
-      setUserData(teacher);
+      setTeacherOptions(formattedCourses);
     } catch (error) {
-      toast.error(error);
+      console.error("Error fetching Teacher:", error);
+      toast.error(error.message || "Failed to fetch courses");
     }
   };
 
   const fetchStudent = async (centerId) => {
-    try {
-      const teacher = await fetchAllStudentListByCenter(centerId);
-      const formattedTeacher = teacher.map((studentName) => ({
-        value: studentName.id,
-        label: studentName.studentNames,
-      }));
-      setStudentOptions(formattedTeacher);
 
-      setStudentData(teacher);
+    try {
+      let student = [];
+      const numericCenterId = Number(centerId);
+      if (numericCenterId === 0) {
+        student = await fetchAllStudentsWithIds();
+      } else {
+        student = await fetchAllStudentListByCenter(numericCenterId);
+      }
+      if (!Array.isArray(student)) {
+        throw new Error("API did not return an array");
+      }
+      const formattedCourses = student.map((student) => ({
+        value: student.id,
+        label: student.studentNames,
+      }));
+      setStudentOptions(formattedCourses);
     } catch (error) {
-      toast.error(error);
+      console.error("Error fetching Student:", error);
+      toast.error(error.message || "Failed to fetch courses");
     }
   };
 
@@ -265,16 +330,15 @@ function DocumentAdd() {
   };
 
   const handleCenterChange = (event) => {
-    setCourseData(null);
-    setClassData(null);
-    setUserData(null);
-    setStudentData(null);
+    const center = event.target.value || selectedCenter;
+    // setCourseData(null);
+    // setClassData(null);
+    // setUserData(null);
+    // setStudentData(null);
     setCourseOptions([]);
     setClassOptions([]);
     setTeacherOptions([]);
     setStudentOptions([]);
-
-    const center = event.target.value;
     formik.setFieldValue("center", center);
     fetchCourses(center);
     fetchTeacher(center);
@@ -413,13 +477,14 @@ function DocumentAdd() {
 
           <div className="container">
             <div className="row py-4">
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4 d-none">
                 <lable className="">
                   Centre<span className="text-danger">*</span>
                 </lable>
                 <select
                   {...formik.getFieldProps("center")}
                   name="center"
+                  type="hidden"
                   className={`form-select  ${
                     formik.touched.center && formik.errors.center
                       ? "is-invalid"
@@ -428,8 +493,8 @@ function DocumentAdd() {
                   aria-label="Default select example"
                   onChange={handleCenterChange}
                 >
-                  <option disabled></option>
-                  {centerData &&
+                  <option disabled>Select a center</option>
+                  {Array.isArray(centerData) &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>
                         {center.centerNames}
@@ -440,7 +505,6 @@ function DocumentAdd() {
                   <div className="invalid-feedback">{formik.errors.center}</div>
                 )}
               </div>
-
               <div className="col-md-6 col-12 mb-4">
                 <label className="">
                   Course<span className="text-danger">*</span>
@@ -468,7 +532,6 @@ function DocumentAdd() {
                   <div className="invalid-feedback">{formik.errors.course}</div>
                 )}
               </div>
-
               <div className="col-md-6 col-12 mb-4 ">
                 <lable className="">
                   Class Listing<span className="text-danger">*</span>
@@ -503,7 +566,6 @@ function DocumentAdd() {
                   </div>
                 )}
               </div>
-
               <div className="col-md-6 col-12 mb-4">
                 <lable className="">
                   Teacher<span className="text-danger">*</span>
@@ -538,7 +600,6 @@ function DocumentAdd() {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
-
               <div className="col-md-6 col-12 mb-4">
                 <label className="">
                   Days<span className="text-danger">*</span>
@@ -554,12 +615,16 @@ function DocumentAdd() {
                     { value: "SUNDAY", label: "Sunday" },
                   ]}
                   name="day"
-                  value={{
-                    value: formik.values.day,
-                    label:
-                      formik.values.day.charAt(0) +
-                      formik.values.day.slice(1).toLowerCase(),
-                  }}
+                  value={
+                    formik.values.day
+                      ? {
+                          value: formik.values.day,
+                          label:
+                            formik.values.day.charAt(0) +
+                            formik.values.day.slice(1).toLowerCase(),
+                        }
+                      : null // Ensure null when no value is selected
+                  }
                   onChange={(selectedOption) =>
                     formik.setFieldValue(
                       "day",
@@ -579,7 +644,6 @@ function DocumentAdd() {
                   <div className="invalid-feedback">{formik.errors.day}</div>
                 )}
               </div>
-
               <div className="col-md-6 col-12 mb-4">
                 <label className="">
                   Batch Time<span className="text-danger">*</span>
@@ -635,7 +699,47 @@ function DocumentAdd() {
                   </div>
                 )}
               </div>
-
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Date<span className="text-danger">*</span>
+                </label>
+                <div className="input-group mb-3">
+                  <input
+                    name="date"
+                    type="date"
+                    className={`form-control  ${
+                      formik.touched.date && formik.errors.date
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("date")}
+                  />
+                  {formik.touched.date && formik.errors.date && (
+                    <div className="invalid-feedback">{formik.errors.date}</div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Expired Date<span className="text-danger">*</span>
+                </label>
+                <input
+                  name="expiredDate"
+                  type="date"
+                  className={`form-control  ${
+                    formik.touched.expiredDate && formik.errors.expiredDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("expiredDate")}
+                  value={calculateExpiryDate(formik.values.date)}
+                />
+                {formik.touched.expiredDate && formik.errors.expiredDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.expiredDate}
+                  </div>
+                )}
+              </div>
               {/* Radio buttons for selecting folder category */}
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
@@ -677,7 +781,6 @@ function DocumentAdd() {
                     </div>
                   )}
               </div>
-
               <div className="col-md-6 col-12 mb-3">
                 {folderCategory === "group" ? (
                   <></>
@@ -699,6 +802,7 @@ function DocumentAdd() {
                       placeholder="Select Student"
                       isSearchable
                       isClearable
+                      menuPlacement="top"
                     />
                     {/* <select
                       {...formik.getFieldProps("studentSelect")}
@@ -722,49 +826,6 @@ function DocumentAdd() {
                         {formik.errors.studentId}
                       </div>
                     )}
-                  </div>
-                )}
-              </div>
-
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Date<span className="text-danger">*</span>
-                </label>
-                <div className="input-group mb-3">
-                  <input
-                    name="date"
-                    type="date"
-                    className={`form-control  ${
-                      formik.touched.date && formik.errors.date
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("date")}
-                  />
-                  {formik.touched.date && formik.errors.date && (
-                    <div className="invalid-feedback">{formik.errors.date}</div>
-                  )}
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Expired Date<span className="text-danger">*</span>
-                </label>
-                <input
-                  name="expiredDate"
-                  type="date"
-                  className={`form-control  ${
-                    formik.touched.expiredDate && formik.errors.expiredDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("expiredDate")}
-                  value={calculateExpiryDate(formik.values.date)}
-                />
-                {formik.touched.expiredDate && formik.errors.expiredDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.expiredDate}
                   </div>
                 )}
               </div>
