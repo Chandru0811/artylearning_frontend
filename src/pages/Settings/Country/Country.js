@@ -40,7 +40,7 @@ const Country = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -65,19 +65,19 @@ const Country = () => {
       // },
       {
         accessorKey: "country",
-        enableHiding: false,
+        enableHiding: true,
         header: "Country",
         size: 20,
       },
       {
         accessorKey: "nationality",
-        enableHiding: false,
+        enableHiding: true,
         header: "Nationality",
         size: 20,
       },
       {
         accessorKey: "citizenship",
-        enableHiding: false,
+        enableHiding: true,
         header: "Citizenship",
         size: 20,
       },
@@ -118,8 +118,8 @@ const Country = () => {
         styleOverrides: {
           root: {
             "&.Mui-disabled .MuiSwitch-track": {
-              backgroundColor: "#f5e1d0", 
-              opacity: 1, 
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
             },
             "&.Mui-disabled .MuiSwitch-thumb": {
               color: "#eb862a",
@@ -200,47 +200,47 @@ const Country = () => {
           </div>
         ) : (
           <>
-          <ThemeProvider theme={theme}>
-            <MaterialReactTable
-              columns={columns}
-              data={datas}
-              enableColumnActions={false}
-              enableColumnFilters={false}
-              enableDensityToggle={false}
-              enableFullScreenToggle={false}
-              initialState={{
-                columnVisibility: {
-                  createdBy: false,
-                  createdAt: false,
-                  updatedBy: false,
-                  updatedAt: false,
-                },
-              }}
-              // muiTableBodyRowProps={({ row }) => ({
-              //   onClick: () => navigate(`/center/view/${row.original.id}`),
-              //   style: { cursor: "pointer" },
-              // })}
-            />
-          </ThemeProvider>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
 
-          <Menu
-            id="action-menu"
-            anchorEl={menuAnchor}
-            open={Boolean(menuAnchor)}
-            onClose={handleMenuClose}
-          >
-            {/* <MenuItem>
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              {/* <MenuItem>
               <CountryEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
             </MenuItem> */}
-            <MenuItem>
-              <GlobalDelete
-                path={`/deleteCountrySetting/${selectedId}`}
-                onDeleteSuccess={getData}
-                onOpen={handleMenuClose}
-              />
-            </MenuItem>
-          </Menu>
-        </>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteCountrySetting/${selectedId}`}
+                  onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>

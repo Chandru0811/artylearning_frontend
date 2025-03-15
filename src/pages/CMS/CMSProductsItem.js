@@ -50,7 +50,7 @@ const CMSProductsItem = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -59,7 +59,7 @@ const CMSProductsItem = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -75,7 +75,7 @@ const CMSProductsItem = () => {
       },
       {
         accessorKey: "image",
-        enableHiding: false,
+        enableHiding: true,
         header: "Image Upload",
         size: 20,
         Cell: ({ cell }) => (
@@ -89,7 +89,7 @@ const CMSProductsItem = () => {
       },
       {
         accessorKey: "imageDetails",
-        enableHiding: false,
+        enableHiding: true,
         header: "Image Details",
         size: 50,
       },

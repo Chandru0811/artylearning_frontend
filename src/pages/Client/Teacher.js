@@ -74,9 +74,9 @@ function Teacher() {
                       <div className="col-md-6 col-12">
                         <div className="mx-2">
                           <h1 className="fw-bold">{data.teacherName}</h1>
-                          <h4 className="text-danger">
+                          <h5 className="text-danger">
                             {data.teacherRoleName}
-                          </h4>
+                          </h5>
                           <p style={{ fontSize: "20px" }}>
                             {data.teacherDescription}
                           </p>
@@ -135,10 +135,12 @@ function Teacher() {
                         </div>
                         <div className="col-md-6 col-12">
                           <div className="mx-2">
-                            <h1 className="fw-bold text-break">{data.teacherName}</h1>
-                            <h4 className="text-danger">
+                            <h1 className="fw-bold text-break">
+                              {data.teacherName}
+                            </h1>
+                            <h5 className="text-danger">
                               {data.teacherRoleName}
-                            </h4>
+                            </h5>
                             <p style={{ fontSize: "20px" }}>
                               {data.teacherDescription}
                             </p>

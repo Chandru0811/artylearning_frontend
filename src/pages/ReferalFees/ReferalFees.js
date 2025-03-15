@@ -38,7 +38,7 @@ const ReferalFees = ({ selectedCenter }) => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -47,7 +47,7 @@ const ReferalFees = ({ selectedCenter }) => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -63,7 +63,7 @@ const ReferalFees = ({ selectedCenter }) => {
       },
       {
         accessorKey: "status",
-        enableHiding: false,
+        enableHiding: true,
         header: "Status",
         Cell: ({ row }) =>
           row.original.status === "ACTIVE" ? (
@@ -72,30 +72,30 @@ const ReferalFees = ({ selectedCenter }) => {
             <span className="badge badges-Red fw-light">Inactive</span>
           ),
       },
-      { accessorKey: "center", enableHiding: false, header: "Centre Name" },
+      { accessorKey: "center", enableHiding: true, header: "Centre Name" },
       {
         accessorKey: "effectiveDate",
-        enableHiding: false,
+        enableHiding: true,
         header: "Effective Date",
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
       {
         accessorKey: "referralFee",
         header: "Referal fee",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
-      { accessorKey: "createdBy", enableHiding: false, header: "Created By" },
+      { accessorKey: "createdBy", enableHiding: true, header: "Created By" },
       {
         accessorKey: "createdAt",
-        enableHiding: false,
+        enableHiding: true,
         header: "Created Date",
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
       {
         accessorKey: "updatedBy",
         header: "Updated By",
-        enableHiding: false,
+        enableHiding: true,
         Cell: ({ cell }) => cell.getValue() || "",
       },
       // {

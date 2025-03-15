@@ -50,7 +50,7 @@ const Invoice = ({ selectedCenter }) => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -59,7 +59,7 @@ const Invoice = ({ selectedCenter }) => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -76,7 +76,7 @@ const Invoice = ({ selectedCenter }) => {
       },
       {
         accessorKey: "invoiceStatus",
-        enableHiding: false,
+        enableHiding: true,
         header: "Status",
         Cell: ({ row }) => {
           const status = row.original.invoiceStatus?.trim().toUpperCase();
@@ -92,26 +92,26 @@ const Invoice = ({ selectedCenter }) => {
       },
       {
         accessorKey: "centerName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Centre",
       },
       {
         accessorKey: "courseName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Course",
       },
       {
         accessorKey: "studentUniqueId",
-        enableHiding: false,
+        enableHiding: true,
         header: "Student ID",
       },
       { accessorKey: "studentName", header: "Student" },
-      { accessorKey: "parent", enableHiding: false, header: "Parent Name" },
+      { accessorKey: "parent", enableHiding: true, header: "Parent Name" },
       { accessorKey: "packageName", header: "Package" },
       {
         accessorKey: "invoiceNumber",
         header: "Invoice Number",
-        enableHiding: false,
+        enableHiding: true,
         size: 50,
       },
       {

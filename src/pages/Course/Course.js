@@ -36,7 +36,7 @@ const Course = ({ selectedCenter }) => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -45,7 +45,7 @@ const Course = ({ selectedCenter }) => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -62,43 +62,43 @@ const Course = ({ selectedCenter }) => {
       },
       {
         accessorFn: (row) => row.centerName[0],
-        enableHiding: false,
+        enableHiding: true,
         header: "Center Name",
       },
-      { accessorKey: "levelName", enableHiding: false, header: "Level" },
+      { accessorKey: "levelName", enableHiding: true, header: "Level" },
       {
         accessorKey: "courseName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Course Name",
       },
       {
         accessorKey: "courseCode",
-        enableHiding: false,
+        enableHiding: true,
         header: "Course Code",
       },
       {
         accessorKey: "subjectName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Subject",
       },
       {
         accessorKey: "courseType",
-        enableHiding: false,
+        enableHiding: true,
         header: "Course Type",
       },
       {
         accessorKey: "minClassSize",
-        enableHiding: false,
+        enableHiding: true,
         header: "Min Class size",
       },
       {
         accessorKey: "maxClassSize",
-        enableHiding: false,
+        enableHiding: true,
         header: "Maximum Class size",
       },
       {
         accessorKey: "status",
-        enableHiding: false,
+        enableHiding: true,
         header: "Status",
       },
       { accessorKey: "colorCode", header: "Color Code" },

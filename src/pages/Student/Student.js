@@ -14,7 +14,7 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 
-const Student = ({selectedCenter}) => {
+const Student = ({ selectedCenter }) => {
   const [filters, setFilters] = useState({
     centerId: "",
     studentName: "",
@@ -38,7 +38,7 @@ const Student = ({selectedCenter}) => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span
@@ -52,7 +52,7 @@ const Student = ({selectedCenter}) => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 10,
         Cell: ({ cell }) => (
@@ -70,51 +70,51 @@ const Student = ({selectedCenter}) => {
       {
         accessorKey: "studentUniqueId",
         header: "Student ID",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
       {
         accessorKey: "center",
         header: "Centre Name",
-        enableHiding: false,
+        enableHiding: true,
       },
       {
         accessorKey: "studentName",
         header: "Student Name",
-        enableHiding: false,
+        enableHiding: true,
       },
       {
         accessorKey: "parentPrimaryName",
         header: "Parent Name",
-        enableHiding: false,
+        enableHiding: true,
       },
       {
         accessorKey: "parentPrimaryEmail",
         header: "Parent Email",
-        enableHiding: false,
+        enableHiding: true,
       },
       {
         accessorKey: "parentPrimaryMobileNumber",
         header: "Parent Mobile",
-        enableHiding: false,
+        enableHiding: true,
       },
       {
         accessorKey: "gender",
         header: "Gender",
-        enableHiding: false,
+        enableHiding: true,
         size: 30,
       },
       {
         accessorKey: "allowMagazine",
         header: "Allow Magazine",
-        enableHiding: false,
+        enableHiding: true,
         size: 30,
         Cell: ({ cell }) => (cell.getValue() ? "Yes" : "No"),
       },
       {
         accessorKey: "allowSocialMedia",
         header: "Allow Social Media",
-        enableHiding: false,
+        enableHiding: true,
         size: 30,
         Cell: ({ cell }) => (cell.getValue() ? "Yes" : "No"),
       },
@@ -314,7 +314,7 @@ const Student = ({selectedCenter}) => {
 
   useEffect(() => {
     fetchStudentData();
-  }, [filters ,selectedCenter]);
+  }, [filters, selectedCenter]);
 
   const clearFilter = () => {
     setFilters({
@@ -370,7 +370,7 @@ const Student = ({selectedCenter}) => {
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 mb-1">
-            <input type="hidden" name="centerId" value={filters.centerId} />
+              <input type="hidden" name="centerId" value={filters.centerId} />
               {/* <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
@@ -450,7 +450,6 @@ const Student = ({selectedCenter}) => {
                 Clear
               </button>
             </div>
-           
           </div>
           <div className="mb-2 ms-2 d-flex justify-content-end">
             {storedScreens?.studentListingCreate && (
@@ -522,7 +521,10 @@ const Student = ({selectedCenter}) => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-              <MenuItem onClick={() => navigate(`/student/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem
+                onClick={() => navigate(`/student/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>

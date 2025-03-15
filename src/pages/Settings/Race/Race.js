@@ -46,7 +46,7 @@ const Race = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -55,7 +55,7 @@ const Race = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -71,7 +71,7 @@ const Race = () => {
       },
       {
         accessorKey: "race",
-        enableHiding: false,
+        enableHiding: true,
         header: "Race",
         size: 20,
       },
@@ -232,7 +232,11 @@ const Race = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <RaceEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
+                <RaceEdit
+                  onSuccess={getData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete

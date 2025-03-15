@@ -49,7 +49,7 @@ const Center = ({ handleCenterChanged }) => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -64,21 +64,21 @@ const Center = ({ handleCenterChanged }) => {
           </IconButton>
         ),
       },
-      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
+      { accessorKey: "centerName", enableHiding: true, header: "Centre Name" },
       {
         accessorKey: "centerManager",
-        enableHiding: false,
+        enableHiding: true,
         header: "Centre Manager",
       },
-      { accessorKey: "code", header: "Code", enableHiding: false, size: 40 },
+      { accessorKey: "code", header: "Code", enableHiding: true, size: 40 },
       {
         accessorKey: "uenNumber",
         header: "UEN Number",
-        enableHiding: false,
+        enableHiding: true,
         size: 50,
       },
-      { accessorKey: "email", enableHiding: false, header: "Email" },
-      { accessorKey: "mobile", enableHiding: false, header: "Mobile" },
+      { accessorKey: "email", enableHiding: true, header: "Email" },
+      { accessorKey: "mobile", enableHiding: true, header: "Mobile" },
       { accessorKey: "address", header: "Address" },
       { accessorKey: "invoiceNotes", header: "Invoice Notes" },
       { accessorKey: "openingDate", header: "Opening Date" },

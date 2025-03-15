@@ -32,7 +32,7 @@ const Holiday = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -41,7 +41,7 @@ const Holiday = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -58,20 +58,20 @@ const Holiday = () => {
       },
       {
         accessorKey: "centerName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Center Name",
       },
       {
         accessorKey: "holidayName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Holiday Name",
       },
       {
         accessorKey: "startDate",
-        enableHiding: false,
+        enableHiding: true,
         header: "Start Date",
       },
-      { accessorKey: "endDate", header: "End Date" , enableHiding: false,},
+      { accessorKey: "endDate", header: "End Date", enableHiding: true },
       { accessorKey: "holidayDescription", header: "Holiday Description" },
       { accessorKey: "createdBy", header: "Created By" },
       {
@@ -104,10 +104,10 @@ const Holiday = () => {
 
   const getData = async () => {
     try {
-      if(role !== "SMS_ADMIN"){
+      if (role !== "SMS_ADMIN") {
         const response = await api.get(`/getAllHolidayListByUserId/${userId}`);
         setData(response.data);
-      }else{
+      } else {
         const response = await api.get("/getAllUserHoliday");
         setData(response.data);
       }
@@ -264,7 +264,10 @@ const Holiday = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/holiday/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem
+                onClick={() => navigate(`/holiday/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>

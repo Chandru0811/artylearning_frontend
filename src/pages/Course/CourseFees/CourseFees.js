@@ -32,7 +32,7 @@ const CourseFees = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 30,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -41,7 +41,7 @@ const CourseFees = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -58,7 +58,7 @@ const CourseFees = () => {
       },
       {
         accessorKey: "status",
-        enableHiding: false,
+        enableHiding: true,
         header: "Status",
         Cell: ({ row }) =>
           row.original.status === "ACTIVE" ||
@@ -73,22 +73,22 @@ const CourseFees = () => {
       },
       {
         accessorKey: "packageName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Package Name",
       },
       {
         accessorKey: "weekdayFee",
-        enableHiding: false,
+        enableHiding: true,
         header: "Weekday Fees",
       },
       {
         accessorKey: "weekendFee",
-        enableHiding: false,
+        enableHiding: true,
         header: "WeekEnd Fees",
       },
       {
         accessorKey: "taxType",
-        enableHiding: false,
+        enableHiding: true,
         header: "Tax Type",
       },
       {

@@ -18,7 +18,7 @@ import {
   IconButton,
 } from "@mui/material";
 
-const Lead = ({selectedCenter}) => {
+const Lead = ({ selectedCenter }) => {
   const navigate = useNavigate();
   const [confirmationMessage, setConfirmationMessage] = useState("");
   const [datas, setDatas] = useState([]);
@@ -140,16 +140,16 @@ const Lead = ({selectedCenter}) => {
       console.error(error.message || "An error occurred");
     }
   };
-  
+
   const getData = async () => {
     setLoading(true);
     let params = {};
 
     const centerId =
-    !isClearFilterClicked &&
-    (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
-      ? filters.centerId || centerLocalId
-      : "";
+      !isClearFilterClicked &&
+      (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
+        ? filters.centerId || centerLocalId
+        : "";
 
     if (centerId !== "" && centerId !== "0") {
       params.centerId = centerId;
@@ -202,7 +202,7 @@ const Lead = ({selectedCenter}) => {
   useEffect(() => {
     const fetchData = async () => {
       await fetchCenterData(); // Fetch center data and subjects
-  
+
       // Check if local storage has center ID
       if (centerLocalId && centerLocalId !== "undefined") {
         setFilters((prevFilters) => ({
@@ -225,13 +225,13 @@ const Lead = ({selectedCenter}) => {
   }, [filters, selectedCenter]);
 
   const ResetFilter = () => {
-  localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
+    localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
     setFilters({
       centerId: "",
       subjectId: "",
       leadStatus: "",
     });
-  setIsClearFilterClicked(true);
+    setIsClearFilterClicked(true);
   };
 
   useEffect(() => {
@@ -254,7 +254,7 @@ const Lead = ({selectedCenter}) => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -263,7 +263,7 @@ const Lead = ({selectedCenter}) => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -280,7 +280,7 @@ const Lead = ({selectedCenter}) => {
       },
       {
         accessorKey: "leadStatus",
-        enableHiding: false,
+        enableHiding: true,
         header: "Status",
         Cell: ({ row }) => (
           <div className="d-flex justify-content-start">
@@ -764,29 +764,29 @@ const Lead = ({selectedCenter}) => {
       {
         header: "Centre Name",
         accessorKey: "center",
-        enableHiding: false,
+        enableHiding: true,
         cell: ({ cell }) => <span>{cell.getValue()}</span>,
       },
       {
         accessorKey: "studentName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Student Name",
       },
       {
         accessorKey: "dateOfBirth",
         header: "Date Of Birth",
-        enableHiding: false,
+        enableHiding: true,
         Cell: ({ cell }) =>
           cell.getValue()?.substring(0, 10)?.split("").join(""),
       },
       {
         header: "Subject",
         accessorKey: "subject",
-        enableHiding: false,
+        enableHiding: true,
       },
       {
         accessorKey: "fathersFullName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Parent Name",
         // cell: ({ row }) => {
         //   const { fathersFullName, mothersFullName } = row.original; // Access row data

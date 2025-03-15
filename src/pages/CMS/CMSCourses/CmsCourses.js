@@ -37,14 +37,14 @@ const CmsCourses = () => {
   useEffect(() => {
     getAllCourses();
   }, []);
-  
+
   const columns = useMemo(
     () => [
       {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -53,7 +53,7 @@ const CmsCourses = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -69,7 +69,7 @@ const CmsCourses = () => {
       },
       {
         accessorKey: "menuLogo",
-        enableHiding: false,
+        enableHiding: true,
         header: "Menu Logo",
         size: 20,
         Cell: ({ cell }) => (
@@ -83,14 +83,14 @@ const CmsCourses = () => {
       },
       {
         accessorKey: "menuTitle",
-        enableHiding: false,
+        enableHiding: true,
         header: "Menu Title",
         size: 50,
       },
       {
         accessorKey: "heading",
         header: " Heading",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
       { accessorKey: "createdBy", header: "Created By" },

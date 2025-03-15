@@ -19,7 +19,7 @@ const ReferalHistory = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -27,37 +27,37 @@ const ReferalHistory = () => {
       },
       {
         accessorKey: "referByStudent",
-        enableHiding: false,
+        enableHiding: true,
         header: "Refer By Student",
       },
       {
         accessorKey: "referByParent",
-        enableHiding: false,
+        enableHiding: true,
         header: "Refer By Parent",
       },
       {
         accessorKey: "studentName",
         header: "Student Name",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
       {
         accessorKey: "referralFee",
-        enableHiding: false,
+        enableHiding: true,
         header: "Referal Fee",
         size: 30,
       },
       {
         accessorKey: "enrollDate",
         header: "Enroll Date",
-        enableHiding: false,
+        enableHiding: true,
         size: 50,
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
 
       {
         accessorKey: "attendance",
-        enableHiding: false,
+        enableHiding: true,
         header: "Attendance",
         size: 30,
       },
@@ -86,7 +86,9 @@ const ReferalHistory = () => {
     try {
       setLoading(true);
       const queryParams = new URLSearchParams(filters).toString();
-      const response = await api.get(`/getReferralHistoryWithCustomInfo?${queryParams}`);
+      const response = await api.get(
+        `/getReferralHistoryWithCustomInfo?${queryParams}`
+      );
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

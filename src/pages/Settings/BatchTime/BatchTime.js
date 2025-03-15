@@ -43,7 +43,7 @@ const BatchTime = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -52,7 +52,7 @@ const BatchTime = () => {
       {
         accessorKey: "batchId",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -68,13 +68,13 @@ const BatchTime = () => {
       },
       {
         accessorKey: "batchDay",
-        enableHiding: false,
+        enableHiding: true,
         header: "Batch Day",
         size: 20,
       },
       {
         accessorKey: "batchTimes",
-        enableHiding: false,
+        enableHiding: true,
         header: "Batch Times",
         size: 20,
         Cell: ({ cell }) => <span>{formatBatchTimes(cell.getValue())}</span>,
@@ -245,7 +245,11 @@ const BatchTime = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <BatchTimeEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
+                <BatchTimeEdit
+                  onSuccess={getData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
             </Menu>
           </>

@@ -46,7 +46,7 @@ const Shg = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -55,7 +55,7 @@ const Shg = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -71,13 +71,13 @@ const Shg = () => {
       },
       {
         accessorKey: "shgType",
-        enableHiding: false,
+        enableHiding: true,
         header: "ShgType",
         size: 20,
       },
       {
         accessorKey: "shgAmount",
-        enableHiding: false,
+        enableHiding: true,
         header: "ShgAmount",
         size: 20,
       },
@@ -237,7 +237,11 @@ const Shg = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <ShgEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
+                <ShgEdit
+                  onSuccess={getData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete

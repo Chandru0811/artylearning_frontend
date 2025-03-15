@@ -34,7 +34,7 @@ const Staff = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -43,7 +43,7 @@ const Staff = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -60,7 +60,7 @@ const Staff = () => {
       },
       {
         accessorKey: "role",
-        enableHiding: false,
+        enableHiding: true,
         header: "Role",
         Cell: ({ row }) =>
           row.original.role === "staff" ||
@@ -75,31 +75,31 @@ const Staff = () => {
             <span className="badge badges-Blue fw-light">Branch Admin</span>
           ) : null,
       },
-      { accessorKey: "userUniqueId", enableHiding: false, header: "Staff Id" },
+      { accessorKey: "userUniqueId", enableHiding: true, header: "Staff Id" },
       {
         accessorKey: "teacherType",
-        enableHiding: false,
+        enableHiding: true,
         header: "Staff Type",
       },
       {
         accessorKey: "teacherName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Staff Name",
       },
       {
         accessorKey: "email",
-        enableHiding: false,
+        enableHiding: true,
         header: "Email",
       },
       {
         accessorKey: "gender",
-        enableHiding: false,
+        enableHiding: true,
         header: "Gender",
       },
-      
+
       {
         accessorKey: "contactNumber",
-        enableHiding: false,
+        enableHiding: true,
         header: "Mobile",
       },
       {
@@ -114,11 +114,11 @@ const Staff = () => {
       },
       { accessorKey: "idNo", header: "Id No" },
       { accessorKey: "idType", header: "Id Type" },
-      {
-        accessorKey: "userUniqueId",
+      // {
+      //   accessorKey: "userUniqueId",
 
-        header: "User Unique Id",
-      },
+      //   header: "User Unique Id",
+      // },
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",

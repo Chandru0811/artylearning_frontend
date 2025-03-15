@@ -44,7 +44,7 @@ const EmailTemplate = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -53,7 +53,7 @@ const EmailTemplate = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -69,7 +69,7 @@ const EmailTemplate = () => {
       },
       {
         accessorKey: "subject",
-        enableHiding: false,
+        enableHiding: true,
         header: "Subject",
         size: 20,
       },
@@ -251,7 +251,11 @@ const EmailTemplate = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <EmailTemplateEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
+                <EmailTemplateEdit
+                  onSuccess={getData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
             </Menu>
           </>

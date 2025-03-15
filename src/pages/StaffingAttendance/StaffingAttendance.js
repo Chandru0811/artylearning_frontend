@@ -39,7 +39,7 @@ const StaffingAttendance = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 20,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -48,7 +48,7 @@ const StaffingAttendance = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -65,7 +65,7 @@ const StaffingAttendance = () => {
       },
       {
         accessorKey: "attendanceStatus",
-        enableHiding: false,
+        enableHiding: true,
         header: "Status",
         size: 30,
         Cell: ({ row }) =>
@@ -77,16 +77,16 @@ const StaffingAttendance = () => {
             <span className="badge badges-orange fw-light">Absent</span>
           ) : null,
       },
-      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
+      { accessorKey: "centerName", enableHiding: true, header: "Centre Name" },
       {
         accessorKey: "employeeName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Employee Name",
       },
       {
         accessorKey: "checkIn",
         size: 30,
-        enableHiding: false,
+        enableHiding: true,
         header: "Check In",
         Cell: ({ cell }) => {
           const timeValue = cell.getValue();
@@ -107,7 +107,7 @@ const StaffingAttendance = () => {
       {
         accessorKey: "checkOut",
         size: 30,
-        enableHiding: false,
+        enableHiding: true,
         header: "Check Out",
         Cell: ({ cell }) => {
           const timeValue = cell.getValue();
@@ -125,12 +125,12 @@ const StaffingAttendance = () => {
           return null;
         },
       },
-      { accessorKey: "date", enableHiding: false, header: "Date" },
-      { accessorKey: "createdBy", enableHiding: false, header: "Created By" },
+      { accessorKey: "date", enableHiding: true, header: "Date" },
+      { accessorKey: "createdBy", enableHiding: true, header: "Created By" },
       {
         accessorKey: "updatedBy",
         header: "Updated By",
-        enableHiding: false,
+        enableHiding: true,
         Cell: ({ cell }) => cell.getValue() || "",
       },
       { accessorKey: "attendanceRemark", header: "Attendance Remark" },

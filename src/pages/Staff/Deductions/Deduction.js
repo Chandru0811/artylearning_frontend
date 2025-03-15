@@ -27,7 +27,7 @@ const Deduction = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -36,7 +36,7 @@ const Deduction = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -51,20 +51,20 @@ const Deduction = () => {
           </IconButton>
         ),
       },
-      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
+      { accessorKey: "centerName", enableHiding: true, header: "Centre Name" },
       {
         accessorKey: "employeeName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Employee Name",
       },
       {
         accessorKey: "deductionName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Deduction Name",
       },
       {
         accessorKey: "deductionAmount",
-        enableHiding: false,
+        enableHiding: true,
         header: "Deduction Amount",
       },
       { accessorKey: "deductionMonth", header: "Deduction Month" },
@@ -246,7 +246,8 @@ const Deduction = () => {
               onClose={handleMenuClose}
             >
               <MenuItem
-                onClick={() => navigate(`/deduction/edit/${selectedId}`)} className="text-start mb-0 menuitem-style"
+                onClick={() => navigate(`/deduction/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
               >
                 Edit
               </MenuItem>

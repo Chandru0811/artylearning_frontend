@@ -41,7 +41,7 @@ const Leave = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -50,7 +50,7 @@ const Leave = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ row, cell }) =>
@@ -64,11 +64,13 @@ const Leave = () => {
             >
               <MoreVertIcon />
             </IconButton>
-          ) : <div className="m-3" style={{width:"5px",height:"5px"}}></div>, // Hide the button for APPROVED or REJECTED
+          ) : (
+            <div className="m-3" style={{ width: "5px", height: "5px" }}></div>
+          ), // Hide the button for APPROVED or REJECTED
       },
       {
         accessorKey: "leaveStatus",
-        enableHiding: false,
+        enableHiding: true,
         header: "Leave Status",
         Cell: ({ row }) =>
           row.original.leaveStatus === "APPROVED" ? (
@@ -81,25 +83,25 @@ const Leave = () => {
       },
       {
         accessorKey: "fromDate",
-        enableHiding: false,
+        enableHiding: true,
         header: "From Date",
         size: 20,
       },
       {
         accessorKey: "toDate",
-        enableHiding: false,
+        enableHiding: true,
         header: "To Date",
         size: 20,
       },
       {
         accessorKey: "leaveType",
-        enableHiding: false,
+        enableHiding: true,
         header: "Leave Type",
         size: 20,
       },
       {
         accessorKey: "noOfDays",
-        enableHiding: false,
+        enableHiding: true,
         header: "No Of Days",
         size: 20,
       },
