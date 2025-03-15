@@ -17,8 +17,9 @@ import AddRegister from "./Add/AddRegister";
 import AddBreak from "./Add/AddBreak";
 import AddClass from "./Add/AddClass";
 import AddPackage from "./Add/AddPackage";
+import { Button } from "react-bootstrap";
 
-const Center = ({handleCenterChanged}) => {
+const Center = ({ handleCenterChanged }) => {
   const [filters, setFilters] = useState({
     centerName: "",
     centerCode: "",
@@ -31,6 +32,7 @@ const Center = ({handleCenterChanged}) => {
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const columns = useMemo(
     () => [
@@ -123,15 +125,15 @@ const Center = ({handleCenterChanged}) => {
   // const fetchData = async () => {
   //   try {
   //     setLoading(true);
-  
+
   //     // Filter out empty or null values from the filters
   //     const nonEmptyFilters = Object.fromEntries(
   //       Object.entries(filters).filter(([key, value]) => value !== "")
   //     );
-  
+
   //     const queryParams = new URLSearchParams(nonEmptyFilters).toString();
   //     const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
-  
+
   //     setData(response.data);
   //   } catch (error) {
   //     console.error("Error fetching data:", error);
@@ -143,20 +145,20 @@ const Center = ({handleCenterChanged}) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-  
+
       // Filter out empty or null values from the filters
       const nonEmptyFilters = Object.fromEntries(
         Object.entries(filters).filter(([key, value]) => value !== "")
       );
-  
+
       // Construct the query string if there are valid filters
       const queryParams = Object.keys(nonEmptyFilters).length
         ? `?${new URLSearchParams(nonEmptyFilters).toString()}`
         : "";
-  
+
       // Make the API call
       const response = await api.get(`/getCenterWithCustomInfo${queryParams}`);
-      
+
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -165,7 +167,13 @@ const Center = ({handleCenterChanged}) => {
     }
   };
 
-  
+  const handleOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   useEffect(() => {
     fetchData();
   }, [filters]);
@@ -324,15 +332,64 @@ const Center = ({handleCenterChanged}) => {
               </button>
             </div>
           </div>
-          <Link to="/center/add">
+
+          <div className="d-flex align-items-center">
+            {/* Button to Open Menu */}
             <button
-              type="button"
+              onClick={handleOpen}
               className="btn btn-button btn-sm me-2"
-              style={{ fontWeight: "600px !important" }}
+              style={{ fontWeight: "600" }}
             >
-              &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+              Options
             </button>
-          </Link>
+
+            {/* Menu with Options */}
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem>
+                <AddRegister
+                  id={selectedId}
+                  onSuccess={fetchData}
+                  handleMenuClose={handleClose}
+                />
+              </MenuItem>
+              <MenuItem>
+                <AddClass
+                  id={selectedId}
+                  onSuccess={fetchData}
+                  handleMenuClose={handleClose}
+                />
+              </MenuItem>
+              <MenuItem>
+                <AddPackage
+                  id={selectedId}
+                  onSuccess={fetchData}
+                  handleMenuClose={handleClose}
+                />
+              </MenuItem>
+              <MenuItem>
+                <AddBreak
+                  id={selectedId}
+                  onSuccess={fetchData}
+                  handleMenuClose={handleClose}
+                />
+              </MenuItem>
+            </Menu>
+
+            {/* Existing Add Button */}
+            <Link to="/center/add">
+              <button
+                type="button"
+                className="btn btn-button btn-sm me-2"
+                style={{ fontWeight: "600" }}
+              >
+                &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+              </button>
+            </Link>
+          </div>
         </div>
         {loading ? (
           <div className="loader-container">
@@ -386,8 +443,7 @@ const Center = ({handleCenterChanged}) => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-              
-              <MenuItem >
+              {/* <MenuItem >
                 <AddRegister id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem >
@@ -398,8 +454,11 @@ const Center = ({handleCenterChanged}) => {
               </MenuItem>
               <MenuItem >
                 <AddBreak id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
-              </MenuItem>
-              <MenuItem onClick={() => navigate(`/center/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              </MenuItem> */}
+              <MenuItem
+                onClick={() => navigate(`/center/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>

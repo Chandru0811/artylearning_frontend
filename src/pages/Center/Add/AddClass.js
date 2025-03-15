@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
@@ -12,11 +12,19 @@ import {
   DialogTitle,
   DialogContent,
 } from "@mui/material";
+import { MultiSelect } from "react-multi-select-component";
+import fetchAllCentersWithIds from "../../List/CenterList";
 
 function AddClass({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const [centerData, setCenterData] = useState([]);
+  const [selectedCenters, setSelectedCenters] = useState([]);
+  const centerOptions = centerData?.map((center) => ({
+    label: center.centerNames,
+    value: center.id,
+  }));
 
   const handleClose = () => {
     handleMenuClose();
@@ -89,7 +97,17 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
       }
     },
   });
-
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <>
       <p
@@ -114,6 +132,37 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
           </DialogTitle>
           <DialogContent>
             <div className="row">
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Centre<span className="text-danger">*</span>
+                </label>
+                <MultiSelect
+                  options={centerOptions}
+                  value={selectedCenters}
+                  onChange={(selected) => {
+                    setSelectedCenters(selected);
+                    formik.setFieldValue(
+                      "centerId",
+                      selected.map((option) => option.value)
+                    );
+                  }}
+                  labelledBy="Select Centers"
+                  className={`form-multi-select ${
+                    formik.touched.centerId && formik.errors.centerId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  style={{
+                    height: "37.6px !important", // Set the desired height
+                    minHeight: "37.6px", // Ensure the height doesn't shrink
+                  }}
+                />
+                {formik.touched.centerId && formik.errors.centerId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.centerId}
+                  </div>
+                )}
+              </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
                   Classroom Name<span className="text-danger">*</span>
@@ -210,7 +259,7 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
               <div className="form-floating">
                 <lable>Description</lable>
                 <textarea
-                onKeyDown={(e) => e.stopPropagation()}
+                  onKeyDown={(e) => e.stopPropagation()}
                   className="form-control p-1"
                   {...formik.getFieldProps("description")}
                   placeholder=""

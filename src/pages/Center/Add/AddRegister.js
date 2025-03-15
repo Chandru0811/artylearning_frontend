@@ -12,15 +12,23 @@ import {
   DialogTitle,
   DialogContent,
 } from "@mui/material";
+import fetchAllCentersWithIds from "../../List/CenterList";
+import { MultiSelect } from "react-multi-select-component";
 
-function AddRegister({ id, onSuccess ,handleMenuClose}) {
+function AddRegister({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
   const [isModified, setIsModified] = useState(false);
+  const [selectedCenters, setSelectedCenters] = useState([]);
+  const [centerData, setCenterData] = useState([]);
 
+  const centerOptions = centerData?.map((center) => ({
+    label: center.centerNames,
+    value: center.id,
+  }));
   const handleClose = () => {
-    handleMenuClose()
+    handleMenuClose();
     formik.resetForm();
     setShow(false);
   };
@@ -104,10 +112,20 @@ function AddRegister({ id, onSuccess ,handleMenuClose}) {
       }
     },
   });
-
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <>
-       <p
+      <p
         className="text-start mb-0 menuitem-style"
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleShow}
@@ -115,12 +133,7 @@ function AddRegister({ id, onSuccess ,handleMenuClose}) {
         Add Registration Fees
       </p>
 
-      <Dialog
-        open={show}
-        onClose={handleClose} 
-        maxWidth="md"
-        fullWidth
-      >
+      <Dialog open={show} onClose={handleClose} maxWidth="md" fullWidth>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -134,6 +147,37 @@ function AddRegister({ id, onSuccess ,handleMenuClose}) {
           </DialogTitle>
           <DialogContent>
             <div className="row">
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Centre<span className="text-danger">*</span>
+                </label>
+                <MultiSelect
+                  options={centerOptions}
+                  value={selectedCenters}
+                  onChange={(selected) => {
+                    setSelectedCenters(selected);
+                    formik.setFieldValue(
+                      "centerId",
+                      selected.map((option) => option.value)
+                    );
+                  }}
+                  labelledBy="Select Centers"
+                  className={`form-multi-select ${
+                    formik.touched.centerId && formik.errors.centerId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  style={{
+                    height: "37.6px !important", // Set the desired height
+                    minHeight: "37.6px", // Ensure the height doesn't shrink
+                  }}
+                />
+                {formik.touched.centerId && formik.errors.centerId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.centerId}
+                  </div>
+                )}
+              </div>
               <div className="col-md-6 col-12 mb-2">
                 <label>
                   Effective Date<span className="text-danger">*</span>
@@ -160,7 +204,7 @@ function AddRegister({ id, onSuccess ,handleMenuClose}) {
                 </label>
                 <div className="input-group mb-3">
                   <input
-                  onKeyDown={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${
                       formik.touched.amount && formik.errors.amount

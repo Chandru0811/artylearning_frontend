@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
@@ -12,13 +12,22 @@ import {
   DialogTitle,
   DialogContent,
 } from "@mui/material";
-function AddPackage({ id, onSuccess,handleMenuClose }) {
+import { MultiSelect } from "react-multi-select-component";
+import fetchAllCentersWithIds from "../../List/CenterList";
+function AddPackage({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const [selectedCenters, setSelectedCenters] = useState([]);
+  const [centerData, setCenterData] = useState([]);
+
+  const centerOptions = centerData?.map((center) => ({
+    label: center.centerNames,
+    value: center.id,
+  }));
 
   const handleClose = () => {
-    handleMenuClose()
+    handleMenuClose();
     formik.resetForm();
     setShow(false);
   };
@@ -79,23 +88,28 @@ function AddPackage({ id, onSuccess,handleMenuClose }) {
       }
     },
   });
-
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <>
-       <p
+      <p
         className="text-start mb-0 menuitem-style"
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleShow}
       >
-      Add Package
+        Add Package
       </p>
 
-      <Dialog
-        open={show}
-        onClose={handleClose} 
-        maxWidth="md"
-        fullWidth
-      >
+      <Dialog open={show} onClose={handleClose} maxWidth="md" fullWidth>
         <form
           onSubmit={formik.handleSubmit}
           // onKeyDown={(e) => {
@@ -104,11 +118,42 @@ function AddPackage({ id, onSuccess,handleMenuClose }) {
           //   }
           // }}
         >
-            <DialogTitle>
-              <p className="headColor">Add Package</p>
-            </DialogTitle>
+          <DialogTitle>
+            <p className="headColor">Add Package</p>
+          </DialogTitle>
           <DialogContent>
             <div className="row">
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Centre<span className="text-danger">*</span>
+                </label>
+                <MultiSelect
+                  options={centerOptions}
+                  value={selectedCenters}
+                  onChange={(selected) => {
+                    setSelectedCenters(selected);
+                    formik.setFieldValue(
+                      "centerId",
+                      selected.map((option) => option.value)
+                    );
+                  }}
+                  labelledBy="Select Centers"
+                  className={`form-multi-select ${
+                    formik.touched.centerId && formik.errors.centerId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  style={{
+                    height: "37.6px !important", // Set the desired height
+                    minHeight: "37.6px", // Ensure the height doesn't shrink
+                  }}
+                />
+                {formik.touched.centerId && formik.errors.centerId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.centerId}
+                  </div>
+                )}
+              </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
                   Package Name<span className="text-danger">*</span>
