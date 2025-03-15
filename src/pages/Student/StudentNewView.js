@@ -732,7 +732,7 @@ function StudentNewView() {
               </button> */}
             {storedScreens?.endClassCreate && (
               <Link
-                to={`/student/view/endClass/${data.id}?centerId=${centerId}`}
+                to={`/student/view/endClassAdd/${data.id}?centerId=${centerId}`}
               >
                 <button
                   className="btn btn-success btn-sm"

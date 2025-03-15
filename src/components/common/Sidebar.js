@@ -194,8 +194,13 @@ function Sidebar() {
             access: storedScreens.attendanceIndex,
           },
           {
-            title: "Replace Class Lesson List",
+            title: "Replace Class List",
             path: "/replaceclasslesson",
+            access: storedScreens.attendanceIndex,
+          },
+          {
+            title: "End Class List",
+            path: "/endClass",
             access: storedScreens.attendanceIndex,
           },
         ],

@@ -176,7 +176,7 @@ function StudentView() {
               </Link>
             )} */}
             {storedScreens?.endClassCreate && (
-              <Link to={`/student/view/endClass/${data.id}`}>
+              <Link to={`/student/view/endClassAdd/${data.id}`}>
                 <button
                   className="btn btn-border btn-sm mx-2 stdViewBtn"
                   style={{ padding: "7px" }}
