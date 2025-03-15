@@ -47,7 +47,7 @@ const Class = ({ selectedCenter }) => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -56,7 +56,7 @@ const Class = ({ selectedCenter }) => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -71,16 +71,16 @@ const Class = ({ selectedCenter }) => {
           </IconButton>
         ),
       },
-      { accessorKey: "className", header: "Class Name", enableHiding: false },
-      { accessorKey: "centerName", header: "Center Name", enableHiding: false },
-      { accessorKey: "courseName", header: "Course Name", enableHiding: false },
-      { accessorKey: "classCode", header: "Class Code", enableHiding: false },
+      { accessorKey: "className", header: "Class Name", enableHiding: true },
+      { accessorKey: "centerName", header: "Center Name", enableHiding: true },
+      { accessorKey: "courseName", header: "Course Name", enableHiding: true },
+      { accessorKey: "classCode", header: "Class Code", enableHiding: true },
 
-      { accessorKey: "classType", header: "Class Type", enableHiding: false },
+      { accessorKey: "classType", header: "Class Type", enableHiding: true },
       {
         accessorKey: "teacherName",
         header: "Teacher Name",
-        enableHiding: false,
+        enableHiding: true,
       },
       {
         accessorKey: "durationInHrs",
@@ -360,7 +360,9 @@ const Class = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.courseId}
               >
-                <option value="" selected>Select a Course</option>
+                <option value="" selected>
+                  Select a Course
+                </option>
                 {selectedCenter === "0"
                   ? courseListData &&
                     courseListData.map((course) => (
@@ -396,7 +398,9 @@ const Class = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.userId}
               >
-                <option selected value="">Select a Teacher</option>
+                <option selected value="">
+                  Select a Teacher
+                </option>
 
                 {selectedCenter === "0"
                   ? teacherListData &&

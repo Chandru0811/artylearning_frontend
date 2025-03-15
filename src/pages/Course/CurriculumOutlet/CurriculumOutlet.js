@@ -28,7 +28,7 @@ function CurriculumOutlet() {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 30,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -37,7 +37,7 @@ function CurriculumOutlet() {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -54,7 +54,7 @@ function CurriculumOutlet() {
       },
       {
         accessorKey: "status",
-        enableHiding: false,
+        enableHiding: true,
         header: "Status",
         Cell: ({ row }) =>
           row.original.status === "ACTIVE" ||
@@ -69,12 +69,12 @@ function CurriculumOutlet() {
       },
       {
         accessorKey: "effectiveDate",
-        enableHiding: false,
+        enableHiding: true,
         header: "Effective Date",
       },
       {
         accessorKey: "name",
-        enableHiding: false,
+        enableHiding: true,
         header: "Title",
       },
       {
@@ -150,7 +150,7 @@ function CurriculumOutlet() {
   const getData = async () => {
     try {
       const response = await api.get(`/getCurriculumOutLetByCourseId/${id}`);
-        setDatas(response.data);
+      setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
     } finally {
@@ -261,7 +261,7 @@ function CurriculumOutlet() {
                 Course Curriculum
               </MenuItem>
 
-              <MenuItem >
+              <MenuItem>
                 <CurriculumOutletEdit
                   onSuccess={getData}
                   id={selectedId}

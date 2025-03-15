@@ -28,7 +28,7 @@ const LeaveAdmin = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -37,7 +37,7 @@ const LeaveAdmin = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -54,7 +54,7 @@ const LeaveAdmin = () => {
       },
       {
         accessorKey: "leaveStatus",
-        enableHiding: false,
+        enableHiding: true,
         header: "Leave Status",
         Cell: ({ row }) =>
           row.original.leaveStatus === "Approved" ||
@@ -69,15 +69,15 @@ const LeaveAdmin = () => {
           ) : null,
       },
 
-      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
+      { accessorKey: "centerName", enableHiding: true, header: "Centre Name" },
       {
         accessorKey: "employeeName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Employee Name",
       },
       {
         accessorKey: "leaveType",
-        enableHiding: false,
+        enableHiding: true,
         header: "Leave Type",
       },
       { accessorKey: "approverName", header: "Approver Name" },

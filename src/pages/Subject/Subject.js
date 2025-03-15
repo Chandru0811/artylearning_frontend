@@ -45,7 +45,7 @@ const Subject = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -62,7 +62,7 @@ const Subject = () => {
       },
       {
         accessorKey: "status",
-        enableHiding: false,
+        enableHiding: true,
         header: "Status",
         Cell: ({ row }) =>
           row.original.status === "ACTIVE" ||
@@ -85,10 +85,10 @@ const Subject = () => {
             </span>
           ) : null,
       },
-      { accessorKey: "subject", enableHiding: false, header: "Subject" },
+      { accessorKey: "subject", enableHiding: true, header: "Subject" },
       {
         accessorKey: "code",
-        enableHiding: false,
+        enableHiding: true,
         header: "Subject Code",
       },
 

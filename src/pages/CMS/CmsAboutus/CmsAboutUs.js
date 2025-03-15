@@ -79,11 +79,11 @@ function CmsAboutUs() {
     if (!bgImageFile) return;
 
     const formData = new FormData();
-    formData.append("backgroundImage", bgImageFile);
+    formData.append("backGround", bgImageFile);
     formData.append("updatedBy", userName);
 
     try {
-      const response = await api.put(`/updateAboutUsBackground`, formData);
+      const response = await api.put(`/updateAboutUsSaveImage`, formData);
       if (response.status === 200) {
         toast.success("Background image updated successfully");
         getData();

@@ -8,10 +8,12 @@ import { Link, useNavigate } from "react-router-dom";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import Select from "react-select";
+import fetchAllCoursesWithIds from "../List/CourseList";
 
-function DocumentFile() {
+function DocumentFile({ selectedCenter }) {
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
+  const [classCenter, setClassCenter] = useState(null);
   const [classData, setClassListtingData] = useState(null);
   const [documentData, setDocumentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -25,29 +27,48 @@ function DocumentFile() {
 
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
-
-      setCenterData(centerData);
+      const response = await fetchAllCentersWithIds();
+      if (Array.isArray(response)) {
+        setCenterData(response);
+        formik.setFieldValue("center", selectedCenter);
+        fetchCourses(selectedCenter);
+      } else {
+        console.error("Invalid data format:", response);
+        setCenterData([]);
+      }
     } catch (error) {
-      toast.error(error);
+      toast.error("Failed to fetch center data");
+      console.error(error);
     }
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+    if (selectedCenter) {
+      formik.setFieldValue("centerName", selectedCenter);
+    }
+  }, [selectedCenter]);
 
   const fetchCourses = async (centerId) => {
     try {
-      const courses = await fetchAllCoursesWithIdsC(centerId);
+      let courses = [];
+      const numericCenterId = Number(centerId);
+      if (numericCenterId === 0) {
+        courses = await fetchAllCoursesWithIds();
+      } else {
+        courses = await fetchAllCoursesWithIdsC(numericCenterId);
+      }
+      if (!Array.isArray(courses)) {
+        throw new Error("API did not return an array");
+      }
       const formattedCourses = courses.map((course) => ({
         value: course.id,
         label: course.courseNames,
       }));
       setCourseOptions(formattedCourses);
-      setCourseData(courses);
     } catch (error) {
-      toast.error(error);
+      console.error("Error fetching courses:", error);
+      toast.error(error.message || "Failed to fetch courses");
     }
   };
 
@@ -67,8 +88,20 @@ function DocumentFile() {
 
   const fetchFolders = async (centerId, courseId, classId) => {
     try {
+      if (!selectedCenter || selectedCenter === "0") {
+        try {
+          const response = await api.get(
+            `/getAllCourseClassListingsById/${classId}`
+          );
+          setClassCenter(response.data); // Update state
+        } catch (error) {
+          toast.error("Error Fetching Data");
+          setLoadIndicator(false);
+          return; // Stop execution
+        }
+      }
       const formData = new FormData();
-      formData.append("centerId", centerId);
+      formData.append("centerId", classCenter.centerId || selectedCenter);
       formData.append("courseId", courseId);
       formData.append("classId", classId);
 
@@ -115,7 +148,7 @@ function DocumentFile() {
 
   const formik = useFormik({
     initialValues: {
-      centerName: "",
+      centerName: selectedCenter,
       course: "",
       classId: "",
       classListing: "",
@@ -184,9 +217,9 @@ function DocumentFile() {
     fetchClasses(course); // Fetch class for the selected course
   };
 
-  const handleClassChange = (event) => {
+  const handleClassChange = (selectedOption) => {
     setDocumentData(null);
-    const classId = event.target.value;
+    const classId = selectedOption ? selectedOption.value : "";
     formik.setFieldValue("classListing", classId);
     fetchFolders(formik.values.centerName, formik.values.course, classId); // Fetch folders for the selected center, course, and class
   };
@@ -259,7 +292,7 @@ function DocumentFile() {
                   <p className="headColor">Centre Files</p>
                 </div>
 
-                <div className="col-md-6 col-12 mb-2">
+                <div className="col-md-6 col-12 mb-2 d-none">
                   <label>
                     Centre<span className="text-danger">*</span>
                   </label>
@@ -330,12 +363,7 @@ function DocumentFile() {
                       value={classOptions.find(
                         (option) => option.value === formik.values.classId
                       )}
-                      onChange={(selectedOption) =>
-                        formik.setFieldValue(
-                          "classId",
-                          selectedOption ? selectedOption.value : ""
-                        )
-                      }
+                      onChange={handleClassChange}
                       placeholder="Select Class"
                       isSearchable
                       isClearable

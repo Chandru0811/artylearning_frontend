@@ -35,7 +35,7 @@ const Payroll = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -44,7 +44,7 @@ const Payroll = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -61,7 +61,7 @@ const Payroll = () => {
       },
       {
         accessorKey: "status",
-        enableHiding: false,
+        enableHiding: true,
         header: "Status",
         Cell: ({ row }) =>
           row.original.status === "APPROVED" ? (
@@ -87,20 +87,20 @@ const Payroll = () => {
             </span>
           ) : null,
       },
-      { accessorKey: "centerName", enableHiding: false, header: "Center Name" },
+      { accessorKey: "centerName", enableHiding: true, header: "Center Name" },
       {
         accessorKey: "employeeName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Employee Name",
       },
       {
         accessorKey: "netPay",
-        enableHiding: false,
+        enableHiding: true,
         header: "Net Pay",
       },
       {
         accessorKey: "userRole",
-        enableHiding: false,
+        enableHiding: true,
         header: "Role",
         Cell: ({ row }) =>
           row.original.userRole === "SMS_TEACHER" ? (

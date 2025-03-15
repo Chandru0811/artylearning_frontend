@@ -73,43 +73,39 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       console.log(values);
-
-      try {
-        const response = await api.post(
-          `/createCenterRegistrations/${id}`,
-          values,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
+      const apiCalls = selectedCenters.map(async (center) => {
+        try {
+          const payload = {
+            effectiveDate: values.effectiveDate,
+            amount: values.amount,
+            classRoomCode: values.classRoomCode,
+            taxId: values.taxId,
+            status: values.status,
+          };
+          const response = await api.post(
+            `/createCenterRegistrations/${center.value}`,
+            { ...payload, centerId: center.value },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+        } catch (error) {
+          if (error.response?.status === 409) {
+            toast.warning(`${error?.response?.data?.message}$${center.label}`);
+          } else {
+            toast.error(error.response?.data?.message || "API Error");
           }
-        );
-        if (response.status === 201) {
-          toast.success(response.data.message);
-          onSuccess();
-          handleClose();
-        } else {
-          toast.error(response.data.message);
         }
-      } catch (error) {
-        if (error.response.status === 409) {
-          toast.warning(error?.response?.data?.message);
-        } else {
-          toast.error(error.response.data.message);
-        }
-      } finally {
-        setLoadIndicator(false);
-      }
-    },
-    enableReinitialize: true,
-    validateOnChange: true,
-    validateOnBlur: true,
-    validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
-        setIsModified(true);
-      } else {
-        setIsModified(false);
-      }
+      });
+
+      await Promise.all(apiCalls);
+      toast.success(`Regester added Successfully`);
+
+      setLoadIndicator(false);
+      onSuccess();
+      handleClose();
     },
   });
   const fetchData = async () => {

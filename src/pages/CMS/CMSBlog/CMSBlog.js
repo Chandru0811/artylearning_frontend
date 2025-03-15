@@ -36,7 +36,7 @@ const CMSBlog = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -45,7 +45,7 @@ const CMSBlog = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -61,7 +61,7 @@ const CMSBlog = () => {
       },
       {
         accessorKey: "imagerOne",
-        enableHiding: false,
+        enableHiding: true,
         header: "Blog Image",
         size: 20,
         Cell: ({ cell }) => (
@@ -75,14 +75,14 @@ const CMSBlog = () => {
       },
       {
         accessorKey: "description",
-        enableHiding: false,
+        enableHiding: true,
         header: "Blog Description",
         size: 50,
       },
       {
         accessorKey: "title",
         header: " Blog Title",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
       { accessorKey: "createdBy", header: "Created By" },

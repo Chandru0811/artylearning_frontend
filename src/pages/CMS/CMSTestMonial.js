@@ -41,7 +41,7 @@ const CMSTestMonail = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -50,7 +50,7 @@ const CMSTestMonail = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -66,7 +66,7 @@ const CMSTestMonail = () => {
       },
       {
         accessorKey: "parentImage",
-        enableHiding: false,
+        enableHiding: true,
         header: "Parent Image",
         size: 20,
         Cell: ({ cell }) => (
@@ -80,14 +80,14 @@ const CMSTestMonail = () => {
       },
       {
         accessorKey: "parentDescription",
-        enableHiding: false,
+        enableHiding: true,
         header: "Parent Description",
         size: 50,
       },
       {
         accessorKey: "parentName",
         header: "Parent Name",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
       { accessorKey: "createdBy", header: "Created By" },

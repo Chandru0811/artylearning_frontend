@@ -32,7 +32,7 @@ const Level = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -41,7 +41,7 @@ const Level = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -58,7 +58,7 @@ const Level = () => {
       },
       {
         accessorKey: "status",
-        enableHiding: false,
+        enableHiding: true,
         header: "Status",
         Cell: ({ row }) =>
           row.original.status === "ACTIVE" ||
@@ -81,15 +81,15 @@ const Level = () => {
             </span>
           ) : null,
       },
-      { accessorKey: "level", enableHiding: false, header: "Level" },
+      { accessorKey: "level", enableHiding: true, header: "Level" },
       {
         accessorKey: "levelCode",
-        enableHiding: false,
+        enableHiding: true,
         header: "Level Code",
       },
       {
         accessorKey: "subjectName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Subject Name",
       },
 
@@ -325,7 +325,11 @@ const Level = () => {
                 View
               </MenuItem> */}
               <MenuItem>
-                <LevelEdit onSuccess={fetchData} id={selectedId}  handleMenuClose={handleMenuClose}/>
+                <LevelEdit
+                  onSuccess={fetchData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete

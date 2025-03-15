@@ -29,7 +29,7 @@ const CourseDeposit = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 30,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -38,7 +38,7 @@ const CourseDeposit = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -55,7 +55,7 @@ const CourseDeposit = () => {
       },
       {
         accessorKey: "status",
-        enableHiding: false,
+        enableHiding: true,
         header: "Status",
         Cell: ({ row }) =>
           row.original.status === "ACTIVE" ||
@@ -70,13 +70,13 @@ const CourseDeposit = () => {
       },
       {
         accessorKey: "effectiveDate",
-        enableHiding: false,
+        enableHiding: true,
         header: "Effective Date",
       },
-      { accessorKey: "taxType", enableHiding: false, header: "Tax Type" },
+      { accessorKey: "taxType", enableHiding: true, header: "Tax Type" },
       {
         accessorKey: "depositFees",
-        enableHiding: false,
+        enableHiding: true,
         header: "Course Deposit Fees",
       },
       {

@@ -44,7 +44,7 @@ const CMSContact = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -53,7 +53,7 @@ const CMSContact = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -69,20 +69,20 @@ const CMSContact = () => {
       },
       {
         accessorKey: "centerName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Centre Name",
         size: 20,
       },
       {
         accessorKey: "email",
-        enableHiding: false,
+        enableHiding: true,
         header: "Email",
         size: 50,
       },
       {
         accessorKey: "mobileNo",
         header: " Mobile No",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
       { accessorKey: "createdBy", header: "Created By" },

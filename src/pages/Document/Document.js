@@ -49,7 +49,7 @@ const Document = ({ selectedCenter }) => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -58,7 +58,7 @@ const Document = ({ selectedCenter }) => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -73,45 +73,45 @@ const Document = ({ selectedCenter }) => {
           </IconButton>
         ),
       },
-      { accessorKey: "folderName", enableHiding: false, header: "Folder Name" },
+      { accessorKey: "folderName", enableHiding: true, header: "Folder Name" },
       {
         accessorKey: "studentName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Student Name",
       },
       {
         accessorKey: "user",
-        enableHiding: false,
+        enableHiding: true,
         header: "User Name",
       },
       {
         accessorKey: "course",
         header: "Course",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
       {
         accessorKey: "classListing",
         header: "Class",
-        enableHiding: false,
+        enableHiding: true,
         size: 50,
       },
-      { accessorKey: "batchTime", enableHiding: false, header: "Batch" },
+      { accessorKey: "batchTime", enableHiding: true, header: "Batch" },
       {
         accessorKey: "date",
-        enableHiding: false,
+        enableHiding: true,
         header: "Date",
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
       {
         accessorKey: "day",
-        enableHiding: false,
+        enableHiding: true,
         header: "Days",
       },
-      { accessorKey: "user", enableHiding: false, header: "Teacher" },
+      { accessorKey: "user", enableHiding: true, header: "Teacher" },
       {
         accessorKey: "folderCategory",
-        enableHiding: false,
+        enableHiding: true,
         header: "Folder Category",
       },
       { accessorKey: "createdBy", header: "Created By" },
@@ -270,7 +270,7 @@ const Document = ({ selectedCenter }) => {
   const handleCourseChange = async (event) => {
     const courseId = event.target.value;
     setFilters((prevFilters) => ({ ...prevFilters, courseId })); // Update filter state
-  
+
     // Only trigger API call if courseId is not empty
     if (courseId) {
       try {
@@ -281,7 +281,6 @@ const Document = ({ selectedCenter }) => {
       }
     }
   };
-  
 
   const getDocumentData = async () => {
     try {
@@ -410,7 +409,9 @@ const Document = ({ selectedCenter }) => {
                 onChange={handleCourseChange}
                 value={filters.courseId}
               >
-                <option value="" disabled>Select the Course</option>
+                <option value="" disabled>
+                  Select the Course
+                </option>
                 {selectedCenter === "0"
                   ? courseListData &&
                     courseListData.map((course) => (
@@ -434,7 +435,9 @@ const Document = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.classId}
               >
-                <option value="" disabled>Select the Class</option>
+                <option value="" disabled>
+                  Select the Class
+                </option>
                 {classData &&
                   classData.map((classes) => (
                     <option key={classes.id} value={classes.id}>
@@ -461,7 +464,9 @@ const Document = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.userId}
               >
-                <option value="" disabled>Select the Teacher</option>
+                <option value="" disabled>
+                  Select the Teacher
+                </option>
                 {selectedCenter === "0"
                   ? teacherListData &&
                     teacherListData.map((teacher) => (
@@ -488,7 +493,9 @@ const Document = ({ selectedCenter }) => {
                   onChange={handleFilterChange}
                   value={filters.day}
                 >
-                  <option value="" disabled>Select a Day</option>
+                  <option value="" disabled>
+                    Select a Day
+                  </option>
                   <option value="SUNDAY">Sunday</option>
                   <option value="MONDAY">Monday</option>
                   <option value="TUESDAY">Tuesday</option>

@@ -46,7 +46,7 @@ const AbsentReason = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -55,7 +55,7 @@ const AbsentReason = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -71,13 +71,13 @@ const AbsentReason = () => {
       },
       {
         accessorKey: "absentReason",
-        enableHiding: false,
+        enableHiding: true,
         header: "Absent Reason",
         size: 20,
       },
       {
         accessorKey: "remarks",
-        enableHiding: false,
+        enableHiding: true,
         header: "Remarks",
         size: 20,
       },
@@ -201,47 +201,51 @@ const AbsentReason = () => {
           </div>
         ) : (
           <>
-          <ThemeProvider theme={theme}>
-            <MaterialReactTable
-              columns={columns}
-              data={datas}
-              enableColumnActions={false}
-              enableColumnFilters={false}
-              enableDensityToggle={false}
-              enableFullScreenToggle={false}
-              initialState={{
-                columnVisibility: {
-                  createdBy: false,
-                  createdAt: false,
-                  updatedBy: false,
-                  updatedAt: false,
-                },
-              }}
-              // muiTableBodyRowProps={({ row }) => ({
-              //   onClick: () => navigate(`/center/view/${row.original.id}`),
-              //   style: { cursor: "pointer" },
-              // })}
-            />
-          </ThemeProvider>
-
-          <Menu
-            id="action-menu"
-            anchorEl={menuAnchor}
-            open={Boolean(menuAnchor)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem>
-              <AbsentReasonEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
-            </MenuItem>
-            <MenuItem>
-              <GlobalDelete
-                path={`/deleteAbsentReason/${selectedId}`}
-                onDeleteSuccess={getData}
-                onOpen={handleMenuClose}
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
               />
-            </MenuItem>
-          </Menu>
-        </>
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem>
+                <AbsentReasonEdit
+                  onSuccess={getData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteAbsentReason/${selectedId}`}
+                  onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>

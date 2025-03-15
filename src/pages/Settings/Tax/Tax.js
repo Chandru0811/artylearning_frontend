@@ -47,7 +47,7 @@ const Tax = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -56,7 +56,7 @@ const Tax = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -73,7 +73,7 @@ const Tax = () => {
       {
         accessorKey: "status",
         header: "Status",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         Cell: ({ row }) =>
           row.original.status === "ACTIVE" ? (
@@ -84,20 +84,20 @@ const Tax = () => {
       },
       {
         accessorKey: "taxType",
-        enableHiding: false,
+        enableHiding: true,
         header: "Tax Type",
         size: 20,
       },
       {
         accessorKey: "rate",
-        enableHiding: false,
+        enableHiding: true,
         header: "Rate",
         size: 50,
       },
       {
         accessorKey: "effectiveDate",
         header: "Effective Date",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
       { accessorKey: "createdBy", header: "Created By" },
