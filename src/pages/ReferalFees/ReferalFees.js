@@ -285,7 +285,7 @@ const ReferalFees = ({ selectedCenter }) => {
               <input type="hidden" name="centerId" value={filters.centerId} />
             </div>
           </div>
-          {storedScreens?.referalFeesCreate && (
+          {storedScreens?.referralFeesCreate && (
             <ReferalFeesAdd onSuccess={fetchReferalData} />
           )}
         </div>
@@ -328,7 +328,7 @@ const ReferalFees = ({ selectedCenter }) => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              {storedScreens?.referalFeesUpdate && (
+              {storedScreens?.referralFeesUpdate && (
                 <MenuItem>
                   <ReferalFeesEdit
                     id={selectedId}
@@ -337,7 +337,7 @@ const ReferalFees = ({ selectedCenter }) => {
                   />
                 </MenuItem>
               )}
-              {storedScreens?.referalFeesDelete && (
+              {storedScreens?.referralFeesDelete && (
                 <MenuItem>
                   <GlobalDelete
                     path={`/deleteReferralFees/${selectedId}`}

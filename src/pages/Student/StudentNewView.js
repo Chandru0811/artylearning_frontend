@@ -21,6 +21,8 @@ import PasswordModal from "./StudentNewView/PasswordModal";
 import TransferOutModal from "../StudentMovement/TransferOut/TransferOutModal";
 import NoImage from "../../assets/images/no-photo.png";
 import { Modal, Button } from "react-bootstrap";
+import StudentEndClassAdd from "./StudentEndClassAdd";
+import StudentChangeClassAdd from "./StudentChangeClassAdd";
 
 function StudentNewView() {
   const [activeTab, setActiveTab] = useState("tab1");
@@ -343,13 +345,11 @@ function StudentNewView() {
                 </li>
                 <li className="stdList">
                   <b>School Name</b>
-                  <span>{data.schoolName || "--"}
-                  </span>
+                  <span>{data.schoolName || "--"}</span>
                 </li>
                 <li className="stdList">
                   <b>School Type</b>
-                  <span>{data.schoolType || "--"}
-                  </span>
+                  <span>{data.schoolType || "--"}</span>
                 </li>
                 <li className="stdList">
                   <b>D.O.B</b>
@@ -730,18 +730,30 @@ function StudentNewView() {
               >
                 Withdraw
               </button> */}
+            {storedScreens?.changeClassCreate && (
+              <StudentChangeClassAdd
+                onsuccess={getData}
+                id={id}
+                centerId={centerId}
+              />
+            )}
             {storedScreens?.endClassCreate && (
-              <Link
-                to={`/student/view/endClassAdd/${data.id}?centerId=${centerId}`}
-              >
-                <button
-                  className="btn btn-success btn-sm"
-                  type="button"
-                  style={{ fontSize: "12px" }}
-                >
-                  End Class
-                </button>
-              </Link>
+              // <Link
+              //   to={`/student/view/endClassAdd/${data.id}?centerId=${centerId}`}
+              // >
+              //   <button
+              //     className="btn btn-success btn-sm"
+              //     type="button"
+              //     style={{ fontSize: "12px" }}
+              //   >
+              //     End Class
+              //   </button>
+              // </Link>
+              <StudentEndClassAdd
+                onsuccess={getData}
+                id={id}
+                centerId={centerId}
+              />
             )}
             {storedScreens?.registerNewCreate && (
               <Link

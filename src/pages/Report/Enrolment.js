@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import api from "../../config/URL";
 import { Link } from "react-router-dom";
 
-function Datatable2() {
+function Datatable2({ selectedCenter }) {
   const getCurrentWeek = () => {
     const date = new Date();
     date.setDate(date.getDate() + 4 - (date.getDay() || 7));
@@ -18,7 +18,7 @@ function Datatable2() {
   };
   const [selectedType, setSelectedType] = useState(getCurrentWeek());
   const [centerData, setCenterData] = useState(null);
-  const [selectedCenterId, setSelectedCenterId] = useState(null);
+  const [selectedCenterId, setSelectedCenterId] = useState(selectedCenter);
   const [selectedDay, setSelectedDay] = useState("ALL");
   const centerLocalId = localStorage.getItem("selectedCenterId");
   const [chartData, setChartData] = useState({
@@ -30,13 +30,14 @@ function Datatable2() {
     try {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
-      if (centerData && centerData.length > 0 && !selectedCenterId) {
-        if (centerLocalId !== null && centerLocalId !== "undefined") {
-          setSelectedCenterId(centerLocalId);
-        } else if (centerData !== null && centerData.length > 0) {
-          setSelectedCenterId(centerData[0].id);
-        }
-      }
+      // if (centerData && centerData.length > 0 && !selectedCenterId) {
+      //   if (centerLocalId !== null && centerLocalId !== "undefined") {
+      //     setSelectedCenterId(centerLocalId);
+      //   } else if (centerData !== null && centerData.length > 0) {
+      //     setSelectedCenterId(centerData[0].id);
+      //   }
+      // }
+      setSelectedCenterId(selectedCenter)
     } catch (error) {
       toast.error(error);
     }
@@ -44,7 +45,7 @@ function Datatable2() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [selectedCenter]);
 
   const handleDayChange = (e) => {
     setSelectedDay(e.target.value);
@@ -75,7 +76,7 @@ function Datatable2() {
         // Map for "ALL" days structure
         const dayData = data.dayData || {};
         const labels = data.labels || [];
-        
+
         const bookedSlots = labels.map(
           (label) => dayData[label]?.bookSlot || 0
         );
@@ -107,26 +108,25 @@ function Datatable2() {
             { name: "Available Slots", data: availableSlots },
           ],
           labels: Object.keys(timeData).map((key) => {
-              if (key.toLowerCase() === "total") return key;
-              const [hours, minutes] = key.split(":").map(Number);
-              const period = hours >= 12 ? "PM" : "AM";
-              const formattedHours = hours % 12 || 12;
-              return `${formattedHours}:${String(minutes).padStart(
-                2,
-                "0"
-              )} ${period}`;
-            }),
+            if (key.toLowerCase() === "total") return key;
+            const [hours, minutes] = key.split(":").map(Number);
+            const period = hours >= 12 ? "PM" : "AM";
+            const formattedHours = hours % 12 || 12;
+            return `${formattedHours}:${String(minutes).padStart(
+              2,
+              "0"
+            )} ${period}`;
+          }),
         });
       }
     } catch (error) {
-      if(selectedCenterId === "0"){
-      return <></>;
-      }else{
+      if (selectedCenterId === "0") {
+        return <></>;
+      } else {
         toast.error("Error fetching data:", error);
       }
     }
   };
-
 
   useEffect(() => {
     if (selectedCenterId) {
@@ -198,13 +198,14 @@ function Datatable2() {
           </div>
           <div className="container">
             <div className="row my-5">
-              <div className="col-md-4 col-12">
+              <div className="col-md-4 col-12 d-none">
                 <label className="form-label">Centre</label>
                 <select
                   className="form-select"
                   value={selectedCenterId}
                   onChange={handleCenterChange}
                 >
+                  <option value="0">Selected Centre</option>
                   {centerData &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>

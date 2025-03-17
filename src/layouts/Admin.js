@@ -378,7 +378,7 @@ function Admin({ handleLogout }) {
                 element={<StudentTransferOut />}
               />
               <Route
-                path="/student/view/changeClass"
+                path="/changeClass"
                 element={<StudentChangeClass />}
               />
               <Route
@@ -515,14 +515,14 @@ function Admin({ handleLogout }) {
               />
 
               {/* Report */}
-              <Route path="/report/attendance" element={<Attendance />} />
-              <Route path="/report/enrolment" element={<Enrolment />} />
+              <Route path="/report/attendance" element={<Attendance selectedCenter={selectedCenter}/>} />
+              <Route path="/report/enrolment" element={<Enrolment selectedCenter={selectedCenter}/>} />
               <Route path="/report/fee" element={<Fee />} />
               <Route path="/report/package" element={<Package />} />
               <Route path="/report/sales" element={<Sales />} />
               <Route path="/report/studentreport" element={<StudentReport />} />
               <Route path="/report/document" element={<DocumentReport />} />
-              <Route path="/report/revenue" element={<RevenueReport />} />
+              <Route path="/report/revenue" element={<RevenueReport selectedCenter={selectedCenter}/>} />
               <Route path="/report/replace_class" element={<ReplaceClass />} />
               <Route
                 path="/report/document/view"
@@ -844,6 +844,7 @@ function Admin({ handleLogout }) {
               />
               <Route path="/scheduleReport" element={<ScheduleReport />} />
               <Route path="/timetable" element={<TimeTable />} />
+              <Route path="/endClass" element={<StudentEndClass />} />
             </Routes>
           </div>
           <Footer />

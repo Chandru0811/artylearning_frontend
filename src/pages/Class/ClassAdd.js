@@ -8,6 +8,7 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
 import Select from "react-select";
+import fetchAllCoursesWithIds from "../List/CourseList";
 
 function ClassAdd({ selectedCenter }) {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ function ClassAdd({ selectedCenter }) {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "" || selectedCenter,
+      centerId: selectedCenter,
       centerName: "",
       courseId: "",
       className: "",
@@ -106,23 +107,41 @@ function ClassAdd({ selectedCenter }) {
 
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
+      const response = await fetchAllCentersWithIds();
+      if (Array.isArray(response)) {
+        setCenterData(response);
+        formik.setFieldValue("centerId", selectedCenter);
+        fetchCourses(selectedCenter);
+      } else {
+        console.error("Invalid data format:", response);
+        setCenterData([]);
+      }
     } catch (error) {
-      toast.error(error);
+      toast.error("Failed to fetch center data");
+      console.error(error);
     }
   };
 
-  const fetchCourses = async () => {
+  const fetchCourses = async (centerId) => {
     try {
-      const courses = await fetchAllCoursesWithIdsC(selectedCenter);
+      let courses = [];
+      const numericCenterId = Number(centerId);
+      if (numericCenterId === 0) {
+        courses = await fetchAllCoursesWithIds();
+      } else {
+        courses = await fetchAllCoursesWithIdsC(numericCenterId);
+      }
+      if (!Array.isArray(courses)) {
+        throw new Error("API did not return an array");
+      }
       const formattedCourses = courses.map((course) => ({
         value: course.id,
         label: course.courseNames,
       }));
       setCourseOptions(formattedCourses);
     } catch (error) {
-      toast.error(error.message);
+      console.error("Error fetching courses:", error);
+      toast.error(error.message || "Failed to fetch courses");
     }
   };
   // const fetchCourses = async (centerId) => {
@@ -132,7 +151,7 @@ function ClassAdd({ selectedCenter }) {
   //       setCourseOptions([]); // Reset courses if no valid center is selected
   //       return;
   //     }
-  
+
   //     const courses = await fetchAllCoursesWithIdsC(idToUse);
   //     const formattedCourses = courses.map((course) => ({
   //       value: course.id,
@@ -144,8 +163,9 @@ function ClassAdd({ selectedCenter }) {
   //   }
   // };
   useEffect(() => {
-    if (selectedCenter && selectedCenter !== "0") {
-      fetchCourses(selectedCenter);
+    fetchData();
+    if (selectedCenter) {
+      formik.setFieldValue("centerId", selectedCenter);
     }
   }, [selectedCenter]);
 
@@ -194,24 +214,19 @@ function ClassAdd({ selectedCenter }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.courseId]);
 
-  // const handleCenterChange = (event) => {
-  //   let center = event.target.value || selectedCenter;
-  //   console.log("Selected centercenter :::", selectedCenter);
-  //   if (!center || center === "0") {
-  //     formik.setFieldValue("centerId", "");
-  //     setCourseOptions([]);
-  //     setClassRoomData(null);
-  //     setTeacherData(null);
-  //   } else {
-  //     formik.setFieldValue("centerId", center);
-  //     fetchCourses(center);
-  //   }
-  // };
+  const handleCenterChange = (event) => {
+    let center = event.target.value || selectedCenter;
+    setCourseOptions([]);
+    formik.setFieldValue("centerId", center);
+    fetchCourses(center);
+  };
 
   useEffect(() => {
     fetchData();
     fetchClassRoom();
   }, []);
+
+  
 
   const calculateEndTime = () => {
     const { durationInHrs, durationInMins, startTime } = formik.values;
@@ -348,36 +363,35 @@ function ClassAdd({ selectedCenter }) {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              {/* <div className="col-md-6 col-12 mb-4">
-                <label className="">
+              <div className="col-md-6 col-12 mb-4 d-none">
+                <lable className="">
                   Centre<span className="text-danger">*</span>
-                </label>
+                </lable>
                 <select
                   {...formik.getFieldProps("centerId")}
                   name="centerId"
-                  className={`form-select ${
-                    formik.touched.centerId && formik.errors.centerId
+                  type="hidden"
+                  className={`form-select  ${
+                    formik.touched.center && formik.errors.center
                       ? "is-invalid"
                       : ""
                   }`}
                   aria-label="Default select example"
                   onChange={handleCenterChange}
                 >
-                  <option value="">Select Centre</option>
-                  {centerData &&
+                  <option disabled>Select a center</option>
+                  {Array.isArray(centerData) &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>
                         {center.centerNames}
                       </option>
                     ))}
                 </select>
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.centerId}
-                  </div>
+                {formik.touched.center && formik.errors.center && (
+                  <div className="invalid-feedback">{formik.errors.center}</div>
                 )}
-              </div> */}
-                <div className="col-md-6 col-12 mb-4">
+              </div>
+              <div className="col-md-6 col-12 mb-4">
                 <label>
                   Course<span className="text-danger">*</span>
                 </label>

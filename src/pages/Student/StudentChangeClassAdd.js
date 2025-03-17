@@ -23,7 +23,7 @@ const validationSchema = Yup.object().shape({
     .max(200, "*The maximum length is 200 characters"),
 });
 
-const StudentEndClassAdd = ({ id, centerId }) => {
+const StudentChangeClassAdd = ({ id, centerId }) => {
   const [courseData, setCourseData] = useState(null);
   const [classData, setClassData] = useState(null);
   const [show, setShow] = useState(false);
@@ -55,7 +55,7 @@ const StudentEndClassAdd = ({ id, centerId }) => {
       setLoadIndicator(true);
       values.studentId = id;
       try {
-        const response = await api.post("/createStudentEndClass", values, {
+        const response = await api.post("/createStudentChangeClass", values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -128,12 +128,12 @@ const StudentEndClassAdd = ({ id, centerId }) => {
         style={{ fontSize: "12px" }}
         onClick={handleShow}
       >
-        End Class
+        Change Class
       </button>
       <Modal show={show} centered onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            <p className="headColor">Student End Class</p>
+            <p className="headColor">Student Change Class</p>
           </Modal.Title>
         </Modal.Header>
         <form
@@ -334,4 +334,4 @@ const StudentEndClassAdd = ({ id, centerId }) => {
   );
 };
 
-export default StudentEndClassAdd;
+export default StudentChangeClassAdd;

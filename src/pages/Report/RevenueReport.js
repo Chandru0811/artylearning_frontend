@@ -8,13 +8,13 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import api from "../../config/URL";
 import { Link } from "react-router-dom";
 
-const RevenueReport = () => {
+const RevenueReport = ({ selectedCenter }) => {
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [dashboardData, setDashboardData] = useState(null);
   const [selectedType, setSelectedType] = useState("WEEKLY");
-  const [selectedCenterId, setSelectedCenterId] = useState("");
+  const [selectedCenterId, setSelectedCenterId] = useState(selectedCenter);
   const [selectedWeek, setSelectedWeek] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedCourseId, setSelectedCourseId] = useState("All");
@@ -57,20 +57,21 @@ const RevenueReport = () => {
         setCenterData(centers);
         const subjects = await fetchAllSubjectsWithIds();
         setSubjectData(subjects);
-        if (centers && centers.length > 0 && !selectedCenterId) {
-          if (centerLocalId !== null && centerLocalId !== "undefined") {
-            setSelectedCenterId(centerLocalId);
-          } else if (centerData !== null && centerData.length > 0) {
-            setSelectedCenterId(centers[0].id);
-          }
-        }
+        // if (centers && centers.length > 0 && !selectedCenterId) {
+        //   if (centerLocalId !== null && centerLocalId !== "undefined") {
+        //     setSelectedCenterId(centerLocalId);
+        //   } else if (centerData !== null && centerData.length > 0) {
+        //     setSelectedCenterId(centers[0].id);
+        //   }
+        // }
       } catch (error) {
         toast.error(error.message || "Failed to fetch data");
       }
     };
     fetchData();
     setDefaultWeekAndMonth();
-  }, [selectedCenterId]);
+    setSelectedCenterId(selectedCenter);
+  }, [selectedCenter]);
 
   useEffect(() => {
     if (selectedCenterId) {
@@ -88,7 +89,7 @@ const RevenueReport = () => {
     } else {
       setCourseData(null);
     }
-  }, [selectedCenterId]);
+  }, [selectedCenter]);
 
   const fetchRevenueData = async () => {
     const params = {
@@ -198,13 +199,14 @@ const RevenueReport = () => {
           </div>
           <div className="container-fluid">
             <div className="row my-5">
-              <div className="col-md-4 col-12">
+              <div className="col-md-4 col-12 d-none">
                 <label className="form-label">Centre</label>
                 <select
                   className="form-select"
                   value={selectedCenterId}
                   onChange={handleCenterChange}
                 >
+                 <option value="0">Selected Centre</option>
                   {centerData?.map((data) => (
                     <option key={data.id} value={data.id}>
                       {data.centerNames}

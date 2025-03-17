@@ -54,28 +54,7 @@ function AddPackage({ id, onSuccess, handleMenuClose }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       console.log("Form values:", values);
-      try {
-        const response = await api.post(`/createCenterPackages/${id}`, values, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (response.status === 201) {
-          toast.success(response.data.message);
-          onSuccess();
-          handleClose();
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        if (error.response.status === 409) {
-          toast.warning(error?.response?.data?.message);
-        } else {
-          toast.error(error.response.data.message);
-        }
-      } finally {
-        setLoadIndicator(false);
-      }
+      let successCount = 0;
       const apiCalls = selectedCenters.map(async (center) => {
         try {
           const payload = {
@@ -91,21 +70,25 @@ function AddPackage({ id, onSuccess, handleMenuClose }) {
               },
             }
           );
+          if (response.status === 201) {
+            successCount++;
+          }
         } catch (error) {
           if (error.response?.status === 409) {
             toast.warning(`${error?.response?.data?.message}$${center.label}`);
           } else {
-            toast.error(error.response?.data?.message || "API Error");
+            toast.error(`${error?.response?.data?.message}$${center.label}`);
           }
         }
       });
 
       await Promise.all(apiCalls);
-      toast.success(`Package added Successfully`);
-
-      setLoadIndicator(false);
-      onSuccess();
-      handleClose();
+      if (successCount > 0) {
+        toast.success(`Package added successfully`);
+        setLoadIndicator(false);
+        onSuccess();
+        handleClose();
+      }
     },
   });
   const fetchData = async () => {

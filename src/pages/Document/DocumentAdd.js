@@ -202,7 +202,12 @@ function DocumentAdd({ selectedCenter }) {
       console.error(error);
     }
   };
-
+  useEffect(() => {
+    fetchData();
+    if (selectedCenter) {
+      formik.setFieldValue("center", selectedCenter);
+    }
+  }, [selectedCenter]);
   // const fetchData = async () => {
   //   try {
   //     const response = await fetchAllCentersWithIds();
@@ -226,12 +231,7 @@ function DocumentAdd({ selectedCenter }) {
   //   }
   // };
 
-  useEffect(() => {
-    fetchData();
-    if (selectedCenter) {
-      formik.setFieldValue("center", selectedCenter);
-    }
-  }, [selectedCenter]);
+
 
   const fetchCourses = async (centerId) => {
     try {

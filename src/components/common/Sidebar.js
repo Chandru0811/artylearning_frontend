@@ -203,6 +203,11 @@ function Sidebar() {
             path: "/endClass",
             access: storedScreens.attendanceIndex,
           },
+          {
+            title: "Change Class List",
+            path: "/changeClass",
+            access: storedScreens.attendanceIndex,
+          },
         ],
       },
       // {

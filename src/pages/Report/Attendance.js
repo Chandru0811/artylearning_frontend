@@ -9,7 +9,7 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import api from "../../config/URL";
 import { Link } from "react-router-dom";
 
-const Attendance = () => {
+const Attendance = ({ selectedCenter }) => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [centerData, setCenterData] = useState(null);
@@ -29,7 +29,7 @@ const Attendance = () => {
 
   const formik = useFormik({
     initialValues: {
-      centerId: centerLocalId || "",
+      centerId: selectedCenter,
       courseId: "",
       attendanceDate: "",
       attendanceStatus: "",
@@ -84,28 +84,51 @@ const Attendance = () => {
   // };
 
   // Fetch centers on component mount
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const centers = await fetchAllCentersWithIds();
-        setCenterData(centers);
 
-        if (centers.length > 0) {
-          const defaultCenterId = centerLocalId && centerLocalId !== "undefined" ? centerLocalId : centers[0].id;
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const centers = await fetchAllCentersWithIds();
+  //       setCenterData(centers);
 
-          formik.setFieldValue("centerId", defaultCenterId);
-          await fetchCourses(defaultCenterId);
-        } else {
-          console.error("No centers found!");
-        }
-      } catch (error) {
-        toast.error(error.message || "Error fetching centers.");
+  //       if (centers.length > 0) {
+  //         const defaultCenterId = centerLocalId && centerLocalId !== "undefined" ? centerLocalId : centers[0].id;
+
+  //         formik.setFieldValue("centerId", defaultCenterId);
+  //         await fetchCourses(defaultCenterId);
+  //       } else {
+  //         console.error("No centers found!");
+  //       }
+  //     } catch (error) {
+  //       toast.error(error.message || "Error fetching centers.");
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetchAllCentersWithIds();
+      if (Array.isArray(response)) {
+        setCenterData(response);
+        formik.setFieldValue("centerId", selectedCenter);
+        fetchCourses(selectedCenter);
+      } else {
+        console.error("Invalid data format:", response);
+        setCenterData([]);
       }
-    };
-
+    } catch (error) {
+      toast.error("Failed to fetch center data");
+      console.error(error);
+    }
+  };
+  useEffect(() => {
     fetchData();
-  }, []); 
+    if (selectedCenter) {
+      formik.setFieldValue("centerId", selectedCenter);
+    }
+  }, [selectedCenter]);
 
   const fetchCourses = async (centerId) => {
     try {
@@ -175,7 +198,7 @@ const Attendance = () => {
           </div>
           <div className="container-fluid">
             <div className="row my-4">
-              <div className="col-md-4 col-12 mb-2">
+              <div className="col-md-4 col-12 mb-2 d-none">
                 <label className="form-label">Centre</label>
                 <select
                   {...formik.getFieldProps("centerId")}
