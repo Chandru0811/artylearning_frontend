@@ -35,7 +35,7 @@ const Teacher = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -44,7 +44,7 @@ const Teacher = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -61,7 +61,7 @@ const Teacher = () => {
       },
       {
         accessorKey: "role",
-        enableHiding: false,
+        enableHiding: true,
         header: "Role",
         Cell: ({ row }) =>
           row.original.role === "Teacher" ||
@@ -74,36 +74,36 @@ const Teacher = () => {
             <span className="badge badges-orange fw-light">Freelancer</span>
           ) : null,
       },
-      { accessorKey: "countryName", enableHiding: false, header: "Country" },
+      { accessorKey: "countryName", enableHiding: true, header: "Country" },
       {
         accessorKey: "userUniqueId",
-        enableHiding: false,
+        enableHiding: true,
         header: "Teacher Id",
       },
       {
         accessorKey: "teacherName",
         header: "Teacher Name",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
       {
         accessorKey: "teacherType",
         header: "Teacher Type",
-        enableHiding: false,
+        enableHiding: true,
         size: 50,
       },
-      { accessorKey: "email", enableHiding: false, header: "Email" },
-      { accessorKey: "contactNumber", enableHiding: false, header: "Mobile" },
-    
+      { accessorKey: "email", enableHiding: true, header: "Email" },
+      { accessorKey: "contactNumber", enableHiding: true, header: "Mobile" },
+
       {
         accessorKey: "createdAt",
-        enableHiding: false,
+        enableHiding: true,
         header: "Created At",
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
       {
         accessorKey: "updatedAt",
-        enableHiding: false,
+        enableHiding: true,
         header: "Updated At",
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
       },

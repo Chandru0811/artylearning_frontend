@@ -19,7 +19,7 @@ const StudentViewCourse = ({ data }) => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -27,7 +27,7 @@ const StudentViewCourse = ({ data }) => {
       },
       {
         accessorKey: "status",
-        enableHiding: false,
+        enableHiding: true,
         size: 50,
         header: "Status",
         Cell: ({ row }) => {
@@ -38,7 +38,7 @@ const StudentViewCourse = ({ data }) => {
               return (
                 <span
                   className="badge text-light fw-light"
-                  style={{ backgroundColor: "#007bff" }} 
+                  style={{ backgroundColor: "#007bff" }}
                 >
                   Yet to Start
                 </span>
@@ -56,7 +56,7 @@ const StudentViewCourse = ({ data }) => {
               return (
                 <span
                   className="badge text-light fw-light"
-                  style={{ backgroundColor: "#287f71" }} 
+                  style={{ backgroundColor: "#287f71" }}
                 >
                   Completed
                 </span>
@@ -65,7 +65,7 @@ const StudentViewCourse = ({ data }) => {
               return (
                 <span
                   className="badge text-light fw-light"
-                  style={{ backgroundColor: "#6c757d" }} 
+                  style={{ backgroundColor: "#6c757d" }}
                 >
                   Pending
                 </span>
@@ -73,32 +73,32 @@ const StudentViewCourse = ({ data }) => {
           }
         },
       },
-      { accessorKey: "centerName", enableHiding: false, header: "Center Name" },
+      { accessorKey: "centerName", enableHiding: true, header: "Center Name" },
       {
         accessorKey: "course",
-        enableHiding: false,
+        enableHiding: true,
         header: "Course",
       },
       {
         accessorKey: "classId",
-        enableHiding: false,
+        enableHiding: true,
         size: 50,
         header: "Class Code",
       },
       {
         accessorKey: "teacher",
-        enableHiding: false,
+        enableHiding: true,
         header: "Teacher",
       },
       {
         accessorKey: "startDate",
-        enableHiding: false,
+        enableHiding: true,
         size: 50,
         header: "Start Date",
       },
       {
         accessorKey: "endDate",
-        enableHiding: false,
+        enableHiding: true,
         size: 50,
         header: "End Date",
       },

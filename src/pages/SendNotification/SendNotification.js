@@ -42,7 +42,7 @@ const SendNotification = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -51,7 +51,7 @@ const SendNotification = () => {
       {
         accessorKey: "id",
         header: "",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 20,
         Cell: ({ cell }) => (
@@ -68,19 +68,19 @@ const SendNotification = () => {
       },
       {
         accessorKey: "messageTitle",
-        enableHiding: false,
+        enableHiding: true,
         header: "Event Name",
         size: 20,
       },
       {
         accessorKey: "messageDescription",
-        enableHiding: false,
+        enableHiding: true,
         header: "Message",
         size: 20,
       },
       {
         accessorKey: "datePosted",
-        enableHiding: false,
+        enableHiding: true,
         header: "Created At",
         size: 20,
       },
