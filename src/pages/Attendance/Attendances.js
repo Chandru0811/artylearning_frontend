@@ -8,16 +8,16 @@ import ReplacementAdd from "./ReplacementAdd";
 import { Link } from "react-router-dom";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 
-function Attendances() {
+function Attendances({selectedCenter}) {
   const [attendanceData, setAttendanceData] = useState([]);
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
-  const [selectedCenter, setSelectedCenter] = useState("");
+  const [center, setSelectedCenter] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedBatch, setSelectedBatch] = useState("");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [batchData, setBatchData] = useState(null);
-  const centerLocalId = localStorage.getItem("selectedCenterId");
+  // const centerLocalId = localStorage.getItem("selectedCenterId");
 
   const getCurrentDate = () => {
     const today = new Date();
@@ -91,23 +91,41 @@ function Attendances() {
     setSelectedDate(e.target.value);
   };
 
+  // const fetchCentreData = async () => {
+  //   try {
+  //     const centerData = await fetchAllCentersWithIds();
+  //     setCenterData(centerData);
+
+  //     if (centerData?.length > 0) {
+  //       const defaultCenterId = centerData[0].id;
+  //       if (centerLocalId !== null && centerLocalId !== "undefined") {
+  //         setSelectedCenter(centerLocalId);
+  //         fetchCourses(centerLocalId);
+  //       } else if (centerData !== null && centerData.length > 0) {
+  //         setSelectedCenter(defaultCenterId);
+  //         fetchCourses(defaultCenterId);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message || "Error fetching centers.");
+  //   }
+  // };
+  
   const fetchCentreData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-
-      if (centerData?.length > 0) {
-        const defaultCenterId = centerData[0].id;
-        if (centerLocalId !== null && centerLocalId !== "undefined") {
-          setSelectedCenter(centerLocalId);
-          fetchCourses(centerLocalId);
-        } else if (centerData !== null && centerData.length > 0) {
-          setSelectedCenter(defaultCenterId);
-          fetchCourses(defaultCenterId);
-        }
+      const response = await fetchAllCentersWithIds();
+      if (Array.isArray(response)) {
+        setCenterData(response);
+        // formik.setFieldValue("center", selectedCenter);
+        setSelectedCenter(selectedCenter)
+        fetchCourses(selectedCenter);
+      } else {
+        console.error("Invalid data format:", response);
+        setCenterData([]);
       }
     } catch (error) {
-      toast.error(error.message || "Error fetching centers.");
+      toast.error("Failed to fetch center data");
+      console.error(error);
     }
   };
 
@@ -120,18 +138,18 @@ function Attendances() {
     }
   };
 
-  const handleCenterChange = (e) => {
-    const centerId = e.target.value;
-    setSelectedCenter(centerId);
-    setSelectedCourse("");
-    setCourseData([]);
-    fetchCourses(centerId);
-  };
+  // const handleCenterChange = (e) => {
+  //   const centerId = e.target.value;
+  //   setSelectedCenter(centerId);
+  //   setSelectedCourse("");
+  //   setCourseData([]);
+  //   fetchCourses(centerId);
+  // };
 
   const fetchData = async () => {
     try {
       const requestBody = {
-        centerId: selectedCenter,
+        centerId: center,
         date: selectedDate,
         courseId: selectedCourse || "",
         ...(selectedBatch && { batchTime: selectedBatch }),
@@ -146,6 +164,15 @@ function Attendances() {
     }
   };
 
+  const handleCenterChange = (event) => {
+    const center = event.target.value || selectedCenter;
+    setCourseData([]);
+    // formik.setFieldValue("center", center);
+    setSelectedCenter(center)
+    fetchCourses(center);
+  };
+
+
   useEffect(() => {
     if (selectedDate) {
       fetchAvailableSlots(selectedDate);
@@ -159,7 +186,11 @@ function Attendances() {
 
   useEffect(() => {
     fetchCentreData();
-  }, []);
+    if (selectedCenter) {
+      // formik.setFieldValue("center", selectedCenter);
+      setSelectedCenter(selectedCenter)
+    }
+  }, [selectedCenter]);
 
   // useEffect(() => {
   //   fetchData();
@@ -250,7 +281,7 @@ function Attendances() {
             </div>
           </div>
           <div className="row px-2">
-            <div className="col-md-6 col-12 mb-2">
+            <div className="col-md-6 col-12 d-none">
               <label className="form-lable">
                 Centre<span className="text-danger">*</span>
               </label>
@@ -259,6 +290,7 @@ function Attendances() {
                 value={selectedCenter}
                 onChange={handleCenterChange}
               >
+                <option selected disabled>Select a centre</option>
                 {centerData &&
                   centerData.map((center) => (
                     <option key={center.id} value={center.id}>
@@ -267,7 +299,7 @@ function Attendances() {
                   ))}
               </select>
             </div>
-            <div className="col-md-6 col-12">
+            <div className="col-md-3 col-12">
               <label className="form-lable">
                 Attendance Date<span className="text-danger">*</span>
               </label>
@@ -278,7 +310,7 @@ function Attendances() {
                 value={selectedDate}
               />
             </div>
-            <div className="col-md-6 col-12 mb-2">
+            <div className="col-md-4 col-12 mb-2">
               <label className="form-lable">Course</label>
               <select
                 className="form-select "
@@ -293,7 +325,7 @@ function Attendances() {
                   ))}
               </select>
             </div>
-            <div className="col-md-6 col-12">
+            <div className="col-md-3 col-12">
               <label className="form-lable">Batch</label>
               <select
                 className="form-select"
@@ -316,7 +348,7 @@ function Attendances() {
                   })}
               </select>
             </div>
-            <div className="col-md-12 col-12 d-flex align-items-end justify-content-end mb-3">
+            <div className="col-md-2 col-12 d-flex align-items-end justify-content-end mb-3">
               <button
                 className="btn btn-light btn-button btn-sm mt-3"
                 onClick={handelSubmitData}

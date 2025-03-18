@@ -646,7 +646,7 @@ function Admin({ handleLogout }) {
 
               {/* {/ Attendance /} */}
               <Route path="/attendance/list" element={<AttendancesCourse />} />
-              <Route path="/attendance" element={<Attendances />} />
+              <Route path="/attendance" element={<Attendances selectedCenter={selectedCenter}/>} />
               <Route path="/attendance/add" element={<AttendancesAdd />} />
               <Route path="/attendance/edit" element={<AttendancesEdit />} />
 

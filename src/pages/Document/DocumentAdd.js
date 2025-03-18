@@ -202,36 +202,13 @@ function DocumentAdd({ selectedCenter }) {
       console.error(error);
     }
   };
+  
   useEffect(() => {
     fetchData();
     if (selectedCenter) {
       formik.setFieldValue("center", selectedCenter);
     }
   }, [selectedCenter]);
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await fetchAllCentersWithIds();
-
-  //     if (Array.isArray(response)) { // Ensure response is an array
-  //       setCenterData(response);
-
-  //       // Check if selectedCenter exists in the fetched centerData
-  //       if (selectedCenter && response.some(center => center.id === selectedCenter)) {
-  //         setCenterData(selectedCenter);
-  //       } else if (response.length > 0) {
-  //         setCenterData(response[0].id); // Set first center as default
-  //       }
-  //     } else {
-  //       console.error("Invalid data format:", response);
-  //       setCenterData([]); // Prevent .map() errors by defaulting to an empty array
-  //     }
-  //   } catch (error) {
-  //     toast.error("Failed to fetch center data");
-  //     console.error(error);
-  //   }
-  // };
-
-
 
   const fetchCourses = async (centerId) => {
     try {
