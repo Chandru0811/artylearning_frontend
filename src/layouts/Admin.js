@@ -369,7 +369,7 @@ function Admin({ handleLogout }) {
 
               {/* {/ Student /} */}
               <Route path="/student" element={<Student selectedCenter={selectedCenter}/>} />
-              <Route path="/student/add" element={<StudentAdd />} />
+              <Route path="/student/add" element={<StudentAdd selectedCenter={selectedCenter}/>} />
               <Route path="/student/edit/:id" element={<StudentEdit />} />
               {/* <Route path="/student/view/:id" element={<StudentView />} /> */}
               <Route path="/student/view/:id" element={<StudentNewView />} />
