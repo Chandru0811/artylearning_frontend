@@ -144,24 +144,7 @@ function ClassAdd({ selectedCenter }) {
       toast.error(error.message || "Failed to fetch courses");
     }
   };
-  // const fetchCourses = async (centerId) => {
-  //   try {
-  //     const idToUse = centerId && centerId !== "0" ? centerId : selectedCenter;
-  //     if (!idToUse || idToUse === "0") {
-  //       setCourseOptions([]); // Reset courses if no valid center is selected
-  //       return;
-  //     }
-
-  //     const courses = await fetchAllCoursesWithIdsC(idToUse);
-  //     const formattedCourses = courses.map((course) => ({
-  //       value: course.id,
-  //       label: course.courseNames,
-  //     }));
-  //     setCourseOptions(formattedCourses);
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
+  
   useEffect(() => {
     fetchData();
     if (selectedCenter) {

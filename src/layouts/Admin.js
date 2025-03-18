@@ -354,8 +354,8 @@ function Admin({ handleLogout }) {
 
               {/* Lead */}
               <Route path="/lead/lead" element={<Lead selectedCenter={selectedCenter}/>} />
-              <Route path="/lead/lead/add" element={<EnrollmentAdd />} />
-              <Route path="/lead/lead/edit/:id" element={<EnrollmentEdit />} />
+              <Route path="/lead/lead/add" element={<EnrollmentAdd selectedCenter={selectedCenter}/>} />
+              <Route path="/lead/lead/edit/:id" element={<EnrollmentEdit selectedCenter={selectedCenter}/>} />
               {/* <Route path="/lead/lead/view/:id" element={<LeadView />} /> */}
               <Route path="/lead/lead/view/:id" element={<LeadNewView />} />
               <Route

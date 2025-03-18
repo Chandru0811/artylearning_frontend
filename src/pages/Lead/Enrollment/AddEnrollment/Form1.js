@@ -35,11 +35,11 @@ const validationSchema = Yup.object().shape({
 });
 
 const Form1 = forwardRef(
-  ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
+  ({ formData, setFormData, handleNext, setLoadIndicators ,selectedCenter}, ref) => {
     const [subjectData, setSubjectData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [centerData, setCenterData] = useState(null);
-    console.log("Form data is ", formData);
+    console.log("SSSCCC selectedCenter ", selectedCenter);
     const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
@@ -132,14 +132,29 @@ const Form1 = forwardRef(
         scrollToError(formik.errors);
       }
     }, [formik.submitCount, formik.errors]);
+
+      const fetchCenterData = async () => {
+        try {
+          const response = await fetchAllCentersWithIds();
+          if (Array.isArray(response)) {
+            setCenterData(response);
+            formik.setFieldValue("centerId", selectedCenter);
+          } else {
+            console.error("Invalid data format:", response);
+            setCenterData([]);
+          }
+        } catch (error) {
+          toast.error("Failed to fetch center data");
+          console.error(error);
+        }
+      };
+
     const fetchData = async () => {
       try {
         const subjectData = await fetchAllSubjectsWithIds();
         const raceData = await fetchAllRaceWithIds();
-        const centerData = await fetchAllCentersWithIds();
         setRaceData(raceData);
         setSubjectData(subjectData);
-        setCenterData(centerData);
       } catch (error) {
         toast.error(error);
       }
@@ -148,6 +163,13 @@ const Form1 = forwardRef(
     useEffect(() => {
       fetchData();
     }, []);
+
+      useEffect(() => {
+        fetchCenterData();
+        if (selectedCenter !==0) {
+          formik.setFieldValue("centerId", selectedCenter);
+        }
+      }, [selectedCenter]);
 
     useImperativeHandle(ref, () => ({
       form1: formik.handleSubmit,
@@ -429,7 +451,7 @@ const Form1 = forwardRef(
             <div className="col-md-6 col-12 ">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
-                  Centre<span className="text-danger">*</span>
+                  Centre
                 </label>
                 <select
                   className="form-select"
@@ -438,7 +460,7 @@ const Form1 = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.centerId}
                 >
-                  <option selected></option>
+                  <option selected value=""></option>
                   {centerData &&
                     centerData.map((centerId) => (
                       <option key={centerId.id} value={centerId.id}>

@@ -21,7 +21,7 @@ const steps = [
   { tooltip: "Permission for Medias Posting" },
 ];
 
-export default function EnrollmentAdd() {
+export default function EnrollmentAdd({selectedCenter}) {
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({ lead_id: null });
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -134,6 +134,7 @@ export default function EnrollmentAdd() {
               setFormData={setFormData}
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
+              selectedCenter={selectedCenter}
             />
           )}
           {activeStep === 1 && (
