@@ -1,364 +1,937 @@
-import React, { useEffect, useState } from "react";
-import api from "../config/URL";
-import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "./List/CenterList";
-import { FaDownload } from "react-icons/fa6";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import React from "react";
 
-const ScheduleReport = () => {
-  // const [data, setData] = useState([]);
-  const data = [
+const scheduleData = {
+  teacherList: [
+    "Jen",
+    "Jing En",
+    "Mogana",
+    "Vivian",
+    "XP",
+    "Joyce",
+    "Jolene",
+    "Ya Jing",
+  ],
+  data: [
     {
-      period: "11 March 2021 - 16 March 2021",
-      week: [
+      period: "28 Jan - 2 Feb",
+      days: [
         {
           day: "Monday",
-          periods: [
+          records: [
             {
-              times: ["10:30", "02:30"],
-              teacherList: [
-                { teacherName: "Mai", curriculumCode: "N/A", time: "10:30" },
+              batch: "10:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "AP59 Silent E story" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "AP58 Trigraph rev" },
+                { teacher: "XP", curriculumCode: "N/A" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
                 {
-                  teacherName: "Jeni",
-                  curriculumCode: "CPLL021",
-                  time: "02:30",
+                  teacher: "Ya Jing",
+                  curriculumCode: "AP 49 h bro ch sh spelling",
                 },
+              ],
+            },
+            {
+              batch: "12:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "SLSOE" },
+                { teacher: "Jing En", curriculumCode: "CLIPE" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "N/A" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "N/A" },
               ],
             },
           ],
         },
         {
           day: "Tuesday",
-          periods: [
+          records: [
             {
-              times: ["11:30", "01:30", "03:00", "05:00"],
-              teacherList: [
-                { teacherName: "Jeni", curriculumCode: "N/A", time: "11:30" },
-                { teacherName: "Jeni", curriculumCode: "Cpile", time: "01:30" },
-                {
-                  teacherName: "Natacsha",
-                  curriculumCode: "CPLL021",
-                  time: "01:30",
-                },
+              batch: "15:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "17:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "19:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "AP58  trigraph rev" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
               ],
             },
           ],
         },
         {
           day: "Wednesday",
-          periods: [
+          records: [
             {
-              times: ["11:30", "01:30"],
-              teacherList: [
-                { teacherName: "Mai", curriculumCode: "N/A", time: "11:30" },
+              batch: "15:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "AP07 CVC ad Ob vin" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "17:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "AP 71 2 vowels oa, oe, ow" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "AD /e/" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "18:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
                 {
-                  teacherName: "Natacsha",
-                  curriculumCode: "CPLL021",
-                  time: "01:30",
+                  teacher: "Mogana",
+                  curriculumCode: "AP 49 h bro ch sh spelling",
                 },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "19:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
               ],
             },
           ],
         },
         {
           day: "Thursday",
-          periods: [
+          records: [
             {
-              times: ["10:30"],
-              teacherList: [
+              batch: "14:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
                 {
-                  teacherName: "Wei",
-                  curriculumCode: "AP05 cvc ap, AP04 cvc am",
-                  time: "10:30",
+                  teacher: "XP",
+                  curriculumCode: " AP 36 blends br, cr, dr, tr, gr, pr",
                 },
                 {
-                  teacherName: "Natacsha",
-                  curriculumCode: "CCAL2024",
-                  time: "10:30",
+                  teacher: "Joyce",
+                  curriculumCode: "AP72 2 vowel rev & AP53 ph",
                 },
+                { teacher: "Jolene", curriculumCode: "AP 18 CVC ip" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "15:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                {
+                  teacher: "XP",
+                  curriculumCode: " AP 36 blends br, cr, dr, tr, gr, pr",
+                },
+                {
+                  teacher: "Joyce",
+                  curriculumCode: "AP72 2 vowel rev & AP53 ph",
+                },
+                { teacher: "Jolene", curriculumCode: "AP 18 CVC ip" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "17:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "N/A" },
+                { teacher: "XP", curriculumCode: "AB y" },
+                { teacher: "Joyce", curriculumCode: "AP02 cvc at" },
+                { teacher: "Jolene", curriculumCode: "AP45 ee 2" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "19:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "AD x AD y" },
+                { teacher: "Joyce", curriculumCode: "AP83 er ir ur" },
+                { teacher: "Jolene", curriculumCode: "AP52 h bro th" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+          ],
+        },
+        {
+          day: "Friday",
+          records: [
+            {
+              batch: "15:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "AP 73 Spelling oi oy" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "N/A" },
+              ],
+            },
+            {
+              batch: "17:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "AP02 cvc at" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "19:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "N/A" },
+                { teacher: "XP", curriculumCode: "AB v" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "AP60 Silent E a_e a_ce" },
+                { teacher: "Ya Jing", curriculumCode: "" },
               ],
             },
           ],
         },
         {
           day: "Saturday",
-          periods: [
+          records: [
             {
-              times: ["10:30", "12:00", "01:30", "04:00"],
-              teacherList: [
+              batch: "09:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
                 {
-                  teacherName: "Danial",
-                  curriculumCode: "AP05 cvc ap, AP04 cvc am",
-                  time: "01:30",
+                  teacher: "Vivian",
+                  curriculumCode: "AP61 silent e i_e i_ce o_e (Asha observer)",
                 },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP64 hard & Soft g" },
+                { teacher: "Jolene", curriculumCode: "" },
                 {
-                  teacherName: "Wei",
-                  curriculumCode: "CCAL2024",
-                  time: "04:00",
+                  teacher: "Ya Jing",
+                  curriculumCode: "AD revision - Practicum Ya Jing",
                 },
+              ],
+            },
+            {
+              batch: "10:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                {
+                  teacher: "Vivian",
+                  curriculumCode: "AP33 ck (Asha Observer)",
+                },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP02 cvc at" },
+                { teacher: "Jolene", curriculumCode: "" },
+                {
+                  teacher: "Ya Jing",
+                  curriculumCode: "AB l - Practicum Ya Jing",
+                },
+              ],
+            },
+            {
+              batch: "13:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "AP33 ck " },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP56 oo 2" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "15:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "AP75 ghos wr" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP10 cvc et" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "16:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "AP04 cvc am" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AD /d/" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
               ],
             },
           ],
         },
         {
           day: "Sunday",
-          periods: [
+          records: [
             {
-              times: ["11:30", "01:30", "03:00"],
-              teacherList: [
-                { teacherName: "Wei", curriculumCode: "N/A", time: "01:30" },
+              batch: "09:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
                 {
-                  teacherName: "Roja",
-                  curriculumCode: "Coewe123 nf2",
-                  time: "11:30",
+                  teacher: "Jing En",
+                  curriculumCode: "AP04 CVC at - Obs Tannya",
                 },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                {
+                  teacher: "Ya Jing",
+                  curriculumCode: "AP51 h bro wh 2- Practicum Ya Jing",
+                },
+              ],
+            },
+            {
+              batch: "10:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                {
+                  teacher: "Vivian",
+                  curriculumCode: "AP33 ck (Asha Observer)",
+                },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP02 cvc at" },
+                { teacher: "Jolene", curriculumCode: "" },
+                {
+                  teacher: "Ya Jing",
+                  curriculumCode: "AB l - Practicum Ya Jing",
+                },
+              ],
+            },
+            {
+              batch: "13:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "AP33 ck " },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP56 oo 2" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "15:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "AP75 ghos wr" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP10 cvc et" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "16:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "AP04 cvc am" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AD /d/" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
               ],
             },
           ],
         },
       ],
     },
-  ];
-  const [centerData, setCenterData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [filters, setFilters] = useState({
-    centerId: localStorage.getItem("selectedCenterId") || "",
-    startDate: "",
-    endDate: "",
-  });
+    {
+      period: "04 Feb - 9 Feb",
+      days: [
+        {
+          day: "Monday",
+          records: [
+            {
+              batch: "10:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "AP59 Silent E story" },
+                { teacher: "Jing En", curriculumCode: "AP58 Trigraph rev" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "N/A" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                {
+                  teacher: "Ya Jing",
+                  curriculumCode: "AP 49 h bro ch sh spelling",
+                },
+              ],
+            },
+            {
+              batch: "12:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "SLSOE" },
+                { teacher: "Jing En", curriculumCode: "CLIPE" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "N/A" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "N/A" },
+              ],
+            },
+          ],
+        },
+        {
+          day: "Tuesday",
+          records: [
+            {
+              batch: "15:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "17:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "19:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "AP58  trigraph rev" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+          ],
+        },
+        {
+          day: "Wednesday",
+          records: [
+            {
+              batch: "15:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "AP07 CVC ad Ob vin" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "17:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "AP 71 2 vowels oa, oe, ow" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "AD /e/" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "18:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                {
+                  teacher: "Mogana",
+                  curriculumCode: "AP 49 h bro ch sh spelling",
+                },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "19:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+          ],
+        },
+        {
+          day: "Thursday",
+          records: [
+            {
+              batch: "14:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                {
+                  teacher: "XP",
+                  curriculumCode: " AP 36 blends br, cr, dr, tr, gr, pr",
+                },
+                {
+                  teacher: "Joyce",
+                  curriculumCode: "AP72 2 vowel rev & AP53 ph",
+                },
+                { teacher: "Jolene", curriculumCode: "AP 18 CVC ip" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "15:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                {
+                  teacher: "XP",
+                  curriculumCode: " AP 36 blends br, cr, dr, tr, gr, pr",
+                },
+                {
+                  teacher: "Joyce",
+                  curriculumCode: "AP72 2 vowel rev & AP53 ph",
+                },
+                { teacher: "Jolene", curriculumCode: "AP 18 CVC ip" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "17:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "N/A" },
+                { teacher: "XP", curriculumCode: "AB y" },
+                { teacher: "Joyce", curriculumCode: "AP02 cvc at" },
+                { teacher: "Jolene", curriculumCode: "AP45 ee 2" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "19:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "AD x AD y" },
+                { teacher: "Joyce", curriculumCode: "AP83 er ir ur" },
+                { teacher: "Jolene", curriculumCode: "AP52 h bro th" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+          ],
+        },
+        {
+          day: "Friday",
+          records: [
+            {
+              batch: "15:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "AP 73 Spelling oi oy" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "N/A" },
+              ],
+            },
+            {
+              batch: "17:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "AP02 cvc at" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "19:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "N/A" },
+                { teacher: "XP", curriculumCode: "AB v" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "AP60 Silent E a_e a_ce" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+          ],
+        },
+        {
+          day: "Saturday",
+          records: [
+            {
+              batch: "09:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                {
+                  teacher: "Vivian",
+                  curriculumCode: "AP61 silent e i_e i_ce o_e (Asha observer)",
+                },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP64 hard & Soft g" },
+                { teacher: "Jolene", curriculumCode: "" },
+                {
+                  teacher: "Ya Jing",
+                  curriculumCode: "AD revision - Practicum Ya Jing",
+                },
+              ],
+            },
+            {
+              batch: "10:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                {
+                  teacher: "Vivian",
+                  curriculumCode: "AP33 ck (Asha Observer)",
+                },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP02 cvc at" },
+                { teacher: "Jolene", curriculumCode: "" },
+                {
+                  teacher: "Ya Jing",
+                  curriculumCode: "AB l - Practicum Ya Jing",
+                },
+              ],
+            },
+            {
+              batch: "13:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "AP33 ck " },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP56 oo 2" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "15:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "AP75 ghos wr" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP10 cvc et" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "16:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "AP04 cvc am" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AD /d/" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+          ],
+        },
+        {
+          day: "Sunday",
+          records: [
+            {
+              batch: "09:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                {
+                  teacher: "Jing En",
+                  curriculumCode: "AP04 CVC at - Obs Tannya",
+                },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                {
+                  teacher: "Ya Jing",
+                  curriculumCode: "AP51 h bro wh 2- Practicum Ya Jing",
+                },
+              ],
+            },
+            {
+              batch: "10:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "N/A" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                {
+                  teacher: "Vivian",
+                  curriculumCode: "AP33 ck (Asha Observer)",
+                },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP02 cvc at" },
+                { teacher: "Jolene", curriculumCode: "" },
+                {
+                  teacher: "Ya Jing",
+                  curriculumCode: "AB l - Practicum Ya Jing",
+                },
+              ],
+            },
+            {
+              batch: "13:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "AP33 ck " },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP56 oo 2" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "15:00",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "AP75 ghos wr" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "AP10 cvc et" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "" },
+              ],
+            },
+            {
+              batch: "16:30",
+              curriculamData: [
+                { teacher: "Jen", curriculumCode: "" },
+                { teacher: "Jing En", curriculumCode: "AP04 cvc am" },
+                { teacher: "Mogana", curriculumCode: "" },
+                { teacher: "Vivian", curriculumCode: "" },
+                { teacher: "XP", curriculumCode: "" },
+                { teacher: "Joyce", curriculumCode: "" },
+                { teacher: "Jolene", curriculumCode: "" },
+                { teacher: "Ya Jing", curriculumCode: "AD /d/" },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
 
-  const fetchData = async () => {
-    try {
-      // Fetch center data
-      const centers = await fetchAllCentersWithIds();
-      setCenterData(centers);
-
-      // Set default center ID if not available
-      if (!filters.centerId && centers.length > 0) {
-        setFilters((prev) => ({ ...prev, centerId: centers[0].id }));
-      }
-    } catch (error) {
-      toast.error("Error fetching center data");
-      console.error(error);
-    }
-  };
-
-  const fetchScheduleData = async () => {
-    try {
-      setLoading(true);
-
-      // Construct query params
-      const queryParams = new URLSearchParams(
-        Object.entries(filters).filter(([_, value]) => value)
-      );
-      const response = await api.get(`/getAllClassSchedule?${queryParams}`);
-      // setData(response.data);
-      console.log("response.data :::", response.data);
-    } catch (error) {
-      toast.error("Error fetching schedule data");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
-  };
-
-  useEffect(() => {
-    if (filters.centerId) {
-      fetchScheduleData();
-    }
-  }, [filters]);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const handleGeneratePDF = async () => {
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "px",
-      format: "a3",
-    });
-    try {
-      const canvas = await html2canvas(document.querySelector(".Report-body"), {
-        scale: 2,
-      });
-      const imgData = canvas.toDataURL();
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, "PNG", 10, 10, pdfWidth - 20, pdfHeight);
-      pdf.save("Curriculum Code Report.pdf");
-    } catch (error) {
-      toast.error("Failed to generate PDF.");
-      console.error(error);
-    }
-  };
-
-  const allTeachers = Array.from(
-    new Set(
-      data.flatMap((entry) =>
-        entry.week.flatMap((day) =>
-          day.periods.flatMap((period) =>
-            period.teacherList.map((t) => t.teacherName)
-          )
-        )
-      )
-    )
-  );
-
+const ScheduleTable = () => {
   return (
-    <>
-      <div className="container mt-4">
-        <div className="row p-1">
-          <div className="col-md-6 col-lg-3 mb-2">
-            <div className="form-group">
-              <select
-                className="form-select form-select-sm"
-                name="centerId"
-                style={{ width: "100%" }}
-                onChange={handleFilterChange}
-                value={filters.centerId}
-              >
-                <option value="" disabled>
-                  Select a Centre
-                </option>
-                {centerData?.map((center) => (
-                  <option key={center.id} value={center.id}>
-                    {center.centerNames}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="col-md-6 col-lg-2 mb-2">
-            <div className="form-group">
-              <input
-                type="date"
-                className="form-control form-control-sm"
-                style={{ width: "100%" }}
-                name="startDate"
-                value={filters.startDate}
-                onChange={handleFilterChange}
-                onFocus={(e) => (e.target.type = "date")}
-                onBlur={(e) =>
-                  e.target.value === "" ? (e.target.type = "text") : null
-                }
-                placeholder="Start Date"
-              />
-            </div>
-          </div>
-
-          <div className="col-md-6 col-lg-2 mb-2">
-            <div className="form-group">
-              <input
-                type="date"
-                className="form-control form-control-sm"
-                style={{ width: "100%" }}
-                name="endDate"
-                value={filters.endDate}
-                onChange={handleFilterChange}
-                onFocus={(e) => (e.target.type = "date")}
-                onBlur={(e) =>
-                  e.target.value === "" ? (e.target.type = "text") : null
-                }
-                placeholder="End Date"
-              />
-            </div>
-          </div>
-
-          {data && Object.keys(data).length > 0 ? (
-            <div className="col-md-6 col-lg-1 mb-2 text-center">
-              <button
-                className="btn btn-sm text-white"
-                onClick={handleGeneratePDF}
-                style={{ background: "#eb862a" }}
-              >
-                <FaDownload />
-              </button>
-            </div>
-          ) : null}
-        </div>
-        <div className="container mt-4">
-          <div className="table-responsive table-container">
-          <table className="table table-bordered Report-body">
+    <div className="timetable-container">
+      <div className="table-wrapper">
+        <table className="timetable">
           <thead>
             <tr>
-              <th className="text-center fw-medium">Period</th>
-              <th className="text-center fw-medium">Day</th>
-              <th className="text-center fw-medium">Time</th>
-              {allTeachers.map((teacher) => (
-                <th key={teacher} className="text-center fw-medium">
-                  {teacher}
-                </th>
+              <th className="period-cell bg-dark">Period</th>
+              <th className="period-cell bg-dark">Day</th>
+              <th className="period-cell bg-dark">Time</th>
+              {scheduleData.teacherList.map((teacher) => (
+                <th key={teacher}>{teacher}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {data.map((entry, snoIndex) =>
-              entry.week.map((dayEntry, dayIndex) =>
-                dayEntry.periods.flatMap((period, periodIndex) =>
-                  period.times.map((time, timeIndex) => (
-                    <tr
-                      key={`${snoIndex}-${dayIndex}-${periodIndex}-${timeIndex}`}
-                    >
-                      {dayIndex === 0 &&
-                        periodIndex === 0 &&
-                        timeIndex === 0 && (
+            {scheduleData.data.map((periodData, periodIndex) => {
+              const { period, days } = periodData;
+              const totalRowsInPeriod = days.reduce(
+                (total, d) => total + d.records.length,
+                0
+              );
+
+              return (
+                <React.Fragment key={period}>
+                  {/* Add spacer row between periods */}
+                  {periodIndex > 0 && (
+                    <tr className="period-spacer">
+                      <td colSpan={scheduleData.teacherList.length + 3} />
+                    </tr>
+                  )}
+                  {days.map((dayData, dayIndex) =>
+                    dayData.records.map((record, recordIndex) => (
+                      <tr key={dayData.day + record.batch}>
+                        {/* Period column: Spans all rows for the full period */}
+                        {dayIndex === 0 && recordIndex === 0 && (
                           <td
-                            rowSpan={entry.week.reduce(
-                              (acc, day) =>
-                                acc +
-                                day.periods.reduce(
-                                  (sum, p) => sum + p.times.length,
-                                  0
-                                ),
-                              0
-                            )}
-                            className="text-center align-middle"
+                            rowSpan={totalRowsInPeriod}
+                            className="period-cell"
                           >
-                            {entry.period}
+                            {period}
                           </td>
                         )}
-                      {periodIndex === 0 && timeIndex === 0 && (
-                        <td
-                          rowSpan={dayEntry.periods.reduce(
-                            (sum, p) => sum + p.times.length,
-                            0
-                          )}
-                          className="text-center align-middle"
-                        >
-                          {dayEntry.day}
-                        </td>
-                      )}
-                      <td className="text-center">{time}</td>
-                      {allTeachers.map((teacher) => {
-                        const teacherClass = period.teacherList.find(
-                          (t) => t.teacherName === teacher && t.time === time
-                        );
-                        return (
-                          <td key={teacher} className="text-center">
-                            {teacherClass ? teacherClass.curriculumCode : ""}
+                        {/* Day column: Spans all time slots for the day */}
+                        {recordIndex === 0 && (
+                          <td
+                            rowSpan={dayData.records.length}
+                            className="day-cell"
+                          >
+                            {dayData.day}
                           </td>
-                        );
-                      })}
-                    </tr>
-                  ))
-                )
-              )
-            )}
+                        )}
+                        <td className="time-cell">{record.batch}</td>
+                        {scheduleData.teacherList.map((teacher) => {
+                          const teacherData = record.curriculamData.find(
+                            (t) => t.teacher === teacher
+                          );
+                          return (
+                            <td
+                              key={teacher + record.batch}
+                              className="data-cell"
+                            >
+                              {teacherData?.curriculumCode || ""}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))
+                  )}
+                </React.Fragment>
+              );
+            })}
           </tbody>
-        </table> 
-          </div>
-        </div>
+        </table>
       </div>
-    </>
+    </div>
   );
 };
-export default ScheduleReport;
+
+export default ScheduleTable;

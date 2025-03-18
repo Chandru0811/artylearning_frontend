@@ -1309,3 +1309,27 @@ thead th {
   display: flex;
   justify-content: flex-start;
 }
+
+
+.timetable-container {
+  padding: 20px;
+}
+
+.timetable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.period-cell,
+.day-cell,
+.time-cell,
+.data-cell {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.period-spacer {
+  height: 20px; /* Adjust the height for spacing */
+  background-color: #f0f0f0; /* Optional: light gray background for distinction */
+}
