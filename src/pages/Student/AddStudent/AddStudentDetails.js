@@ -56,11 +56,11 @@ const AddStudentDetails = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
+    const [referByParent, setReferByParent] = useState([]);
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem("userName");
-
     // console.log("FormData is ", formData);
 
     const maxDate = new Date();
@@ -71,8 +71,10 @@ const AddStudentDetails = forwardRef(
         const centerData = await fetchAllCentersWithIds();
         setCenterData(centerData);
 
-        const studentData = await fetchAllStudentsWithIds();
-        setStudentData(studentData);
+        // const studentData = await fetchAllStudentsWithIds();
+        // setStudentData(studentData);
+        const response = await api.get("getOverAllStudentCompletionForm");
+        setStudentData(response.data);
 
         const raceData = await fetchAllRaceWithIds();
         setRaceData(raceData);
@@ -105,7 +107,7 @@ const AddStudentDetails = forwardRef(
 
     const formik = useFormik({
       initialValues: {
-        centerId: formData.centerId || "",
+        centerId: formData.selectedCenter || "",
         studentName: formData.studentName || "",
         studentChineseName: formData.studentChineseName || "",
         file: null || "",
@@ -155,12 +157,19 @@ const AddStudentDetails = forwardRef(
           formDatas.append("preAssessmentResult", values.preAssessmentResult);
           formDatas.append("race", values.race);
           formDatas.append("nationality", values.nationality || "");
-          formDatas.append("referByParent", values.referByParent || "");
-          formDatas.append("referByStudent", values.referByStudent || "");
+          formDatas.append("parentId", values.referByParent || "");
+          formDatas.append("stdId", values.referByStudent || "");
           formDatas.append("remark", values.remark || "");
           formDatas.append("allowMagazine", values.allowMagazine);
           formDatas.append("allowSocialMedia", values.allowSocialMedia);
-          formDatas.append("centerId", values.centerId);
+          if (
+            formData.selectedCenter === 0 ||
+            formData.selectedCenter === "0"
+          ) {
+            formDatas.append("centerId", "");
+          } else {
+            formDatas.append("centerId", formData.selectedCenter);
+          }
           formDatas.append("center", selectedCenter);
           formDatas.append("primaryLanguage", values.primaryLanguage);
           formDatas.append("groupName", values.groupName);
@@ -270,8 +279,19 @@ const AddStudentDetails = forwardRef(
     }, [formik.values.dateOfBirth]);
 
     useEffect(() => {
+      formik.setFieldValue("centerId", formData.selectedCenter);
       fetchData();
-    }, []);
+    }, [formData]);
+
+    const handleChangeStudent = async (event) => {
+      const studentId = event.target.value;
+      formik.setFieldValue("referByStudent", studentId);
+      const response = await api.get(`/getStudentPrimaryContact/${studentId}`);
+      setReferByParent(response.data);
+      if (response.data.length > 0) {
+        formik.setFieldValue("referByParent", response.data[0].parentId);
+      }
+    };
 
     useImperativeHandle(ref, () => ({
       StudentDetails: formik.handleSubmit,
@@ -292,8 +312,8 @@ const AddStudentDetails = forwardRef(
               <p className="headColor">Student Details</p>
               <div className="container">
                 <div className="row mt-3">
-                  <div className="col-lg-6 col-md-6 col-12">
-                    <div className="text-start mt-2">
+                  <div className="col-lg-6 col-md-6 col-12 ">
+                    <div className="text-start mt-2 d-none">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Centre</small>
                         <span className="text-danger">*</span>
@@ -306,7 +326,7 @@ const AddStudentDetails = forwardRef(
                         value={formik.values.centerId}
                         className="form-select"
                       >
-                        <option selected></option>
+                        <option value="0">Selected Centre</option>
                         {centerData &&
                           centerData.map((centerId) => (
                             <option key={centerId.id} value={centerId.id}>
@@ -511,7 +531,7 @@ const AddStudentDetails = forwardRef(
                       /> */}
                       <select
                         name="referByStudent"
-                        onChange={formik.handleChange}
+                        onChange={handleChangeStudent}
                         onBlur={formik.handleBlur}
                         value={formik.values.referByStudent}
                         className="form-select"
@@ -706,22 +726,28 @@ const AddStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-               
+
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Refered By Parent</small>
                         {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
-                      <input
+                      <select
                         name="referByParent"
                         className="form-control"
                         type="text"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.referByParent}
-                        readOnly
-                      />
+                        disabled
+                      >
+                        {referByParent.length > 0 && (
+                          <option value={referByParent[0].parentId}>
+                            {referByParent[0].parentName}
+                          </option>
+                        )}
+                      </select>
                       {formik.touched.referByParent &&
                         formik.errors.referByParent && (
                           <div className="error text-danger ">
