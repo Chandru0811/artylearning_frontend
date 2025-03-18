@@ -21,13 +21,26 @@ const steps = [
   { tooltip: "Student Relation" },
   { tooltip: "Terms and Conditions" },
 ];
-export default function StudentAdd() {
+export default function StudentAdd({ selectedCenter }) {
   const [activeStep, setActiveStep] = useState(0);
   const [searchParams] = useSearchParams();
   const LeadId = searchParams.get("LeadId");
   const LeadStatus = searchParams.get("LeadStatus");
-  const [formData, setFormData] = useState({ LeadId, LeadStatus });
+  const [formData, setFormData] = useState({
+    LeadId,
+    LeadStatus,
+    selectedCenter,
+  });
   const [loadIndicator, setLoadIndicator] = useState(false);
+
+  React.useEffect(() => {
+    setFormData((prevData) => ({
+      ...prevData,
+      selectedCenter,
+    }));
+
+    console.log("Updated formData:", { ...formData, selectedCenter });
+  }, [selectedCenter]);
 
   const childRef = React.useRef();
   // console.log("Form Data:", formData);

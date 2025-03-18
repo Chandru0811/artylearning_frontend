@@ -9,7 +9,7 @@ const ReferralList = ({ data }) => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 20,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -17,33 +17,33 @@ const ReferralList = ({ data }) => {
       },
       {
         accessorKey: "referByStudent",
-        enableHiding: false,
+        enableHiding: true,
         header: "Referal Student Name",
         size: 200,
       },
       {
         accessorKey: "referByParent",
-        enableHiding: false,
+        enableHiding: true,
         header: "Referal Parent Name",
       },
       {
         accessorKey: "referralFee",
-        enableHiding: false,
+        enableHiding: true,
         header: "Referal Fee",
       },
       {
         accessorKey: "attendance",
-        enableHiding: false,
+        enableHiding: true,
         header: "Attendance",
       },
       {
         accessorKey: "studentName",
-        enableHiding: false,
+        enableHiding: true,
         header: "New Student Name",
       },
       {
         accessorKey: "enrollDate",
-        enableHiding: false,
+        enableHiding: true,
         header: "New Student Start Date",
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },

@@ -52,7 +52,7 @@ function StudentRegisterCourse() {
     () => [
       {
         accessorKey: "id",
-        enableHiding: false,
+        enableHiding: true,
         enableSorting: false,
         size: 50,
         header: "",
@@ -73,7 +73,7 @@ function StudentRegisterCourse() {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -81,7 +81,7 @@ function StudentRegisterCourse() {
       },
       {
         accessorKey: "availableSlots",
-        enableHiding: false,
+        enableHiding: true,
         header: "Available Slots",
         size: 50,
         Cell: ({ cell }) => (
@@ -98,25 +98,25 @@ function StudentRegisterCourse() {
       },
       {
         accessorKey: "course",
-        enableHiding: false,
+        enableHiding: true,
         header: "Course",
       },
-      { accessorKey: "batch", enableHiding: false, header: "Batch", size: 50 },
+      { accessorKey: "batch", enableHiding: true, header: "Batch", size: 50 },
       {
         accessorKey: "startDate",
-        enableHiding: false,
+        enableHiding: true,
         header: "Start Date",
         size: 50,
       },
       {
         accessorKey: "endDate",
-        enableHiding: false,
+        enableHiding: true,
         header: "End Date",
         size: 50,
       },
       {
         accessorKey: "days",
-        enableHiding: false,
+        enableHiding: true,
         header: "Days",
         size: 50,
       },

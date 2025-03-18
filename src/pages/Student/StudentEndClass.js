@@ -30,7 +30,7 @@ const StudentEndClass = ({ selectedCenter }) => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -38,7 +38,7 @@ const StudentEndClass = ({ selectedCenter }) => {
       },
       {
         accessorKey: "status",
-        enableHiding: false,
+        enableHiding: true,
         header: "Status",
         size: 50,
         Cell: ({ row }) =>
@@ -52,43 +52,43 @@ const StudentEndClass = ({ selectedCenter }) => {
       },
       {
         accessorKey: "centerName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Centre Name",
       },
       {
         accessorKey: "studentUniqueId",
         header: "Student ID",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
       {
         accessorKey: "studentName",
-        enableHiding: false,
+        enableHiding: true,
         header: "Student Name",
       },
       {
         accessorKey: "course",
         header: "Course",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
-      { accessorKey: "month", header: "Month", enableHiding: false, size: 40 },
+      { accessorKey: "month", header: "Month", enableHiding: true, size: 40 },
       {
         accessorKey: "className",
         header: "Class Listing",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
       {
         accessorKey: "classDate",
         header: "Class Date",
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
       },
       {
         accessorKey: "classCode",
         header: "Class Code",
-        enableHiding: false,
+        enableHiding: true,
         size: 50,
       },
       { accessorKey: "createdBy", header: "Created By" },
@@ -136,9 +136,9 @@ const StudentEndClass = ({ selectedCenter }) => {
         }
       }
 
-    //   const response = await api.get(
-    //     `/getReplacementWithCustomInfo?${queryParams.toString()}`
-    //   );
+      //   const response = await api.get(
+      //     `/getReplacementWithCustomInfo?${queryParams.toString()}`
+      //   );
       const response = await api.get(`/getAllStudentEndClass`);
 
       setData(response.data);
@@ -307,9 +307,7 @@ const StudentEndClass = ({ selectedCenter }) => {
         >
           <span className="text-muted">
             This database shows the list of{" "}
-            <strong style={{ color: "#287f71" }}>
-              End Class List
-            </strong>
+            <strong style={{ color: "#287f71" }}>End Class List</strong>
           </span>
         </div>
         <div className="mb-3 d-flex justify-content-between">
@@ -339,7 +337,7 @@ const StudentEndClass = ({ selectedCenter }) => {
                 onChange={handleFilterChange}
                 value={filters.courseId}
               >
-                 <option value="">Select a Course</option>
+                <option value="">Select a Course</option>
                 {selectedCenter === "0"
                   ? courseListData &&
                     courseListData.map((course) => (
