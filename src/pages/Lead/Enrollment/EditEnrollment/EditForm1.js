@@ -30,7 +30,10 @@ const validationSchema = Yup.object().shape({
 });
 
 const EditForm1 = forwardRef(
-  ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
+  (
+    { formData, setFormData, handleNext, setLoadIndicators, selectedCenter },
+    ref
+  ) => {
     const [subjectData, setSubjectData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [centerData, setCenterData] = useState(null);
@@ -105,10 +108,8 @@ const EditForm1 = forwardRef(
       try {
         const subjectData = await fetchAllSubjectsWithIds();
         const raceData = await fetchAllRaceWithIds();
-        const centerData = await fetchAllCentersWithIds();
         setRaceData(raceData);
         setSubjectData(subjectData);
-        setCenterData(centerData);
       } catch (error) {
         toast.error(error);
       }
@@ -117,6 +118,21 @@ const EditForm1 = forwardRef(
     useEffect(() => {
       fetchData();
     }, []);
+
+    const fetchCenterData = async () => {
+      try {
+        const response = await fetchAllCentersWithIds();
+        if (Array.isArray(response)) {
+          setCenterData(response);
+        } else {
+          console.error("Invalid data format:", response);
+          setCenterData([]);
+        }
+      } catch (error) {
+        toast.error("Failed to fetch center data");
+        console.error(error);
+      }
+    };
 
     useEffect(() => {
       const getData = async () => {
@@ -133,6 +149,15 @@ const EditForm1 = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+      fetchCenterData();
+      if (selectedCenter === 0) {
+        formik.setFieldValue("centerId", "");
+      } else {
+        formik.setFieldValue("centerId", selectedCenter); // Set to empty string when selectedCenter is 0
+      }
+    }, [selectedCenter]);
+
     useImperativeHandle(ref, () => ({
       editForm1: formik.handleSubmit,
     }));
@@ -142,6 +167,34 @@ const EditForm1 = forwardRef(
         <div className="container py-4">
           <h5 className="headColor mb-5">Student Information</h5>
           <div className="row">
+            <div className="col-md-6 col-12 d-none">
+              <div className="mb-3">
+                <label for="exampleFormControlInput1" className="form-label">
+                  Centre
+                </label>
+                <select
+                  className="form-select"
+                  name="centerId"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.centerId}
+                  disabled
+                >
+                  <option value={""}></option>
+                  {centerData &&
+                    centerData.map((centerId) => (
+                      <option key={centerId.id} value={centerId.id}>
+                        {centerId.centerNames}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.centerId && formik.errors.centerId && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.centerId}</small>
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="col-md-6 col-12">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
@@ -405,74 +458,6 @@ const EditForm1 = forwardRef(
                 )}
               </div>
             </div>
-            <div className="col-md-6 col-12 ">
-              <lable className="">
-                Centre<span className="text-danger">*</span>
-              </lable>
-              <select
-                className="form-select"
-                name="centerId"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.centerId}
-              >
-                <option selected></option>
-                {centerData &&
-                  centerData.map((centerId) => (
-                    <option key={centerId.id} value={centerId.id}>
-                      {centerId.centerNames}
-                    </option>
-                  ))}
-              </select>
-              {formik.touched.centerId && formik.errors.centerId && (
-                <div className="error text-danger">
-                  <small>{formik.errors.centerId}</small>
-                </div>
-              )}
-            </div>
-            {/* <div className="col-md-6 col-12 ">
-            <div className="mb-3">
-              <label for="exampleFormControlInput1" className="form-label">
-                Name Of Children In Total
-                <span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                name="nameOfChildrenInTotal"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.nameOfChildrenInTotal}
-              />
-              {formik.touched.nameOfChildrenInTotal &&
-                formik.errors.nameOfChildrenInTotal && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.nameOfChildrenInTotal}</small>
-                  </div>
-                )}
-            </div>
-          </div> */}
-            {/* <div className="col-md-6 col-12 ">
-            <div className="mb-3">
-              <label for="exampleFormControlInput1" className="form-label">
-                Father's Full Name<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                name="fathersFullName"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.fathersFullName}
-              />
-              {formik.touched.fathersFullName &&
-                formik.errors.fathersFullName && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.fathersFullName}</small>
-                  </div>
-                )}
-            </div>
-          </div> */}
           </div>
         </div>
       </form>

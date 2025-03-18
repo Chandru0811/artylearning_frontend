@@ -19,6 +19,7 @@ function AddMore({
   const [show, setShow] = useState(false);
   const [lessonData, setLessonData] = useState([]);
   console.log("FeedBack Data:", feedbackData);
+  console.log("batchTime Data:", batchTime);
 
   const validationSchema = Yup.object().shape({
     items: Yup.array().of(

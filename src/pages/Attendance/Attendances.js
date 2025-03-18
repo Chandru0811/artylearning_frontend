@@ -501,7 +501,7 @@ function Attendances({selectedCenter}) {
                               courseId={attendanceItem.courseId}
                               userId={attendanceItem.userId}
                               attendanceDate={selectedDate}
-                              batchTime={selectedBatch}
+                              batchTime={attendanceItem.batchTime}
                               feedbackData={attendanceItem.feedbacks}
                             />
                           </div>

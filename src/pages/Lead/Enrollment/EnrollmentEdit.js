@@ -15,7 +15,7 @@ import { OverlayTrigger } from "react-bootstrap";
 const steps = [{ tooltip: "Student Information" }, { tooltip: "Child Ability" },{ tooltip: "Parent Information" },{ tooltip: "Address" },{ tooltip: "Account Information" },{ tooltip: "Permission for Medias Posting" }];
 
 
-export default function EnrollmentEdit() {
+export default function EnrollmentEdit({selectedCenter}) {
   const { id } = useParams();
 
   const [activeStep, setActiveStep] = useState(0);
@@ -119,6 +119,7 @@ export default function EnrollmentEdit() {
               setFormData={setFormData}
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
+              selectedCenter={selectedCenter}
             />
           )}
           {activeStep === 1 && (

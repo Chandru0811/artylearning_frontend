@@ -22,40 +22,33 @@ const validationSchema = Yup.object().shape({
       new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
       "*Date of Birth must be at least 1 year ago"
     ),
-  // medicalCondition: Yup.string().required("*Medical Condition is required"),
-  // ethnicGroup: Yup.string().required("*Ethnic group is required"),
   schoolType: Yup.string().required("*School type is required"),
-  // nameOfSchool: Yup.string().required("*School Name is required"),
   centerId: Yup.string().required("*Centre is required"),
-  // nameOfChildrenInTotal: Yup.number()
-  //   .typeError("*Enter a valid number")
-  //   .required("*Name of Children is required"),
-  // fathersFullName: Yup.string().required("*Father Name is required"),
-  // leadStatus: Yup.string().required("*Status is required"),
 });
 
 const Form1 = forwardRef(
-  ({ formData, setFormData, handleNext, setLoadIndicators ,selectedCenter}, ref) => {
+  (
+    { formData, setFormData, handleNext, setLoadIndicators, selectedCenter },
+    ref
+  ) => {
     const [subjectData, setSubjectData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [centerData, setCenterData] = useState(null);
-    console.log("SSSCCC selectedCenter ", selectedCenter);
     const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
       initialValues: {
         studentName: formData.studentName || "",
-        subjectId: formData.subjectId,
+        subjectId: formData.subjectId || "",
         gender: formData.gender || "",
         dateOfBirth: formData.dateOfBirth || "",
         medicalCondition: formData.medicalCondition || "",
         ethnicGroup: formData.ethnicGroup || "",
         schoolType: formData.schoolType || "",
         nameOfSchool: formData.nameOfSchool || "",
-        centerId: formData.centerId || "",
-        // nameOfChildrenInTotal: formData.nameOfChildrenInTotal || "",
+        centerId: formData.centerId || (selectedCenter === 0 ? "" : selectedCenter), // Set centerId based on selectedCenter
         fathersFullName: formData.fathersFullName || "",
-        leadStatus: "NEW_WAITLIST" || "",
+        leadStatus: "NEW_WAITLIST",
         referby: "",
         createdBy: userName,
       },
@@ -63,20 +56,22 @@ const Form1 = forwardRef(
       onSubmit: async (data) => {
         setLoadIndicators(true);
         data.createdBy = userName;
+    
+        // Validate centerId when selectedCenter is 0
+        if (selectedCenter === 0 && (!data.centerId || data.centerId === "")) {
+          toast.error("Please select a center");
+          setLoadIndicators(false);
+          return; // Exit early if center is not selected
+        }
+    
         try {
-          // console.log("Before API Call - formData:", formData);
-
           let response;
           if (formData.lead_id !== null) {
-            response = await api.put(
-              `/updateLeadInfo/${formData.lead_id}`,
-              data,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
+            response = await api.put(`/updateLeadInfo/${formData.lead_id}`, data, {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
           } else {
             response = await api.post("/createLeadInfo", data, {
               headers: {
@@ -84,36 +79,28 @@ const Form1 = forwardRef(
               },
             });
           }
-
+    
           if (response.status === 200 || response.status === 201) {
             const lead_id = response.data.id;
             console.log("New lead_id:", lead_id);
             toast.success(response.data.message);
-
             setFormData((prev) => ({
               ...prev,
               ...data,
               lead_id,
             }));
-
-            // console.log("Updated formData:", {
-            //   ...formData,
-            //   ...data,
-            //   lead_id,
-            // });
-
             handleNext();
           } else {
-            toast.error(response.data.message);
+            toast.error(response.data.message || "Failed to save data");
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message || "An error occurred");
         } finally {
           setLoadIndicators(false);
         }
       },
-      validateOnChange: false, // Enable validation on change
-      validateOnBlur: true, // Enable validation on blur
+      validateOnChange: false,
+      validateOnBlur: true,
     });
 
     // Function to scroll to the first error field
@@ -133,21 +120,20 @@ const Form1 = forwardRef(
       }
     }, [formik.submitCount, formik.errors]);
 
-      const fetchCenterData = async () => {
-        try {
-          const response = await fetchAllCentersWithIds();
-          if (Array.isArray(response)) {
-            setCenterData(response);
-            formik.setFieldValue("centerId", selectedCenter);
-          } else {
-            console.error("Invalid data format:", response);
-            setCenterData([]);
-          }
-        } catch (error) {
-          toast.error("Failed to fetch center data");
-          console.error(error);
+    const fetchCenterData = async () => {
+      try {
+        const response = await fetchAllCentersWithIds();
+        if (Array.isArray(response)) {
+          setCenterData(response);
+        } else {
+          console.error("Invalid data format:", response);
+          setCenterData([]);
         }
-      };
+      } catch (error) {
+        toast.error("Failed to fetch center data");
+        console.error(error);
+      }
+    };
 
     const fetchData = async () => {
       try {
@@ -164,12 +150,14 @@ const Form1 = forwardRef(
       fetchData();
     }, []);
 
-      useEffect(() => {
-        fetchCenterData();
-        if (selectedCenter !==0) {
-          formik.setFieldValue("centerId", selectedCenter);
-        }
-      }, [selectedCenter]);
+    useEffect(() => {
+      fetchCenterData();
+      if (selectedCenter === 0) {
+        formik.setFieldValue("centerId", "");
+      } else {
+        formik.setFieldValue("centerId", selectedCenter); // Set to empty string when selectedCenter is 0
+      }
+    }, [selectedCenter]);
 
     useImperativeHandle(ref, () => ({
       form1: formik.handleSubmit,
@@ -180,6 +168,34 @@ const Form1 = forwardRef(
         <div className="container py-4">
           <h5 className="headColor mb-5">Student Information</h5>
           <div className="row">
+            <div className="col-md-6 col-12 d-none">
+              <div className="mb-3">
+                <label for="exampleFormControlInput1" className="form-label">
+                  Centre
+                </label>
+                <select
+                  className="form-select"
+                  name="centerId"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.centerId}
+                  disabled
+                >
+                  <option value={""}></option>
+                  {centerData &&
+                    centerData.map((centerId) => (
+                      <option key={centerId.id} value={centerId.id}>
+                        {centerId.centerNames}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.centerId && formik.errors.centerId && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.centerId}</small>
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="col-md-6 col-12">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
@@ -314,37 +330,11 @@ const Form1 = forwardRef(
                 </div>
               </div>
             </div>
-            {/* <div className="col-md-6 col-12">
-              <div className="mb-3">
-                <div>
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Refer By
-                  </label>
-                </div>
-                <div className="">
-                  <input
-                    type="text"
-                    name="referby"
-                    className="form-control"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.referby}
-                  />
-                  {formik.touched.referby &&
-                    formik.errors.referby && (
-                      <div className="error text-danger ">
-                        <small>{formik.errors.referby}</small>
-                      </div>
-                    )}
-                </div>
-              </div>
-            </div> */}
             <div className="col-md-6 col-12 ">
               <div className="mb-3">
                 <div>
                   <label for="exampleFormControlInpu t1" className="form-label">
                     Ethnic Group
-                    {/* <span className="text-danger">*</span> */}
                   </label>
                 </div>
                 <select
@@ -444,33 +434,6 @@ const Form1 = forwardRef(
                 {formik.touched.nameOfSchool && formik.errors.nameOfSchool && (
                   <div className="error text-danger ">
                     <small>{formik.errors.nameOfSchool}</small>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="col-md-6 col-12 ">
-              <div className="mb-3">
-                <label for="exampleFormControlInput1" className="form-label">
-                  Centre
-                </label>
-                <select
-                  className="form-select"
-                  name="centerId"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.centerId}
-                >
-                  <option selected value=""></option>
-                  {centerData &&
-                    centerData.map((centerId) => (
-                      <option key={centerId.id} value={centerId.id}>
-                        {centerId.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="error text-danger">
-                    <small>{formik.errors.centerId}</small>
                   </div>
                 )}
               </div>

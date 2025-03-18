@@ -340,27 +340,24 @@ const AddStudentDetails = forwardRef(
                         </div>
                       )}
                     </div>
-                    <div className="text-start mt-4">
-                      <label className=" fw-medium">
-                        <small>
-                          Student Chinese Name (put N/A if not applicable)
-                          <span className="text-danger">*</span>
-                        </small>
-                        &nbsp;
+                    <div className="text-start mt-2">
+                      <label htmlFor="" className="mb-1 fw-medium">
+                        <small>Student Name / as per ID</small>
+                        <span className="text-danger">*</span>
                       </label>
                       <br />
                       <input
-                        className="form-control "
-                        type="text"
-                        name="studentChineseName"
+                        name="studentName"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.studentChineseName}
+                        value={formik.values.studentName}
+                        className="form-control "
+                        type="text"
                       />
-                      {formik.touched.studentChineseName &&
-                        formik.errors.studentChineseName && (
+                      {formik.touched.studentName &&
+                        formik.errors.studentName && (
                           <div className="text-danger">
-                            <small>{formik.errors.studentChineseName}</small>
+                            <small>{formik.errors.studentName}</small>
                           </div>
                         )}
                     </div>
@@ -553,24 +550,27 @@ const AddStudentDetails = forwardRef(
                     </div>
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 px-5">
-                    <div className="text-start mt-2">
-                      <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Student Name / as per ID</small>
-                        <span className="text-danger">*</span>
+                    <div className="text-start mt-4">
+                      <label className=" fw-medium">
+                        <small>
+                          Student Chinese Name (put N/A if not applicable)
+                          <span className="text-danger">*</span>
+                        </small>
+                        &nbsp;
                       </label>
                       <br />
                       <input
-                        name="studentName"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.studentName}
                         className="form-control "
                         type="text"
+                        name="studentChineseName"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.studentChineseName}
                       />
-                      {formik.touched.studentName &&
-                        formik.errors.studentName && (
+                      {formik.touched.studentChineseName &&
+                        formik.errors.studentChineseName && (
                           <div className="text-danger">
-                            <small>{formik.errors.studentName}</small>
+                            <small>{formik.errors.studentChineseName}</small>
                           </div>
                         )}
                     </div>
