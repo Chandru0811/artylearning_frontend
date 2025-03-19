@@ -52,6 +52,7 @@ const EditStudentDetails = forwardRef(
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem("userName");
+    const [referByParent, setReferByParent] = useState([]);
 
     const fetchData = async () => {
       try {
@@ -200,6 +201,15 @@ const EditStudentDetails = forwardRef(
       }
     }, [formik.values.dateOfBirth]);
 
+    const handleChangeStudent = async (event) => {
+      const studentId = event.target.value;
+      formik.setFieldValue("referByStudent", studentId);
+      const response = await api.get(`/getStudentPrimaryContact/${studentId}`);
+      setReferByParent(response.data);
+      if (response.data.length > 0) {
+        formik.setFieldValue("referByParent", response.data[0].parentId);
+      }
+    };
     useImperativeHandle(ref, () => ({
       Editstudentdetails: formik.handleSubmit,
     }));
@@ -217,398 +227,350 @@ const EditStudentDetails = forwardRef(
           <div className=" border-0 mb-5">
             <div className="mb-3">
               <p className="headColor">Student Details</p>
-              <div className="container-fluid">
+              <div className="container">
                 <div className="row mt-3">
-                  <div className="col-lg-6 col-md-6 col-12">
-                    <div className="text-start mt-2">
-                      <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Centre</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <select
-                        name="centerId"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.centerId}
-                        className="form-select"
-                      >
-                        <option selected></option>
-                        {centerData &&
-                          centerData.map((centerId) => (
-                            <option key={centerId.id} value={centerId.id}>
-                              {centerId.centerNames}
-                            </option>
-                          ))}
-                      </select>
-                      {formik.touched.centerId && formik.errors.centerId && (
-                        <div className="text-danger">
-                          <small>{formik.errors.centerId}</small>
-                        </div>
-                      )}
-                    </div>
-                    <div className="text-start mt-4">
-                      <label className=" fw-medium">
-                        <small>
-                          Student Chinese Name (put N/A if not applicable)
-                          <span className="text-danger">*</span>
-                        </small>
-                        &nbsp;
-                      </label>
-                      <br />
-                      <input
-                        className="form-control "
-                        type="text"
-                        name="studentChineseName"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.studentChineseName}
-                      />
-                      {formik.touched.studentChineseName &&
-                        formik.errors.studentChineseName && (
-                          <div className="text-danger">
-                            <small>{formik.errors.studentChineseName}</small>
-                          </div>
-                        )}
-                    </div>
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Date Of Birth</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <input
-                        className="form-control  form-contorl-sm"
-                        name="dateOfBirth"
-                        type="date"
-                        // onFocus={(e) => e.target.showPicker()}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.dateOfBirth}
-                      />
-                      {formik.touched.dateOfBirth &&
-                        formik.errors.dateOfBirth && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.dateOfBirth}</small>
-                          </div>
-                        )}
-                    </div>
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Gender</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <div className="mt-1">
-                        <input
-                          className="form-check-input mx-2"
-                          type="radio"
-                          name="gender"
-                          value="Male"
-                          checked={formik.values.gender === "Male"}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        <span style={{ color: "gray" }}>Male</span> &nbsp;&nbsp;
-                        <input
-                          className="form-check-input mx-2"
-                          type="radio"
-                          name="gender"
-                          value="Female"
-                          checked={formik.values.gender === "Female"}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        <span style={{ color: "gray" }}>Female</span>
+                  <div className=" col-lg-6 col-md-6 col-12 d-none">
+                    <label htmlFor="" className="mb-1 fw-medium">
+                      <small>Centre</small>
+                      <span className="text-danger">*</span>
+                    </label>
+                    <br />
+                    <select
+                      name="centerId"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.centerId}
+                      className="form-select"
+                    >
+                      <option value="0">Selected Centre</option>
+                      {centerData &&
+                        centerData.map((centerId) => (
+                          <option key={centerId.id} value={centerId.id}>
+                            {centerId.centerNames}
+                          </option>
+                        ))}
+                    </select>
+                    {formik.touched.centerId && formik.errors.centerId && (
+                      <div className="text-danger">
+                        <small>{formik.errors.centerId}</small>
                       </div>
-                      {formik.touched.gender && formik.errors.gender && (
-                        <div className="error text-danger">
-                          <small>{formik.errors.gender}</small>
-                        </div>
-                      )}
-                    </div>
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className="fw-medium">
-                        <small>School Type</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <div className="mt-1">
-                        <input
-                          className="form-check-input mx-2"
-                          type="radio"
-                          name="schoolType"
-                          value="CHILDCARE"
-                          checked={formik.values.schoolType === "CHILDCARE"}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        <span style={{ color: "gray" }}>Childcare</span>{" "}
-                        &nbsp;&nbsp;
-                        <input
-                          className="form-check-input mx-2"
-                          type="radio"
-                          name="schoolType"
-                          value="KINDERGARTEN"
-                          checked={formik.values.schoolType === "KINDERGARTEN"}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        <span style={{ color: "gray" }}>Kindergarten</span>{" "}
-                        &nbsp;&nbsp;
-                        <input
-                          className="form-check-input mx-2"
-                          type="radio"
-                          name="schoolType"
-                          value="OTHERS"
-                          checked={formik.values.schoolType === "OTHERS"}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        <span style={{ color: "gray" }}>Others</span>
-                      </div>
-                      {formik.touched.schoolType &&
-                        formik.errors.schoolType && (
-                          <div className="error text-danger">
-                            <small>{formik.errors.schoolType}</small>
-                          </div>
-                        )}
-                    </div>
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Pre-Assessment Result</small>
-                      </label>
-                      <br />
-                      <input
-                        className="form-control "
-                        type="text"
-                        name="preAssessmentResult"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.preAssessmentResult}
-                        readOnly
-                      />
-                      {formik.touched.preAssessmentResult &&
-                        formik.errors.preAssessmentResult && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.preAssessmentResult}</small>
-                          </div>
-                        )}
-                    </div>
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Nationality</small>
-                      </label>
-                      <br />
-                      <select
-                        name="nationality"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.nationality}
-                        className="form-select"
-                      >
-                        <option selected></option>
-                        {nationalityData &&
-                          nationalityData.map((nationalityId) => (
-                            <option
-                              key={nationalityId.id}
-                              value={nationalityId.nationality}
-                            >
-                              {nationalityId.nationality}
-                            </option>
-                          ))}
-                      </select>
-                      {formik.touched.nationality &&
-                        formik.errors.nationality && (
-                          <div className="error text-danger">
-                            <small>{formik.errors.nationality}</small>
-                          </div>
-                        )}
-                    </div>
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Refered By Parents</small>
-                        {/* <span className="text-danger">*</span> */}
-                      </label>
-                      <br />
-                      <input
-                        name="referByParent"
-                        className="form-control"
-                        type="text"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.referByParent}
-                      />
-                      {formik.touched.referByParent &&
-                        formik.errors.referByParent && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.referByParent}</small>
-                          </div>
-                        )}
-                    </div>
+                    )}
                   </div>
-                  <div className="col-lg-6 col-md-6 col-12 px-5">
-                    <div className="text-start mt-2">
-                      <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Student Name / as per ID</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <input
-                        name="studentName"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.studentName}
-                        className="form-control "
-                        type="text"
-                      />
-                      {formik.touched.studentName &&
-                        formik.errors.studentName && (
-                          <div className="text-danger">
-                            <small>{formik.errors.studentName}</small>
-                          </div>
-                        )}
-                    </div>
-                    {/* <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Profile Image</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <input
-                        type="file"
-                        name="profileImage"
-                        className="form-control"
-                        onChange={(event) => {
-                          formik.setFieldValue(
-                            "profileImage",
-                            event.target.files[0]
-                          );
-                        }}
-                        onBlur={formik.handleBlur}
-                      />
-                    </div> */}
-
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Medical Condition</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <input
-                        className="form-control "
-                        type="text"
-                        name="medicalCondition"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.medicalCondition}
-                      />
-                      {formik.touched.medicalCondition &&
-                        formik.errors.medicalCondition && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.medicalCondition}</small>
-                          </div>
-                        )}
-                    </div>
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Age</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <input
-                        className="form-control "
-                        type="text"
-                        name="age"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.age}
-                        readOnly
-                      />
-                      {formik.touched.age && formik.errors.age && (
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label htmlFor="" className="mb-1 fw-medium">
+                      <small>Student Name / as per ID</small>
+                      <span className="text-danger">*</span>
+                    </label>
+                    <br />
+                    <input
+                      name="studentName"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.studentName}
+                      className="form-control "
+                      type="text"
+                    />
+                    {formik.touched.studentName &&
+                      formik.errors.studentName && (
                         <div className="text-danger">
-                          <small>{formik.errors.age}</small>
+                          <small>{formik.errors.studentName}</small>
                         </div>
                       )}
-                    </div>
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className="mb-1 fw-medium">
-                        <small>School Name</small>
+                  </div>
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label className=" fw-medium">
+                      <small>
+                        Student Chinese Name (put N/A if not applicable)
                         <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <input
-                        name="schoolName"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.schoolName}
-                        className="form-control "
-                        type="text"
-                      />
-                      {formik.touched.schoolName &&
-                        formik.errors.schoolName && (
-                          <div className="text-danger">
-                            <small>{formik.errors.schoolName}</small>
-                          </div>
-                        )}
-                    </div>
-                    <div className="text-start mt-3">
-                      <label className="mb-1 fw-medium">
-                        <small>Race</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <select
-                        name="race"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.race}
-                        className="form-select"
-                      >
-                        {raceData &&
-                          raceData.map((raceId) => (
-                            <option key={raceId.id} value={raceId.race}>
-                              {raceId.race}
-                            </option>
-                          ))}
-                      </select>
-                      {formik.touched.race && formik.errors.race && (
+                      </small>
+                      &nbsp;
+                    </label>
+                    <br />
+                    <input
+                      className="form-control "
+                      type="text"
+                      name="studentChineseName"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.studentChineseName}
+                    />
+                    {formik.touched.studentChineseName &&
+                      formik.errors.studentChineseName && (
+                        <div className="text-danger">
+                          <small>{formik.errors.studentChineseName}</small>
+                        </div>
+                      )}
+                  </div>
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label htmlFor="" className="mb-1 fw-medium">
+                      <small>Date Of Birth</small>
+                      <span className="text-danger">*</span>
+                    </label>
+                    <br />
+                    <input
+                      className="form-control  form-contorl-sm"
+                      name="dateOfBirth"
+                      type="date"
+                      // onFocus={(e) => e.target.showPicker()}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.dateOfBirth}
+                      // max={maxDate.toISOString().split("T")[0]}
+                    />
+                    {formik.touched.dateOfBirth &&
+                      formik.errors.dateOfBirth && (
                         <div className="error text-danger ">
-                          <small>{formik.errors.race}</small>
+                          <small>{formik.errors.dateOfBirth}</small>
                         </div>
                       )}
-                    </div>
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Primary Language Spoken</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <select
-                        name="primaryLanguage"
+                  </div>
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label htmlFor="" className=" fw-medium">
+                      <small>Age</small>
+                      <span className="text-danger">*</span>
+                    </label>
+                    <br />
+                    <input
+                      className="form-control "
+                      type="text"
+                      name="age"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.age}
+                      readOnly
+                    />
+                    {formik.touched.age && formik.errors.age && (
+                      <div className="text-danger">
+                        <small>{formik.errors.age}</small>
+                      </div>
+                    )}
+                  </div>
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label htmlFor="" className="mb-1 fw-medium">
+                      <small>Gender</small>
+                      <span className="text-danger">*</span>
+                    </label>
+                    <br />
+                    <div className="mt-1">
+                      <input
+                        className="form-check-input mx-2"
+                        type="radio"
+                        name="gender"
+                        value="Male"
+                        checked={formik.values.gender === "Male"}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.primaryLanguage}
-                        className="form-select"
-                      >
-                        <option selected></option>
-                        <option value="CHINESE">Chinese</option>
-                        <option value="ENGLISH">English</option>
-                      </select>
-                      {formik.touched.primaryLanguage &&
-                        formik.errors.primaryLanguage && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.primaryLanguage}</small>
-                          </div>
-                        )}
-                    </div>
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Refer By Student</small>
-                        {/* <span className="text-danger">*</span> */}
-                      </label>
-                      <br />
+                      />
+                      <span style={{ color: "gray" }}>Male</span> &nbsp;&nbsp;
                       <input
+                        className="form-check-input mx-2"
+                        type="radio"
+                        name="gender"
+                        value="Female"
+                        checked={formik.values.gender === "Female"}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      <span style={{ color: "gray" }}>Female</span>
+                    </div>
+                    {formik.touched.gender && formik.errors.gender && (
+                      <div className="error text-danger">
+                        <small>{formik.errors.gender}</small>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label htmlFor="" className="fw-medium">
+                      <small>School Type</small>
+                      <span className="text-danger">*</span>
+                    </label>
+                    <br />
+                    <div className="mt-1">
+                      <input
+                        className="form-check-input mx-2"
+                        type="radio"
+                        name="schoolType"
+                        value="CHILDCARE"
+                        checked={formik.values.schoolType === "CHILDCARE"}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      <span style={{ color: "gray" }}>Childcare</span>{" "}
+                      &nbsp;&nbsp;
+                      <input
+                        className="form-check-input mx-2"
+                        type="radio"
+                        name="schoolType"
+                        value="KINDERGARTEN"
+                        checked={formik.values.schoolType === "KINDERGARTEN"}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      <span style={{ color: "gray" }}>Kindergarten</span>{" "}
+                      &nbsp;&nbsp;
+                      <input
+                        className="form-check-input mx-2"
+                        type="radio"
+                        name="schoolType"
+                        value="OTHERS"
+                        checked={formik.values.schoolType === "OTHERS"}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      <span style={{ color: "gray" }}>Others</span>
+                    </div>
+                    {formik.touched.schoolType && formik.errors.schoolType && (
+                      <div className="error text-danger">
+                        <small>{formik.errors.schoolType}</small>
+                      </div>
+                    )}
+                  </div>
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label htmlFor="" className=" fw-medium">
+                      <small>Medical Condition</small>
+                      <span className="text-danger">*</span>
+                    </label>
+                    <br />
+                    <input
+                      className="form-control "
+                      type="text"
+                      name="medicalCondition"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.medicalCondition}
+                    />
+                    {formik.touched.medicalCondition &&
+                      formik.errors.medicalCondition && (
+                        <div className="error text-danger ">
+                          <small>{formik.errors.medicalCondition}</small>
+                        </div>
+                      )}
+                  </div>
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label htmlFor="" className=" fw-medium">
+                      <small>Pre-Assessment Result</small>
+                    </label>
+                    <br />
+                    <input
+                      className="form-control "
+                      type="text"
+                      name="preAssessmentResult"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.preAssessmentResult}
+                      readOnly
+                    />
+                  </div>
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label htmlFor="" className="mb-1 fw-medium">
+                      <small>School Name</small>
+                      <span className="text-danger">*</span>
+                    </label>
+                    <br />
+                    <input
+                      name="schoolName"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.schoolName}
+                      className="form-control "
+                      type="text"
+                    />
+                    {formik.touched.schoolName && formik.errors.schoolName && (
+                      <div className="text-danger">
+                        <small>{formik.errors.schoolName}</small>
+                      </div>
+                    )}
+                  </div>
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label htmlFor="" className="mb-1 fw-medium">
+                      <small>Nationality</small>
+                      {/* <span className="text-danger">*</span> */}
+                    </label>
+                    <br />
+                    <select
+                      name="nationality"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.nationality}
+                      className="form-select"
+                    >
+                      <option selected></option>
+                      {nationalityData &&
+                        nationalityData.map((nationalityId) => (
+                          <option
+                            key={nationalityId.id}
+                            value={nationalityId.nationality}
+                          >
+                            {nationalityId.nationality}
+                          </option>
+                        ))}
+                    </select>
+                    {formik.touched.nationality &&
+                      formik.errors.nationality && (
+                        <div className="error text-danger ">
+                          <small>{formik.errors.nationality}</small>
+                        </div>
+                      )}
+                  </div>
+                  <div className=" col-lg-6 col-md-6 col-12 mt-3">
+                    <label className="mb-1 fw-medium">
+                      <small>Race</small>
+                      <span className="text-danger">*</span>
+                    </label>
+                    <br />
+                    <select
+                      name="race"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.race}
+                      className="form-select"
+                    >
+                      <option selected></option>
+                      {raceData &&
+                        raceData.map((raceId) => (
+                          <option key={raceId.id} value={raceId.race}>
+                            {raceId.race}
+                          </option>
+                        ))}
+                    </select>
+                    {formik.touched.race && formik.errors.race && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.race}</small>
+                      </div>
+                    )}
+                  </div>
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label htmlFor="" className=" fw-medium">
+                      <small>Primary Language Spoken</small>
+                      <span className="text-danger">*</span>
+                    </label>
+                    <br />
+                    <select
+                      name="primaryLanguage"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.primaryLanguage}
+                      className="form-select"
+                    >
+                      <option selected></option>
+                      <option value="CHINESE">Chinese</option>
+                      <option value="ENGLISH">English</option>
+                    </select>
+                    {formik.touched.primaryLanguage &&
+                      formik.errors.primaryLanguage && (
+                        <div className="error text-danger ">
+                          <small>{formik.errors.primaryLanguage}</small>
+                        </div>
+                      )}
+                  </div>
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label htmlFor="" className=" fw-medium">
+                      <small>Refer By Student</small>
+                      {/* <span className="text-danger">*</span> */}
+                    </label>
+                    <br />
+                    {/* <input
                         className="form-control "
                         type="text"
                         name="referByStudent"
@@ -616,32 +578,86 @@ const EditStudentDetails = forwardRef(
                         onBlur={formik.handleBlur}
                         value={formik.values.referByStudent}
                         readOnly
-                      />
-                    </div>
+                      /> */}
+                    <select
+                      name="referByStudent"
+                      onChange={handleChangeStudent}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.referByStudent}
+                      className="form-select"
+                    >
+                      <option selected></option>
+                      {studentData &&
+                        studentData.map((student) => (
+                          <option key={student.id} value={student.id}>
+                            {student.studentNames}
+                          </option>
+                        ))}
+                    </select>
+                    {formik.touched.referByStudent &&
+                      formik.errors.referByStudent && (
+                        <div className="error text-danger ">
+                          <small>{formik.errors.referByStudent}</small>
+                        </div>
+                      )}
                   </div>
-                </div>
-                <div className="text-start mt-4">
-                  <label htmlFor="" className="mb-1 fw-medium">
-                    <small>Remark</small>
-                  </label>
-                  <br />
-                  <textarea
-                    name="remark"
-                    className="form-control "
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.remark}
-                    type="text"
-                    style={{
-                      height: "7rem",
-                    }}
-                    maxLength={200}
-                  />
+                  <div className=" col-lg-6 col-md-6 col-12 mt-4">
+                    <label htmlFor="" className=" fw-medium">
+                      <small>Refered By Parent</small>
+                      {/* <span className="text-danger">*</span> */}
+                    </label>
+                    <br />
+                    <select
+                      name="referByParent"
+                      className="form-control"
+                      type="text"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.referByParent}
+                      disabled
+                    >
+                      {referByParent.length > 0 && (
+                        <option value={referByParent[0].parentId}>
+                          {referByParent[0].parentName}
+                        </option>
+                      )}
+                    </select>
+                    {formik.touched.referByParent &&
+                      formik.errors.referByParent && (
+                        <div className="error text-danger ">
+                          <small>{formik.errors.referByParent}</small>
+                        </div>
+                      )}
+                  </div>
+
+                  <div className="col-12 mt-4">
+                    <label htmlFor="" className="mb-1 fw-medium">
+                      <small>Remark</small>
+                    </label>
+                    <br />
+                    <textarea
+                      name="remark"
+                      className="form-control "
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.remark}
+                      type="text"
+                      style={{
+                        height: "7rem",
+                      }}
+                      maxLength={200}
+                    />
+                    {formik.touched.remark && formik.errors.remark && (
+                      <div className="error text-danger">
+                        <small>{formik.errors.remark}</small>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="mb-5">
                   <div className="row mt-5">
-                    <h6 className="text-start" style={{ color: "#ff7500" }}>
+                    <h6 className="" style={{ color: "#ff7500" }}>
                       Videography/Photography
                     </h6>
                     <div className="col-lg-6 col-sm-12 mt-3 ps-4">
@@ -653,19 +669,14 @@ const EditStudentDetails = forwardRef(
                           </b>
                         </small>
                         <span className="text-danger">*</span>
-                        <div className="text-start mt-2">
+                        <div className=" mt-2">
                           <input
                             className="form-check-input mx-2"
                             type="radio"
                             name="allowMagazine"
-                            value="true" // String value for radio buttons
-                            checked={formik.values.allowMagazine === true} // Compare with boolean
-                            onChange={(e) =>
-                              formik.setFieldValue(
-                                "allowMagazine",
-                                e.target.value === "true"
-                              )
-                            } // Convert string back to boolean
+                            value="yes"
+                            checked={formik.values.allowMagazine === "yes"}
+                            onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                           />
                           &nbsp; Yes &nbsp;&nbsp;&nbsp;
@@ -673,14 +684,9 @@ const EditStudentDetails = forwardRef(
                             className="form-check-input mx-2"
                             type="radio"
                             name="allowMagazine"
-                            value="false" // String value for radio buttons
-                            checked={formik.values.allowMagazine === false} // Compare with boolean
-                            onChange={(e) =>
-                              formik.setFieldValue(
-                                "allowMagazine",
-                                e.target.value === "true"
-                              )
-                            } // Convert string back to boolean
+                            value="No"
+                            checked={formik.values.allowMagazine === "No"}
+                            onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                           />
                           &nbsp; No
@@ -693,26 +699,20 @@ const EditStudentDetails = forwardRef(
                         </div>
                       </label>
                     </div>
-
                     <div className="col-lg-6 col-sm-12 mt-3">
                       <label>
                         <small>
                           <b>Allow display on Social Media</b>
                         </small>
                         <span className="text-danger">*</span>
-                        <div className="text-start mt-2">
+                        <div className=" mt-2">
                           <input
                             className="form-check-input mx-2"
                             type="radio"
                             name="allowSocialMedia"
-                            value="true"
-                            checked={formik.values.allowSocialMedia === true}
-                            onChange={(e) =>
-                              formik.setFieldValue(
-                                "allowSocialMedia",
-                                e.target.value === "true"
-                              )
-                            }
+                            value="yes"
+                            checked={formik.values.allowSocialMedia === "yes"}
+                            onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                           />
                           &nbsp; Yes &nbsp;&nbsp;&nbsp;
@@ -720,14 +720,9 @@ const EditStudentDetails = forwardRef(
                             className="form-check-input mx-2"
                             type="radio"
                             name="allowSocialMedia"
-                            value="false"
-                            checked={formik.values.allowSocialMedia === false}
-                            onChange={(e) =>
-                              formik.setFieldValue(
-                                "allowSocialMedia",
-                                e.target.value === "true"
-                              )
-                            }
+                            value="No"
+                            checked={formik.values.allowSocialMedia === "No"}
+                            onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                           />
                           &nbsp; No

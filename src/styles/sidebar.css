@@ -10,7 +10,7 @@
 
 .sidebar {
   position: fixed;
-  overflow: auto;
+  overflow-y: auto;
   height: 100%;
   width: 280px;
   background: #fff;
@@ -19,7 +19,7 @@
 }
 
 .sidebar.active {
-  width: 60px;
+  width: 75px;
 }
 
 .sidebar .logo-details {
@@ -78,7 +78,7 @@
 }
 
 .sidebar .nav-links li a.active {
-  border-radius: 8px ;
+  border-radius: 8px;
   background: #287f71;
   color: white !important;
 }
@@ -313,8 +313,11 @@ nav .profile-details i {
 
 /* Responsive Media Query */
 @media (max-width: 1240px) {
-  .sidebar {
+  /* .sidebar {
     width: 60px;
+  } */
+  .sidebar .logo-details {
+    width: 50px;
   }
 
   .sidebar.active {
@@ -398,8 +401,11 @@ nav .profile-details i {
     width: 0;
   }
 
-  .sidebar.active {
-    width: 60px;
+  /* .sidebar.active {
+    width: 25%;
+  } */
+  .sidebar .logo-details {
+    width: 50px;
   }
 
   .home-section {
@@ -761,12 +767,12 @@ a:hover {
 .on-off-toggle__input:checked + .on-off-toggle__slider {
   /* background-color: #64e455; */
   background-color: #287f71;
-  
+
   &:before {
     transform: translateX(20px);
     color: white !important;
   }
-  
+
   &:after {
     content: "\2714";
     color: #ffffff !important;

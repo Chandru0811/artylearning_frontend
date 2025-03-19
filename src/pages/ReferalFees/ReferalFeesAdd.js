@@ -32,7 +32,10 @@ function ReferalFeesAdd({ onSuccess }) {
   };
 
   const validationSchema = yup.object().shape({
-    centerId: yup.string().required("*Centre is required"),
+    centerId: yup
+      .array()
+      .min(1, "*At least one center must be selected")
+      .required("*Center selection is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
     referralFee: yup
       .number()
@@ -46,40 +49,46 @@ function ReferalFeesAdd({ onSuccess }) {
       centerId: "",
       effectiveDate: "",
       referralFee: "",
-      status:"ACTIVE",
+      status: "ACTIVE",
       createdBy: createdBy,
     },
     validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-
-      try {
-        const response = await api.post("/createReferralFees", values, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (response.status === 201) {
-          onSuccess();
-          handleClose();
-          toast.success(response.data.message);
-        } else {
-          toast.error(response.data.message);
+      let successCount = 0;
+      const apiCalls = selectedCenters.map(async (center) => {
+        const payload = {
+          breakName: values.breakName,
+          effectiveDate: values.effectiveDate,
+          referralFee: values.referralFee,
+          status: values.status,
+          createdBy: values.createdBy,
+          centerId: center.value,
+        };
+        try {
+          const response = await api.post(`/createReferralFees`, payload, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          if (response.status === 201) {
+            successCount++;
+          }
+        } catch (error) {
+          if (error.response?.status === 409) {
+            toast.warning(`${error?.response?.data?.message}$${center.label}`);
+          } else {
+            toast.error(`${error?.response?.data?.message}$${center.label}`);
+          }
         }
-      } catch (error) {
-        toast.error(error.message);
-      } finally {
+      });
+
+      await Promise.all(apiCalls);
+      if (successCount > 0) {
+        toast.success(`Referal Fee added successfully`);
         setLoadIndicator(false);
-      }
-    },
-    enableReinitialize: true,
-    validateOnChange: true,
-    validateOnBlur: true,
-    validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
-        setIsModified(true);
-      } else {
-        setIsModified(false);
+        onSuccess();
+        handleClose();
       }
     },
   });
@@ -132,29 +141,26 @@ function ReferalFeesAdd({ onSuccess }) {
             <div className="container">
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-4">
-                  <lable className="">
+                  <label className="form-label">
                     Centre<span className="text-danger">*</span>
-                  </lable>
-                  <select
-                    {...formik.getFieldProps("centerId")}
-                    name="centerId"
-                    className={`form-select   ${
-                      formik.touched.centerId && formik.errors.centerId
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    aria-label="Default select example"
-                  >
-                    <option selected></option>
-                    {centerData &&
-                      centerData.map((centerId) => (
-                        <option key={centerId.id} value={centerId.id}>
-                          {centerId.centerNames}
-                        </option>
-                      ))}
-                  </select>
+                  </label>
+                  <MultiSelect
+                    options={centerOptions}
+                    value={centerOptions?.filter((center) =>
+                      formik.values.centerId?.includes(center.value)
+                    )}
+                    onChange={(selected) => {
+                      setSelectedCenters(selected);
+                      formik.setFieldValue(
+                        "centerId",
+                        selected.map((center) => center.value)
+                      );
+                    }}
+                    labelledBy="Select Centers"
+                    className="form-multi-select"
+                  />
                   {formik.touched.centerId && formik.errors.centerId && (
-                    <div className="invalid-feedback">
+                    <div className="text-danger mt-1">
                       {formik.errors.centerId}
                     </div>
                   )}

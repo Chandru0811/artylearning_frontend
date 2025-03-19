@@ -81,7 +81,7 @@ function ChangePassword({ onLogout }) {
           setShowModal(true);
           formik.resetForm();
         }}
-        className="my-3 btn btn-button"
+        className="btn btn-button"
       >
         <LuKeyRound /> Change Password
       </Button>
