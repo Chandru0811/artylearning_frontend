@@ -21,7 +21,10 @@ function Header({ onLogout, handleCenterChange, centerData, selectedCenter }) {
 
   // Condition to hide the select dropdown
   const hideCenterSelect =
-    location.pathname === "/sms/calendar" || location.pathname === "/calendar" || location.pathname === "/sms/timetable" || location.pathname === "/timetable";
+    location.pathname === "/sms/calendar" ||
+    location.pathname === "/calendar" ||
+    location.pathname === "/sms/scheduleReport" ||
+    location.pathname === "/scheduleReport";
 
   return (
     <nav>
@@ -139,12 +142,9 @@ function Header({ onLogout, handleCenterChange, centerData, selectedCenter }) {
                 </button>
               </div>
               <div className="col-md-6 col-12" data-bs-dismiss="offcanvas">
-                {/* <Link to="/changepassword" >
-                  <button className="btn btn-danger mt-3 w-100"  data-bs-dismiss="offcanvas">
-                    Change password
-                  </button>
-                </Link> */}
-                <ChangePassword />
+                <button className="btn btn-button mt-3 w-100">
+                  <ChangePassword />
+                </button>
               </div>
             </div>
           </div>
