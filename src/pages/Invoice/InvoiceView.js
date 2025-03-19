@@ -81,14 +81,16 @@ function InvoiceView() {
       doc.setFont("helvetica", "normal");
       doc.text(
         `Tel No: ${
-          centerData?.find((center) => parseInt(data.centerId) === center.id)?.phone || "--"
+          centerData?.find((center) => parseInt(data.centerId) === center.id)
+            ?.phone || "--"
         }`,
         130,
         35
       );
       doc.text(
         `Email: ${
-          centerData?.find((center) => parseInt(data.centerId) === center.id)?.email || "--"
+          centerData?.find((center) => parseInt(data.centerId) === center.id)
+            ?.email || "--"
         }`,
         130,
         45
@@ -336,13 +338,15 @@ function InvoiceView() {
         </div>
         <div className=" row">
           <div className="col-12 d-flex justify-content-end my-2">
-            <button
-              type="button"
-              className="btn btn-border btn-sm me-1"
-              onClick={VoidInvoice}
-            >
-              Void Invoice
-            </button>
+            {data.invoiceStatus?.trim().toUpperCase() !== "CANCELLED" && (
+              <button
+                type="button"
+                className="btn btn-border btn-sm me-1"
+                onClick={VoidInvoice}
+              >
+                Void Invoice
+              </button>
+            )}
             <SendAndPublish
               data={data}
               id={id}
@@ -386,18 +390,24 @@ function InvoiceView() {
                         : ""
                     )}
                 </h5>
-                <span>Tel No :  {centerData &&
+                <span>
+                  Tel No :{" "}
+                  {centerData &&
                     centerData.map((center) =>
                       parseInt(data.centerId) === center.id
                         ? center.phone || "--"
                         : ""
-                    )}</span>
-                <span>Email &nbsp;:  {centerData &&
+                    )}
+                </span>
+                <span>
+                  Email &nbsp;:{" "}
+                  {centerData &&
                     centerData.map((center) =>
                       parseInt(data.centerId) === center.id
                         ? center.email || "--"
                         : ""
-                    )}</span>
+                    )}
+                </span>
               </div>
               <div className="card-header my-5">
                 <h5>Official Receipt</h5>

@@ -3,9 +3,10 @@ import { toast } from "react-toastify";
 import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 
-function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
+function SendAndPublish({ data, qr, invoiceNotes, uenNumber, id }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [centerData, setcenterData] = useState(null);
+  const [selectedId, setSelectedId] = useState("");
 
   // console.log("QR:" ,qr);
 
@@ -25,6 +26,7 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
       try {
         const centers = await fetchAllCentersWithIds();
         setcenterData(centers);
+        setSelectedId(selectedId);
       } catch (error) {
         toast.error(error.message || "Error fetching data");
       } finally {
@@ -32,7 +34,7 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
       }
     };
     fetchData();
-  }, []);
+  }, [selectedId]);
 
   const sendEmail = async () => {
     const qrCodeUrl = getQRCodeUrl();
@@ -287,19 +289,30 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
         //   //Authorization: `Bearer ${token}`,
         // },
       });
-
       if (response.status === 201) {
-        toast.success(response.data.message);
-        setLoadIndicator(false);
+        // Update status to PENDING regardless of current status
+        const updateResponse = await api.put(
+          `/updateGenerateInvoiceWithInvoiceItems/${id}`,
+          {
+            invoiceStatus: "PENDING",
+          }
+        );
+        if (updateResponse.status === 200) {
+          toast.success(response.data.message);
+        } else {
+          toast.error("Email sent but failed to update invoice status");
+        }
       } else {
         toast.error("Failed to send email");
       }
+
+      setLoadIndicator(false);
     } catch (error) {
-      console.error("Error sending email:", error);
-      toast.error("Error sending email");
+      console.error("Error processing request:", error);
+      toast.error("Error processing request");
+      setLoadIndicator(false);
     }
   };
-
   return (
     <button className="btn btn-border btn-sm me-1" onClick={sendEmail}>
       {loadIndicator && (
