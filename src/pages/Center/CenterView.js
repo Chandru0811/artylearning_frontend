@@ -349,30 +349,7 @@ function CenterView() {
               </table>
             </div>
             {/* Center Break */}
-            <div className="col-md-12 col-12 mt-4">
-              <h5 className="headColor mb-3">Centre Break</h5>
-              <table className="table table-border-solid">
-                <thead>
-                  <tr>
-                    <td className="">S.No</td>
-                    <td className="">Break Name</td>
-                    <td className="">From Date</td>
-                    <td className="">To date</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.centerBreaks &&
-                    data.centerBreaks.map((centerBreak, index) => (
-                      <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td>{centerBreak.breakName}</td>
-                        <td>{centerBreak.fromDate.substring(0, 10)}</td>
-                        <td>{centerBreak.toDate.substring(0, 10)}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+
             {/* class Room  */}
             <div className="col-md-12 col-12 mt-4">
               <h5 className="headColor mb-3">Centre Class Room</h5>
@@ -432,6 +409,30 @@ function CenterView() {
                         <td>{index + 1}</td>
                         <td>{centerPackage.packageName || "--"}</td>
                         <td>{centerPackage.noOfLesson || "--"}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="col-md-12 col-12 mt-4">
+              <h5 className="headColor mb-3">Centre Break</h5>
+              <table className="table table-border-solid">
+                <thead>
+                  <tr>
+                    <td className="">S.No</td>
+                    <td className="">Break Name</td>
+                    <td className="">From Date</td>
+                    <td className="">To date</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.centerBreaks &&
+                    data.centerBreaks.map((centerBreak, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{centerBreak.breakName}</td>
+                        <td>{centerBreak.fromDate.substring(0, 10)}</td>
+                        <td>{centerBreak.toDate.substring(0, 10)}</td>
                       </tr>
                     ))}
                 </tbody>

@@ -32,6 +32,7 @@ function DeductionAdd() {
     initialValues: {
       centerId: "",
       userId: "",
+      employeeName: "",
       deductionName: "",
       deductionMonth: "",
       deductionAmount: "",
@@ -41,31 +42,25 @@ function DeductionAdd() {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       values.createdBy = userName;
-      console.log("Attendance Emp:", values);
-      let selectedCenterName = "";
-      let selectedEmployeeName = "";
+      console.log("Formik Values Before Submission:", values);
 
+      let selectedCenterName = "";
       centerData.forEach((center) => {
         if (parseInt(values.centerId) === center.id) {
           selectedCenterName = center.centerNames || "--";
         }
       });
 
-      userNamesData.forEach((employee) => {
-        if (parseInt(values.userId) === employee.id) {
-          selectedEmployeeName = employee.userNames || "--";
-        }
-      });
-
-      let payload = {
+      const payload = {
         centerId: values.centerId,
         centerName: selectedCenterName,
         userId: values.userId,
-        employeeName: selectedEmployeeName,
+        employeeName: values.employeeName || "--",
         deductionName: values.deductionName,
         deductionMonth: values.deductionMonth,
         deductionAmount: values.deductionAmount,
       };
+      console.log("Payload:", payload);
 
       try {
         const response = await api.post("/createUserDeduction", payload, {
@@ -80,7 +75,7 @@ function DeductionAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message || "An error occurred");
       } finally {
         setLoadIndicator(false);
       }
@@ -91,12 +86,14 @@ function DeductionAdd() {
     setUserNameData(null);
     const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
+    formik.setFieldValue("userId", "");
+    formik.setFieldValue("employeeName", "");
     setEmployeeOptions([]);
 
     try {
       await fetchUserName(centerId);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message || "Failed to fetch employees");
     }
   };
 
@@ -105,7 +102,7 @@ function DeductionAdd() {
       const centers = await fetchAllCentersWithIds();
       setCenterData(centers);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message || "Failed to fetch centers");
     }
   };
 
@@ -118,15 +115,18 @@ function DeductionAdd() {
       const userNames = await fetchUserListWithoutFreelancerByCenterId(
         centerId
       );
-      const formattedEmployee = userNames.map((employee) => ({
-        value: employee.id,
-        label: employee.userNames,
-      }));
+      const formattedEmployee = userNames.map((employee) => {
+        const option = {
+          value: employee.id,
+          label: employee.userNames || "Unknown", // Fallback if userNames is missing
+        };
+        console.log("Formatted Employee Option:", option); // Debug
+        return option;
+      });
       setEmployeeOptions(formattedEmployee);
-
       setUserNameData(formattedEmployee);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message || "Failed to fetch employee names");
     }
   };
 
@@ -145,27 +145,27 @@ function DeductionAdd() {
           <Link to="/" className="custom-breadcrumb">
             Home
           </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
+          <span className="breadcrumb-separator"> </span>
         </li>
         <li>
-          &nbsp;Staffing
-          <span className="breadcrumb-separator"> &gt; </span>
+          Staffing
+          <span className="breadcrumb-separator"> </span>
         </li>
         <li>
           <Link to="/deduction" className="custom-breadcrumb">
-            &nbsp;Deduction
+            Deduction
           </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
+          <span className="breadcrumb-separator"> </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Deduction Add
+          Deduction Add
         </li>
       </ol>
       <form
         onSubmit={formik.handleSubmit}
         onKeyDown={(e) => {
           if (e.key === "Enter" && !formik.isSubmitting) {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault();
           }
         }}
       >
@@ -182,14 +182,13 @@ function DeductionAdd() {
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/deduction">
-                <button type="button " className="btn btn-sm btn-border">
+                <button type="button" className="btn btn-sm btn-border">
                   Back
                 </button>
               </Link>
-              &nbsp;&nbsp;
               <button
                 type="submit"
-                className="btn btn-button btn-sm"
+                className="btn btn-button btn-sm ms-2"
                 disabled={loadIndicator}
               >
                 {loadIndicator && (
@@ -217,7 +216,7 @@ function DeductionAdd() {
                   aria-label="Default select example"
                   onChange={handleCenterChange}
                 >
-                  <option selected disabled></option>
+                  <option value="" disabled></option>
                   {centerData &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>
@@ -237,41 +236,36 @@ function DeductionAdd() {
                 <Select
                   options={employeeOptions}
                   name="userId"
-                  value={employeeOptions.find(
-                    (option) => option.value === formik.values.userId
-                  )}
-                  onChange={(selectedOption) =>
-                    formik.setFieldValue(
-                      "userId",
-                      selectedOption ? selectedOption.value : ""
-                    )
+                  value={
+                    employeeOptions.find(
+                      (option) => option.value === formik.values.userId
+                    ) || null
                   }
+                  onChange={(selectedOption) => {
+                    const userId = selectedOption ? selectedOption.value : "";
+                    const employeeName = selectedOption
+                      ? selectedOption.label
+                      : "";
+                    console.log("Selected Option:", selectedOption); // Debug
+                    console.log(
+                      "Setting userId:",
+                      userId,
+                      "employeeName:",
+                      employeeName
+                    ); // Debug
+                    formik.setFieldValue("userId", userId);
+                    formik.setFieldValue("employeeName", employeeName);
+                  }}
+                  onBlur={formik.handleBlur}
                   placeholder="Select Employee"
                   isSearchable
                   isClearable
-                  className={`${
+                  className={`react-select ${
                     formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("userId")}
                 />
-                {/* <select
-                  {...formik.getFieldProps("userId")}
-                  className={`form-select  ${
-                    formik.touched.userId && formik.errors.userId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option selected disabled></option>
-                  {userNamesData &&
-                    userNamesData.map((userName) => (
-                      <option key={userName.id} value={userName.id}>
-                        {userName.userNames}
-                      </option>
-                    ))}
-                </select> */}
                 {formik.touched.userId && formik.errors.userId && (
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
@@ -288,10 +282,10 @@ function DeductionAdd() {
                   }`}
                   aria-label="Default select example"
                 >
-                  <option></option>
-                  <option>CPF</option>
-                  <option>LOP</option>
-                  <option>LOAN INTEREST</option>
+                  <option value="" disabled></option>
+                  <option value="CPF">CPF</option>
+                  <option value="LOP">LOP</option>
+                  <option value="LOAN INTEREST">LOAN INTEREST</option>
                 </select>
                 {formik.touched.deductionName &&
                   formik.errors.deductionName && (
@@ -342,29 +336,6 @@ function DeductionAdd() {
                     </div>
                   )}
               </div>
-              {/* <div className="col-md-6 col-12">
-                <div className="text-start mb-3">
-                  <label className="form-label">
-                    Total Deduction Amount<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className={`form-control ${
-                      formik.touched.totalDeductionAmount &&
-                      formik.errors.totalDeductionAmount
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("totalDeductionAmount")}
-                  />
-                  {formik.touched.totalDeductionAmount &&
-                    formik.errors.totalDeductionAmount && (
-                      <div className="invalid-feedback">
-                        {formik.errors.totalDeductionAmount}
-                      </div>
-                    )}
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
