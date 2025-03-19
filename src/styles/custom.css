@@ -616,7 +616,6 @@ tbody tr td {
   background-color: #f0f0f0;
 }
 
-
 .sticky-input-container {
   min-width: 78%;
   top: auto;
@@ -927,8 +926,6 @@ input.searchInputG:hover {
   color: white;
 }
 
-
-
 /* Calender CSS */
 .calendar {
   font-size: small;
@@ -1216,14 +1213,13 @@ table.dataTable.display > tbody > tr > th {
   padding: 0px;
 }
 
-
 /* Time table */
 .table-striped > tbody > tr:nth-of-type(even) {
   background-color: #ffffff; /* White background for even rows */
   width: 30px;
   height: 70px;
 }
-.table-striped>tbody>tr:nth-of-type(odd)>* {
+.table-striped > tbody > tr:nth-of-type(odd) > * {
   justify-content: center;
   align-items: center;
   --bs-table-color-type: var(--bs-table-striped-color);
@@ -1232,13 +1228,13 @@ table.dataTable.display > tbody > tr > th {
   height: 70px;
 }
 
-.table_cell_color{
+.table_cell_color {
   background-color: #eb862a !important;
   border: #eb862a !important;
 }
 
-.table-bordered>:not(caption)>*>* {
-  border-width: 1px  var(--bs-border-width);
+.table-bordered > :not(caption) > * > * {
+  border-width: 1px var(--bs-border-width);
   border: 1px solid #a9a9a9;
 }
 
@@ -1249,7 +1245,7 @@ table.dataTable.display > tbody > tr > th {
   border-collapse: collapse; /* Ensure borders collapse for cleaner lines */
 }
 
-.table-bordered th, 
+.table-bordered th,
 .table-bordered td {
   text-align: center; /* Center-align content */
   vertical-align: middle; /* Vertically align text in the middle */
@@ -1271,18 +1267,18 @@ table.dataTable.display > tbody > tr > th {
 }
 
 thead th {
-  background-color: #317b5d; /* Example color for header */
+  background-color: #287f71; /* Example color for header */
   color: #fff; /* White text color for better contrast */
 }
 
- /* Apply custom color for selected button */
- .btn-outline-orange {
+/* Apply custom color for selected button */
+.btn-outline-orange {
   background-color: #ffffff; /* Custom selected color */
-  color: #eb862a !important;   /* Adjust text color if needed */
+  color: #eb862a !important; /* Adjust text color if needed */
   border-color: #eb862a !important; /* Match border to the background */
- }
+}
 
- .btn-check-status:checked + .btn {
+.btn-check-status:checked + .btn {
   background-color: #eb862a; /* Custom selected color */
   color: white !important; /* Adjust text color if needed */
   border-color: #eb862a; /* Match border to the background */
@@ -1310,7 +1306,6 @@ thead th {
   justify-content: flex-start;
 }
 
-
 .timetable-container {
   padding: 20px;
 }
@@ -1332,4 +1327,122 @@ thead th {
 .period-spacer {
   height: 20px; /* Adjust the height for spacing */
   background-color: #f0f0f0; /* Optional: light gray background for distinction */
+}
+.fc-header-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+@media (max-width: 576px) {
+  .fc-header-toolbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .fc-toolbar-chunk {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+  }
+
+  .fc-toolbar-chunk:nth-child(1),
+  .fc-toolbar-chunk:nth-child(2) {
+    margin-bottom: 5px; /* Space between rows */
+  }
+}
+
+/* curriculum report */
+.timetable-container {
+  padding: 20px;
+  height: 80vh; /* Adjust height as needed */
+  overflow: hidden; /* Prevent container overflow */
+}
+ 
+.table-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow-x: auto; /* Horizontal scroll */
+  overflow-y: auto; /* Vertical scroll */
+  position: relative; /* For sticky positioning */
+}
+ 
+.timetable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Helps with sticky column widths */
+}
+ 
+.period-cell,
+.day-cell,
+.time-cell,
+.data-cell {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+  min-width: 100px; /* Adjust width as needed */
+}
+ 
+/* Sticky Header */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 10; /* Ensure header stays above content */
+  background: inherit; /* Maintain background color */
+}
+ 
+/* Sticky Left Columns (Period, Day, Time) */
+.sticky-left {
+  position: sticky !important;
+  left: 0;
+  z-index: 5; /* Below header but above other cells */
+  background: #fff; /* Ensure background doesn't overlap */
+}
+ 
+/* Specific column widths for sticky columns */
+.period-cell.sticky-left {
+  left: 0; /* First column */
+  z-index: 6; /* Higher than other sticky columns when overlapping with header */
+}
+ 
+.day-cell.sticky-left {
+  left: 100px; /* Adjust based on period-cell width */
+  z-index: 6;
+}
+ 
+.time-cell.sticky-left {
+  left: 200px; /* Adjust based on day-cell width */
+  z-index: 6;
+}
+ 
+/* Ensure header cells with sticky-left have higher z-index */
+.sticky-header.sticky-left {
+  z-index: 15; /* Highest when overlapping */
+}
+ 
+.period-spacer {
+  height: 20px;
+  background-color: #f0f0f0;
+}
+ 
+/* placeholder */
+/* Ensure placeholders are visible for date inputs */
+input[type="date"] {
+  position: relative;
+}
+ 
+input[type="date"]:invalid::before {
+  content: attr(placeholder);
+  color: #999; /* Placeholder text color */
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* Prevent interaction with placeholder */
+}
+ 
+input[type="date"]:focus::before,
+input[type="date"]:valid::before {
+  content: ""; /* Hide placeholder when focused or a date is selected */
 }

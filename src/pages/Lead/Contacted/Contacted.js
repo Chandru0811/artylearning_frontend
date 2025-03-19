@@ -56,7 +56,7 @@ const Level = () => {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
@@ -79,13 +79,13 @@ const Level = () => {
       //     </IconButton>
       //   ),
       // },
-      { accessorKey: "name", enableHiding: false, header: "Name" },
+      { accessorKey: "name", enableHiding: true, header: "Name" },
       {
         accessorKey: "email",
-        enableHiding: false,
+        enableHiding: true,
         header: "Email",
       },
-      { accessorKey: "message", header: "Message", enableHiding: false },
+      { accessorKey: "message", header: "Message", enableHiding: true },
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",

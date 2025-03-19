@@ -245,12 +245,12 @@ function AddPayroll() {
     // alert(userId, payrollMonth);
     const queryParams = new URLSearchParams({
       userId: userId,
-      deductionMonth: payrollMonth,
+      payrollMonth: payrollMonth,
     });
     if (userId && payrollMonth) {
       try {
         const response = await api.get(
-          `/getCurrentMonthUserDeduction?${queryParams}`,
+          `/getCurrentMonthUserDeductionAndAdditional?${queryParams}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -477,48 +477,32 @@ function AddPayroll() {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Employee Name</lable>{" "}
+              <div className="col-md-6 col-12 mb-3">
+                <label className="">Employee Name</label>{" "}
                 <span className="text-danger">*</span>
                 <Select
                   options={employeeOptions}
                   name="userId"
-                  value={employeeOptions.find(
-                    (option) => option.value === formik.values.userId
-                  )}
-                  onChange={(selectedOption) =>
-                    formik.setFieldValue(
-                      "userId",
-                      selectedOption ? selectedOption.value : ""
-                    )
-                  }
+                  value={
+                    employeeOptions.find(
+                      (option) => option.value === formik.values.userId
+                    ) || null
+                  } // Default to null if no match is found
+                  onChange={(selectedOption) => {
+                    const userId = selectedOption ? selectedOption.value : "";
+                    formik.setFieldValue("userId", userId); // Safely set userId
+                    handleUserChange({ target: { value: userId } }); // Trigger handleUserChange manually
+                  }}
+                  onBlur={formik.handleBlur}
                   placeholder="Select Employee"
                   isSearchable
                   isClearable
-                  className={`${
+                  className={`react-select ${
                     formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("userId")}
                 />
-                {/* <select
-                  {...formik.getFieldProps("userId")}
-                  className={`form-select  ${
-                    formik.touched.userId && formik.errors.userId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  onChange={handleUserChange}
-                >
-                  <option></option>
-                  {userNamesData &&
-                    userNamesData.map((userName) => (
-                      <option key={userName.id} value={userName.id}>
-                        {userName.userNames} &nbsp;({userName.role})
-                      </option>
-                    ))}
-                </select> */}
                 {formik.touched.userId && formik.errors.userId && (
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}

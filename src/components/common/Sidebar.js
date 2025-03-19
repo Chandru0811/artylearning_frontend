@@ -48,7 +48,7 @@ function Sidebar() {
 
   useEffect(() => {
     const getData = async () => {
-      try {
+      try { 
         const response = await api.get(`/getAllHeaderSavePublish`);
         setData(response.data);
       } catch (error) {
@@ -539,10 +539,10 @@ function Sidebar() {
   };
 
   return (
-    <div className="sidebar">
+    <div className="sidebar" >
       <div className="logo-details">
         <span className="logo_name">
-          <img src={Logo} alt="logo" width={110} className="img-fluid p-1" />
+          <img src={Logo} alt="logo" width={100} className="img-fluid p-1" />
         </span>
       </div>
       <ul className="nav-links">

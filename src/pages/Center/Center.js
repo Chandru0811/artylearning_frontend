@@ -350,6 +350,19 @@ const Center = ({ handleCenterChanged }) => {
               onClose={handleClose}
             >
               <MenuItem>
+                <Link
+                  to="/center/add"
+                  style={{ textDecoration: "none", width: "100%" }}
+                >
+                  <span
+                    className="text-start mb-0 menuitem-style text-black"
+                    style={{ whiteSpace: "nowrap", width: "100%" }}
+                  >
+                    Add Center
+                  </span>
+                </Link>
+              </MenuItem>
+              <MenuItem>
                 <AddRegister
                   id={selectedId}
                   onSuccess={fetchData}
@@ -380,7 +393,7 @@ const Center = ({ handleCenterChanged }) => {
             </Menu>
 
             {/* Existing Add Button */}
-            <Link to="/center/add">
+            {/* <Link to="/center/add">
               <button
                 type="button"
                 className="btn btn-button btn-sm me-2"
@@ -388,7 +401,7 @@ const Center = ({ handleCenterChanged }) => {
               >
                 &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
               </button>
-            </Link>
+            </Link> */}
           </div>
         </div>
         {loading ? (

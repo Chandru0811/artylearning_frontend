@@ -36,6 +36,11 @@ function Calendar({ selectedCenter }) {
     userId: "",
     date: "",
   });
+  const [headerToolbar, setHeaderToolbar] = useState({
+    start: "today,prev,next",
+    center: "title",
+    end: "customMonth,customWeek,customDay,customAgenda",
+  });
 
   // Process event data for calendar rendering
   const processEventData = (apiData) => {
@@ -232,8 +237,8 @@ function Calendar({ selectedCenter }) {
 
   return (
     <div className="container-fluid card my-2 py-2">
-      <div className="d-flex justify-content-between align-items-center pb-3">
-        <div className="form-group mb-0 ms-2 mb-1">
+      <div className="row mb-3">
+        <div className="col-md-2 col-12 mb-2">
           <select
             className="form-select form-select-sm center_list"
             name="centerId"
@@ -241,7 +246,9 @@ function Calendar({ selectedCenter }) {
             onChange={handleFilterChange}
             value={filters.centerId}
           >
-            <option value="" disabled>Select a Center</option>
+            <option value="" disabled>
+              Select a Center
+            </option>
             {centerData?.map((center) => (
               <option key={center.id} value={center.id}>
                 {center.centerNames}
@@ -250,7 +257,7 @@ function Calendar({ selectedCenter }) {
           </select>
         </div>
 
-        <div className="form-group mb-0 ms-2 mb-1">
+        <div className="col-md-2 col-12 mb-2">
           <select
             className="form-select form-select-sm center_list"
             style={{ width: "100%" }}
@@ -258,7 +265,9 @@ function Calendar({ selectedCenter }) {
             onChange={handleFilterChange}
             value={filters.courseId}
           >
-            <option value="" disabled>Select the Course</option>
+            <option value="" disabled>
+              Select the Course
+            </option>
             {selectedCenter === "0"
               ? courseListData &&
                 courseListData.map((course) => (
@@ -275,7 +284,7 @@ function Calendar({ selectedCenter }) {
           </select>
         </div>
 
-        <div className="form-group mb-0 ms-2 mb-1">
+        <div className="col-md-2 col-12 mb-2">
           <select
             className="form-select form-select-sm center_list"
             name="userId"
@@ -283,7 +292,9 @@ function Calendar({ selectedCenter }) {
             value={filters.userId}
             onChange={handleFilterChange}
           >
-            <option value="" disabled>Select the Teacher</option>
+            <option value="" disabled>
+              Select the Teacher
+            </option>
 
             {selectedCenter === "0"
               ? teacherListData &&
@@ -301,11 +312,11 @@ function Calendar({ selectedCenter }) {
           </select>
         </div>
 
-        <div className="form-group mb-0 ms-2 mb-1">
+        <div className="col-md-2 col-12 mb-2">
           <input
             type="date"
             className="form-control form-control-sm center_list"
-            style={{ width: "140px" }}
+            // style={{ width: "140px" }}
             name="date"
             value={filters.date}
             onChange={handleFilterChange}
@@ -313,7 +324,7 @@ function Calendar({ selectedCenter }) {
           />
         </div>
 
-        <div className="form-group mb-0 ms-2 mb-1 ">
+        <div className="col-md-4 col-12 ">
           <button
             type="button"
             className="btn btn-sm btn-border me-2"
@@ -358,19 +369,13 @@ function Calendar({ selectedCenter }) {
                 resourceTimelinePlugin,
               ]}
               initialView="dayGridMonth"
-              headerToolbar={{
-                start: "today,prev,next",
-                center: "title",
-                end: "customMonth,customWeek,customDay,customAgenda",
-              }}
+              headerToolbar={headerToolbar}
               height="90vh"
               events={events}
               editable={false}
-              eventStartEditable={false}
               selectable={true}
-              selectMirror={true}
-              dayMaxEventRows={2} // Show only one event by default per row
-              dayMaxEvents={true} // Enable collapsing events
+              dayMaxEventRows={2}
+              dayMaxEvents={true}
               moreLinkContent={(args) => (
                 <span
                   className="p-2 text-white"
@@ -386,34 +391,20 @@ function Calendar({ selectedCenter }) {
                 today: "Today",
               }}
               views={{
-                customDay: {
-                  type: "timeGridDay",
-                  buttonText: "Day",
-                },
-                customWeek: {
-                  type: "timeGridWeek",
-                  buttonText: "Week",
-                },
-                customMonth: {
-                  type: "dayGridMonth",
-                  buttonText: "Month",
-                },
-                customAgenda: {
-                  type: "listWeek",
-                  buttonText: "Agenda",
-                },
+                customDay: { type: "timeGridDay", buttonText: "Day" },
+                customWeek: { type: "timeGridWeek", buttonText: "Week" },
+                customMonth: { type: "dayGridMonth", buttonText: "Month" },
+                customAgenda: { type: "listWeek", buttonText: "Agenda" },
               }}
-              eventClick={handleEventClick} // Capture event click
+              eventClick={handleEventClick}
               eventContent={(info) => {
-                const { teacherName, centerName, availableSlotCount } =
-                  info.event.extendedProps;
+                const { teacherName, centerName } = info.event.extendedProps;
                 return (
                   <div className="popover-text-wrapper p-2 border-bottom">
                     <div className="p-1 text-wrap">
                       <FaChalkboardUser className="me-1" /> Teacher:{" "}
                       {teacherName}
                     </div>
-
                     <div className="p-1 text-wrap">
                       <BsBuildings className="me-1" /> Centre: {centerName}
                     </div>
@@ -421,7 +412,6 @@ function Calendar({ selectedCenter }) {
                 );
               }}
             />
-            {/* Pass the selected ID and modal visibility status */}
             <ScheduleTeacherDetails
               id={selectedId}
               teacherDetail={{
