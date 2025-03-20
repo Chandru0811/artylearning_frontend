@@ -786,7 +786,7 @@ export default function InvoiceAdd() {
           formik.setValues({
             center: studentData.centerId || "",
             parent: studentData?.studentParentsDetails[0]?.parentName || "",
-            student: studentID,
+            student: studentData.id || "",
             course: studentData.studentCourseDetailModels[0].courseId,
             packageId: studentData.studentCourseDetailModels[0].packageId,
             schedule: studentData?.schedules[0] || "",

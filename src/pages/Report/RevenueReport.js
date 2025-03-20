@@ -7,6 +7,8 @@ import fetchAllSubjectsWithIds from "../List/SubjectList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import api from "../../config/URL";
 import { Link } from "react-router-dom";
+import fetchAllCoursesWithIds from "../List/CourseList";
+import Select from "react-select";
 
 const RevenueReport = ({ selectedCenter }) => {
   const [centerData, setCenterData] = useState(null);
@@ -47,7 +49,9 @@ const RevenueReport = ({ selectedCenter }) => {
 
   const handleTypeChange = (e) => setSelectedType(e.target.value);
   const handleCenterChange = (e) => setSelectedCenterId(e.target.value);
-  const handleCourseChange = (e) => setSelectedCourseId(e.target.value);
+  const handleCourseChange = (selectedOption) => {
+    setSelectedCourseId(selectedOption ? selectedOption.value : null);
+  };
   const handleSubjectChange = (e) => setSelectedSubjectId(e.target.value);
 
   useEffect(() => {
@@ -74,27 +78,35 @@ const RevenueReport = ({ selectedCenter }) => {
   }, [selectedCenter]);
 
   useEffect(() => {
-    if (selectedCenterId) {
-      const fetchCourseData = async () => {
-        try {
-          const courses = await fetchAllCoursesWithIdsC(selectedCenterId);
-          setCourseData(courses);
-        } catch (error) {
-          toast.error(
-            error.message || "Failed to fetch courses for selected center"
-          );
+    const fetchCourses = async () => {
+      try {
+        let courses = [];
+        const numericCenterId = Number(selectedCenter);
+        if (numericCenterId === 0) {
+          courses = await fetchAllCoursesWithIds();
+        } else {
+          courses = await fetchAllCoursesWithIdsC(numericCenterId);
         }
-      };
-      fetchCourseData();
-    } else {
-      setCourseData(null);
-    }
+        if (!Array.isArray(courses)) {
+          throw new Error("API did not return an array");
+        }
+        const formattedCourses = courses.map((course) => ({
+          value: course.id,
+          label: course.courseNames,
+        }));
+        setCourseData(formattedCourses);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+        toast.error(error.message || "Failed to fetch courses");
+      }
+    };
+    fetchCourses();
   }, [selectedCenter]);
 
   const fetchRevenueData = async () => {
     const params = {
       center: selectedCenterId,
-      courseId: selectedCourseId,
+      courseId: selectedCourseId || "All",
       subjectId: selectedSubjectId,
     };
 
@@ -206,7 +218,7 @@ const RevenueReport = ({ selectedCenter }) => {
                   value={selectedCenterId}
                   onChange={handleCenterChange}
                 >
-                 <option value="0">Selected Centre</option>
+                  <option value="0">Selected Centre</option>
                   {centerData?.map((data) => (
                     <option key={data.id} value={data.id}>
                       {data.centerNames}
@@ -280,21 +292,25 @@ const RevenueReport = ({ selectedCenter }) => {
                 </div>
                 <div className="col-md-6" style={{ minHeight: "450px" }}>
                   <div className="row">
-                    <div className="col-6 p-1">
-                      <label className="form-label">Course</label>
-                      <select
-                        className="form-select"
-                        value={selectedCourseId}
+                    <div className="col-6 p-1 mt-2">
+                      <label>
+                        Course<span className="text-danger">*</span>
+                      </label>
+                      <Select
+                        options={courseData}
+                        name="courseId"
+                        value={
+                          courseData?.find(
+                            (option) => option.value === selectedCourseId
+                          ) || null
+                        }
                         onChange={handleCourseChange}
-                      >
-                        <option value="All">ALL</option>
-                        {courseData?.map((data) => (
-                          <option key={data.id} value={data.id}>
-                            {data.courseNames}
-                          </option>
-                        ))}
-                      </select>
+                        placeholder="Select Course"
+                        isSearchable
+                        isClearable
+                      />
                     </div>
+
                     <div className="col-6 p-1">
                       <label className="form-label">Subject</label>
                       <select
