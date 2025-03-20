@@ -305,7 +305,7 @@ const RevenueReport = ({ selectedCenter }) => {
                           ) || null
                         }
                         onChange={handleCourseChange}
-                        placeholder="Select Course"
+                        placeholder="All"
                         isSearchable
                         isClearable
                       />
