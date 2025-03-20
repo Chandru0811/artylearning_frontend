@@ -8,6 +8,8 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import api from "../../config/URL";
 import { Link } from "react-router-dom";
+import fetchAllCoursesWithIds from "../List/CourseList";
+import Select from "react-select";
 
 const Attendance = ({ selectedCenter }) => {
   const tableRef = useRef(null);
@@ -132,19 +134,30 @@ const Attendance = ({ selectedCenter }) => {
 
   const fetchCourses = async (centerId) => {
     try {
-      const courses = await fetchAllCoursesWithIdsC(centerId);
-      if (courses.length > 0) {
-        const defaultCourseId = courses[0].id;
-        formik.setFieldValue("courseId", defaultCourseId);
-        setCourseData(courses);
+      let courses = [];
+      const numericCenterId = Number(centerId);
+      if (numericCenterId === 0) {
+        courses = await fetchAllCoursesWithIds();
       } else {
-        // toast.warning("No courses found for the selected centre.");
+        courses = await fetchAllCoursesWithIdsC(numericCenterId);
       }
+      if (!Array.isArray(courses)) {
+        throw new Error("API did not return an array");
+      }
+      const formattedCourses = courses.map((course) => ({
+        value: course.id,
+        label: course.courseNames,
+      }));
+      setCourseData(formattedCourses);
     } catch (error) {
-      toast.error(error.message || "Error fetching courses.");
+      console.error("Error fetching courses:", error);
+      toast.error(error.message || "Failed to fetch courses");
     }
   };
-
+  const handleCourseChange = (selectedOption) => {
+    const course = selectedOption ? selectedOption.value : "";
+    formik.setFieldValue("courseId", course);
+  };
   const handleCenterChange = (event) => {
     setCourseData(null);
     const centerId = event.target.value;
@@ -155,6 +168,7 @@ const Attendance = ({ selectedCenter }) => {
   const clearFilter = () => {
     formik.resetForm();
   };
+
 
   return (
     <div className="container-fluid my-3">
@@ -224,24 +238,29 @@ const Attendance = ({ selectedCenter }) => {
                   </div>
                 )}
               </div>
-              <div className="col-md-4 col-12 mb-2">
-                <label className="form-label">Course</label>
-                <select
-                  {...formik.getFieldProps("courseId")}
-                  className={`form-select ${
+              <div className="col-md-4 col-12 mb-4">
+                <label className="">
+                  Course<span className="text-danger">*</span>
+                </label>
+                <Select
+                  options={courseData}
+                  name="courseId"
+                  value={
+                    courseData?.find(
+                      (option) => option.value === formik.values.courseId
+                    ) || null
+                  }
+                  onChange={handleCourseChange}
+                  placeholder="Select Course"
+                  isSearchable
+                  isClearable
+                  className={
                     formik.touched.courseId && formik.errors.courseId
                       ? "is-invalid"
                       : ""
-                  }`}
-                >
-                  <option></option>
-                  {courseData &&
-                    courseData.map((course) => (
-                      <option key={course.id} value={course.id}>
-                        {course.courseNames}
-                      </option>
-                    ))}
-                </select>
+                  }
+                  onBlur={formik.handleBlur}
+                />
                 {formik.touched.courseId && formik.errors.courseId && (
                   <div className="invalid-feedback">
                     {formik.errors.courseId}

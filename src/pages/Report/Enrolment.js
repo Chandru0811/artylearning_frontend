@@ -57,7 +57,7 @@ function Datatable2({ selectedCenter }) {
 
   const fetchEnrollmentData = async (centerId, week, day) => {
     const queryParams = new URLSearchParams({
-      center: centerId === "0" ? "" : centerId,
+      center: centerId,
       week: week,
       day: day,
     });

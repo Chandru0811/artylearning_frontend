@@ -55,6 +55,8 @@ function AddPackage({ id, onSuccess, handleMenuClose }) {
       setLoadIndicator(true);
       console.log("Form values:", values);
       let successCount = 0;
+      let conflictCenters = [];
+      let conflictMessage = "";
       const apiCalls = selectedCenters.map(async (center) => {
         try {
           const payload = {
@@ -75,7 +77,9 @@ function AddPackage({ id, onSuccess, handleMenuClose }) {
           }
         } catch (error) {
           if (error.response?.status === 409) {
-            toast.warning(`${error?.response?.data?.message}$${center.label}`);
+            if (!conflictMessage)
+              conflictMessage = error.response?.data?.message;
+            conflictCenters.push(center.label);
           } else {
             toast.error(`${error?.response?.data?.message}$${center.label}`);
           }
@@ -83,6 +87,9 @@ function AddPackage({ id, onSuccess, handleMenuClose }) {
       });
 
       await Promise.all(apiCalls);
+      if (conflictCenters.length > 0) {
+        toast.warning(`${conflictMessage}: ${conflictCenters.join(", ")}`);
+      }
       if (successCount > 0) {
         toast.success(`Package added successfully`);
         setLoadIndicator(false);

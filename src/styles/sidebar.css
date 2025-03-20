@@ -19,7 +19,8 @@
 }
 
 .sidebar.active {
-  width: 75px;
+  width: 60px;
+  overflow-x: hidden;
 }
 
 .sidebar .logo-details {

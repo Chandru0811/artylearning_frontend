@@ -35,6 +35,10 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      if (values.batchTimes.length === 0) {
+        toast.error("At least one batch time is required"); // Show toast message
+        return; // Prevent submission
+      }
       setLoadIndicator(true);
       try {
         const response = await api.put(`/updateBatchDays/${id}`, values, {
@@ -69,6 +73,7 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
   const handleClose = () => {
     handleMenuClose();
     setShow(false);
+    onSuccess();
   };
 
   const handleShow = () => {
@@ -109,18 +114,25 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
       } catch (error) {
         // Handle specific cases and show appropriate error messages
         if (error?.response?.status === 409) {
-          toast.warning(error?.response?.data?.message || "Conflict detected. Cannot delete this batch time.");
+          toast.warning(
+            error?.response?.data?.message ||
+              "Conflict detected. Cannot delete this batch time."
+          );
         } else if (error?.response?.status === 404) {
-          toast.warning(error?.response?.data?.message || "Batch time not found.");
+          toast.warning(
+            error?.response?.data?.message || "Batch time not found."
+          );
         } else {
-          toast.error(error?.response?.data?.message || "Error deleting batch time.");
+          toast.error(
+            error?.response?.data?.message || "Error deleting batch time."
+          );
         }
       }
     } else {
       // Remove new fields (id is null) directly
       const updatedFields = fields.filter((f) => f !== field);
       setFields(updatedFields);
-  
+
       // Update formik values
       const updatedBatchTimes = formik.values.batchTimes.filter(
         (time) => time !== field.batchTimes
@@ -129,7 +141,6 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
     }
   };
 
-  
   const getData = async () => {
     try {
       const response = await api.get(`/getBatchForSingleDay/${id}`);
@@ -253,6 +264,12 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
                         )}
                     </div>
                   ))}
+                  {fields.length === 0 && formik.touched.batchTimes && (
+                    <div className="text-danger mt-2">
+                      At least one batch time is required
+                      <span className="text-danger">*</span>
+                    </div>
+                  )}
                   <button
                     type="button"
                     className="btn btn-button btn-sm mt-3"

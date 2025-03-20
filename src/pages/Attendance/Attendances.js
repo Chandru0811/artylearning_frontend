@@ -8,7 +8,7 @@ import ReplacementAdd from "./ReplacementAdd";
 import { Link } from "react-router-dom";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 
-function Attendances({selectedCenter}) {
+function Attendances({ selectedCenter }) {
   const [attendanceData, setAttendanceData] = useState([]);
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -110,14 +110,14 @@ function Attendances({selectedCenter}) {
   //     toast.error(error.message || "Error fetching centers.");
   //   }
   // };
-  
+
   const fetchCentreData = async () => {
     try {
       const response = await fetchAllCentersWithIds();
       if (Array.isArray(response)) {
         setCenterData(response);
         // formik.setFieldValue("center", selectedCenter);
-        setSelectedCenter(selectedCenter)
+        setSelectedCenter(selectedCenter);
         fetchCourses(selectedCenter);
       } else {
         console.error("Invalid data format:", response);
@@ -168,10 +168,9 @@ function Attendances({selectedCenter}) {
     const center = event.target.value || selectedCenter;
     setCourseData([]);
     // formik.setFieldValue("center", center);
-    setSelectedCenter(center)
+    setSelectedCenter(center);
     fetchCourses(center);
   };
-
 
   useEffect(() => {
     if (selectedDate) {
@@ -188,7 +187,7 @@ function Attendances({selectedCenter}) {
     fetchCentreData();
     if (selectedCenter) {
       // formik.setFieldValue("center", selectedCenter);
-      setSelectedCenter(selectedCenter)
+      setSelectedCenter(selectedCenter);
     }
   }, [selectedCenter]);
 
@@ -290,7 +289,9 @@ function Attendances({selectedCenter}) {
                 value={selectedCenter}
                 onChange={handleCenterChange}
               >
-                <option selected disabled>Select a centre</option>
+                <option selected disabled>
+                  Select a centre
+                </option>
                 {centerData &&
                   centerData.map((center) => (
                     <option key={center.id} value={center.id}>
@@ -362,38 +363,38 @@ function Attendances({selectedCenter}) {
           <div className="container-fluid">
             <div className="row m-0">
               <div
-                className="table d-flex"
+                className="row"
                 style={{
                   backgroundColor: "#f5f7f9",
                 }}
               >
-                <div style={{ width: "20%" }} className="py-2">
-                  <p style={{ marginBottom: "0px", fontWeight: "700" }}>
+                <div className="py-2 col-md-2 col-sm-3 col-12">
+                  <p style={{ marginBottom: "0px", fontWeight: "700",fontSize:"13px" }}>
                     Centre
                   </p>
                 </div>
-                <div style={{ width: "20%" }} className="py-2">
-                  <p style={{ marginBottom: "0px", fontWeight: "700" }}>
+                <div className="py-2 col-md-2 col-sm-3 col-12">
+                  <p style={{ marginBottom: "0px", fontWeight: "700",fontSize:"13px" }}>
                     Course
                   </p>
                 </div>
-                <div style={{ width: "20%" }} className="py-2">
-                  <p style={{ marginBottom: "0px", fontWeight: "700" }}>
+                <div className="py-2 col-md-2 col-sm-3 col-12">
+                  <p style={{ marginBottom: "0px", fontWeight: "700",fontSize:"13px" }}>
                     Class Code
                   </p>
                 </div>
-                <div style={{ width: "20%" }} className="py-2">
-                  <p style={{ marginBottom: "0px", fontWeight: "700" }}>
+                <div className="py-2 col-md-2 col-sm-3 col-12">
+                  <p style={{ marginBottom: "0px", fontWeight: "700",fontSize:"13px" }}>
                     Batch Time
                   </p>
                 </div>
-                <div style={{ width: "20%" }} className="py-2">
-                  <p style={{ marginBottom: "0px", fontWeight: "700" }}>
+                <div className="py-2 col-md-2 col-sm-3 col-12">
+                  <p style={{ marginBottom: "0px", fontWeight: "700",fontSize:"13px" }}>
                     Course Type
                   </p>
                 </div>
-                <div style={{ width: "20%" }} className="py-2">
-                  <p style={{ marginBottom: "0px", fontWeight: "700" }}>
+                <div className="py-2 col-md-2 col-sm-3 col-12">
+                  <p style={{ marginBottom: "0px", fontWeight: "700",fontSize:"13px" }}>
                     Class Listing Teacher
                   </p>
                 </div>
