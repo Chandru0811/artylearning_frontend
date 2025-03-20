@@ -27,6 +27,7 @@ const Invoice = ({ selectedCenter }) => {
     courseId: "",
     studentId: "",
     packageId: "",
+    invoiceStatus: "",
   });
   const [centerData, setCenterData] = useState([]);
   const centerLocalId = localStorage.getItem("selectedCenterId");
@@ -250,6 +251,7 @@ const Invoice = ({ selectedCenter }) => {
       courseId: "",
       studentId: "",
       packageId: "",
+      invoiceStatus: "",
     });
     getInvoiceData();
     setIsClearFilterClicked(true);
@@ -464,6 +466,24 @@ const Invoice = ({ selectedCenter }) => {
                         {pkg.packageNames}
                       </option>
                     ))}
+              </select>
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <select
+                className="form-select form-select-sm center_list"
+                style={{ width: "100%" }}
+                name="invoiceStatus"
+                onChange={handleFilterChange}
+                value={filters.invoiceStatus}
+              >
+                <option value="" disabled>
+                  Select a Status
+                </option>
+                {["PAID", "PENDING", "CANCELLED"].map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="form-group mb-2 ms-2">

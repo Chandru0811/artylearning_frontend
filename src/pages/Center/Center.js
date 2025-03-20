@@ -340,7 +340,7 @@ const Center = ({ handleCenterChanged }) => {
               className="btn btn-button btn-sm me-2"
               style={{ fontWeight: "600" }}
             >
-              Options
+              &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
             </button>
 
             {/* Menu with Options */}
