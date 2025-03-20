@@ -171,13 +171,22 @@ const ScheduleTable = () => {
             <table className="timetable">
               <thead>
                 <tr>
-                  <th className="period-cell sticky-header sticky-left" style={{ color: "#287f71" }}>
+                  <th
+                    className="period-cell sticky-header sticky-left"
+                    style={{ color: "#287f71" }}
+                  >
                     Period
                   </th>
-                  <th className="period-cell sticky-header sticky-left" style={{ color: "#287f71" }}>
+                  <th
+                    className="period-cell sticky-header sticky-left"
+                    style={{ color: "#287f71" }}
+                  >
                     Day
                   </th>
-                  <th className="period-cell sticky-header sticky-left" style={{ color: "#287f71" }}>
+                  <th
+                    className="period-cell sticky-header sticky-left"
+                    style={{ color: "#287f71" }}
+                  >
                     Time
                   </th>
                   {scheduleData?.teacherList?.map((teacher) => (
@@ -234,7 +243,9 @@ const ScheduleTable = () => {
                             </td>
                             {record.curriculumData.map((teacherData, index) => (
                               <td
-                                key={scheduleData.teacherList[index] + record.batch}
+                                key={
+                                  scheduleData.teacherList[index] + record.batch
+                                }
                                 className="data-cell"
                               >
                                 {teacherData?.curriculumCode || ""}

@@ -33,7 +33,7 @@ const validationSchema = Yup.object().shape({
   // taxRegistrationNumber: Yup.string().required("*Tax Registration Number is required"),
   bankName: Yup.string().required("*Bank Name is required"),
   bankBranch: Yup.string().required("*Bank Branch is required"),
-  bankAccountNumber:Yup.string().required("*Bank Account Number is required"),
+  bankAccountNumber: Yup.string().required("*Bank Account Number is required"),
   bankAccountName: Yup.string().required("*Bank Account Name is required"),
   file: Yup.mixed()
     .required("*File is required")
@@ -324,7 +324,9 @@ function CenterAdd({ handleCenterChanged }) {
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         // Allow the default behavior for Enter key
-                        console.log("Enter key pressed: moving to the next line");
+                        console.log(
+                          "Enter key pressed: moving to the next line"
+                        );
                       }
                     }}
                   ></textarea>
@@ -650,7 +652,7 @@ function CenterAdd({ handleCenterChanged }) {
                 </div>
               </div>
               <div className="col-12">
-                <label for="exampleFormControlInput1" className="form-label">
+                <label htmlFor="invoiceNotes" className="form-label">
                   Invoice Notes
                 </label>
                 <div className="input-group mb-3">
@@ -662,6 +664,11 @@ function CenterAdd({ handleCenterChanged }) {
                     rows="5"
                   ></textarea>
                 </div>
+                {formik.touched.invoiceNotes && formik.errors.invoiceNotes && (
+                  <div className="text-danger">
+                    {formik.errors.invoiceNotes}
+                  </div>
+                )}
               </div>
             </div>
           </div>

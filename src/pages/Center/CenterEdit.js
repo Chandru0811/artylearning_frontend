@@ -690,18 +690,23 @@ function CenterEdit({ handleCenterChanged }) {
                 </div>
               </div>
               <div className="col-12">
-                <label for="exampleFormControlInput1" className="form-label">
+                <label htmlFor="invoiceNotes" className="form-label">
                   Invoice Notes
                 </label>
                 <div className="input-group mb-3">
                   <textarea
-                    className="form-control"
                     name="invoiceNotes"
-                    {...(formik.getFieldProps("invoiceNotes") || " ")}
+                    className="form-control"
+                    {...formik.getFieldProps("invoiceNotes")}
                     id="invoiceNotes"
                     rows="5"
                   ></textarea>
                 </div>
+                {formik.touched.invoiceNotes && formik.errors.invoiceNotes && (
+                  <div className="text-danger">
+                    {formik.errors.invoiceNotes}
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -8,19 +8,11 @@ import { toast } from "react-toastify";
 import fetchAllEmployeeListByCenter from "../List/EmployeeList";
 import api from "../../config/URL";
 import Select from "react-select";
+import fetchAllTeachersWithIds from "../List/TeacherList";
 
 const validationSchema = Yup.object({
-  centerId: Yup.string().required("*Centre name is required"),
+  // centerId: Yup.string().required("*Centre name is required"),
   userId: Yup.string().required("*Employee name is required"),
-  // date: Yup.date()
-  //   .transform((value, originalValue) =>
-  //     originalValue ? new Date(originalValue) : value
-  //   )
-  //   .required("*Date is required")
-  //   .min(
-  //     new Date().setHours(0, 0, 0, 0),
-  //     "*Date must be today or in the future"
-  //   ),
   attendanceStatus: Yup.string().required("*Attendance status is required"),
   attendanceRemark: Yup.string()
     .max(200, "*The maximum length is 200 characters")
@@ -33,24 +25,10 @@ const validationSchema = Yup.object({
       return attendanceStatus === "Present" ? !!value : true;
     }
   ),
-  // checkIn: Yup.string().test(
-  //   "check-check-in",
-  //   "*Check-in is required",
-  //   function (value) {
-  //     const { attendanceStatus } = this.parent;
-  //     return attendanceStatus === "Present" ? !!value : true;
-  //   }
-  // ),
-  // checkOut: Yup.string().required("*Check-out is required"),
-  // otStartTime: Yup.string().required("*OT start time is required"),
-  // otEndTime: Yup.string().required("*OT end time is required"),
-  // attendanceRemark: Yup.string().required("*Attendance remark is required"),
 });
 
-function StaffingAttendanceEdit() {
-  const [centerData, setCenterData] = useState(null);
+function StaffingAttendanceEdit({selectedCenter}) {
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [userNamesData, setUserNameData] = useState(null);
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName");
   const { id } = useParams();
@@ -74,27 +52,9 @@ function StaffingAttendanceEdit() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      let selectedCenterName = "";
-      let selectedEmployeeName = "";
-
-      centerData.forEach((center) => {
-        if (parseInt(values.centerId) === center.id) {
-          selectedCenterName = center.centerNames || "--";
-        }
-      });
-
-      userNamesData.forEach((employee) => {
-        if (parseInt(values.userId) === employee.id) {
-          selectedEmployeeName = employee.userNames || "--";
-        }
-      });
-
       let payload = {
-        centerId: values.centerId,
-        updatedBy: userName,
-        centerName: selectedCenterName,
         userId: values.userId,
-        employeeName: selectedEmployeeName,
+        employeeName: "",
         date: values.date,
         attendanceStatus: values.attendanceStatus,
         modeOfWorking: values.modeOfWorking,
@@ -104,6 +64,7 @@ function StaffingAttendanceEdit() {
         checkOutmode: values.checkOutmode,
         otStartTime: values.otStartTime,
         otEndTime: values.otEndTime,
+        updatedBy: userName,
         attendanceRemark: values.attendanceRemark,
       };
       if (values.modeOfWorking !== "") {
@@ -176,56 +137,32 @@ function StaffingAttendanceEdit() {
     },
   });
 
-  const handleCenterChange = async (event) => {
-    setUserNameData(null);
-    const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    setEmployeeOptions([]);
-
-    try {
-      await fetchUserName(centerId);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const handleAttendanceChange = async (event) => {
-    const attendance = event.target.value;
-    formik.setFieldValue("attendanceStatus", attendance);
-    if (attendance === "Absent") {
-      // Clear the fields if attendance is "Absent"
-      formik.setFieldValue("modeOfWorking");
-      formik.setFieldValue("checkIn", "");
-      formik.setFieldValue("checkOut", "");
-      formik.setFieldValue("checkInmode", "");
-      formik.setFieldValue("checkOutmode", "");
-      formik.setFieldValue("otStartTime", "");
-      formik.setFieldValue("otEndTime", "");
-    }
-  };
-
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCentersWithIds();
-      setCenterData(centers);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const fetchUserName = async (centerId) => {
-    try {
-      const userNames = await fetchAllEmployeeListByCenter(centerId);
-      const formattedEmployee = userNames.map((employee) => ({
-        value: employee.id,
-        label: employee.userNames,
-      }));
-      setEmployeeOptions(formattedEmployee);
-      setUserNameData(formattedEmployee);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+    const fetchUserName = async () => {
+      try {
+        let empList = [];
+        const numericCenterId = Number(selectedCenter);
+        if (numericCenterId === 0) {
+          empList = await fetchAllTeachersWithIds();
+        } else {
+          empList = await fetchAllEmployeeListByCenter(selectedCenter);
+        }
+        const formattedEmployee = empList.map((employee) => ({
+          value: employee.id,
+          label: employee.userNames || employee.teacherNames,
+        }));
+  
+        setEmployeeOptions(formattedEmployee);
+      } catch (error) {
+        toast.error(error.message || "Failed to fetch employee list");
+      }
+    };
+  
+    useEffect(() => {
+      if (selectedCenter !== undefined) {
+        fetchUserName();
+      }
+    }, [selectedCenter]); // Re-run when selectedCenter changes
+  
 
   useEffect(() => {
     const getData = async () => {
@@ -245,7 +182,6 @@ function StaffingAttendanceEdit() {
     };
 
     getData();
-    fetchData();
   }, []);
 
   return (
@@ -319,7 +255,7 @@ function StaffingAttendanceEdit() {
             </div>
             <div className="container-fluid px-4 pb-3">
               <div className="row">
-                <div className="col-md-6 col-12 mb-3 ">
+                {/* <div className="col-md-6 col-12 mb-3 ">
                   <lable className="">Centre Name</lable>
                   <span className="text-danger">*</span>
                   <select
@@ -345,7 +281,7 @@ function StaffingAttendanceEdit() {
                       {formik.errors.centerId}
                     </div>
                   )}
-                </div>
+                </div> */}
                 <div className="col-md-6 col-12 mb-3">
                   <label className="">Employee Name</label>
                   <span className="text-danger">*</span>

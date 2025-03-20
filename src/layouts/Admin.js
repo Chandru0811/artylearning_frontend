@@ -339,7 +339,7 @@ function Admin({ handleLogout }) {
             <Routes>
               {/* <Route path="/" element={<Dashboard />} /> */}
               <Route path="*" element={<NewDashboard />} />
-              <Route path="/" element={<NewDashboard />} />
+              <Route path="/" element={<NewDashboard selectedCenter={selectedCenter}/>} />
               <Route path="/datatable" element={<DataTable />} />
               <Route path="/datatable2" element={<Datatable2 />} />
               <Route path="/batchtable" element={<Test />} />
@@ -461,7 +461,7 @@ function Admin({ handleLogout }) {
               />
               <Route
                 path="/staffing/attendance/add"
-                element={<StaffingAttendanceAdd />}
+                element={<StaffingAttendanceAdd selectedCenter={selectedCenter}/>}
               />
               <Route
                 path="/staffing/attendance/edit/:id"

@@ -77,7 +77,7 @@ const StaffingAttendance = () => {
             <span className="badge badges-orange fw-light">Absent</span>
           ) : null,
       },
-      { accessorKey: "centerName", enableHiding: true, header: "Centre Name" },
+      // { accessorKey: "centerName", enableHiding: true, header: "Centre Name" },
       {
         accessorKey: "employeeName",
         enableHiding: true,

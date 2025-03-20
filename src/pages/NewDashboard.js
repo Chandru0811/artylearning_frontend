@@ -3,14 +3,14 @@ import ApexCharts from "react-apexcharts";
 import api from "../config/URL";
 import { toast } from "react-toastify";
 
-function NewDashboard() {
+function NewDashboard({ selectedCenter }) {
   const [datas, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await api.get("getOverAllSmsRevenueReport");
+      const response = await api.get(`getOverAllSmsRevenueReport?centerId=${selectedCenter}`);
       setData(response.data);
     } catch (e) {
       toast.error("Error Fetching Dashboard Data");

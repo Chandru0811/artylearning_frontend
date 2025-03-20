@@ -9,6 +9,7 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
 import Select from "react-select";
 import fetchAllCoursesWithIds from "../List/CourseList";
+import fetchAllClassRoomWithAll from "../List/ClassRoomListAll";
 
 function ClassAdd({ selectedCenter }) {
   const navigate = useNavigate();
@@ -16,13 +17,13 @@ function ClassAdd({ selectedCenter }) {
   const [courseOptions, setCourseOptions] = useState([]);
   console.log("Selected Center :::", selectedCenter);
   const [classRoomData, setClassRoomData] = useState(null);
-  const [teacherData, setTeacherData] = useState(null);
+  const [teacherData, setTeacherData] = useState([]);
   const [batchData, setBatchData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
 
   const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Centre Name is required"),
+    // centerId: Yup.string().required("*Centre Name is required"),
     courseId: Yup.string().required("*Course Name is required"),
     className: Yup.string().required("*Class Name is required"),
     classType: Yup.string().required("*Class Type is required"),
@@ -33,6 +34,7 @@ function ClassAdd({ selectedCenter }) {
     startTime: Yup.string().required("*Start Time is required"),
     endTime: Yup.string().required("*End Time is required"),
     day: Yup.string().required("*Day is required"),
+    userId: Yup.string().required("*Teacher selection is required"),
     remark: Yup.string()
       .max(200, "*The maximum length is 200 characters")
       .notRequired(),
@@ -46,14 +48,14 @@ function ClassAdd({ selectedCenter }) {
 
   const formik = useFormik({
     initialValues: {
-      centerId: selectedCenter,
+      centerId: selectedCenter === "0" ? "" : selectedCenter,
       centerName: "",
       courseId: "",
       className: "",
       courseName: "",
       classType: "",
       classCode: "",
-      userId: 0,
+      userId: "",
       teacherName: "",
       classId: "",
       durationInHrs: "",
@@ -70,16 +72,6 @@ function ClassAdd({ selectedCenter }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       values.createdBy = userName;
-      const selectedValue = formik.values.centerId;
-      let selectedOptionName = "";
-
-      centerData.forEach((center) => {
-        if (parseInt(selectedValue) === center.id) {
-          selectedOptionName = center.centerNames || "--";
-        }
-      });
-
-      values.centerName = selectedOptionName;
       try {
         const response = await api.post("/createClassSchedules", values, {
           headers: {
@@ -110,8 +102,9 @@ function ClassAdd({ selectedCenter }) {
       const response = await fetchAllCentersWithIds();
       if (Array.isArray(response)) {
         setCenterData(response);
-        formik.setFieldValue("centerId", selectedCenter);
+        // formik.setFieldValue("centerId", selectedCenter);
         fetchCourses(selectedCenter);
+        fetchClassRoom(selectedCenter);
       } else {
         console.error("Invalid data format:", response);
         setCenterData([]);
@@ -144,7 +137,30 @@ function ClassAdd({ selectedCenter }) {
       toast.error(error.message || "Failed to fetch courses");
     }
   };
-  
+
+  const fetchClassRoom = async (centerId) => {
+    try {
+      let classRoom = [];
+      const numericCenterId = Number(centerId);
+      if (numericCenterId === 0) {
+        classRoom = await fetchAllClassRoomWithAll();
+      } else {
+        classRoom = await fetchAllClassRoomWithCenterIds(numericCenterId);
+      }
+      if (!Array.isArray(classRoom)) {
+        throw new Error("API did not return an array");
+      }
+      const formattedCourses = classRoom.map((course) => ({
+        value: course.id,
+        label: course.classRoomName,
+      }));
+      setClassRoomData(formattedCourses);
+    } catch (error) {
+      console.error("Error fetching classRoom:", error);
+      toast.error(error.message || "Failed to fetch");
+    }
+  };
+
   useEffect(() => {
     fetchData();
     if (selectedCenter) {
@@ -152,20 +168,16 @@ function ClassAdd({ selectedCenter }) {
     }
   }, [selectedCenter]);
 
-  const fetchClassRoom = async () => {
-    try {
-      const classId = await fetchAllClassRoomWithCenterIds(selectedCenter);
-      setClassRoomData(classId);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
   const fetchBatchandTeacherData = async (day) => {
     try {
-      const response = await api.get(
-        `getTeacherWithBatchListByDay?day=${day}&centerId=${selectedCenter}`
-      );
+      let apiUrl = `getTeacherWithBatchListByDay?day=${day}`;
+
+      // Only append centerId if selectedCenter is not 0
+      if (selectedCenter !== "0") {
+        apiUrl += `&centerId=${selectedCenter}`;
+      }
+
+      const response = await api.get(apiUrl);
       setTeacherData(response.data.teacherList);
       setBatchData(response.data.batchList);
     } catch (error) {
@@ -199,17 +211,24 @@ function ClassAdd({ selectedCenter }) {
 
   const handleCenterChange = (event) => {
     let center = event.target.value || selectedCenter;
+
+    if (center === "0") {
+      center = ""; // Set empty string if selectedCenter is "0"
+    }
     setCourseOptions([]);
     formik.setFieldValue("centerId", center);
     fetchCourses(center);
+    fetchClassRoom(center);
   };
 
   useEffect(() => {
+    if (selectedCenter === "0") {
+      formik.setFieldValue("centerId", "");
+    } else {
+      formik.setFieldValue("centerId", selectedCenter);
+    }
     fetchData();
-    fetchClassRoom();
-  }, []);
-
-  
+  }, [selectedCenter]);
 
   const calculateEndTime = () => {
     const { durationInHrs, durationInMins, startTime } = formik.values;
@@ -430,45 +449,6 @@ function ClassAdd({ selectedCenter }) {
               </div>
               <div className="col-md-6 col-12 mb-4">
                 <label>
-                  Class Type<span className="text-danger">*</span>
-                </label>{" "}
-                <br />
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="classType"
-                    id="inlineRadio1"
-                    value="Group"
-                    onChange={formik.handleChange}
-                    checked={formik.values.classType === "Group"}
-                  />
-                  <label className="form-check-label" for="inlineRadio1">
-                    Group
-                  </label>
-                </div>
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="classType"
-                    id="inlineRadio2"
-                    value="Individual"
-                    onChange={formik.handleChange}
-                    checked={formik.values.classType === "Individual"}
-                  />
-                  <label className="form-check-label" for="inlineRadio2">
-                    Individual
-                  </label>
-                </div>
-                {formik.errors.classType && formik.touched.classType && (
-                  <div className="text-danger  " style={{ fontSize: ".875em" }}>
-                    {formik.errors.classType}
-                  </div>
-                )}
-              </div>
-              <div className="col-md-6 col-12 mb-4">
-                <label>
                   Duration(Hrs)<span className="text-danger">*</span>
                 </label>
                 <select
@@ -606,27 +586,45 @@ function ClassAdd({ selectedCenter }) {
                 )}
               </div>
               <div className="col-md-6 col-12 mb-4">
-                <label>Teacher</label>
-                <select
-                  {...formik.getFieldProps("userId")}
-                  className={`form-select  ${
+                <label>
+                  Teacher <span className="text-danger">*</span>
+                </label>
+                <Select
+                  options={teacherData?.map((teacher) => ({
+                    value: teacher.teacherId,
+                    label: teacher.teacherName,
+                  }))}
+                  name="userId"
+                  value={
+                    teacherData?.find(
+                      (teacher) => teacher.teacherId === formik.values.userId
+                    )
+                      ? {
+                          value: formik.values.userId,
+                          label: teacherData.find(
+                            (teacher) =>
+                              teacher.teacherId === formik.values.userId
+                          )?.teacherName,
+                        }
+                      : null
+                  }
+                  onChange={(selectedOption) => {
+                    formik.setFieldValue(
+                      "userId",
+                      selectedOption ? selectedOption.value : ""
+                    );
+                    formik.setFieldTouched("userId", true);
+                  }}
+                  onBlur={() => formik.setFieldTouched("userId", true)}
+                  placeholder="Select Teacher"
+                  isSearchable
+                  isClearable
+                  className={`${
                     formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
                   }`}
-                  name="userId"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.userId}
-                >
-                  <option></option>
-                  {teacherData &&
-                    teacherData.map((userId) => (
-                      <option key={userId.teacherId} value={userId.teacherId}>
-                        {userId.teacherName}
-                      </option>
-                    ))}
-                </select>
+                />
                 {formik.touched.userId && formik.errors.userId && (
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
@@ -693,27 +691,70 @@ function ClassAdd({ selectedCenter }) {
                 )}
               </div>
               <div className="col-md-6 col-12 mb-4">
+                <label>
+                  Class Type<span className="text-danger">*</span>
+                </label>{" "}
+                <br />
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="classType"
+                    id="inlineRadio1"
+                    value="Group"
+                    onChange={formik.handleChange}
+                    checked={formik.values.classType === "Group"}
+                  />
+                  <label className="form-check-label" for="inlineRadio1">
+                    Group
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="classType"
+                    id="inlineRadio2"
+                    value="Individual"
+                    onChange={formik.handleChange}
+                    checked={formik.values.classType === "Individual"}
+                  />
+                  <label className="form-check-label" for="inlineRadio2">
+                    Individual
+                  </label>
+                </div>
+                {formik.errors.classType && formik.touched.classType && (
+                  <div className="text-danger  " style={{ fontSize: ".875em" }}>
+                    {formik.errors.classType}
+                  </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-4">
                 <label>Class Room</label>
-                <select
-                  {...formik.getFieldProps("classId")}
-                  className={`form-select  ${
+                <Select
+                  options={classRoomData}
+                  name="classId"
+                  value={classRoomData?.find(
+                    (option) => option.value === formik.values.classId
+                  )}
+                  onChange={(selectedOption) => {
+                    formik.setFieldValue(
+                      "classId",
+                      selectedOption ? selectedOption.value : ""
+                    );
+                    formik.setFieldTouched("classId", true);
+                  }}
+                  onBlur={() => formik.setFieldTouched("classId", true)}
+                  placeholder="Select Course"
+                  isSearchable
+                  isClearable
+                  className={`${
                     formik.touched.classId && formik.errors.classId
                       ? "is-invalid"
                       : ""
                   }`}
-                  name="classId"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.classId}
-                >
-                  <option></option>
-                  {classRoomData &&
-                    classRoomData.map((classId) => (
-                      <option key={classId.id} value={classId.id}>
-                        {classId.classRoomName}
-                      </option>
-                    ))}
-                </select>
+                  // {...formik.getFieldProps("classId")}
+                />
                 {formik.touched.classId && formik.errors.classId && (
                   <div className="invalid-feedback">
                     {formik.errors.classId}

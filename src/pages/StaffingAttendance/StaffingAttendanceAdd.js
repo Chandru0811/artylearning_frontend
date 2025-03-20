@@ -8,9 +8,10 @@ import api from "../../config/URL";
 import fetchAllEmployeeListByCenter from "../List/EmployeeList";
 import { format } from "date-fns";
 import Select from "react-select";
+import fetchAllTeachersWithIds from "../List/TeacherList";
 
 const validationSchema = Yup.object({
-  centerId: Yup.string().required("*Centre name is required"),
+  // centerId: Yup.string().required("*Centre name is required"),
   userId: Yup.string().required("*Employee name is required"),
   date: Yup.date()
     .transform((value, originalValue) =>
@@ -47,22 +48,17 @@ const validationSchema = Yup.object({
   // attendanceRemark: Yup.string().required("*Attendance remark is required"),
 });
 
-function StaffingAttendanceAdd() {
+function StaffingAttendanceAdd({ selectedCenter }) {
   const [centerData, setCenterData] = useState(null);
-  const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName");
   const [employeeOptions, setEmployeeOptions] = useState([]);
-  console.log("first", employeeOptions);
-
-  // const timestamp = 1723141800000;
-  // const date = new Date(timestamp).toISOString().substring(0, 10);
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: selectedCenter,
       userId: "",
       date: currentDate,
       attendanceStatus: "",
@@ -78,28 +74,10 @@ function StaffingAttendanceAdd() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      console.log("Attendance Emp:", values);
-      let selectedCenterName = "";
-      let selectedEmployeeName = "";
-
-      centerData.forEach((center) => {
-        if (parseInt(values.centerId) === center.id) {
-          selectedCenterName = center.centerNames || "--";
-        }
-      });
-
-      userNamesData.forEach((employee) => {
-        if (parseInt(values.userId) === employee.id) {
-          selectedEmployeeName = employee.userNames || "--";
-        }
-      });
 
       let payload = {
-        centerId: values.centerId,
-        createdBy: userName,
-        centerName: selectedCenterName,
         userId: values.userId,
-        employeeName: selectedEmployeeName,
+        employeeName: "",
         date: values.date,
         attendanceStatus: values.attendanceStatus,
         checkIn: values.checkIn,
@@ -109,6 +87,7 @@ function StaffingAttendanceAdd() {
         otStartTime: values.otStartTime,
         otEndTime: values.otEndTime,
         attendanceRemark: values.attendanceRemark,
+        createdBy: userName,
       };
 
       if (values.modeOfWorking !== "") {
@@ -185,20 +164,7 @@ function StaffingAttendanceAdd() {
     },
   });
 
-  const handleCenterChange = async (event) => {
-    setUserNameData(null);
-    const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    setEmployeeOptions([]);
-
-    try {
-      await fetchUserName(centerId);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const fetchData = async () => {
+  const fetchCenterData = async () => {
     try {
       const centers = await fetchAllCentersWithIds();
       setCenterData(centers);
@@ -207,23 +173,35 @@ function StaffingAttendanceAdd() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchUserName = async (centerId) => {
+  const fetchUserName = async () => {
     try {
-      const userNames = await fetchAllEmployeeListByCenter(centerId);
-      const formattedEmployee = userNames.map((employee) => ({
+      let empList = [];
+      const numericCenterId = Number(selectedCenter);
+      if (numericCenterId === 0) {
+        empList = await fetchAllTeachersWithIds();
+      } else {
+        empList = await fetchAllEmployeeListByCenter(selectedCenter);
+      }
+      const formattedEmployee = empList.map((employee) => ({
         value: employee.id,
-        label: employee.userNames,
+        label: employee.userNames || employee.teacherNames,
       }));
+
       setEmployeeOptions(formattedEmployee);
-      setUserNameData(formattedEmployee);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message || "Failed to fetch employee list");
     }
   };
+
+  useEffect(() => {
+    fetchCenterData();
+  }, []);
+
+  useEffect(() => {
+    if (selectedCenter !== undefined) {
+      fetchUserName();
+    }
+  }, [selectedCenter]); // Re-run when selectedCenter changes
 
   return (
     <section className="AttendanceAdd p-3">
@@ -295,7 +273,7 @@ function StaffingAttendanceAdd() {
             </div>
             <div className="container-fluid px-4 pb-3">
               <div className="row">
-                <div className="col-md-6 col-12 mb-3 ">
+                <div className="col-md-6 col-12 mb-3 d-none">
                   <lable className="">Centre Name</lable>
                   <span className="text-danger">*</span>
                   <select
@@ -305,8 +283,6 @@ function StaffingAttendanceAdd() {
                         ? "is-invalid"
                         : ""
                     }`}
-                    aria-label="Default select example"
-                    onChange={handleCenterChange}
                   >
                     <option selected disabled></option>
                     {centerData &&
@@ -329,9 +305,11 @@ function StaffingAttendanceAdd() {
                   <Select
                     options={employeeOptions}
                     name="userId"
-                    value={employeeOptions.find(
-                      (option) => option.value === formik.values.userId
-                    )}
+                    value={
+                      employeeOptions.find(
+                        (option) => option.value === formik.values.userId
+                      ) || null
+                    }
                     onChange={(selectedOption) =>
                       formik.setFieldValue(
                         "userId",
@@ -346,24 +324,8 @@ function StaffingAttendanceAdd() {
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("userId")}
                   />
-                  {/* <select
-                    {...formik.getFieldProps("userId")}
-                    className={`form-select  ${
-                      formik.touched.userId && formik.errors.userId
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  >
-                    <option selected value={""}></option>
-                    {userNamesData &&
-                      userNamesData.map((userName) => (
-                        <option key={userName.id} value={userName.id}>
-                          {userName.userNames}
-                        </option>
-                      ))}
-                  </select> */}
+
                   {formik.touched.userId && formik.errors.userId && (
                     <div className="invalid-feedback">
                       {formik.errors.userId}
@@ -526,51 +488,6 @@ function StaffingAttendanceAdd() {
                     </div>
                   </>
                 )}
-
-                {/* <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Check In Mode</lable>
-                <span className="text-danger">*</span>
-                <select
-                  className={`form-select ${
-                    formik.touched.checkInmode && formik.errors.checkInmode
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("checkInmode")}
-                  aria-label="Default select example"
-                >
-                  <option selected></option>
-                  <option value="Tap In">Tap In</option>
-                  <option value="Face Recognition">Face Recognition</option>
-                </select>
-                {formik.touched.checkInmode && formik.errors.checkInmode && (
-                  <div className="invalid-feedback">
-                    {formik.errors.checkInmode}
-                  </div>
-                )}
-              </div>
-              <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Check Out Mode</lable>
-                <span className="text-danger">*</span>
-                <select
-                  className={`form-select ${
-                    formik.touched.checkOutmode && formik.errors.checkOutmode
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("checkOutmode")}
-                  aria-label="Default select example"
-                >
-                  <option selected></option>
-                  <option value="Tap Out">Tap Out</option>
-                  <option value="Face Recognition">Face Recognition</option>
-                </select>
-                {formik.touched.checkOutmode && formik.errors.checkOutmode && (
-                  <div className="invalid-feedback">
-                    {formik.errors.checkOutmode}
-                  </div>
-                )}
-              </div> */}
 
                 <div className="col-md-6 col-12">
                   <div className="text-start mt-2">
