@@ -12,7 +12,7 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 import api from "../../../config/URL";
 
-const Deduction = () => {
+const Deduction = ({ selectedCenter }) => {
   const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
   console.log(datas);
@@ -92,7 +92,12 @@ const Deduction = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get("/getAllUserDeduction");
+      const url =
+        selectedCenter === 0 || selectedCenter === "0"
+          ? `getAllUserDeduction`
+          : `/getAllUserDeduction?centerId=${selectedCenter}`;
+
+      const response = await api.get(url);
       setDatas(response.data);
       setLoading(false);
     } catch (error) {
@@ -101,7 +106,7 @@ const Deduction = () => {
   };
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedCenter]);
 
   const theme = createTheme({
     components: {
@@ -149,7 +154,7 @@ const Deduction = () => {
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container-fluid my-4 center">
+    <div className="container-fluid center my-4">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -164,20 +169,20 @@ const Deduction = () => {
           &nbsp;Staffing
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li className="breadcrumb-item active" aria-current="page">
+        <li className="active breadcrumb-item" aria-current="page">
           &nbsp;Deduction
         </li>
       </ol>
       <div className="card">
         <div
-          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          className="d-flex align-items-center justify-content-between p-1 mb-3"
           style={{ background: "#f5f7f9" }}
         >
           <div className="d-flex align-items-center">
             <div className="d-flex">
-              <div className="dot active"></div>
+              <div className="active dot"></div>
             </div>
-            <span className="me-2 text-muted">
+            <span className="text-muted me-2">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
                 Deduction
@@ -185,7 +190,7 @@ const Deduction = () => {
             </span>
           </div>
         </div>
-        <div className="mb-3 d-flex justify-content-end">
+        <div className="d-flex justify-content-end mb-3">
           {storedScreens?.deductionCreate && (
             <Link to="/deduction/add">
               <button

@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 import Select from "react-select";
+import fetchAllTeachersWithIds from "../../List/TeacherList";
+import fetchUserListWithoutFreelancerByCenterId from "../../List/UserListWithoutFreelancer";
 
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Center Name is required"),
@@ -19,7 +21,7 @@ const validationSchema = Yup.object({
     .positive("*Deduction Amount must be a positive value"),
 });
 
-function DeductionEdit() {
+function DeductionEdit({selectedCenter}) {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -30,7 +32,7 @@ function DeductionEdit() {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId:selectedCenter,
       userId: "",
       deductionMonth: "",
       deductionAmount: "",
@@ -83,19 +85,33 @@ function DeductionEdit() {
     }
   };
 
-  const fetchUserName = async (centerId) => {
+  const fetchUserName = async () => {
     try {
-      const userNames = await fetchAllEmployeeListByCenter(centerId);
-      const formattedEmployee = userNames.map((employee) => ({
+      let empList = [];
+      const numericCenterId = Number(selectedCenter);
+      if (numericCenterId === 0) {
+        empList = await fetchAllTeachersWithIds();
+      } else {
+        empList = await fetchUserListWithoutFreelancerByCenterId(
+          selectedCenter
+        );
+      }
+      const formattedEmployee = empList.map((employee) => ({
         value: employee.id,
-        label: employee.userNames,
+        label: employee.userNames || employee.teacherNames,
       }));
+
       setEmployeeOptions(formattedEmployee);
-      setUserNameData(formattedEmployee);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || "Failed to fetch employee list");
     }
   };
+  useEffect(() => {
+    if (selectedCenter !== undefined) {
+      fetchUserName();
+      formik.setFieldValue("centerId", selectedCenter);
+    }
+  }, [selectedCenter]);
 
   useEffect(() => {
     const getData = async () => {
@@ -180,7 +196,7 @@ function DeductionEdit() {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              <div className="col-md-6 col-12 mb-3">
+              <div className="col-md-6 col-12 mb-3 d-none">
                 <label className="form-label">Centre Name</label>
                 <span className="text-danger">*</span>
                 <select

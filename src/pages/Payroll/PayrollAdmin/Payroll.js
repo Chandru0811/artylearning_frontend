@@ -14,12 +14,12 @@ import GlobalDelete from "../../../components/common/GlobalDelete";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import api from "../../../config/URL";
 
-const Payroll = () => {
-  const [filters, setFilters] = useState({
-    centerName: "",
-    employeeName: "",
-    roll: "",
-  });
+const Payroll = ({ selectedCenter }) => {
+  // const [filters, setFilters] = useState({
+  //   centerName: "",
+  //   employeeName: "",
+  //   roll: "",
+  // });
   const navigate = useNavigate();
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
@@ -169,7 +169,13 @@ const Payroll = () => {
 
   const fetchData = async () => {
     try {
-      const response = await api.get("getAllUserPayroll");
+      const url =
+        selectedCenter === 0 || selectedCenter === "0"
+          ? `getAllUserPayroll`
+          : `/getAllUserPayroll?centerId=${selectedCenter}`;
+
+      const response = await api.get(url);
+
       setAllData(response.data);
       setDatas(response.data);
       setLoading(false);
@@ -181,7 +187,7 @@ const Payroll = () => {
   useEffect(() => {
     fetchData();
     getCenterData();
-  }, []);
+  }, [selectedCenter]);
 
   const theme = createTheme({
     components: {
@@ -226,75 +232,75 @@ const Payroll = () => {
     },
   });
 
-  useEffect(() => {
-    const filteredData = allData.filter((item) => {
-      const centerNameMatch = filters.centerName
-        ? item.centerName
-            ?.toLowerCase()
-            .includes(filters.centerName.toLowerCase())
-        : true;
+  // useEffect(() => {
+  //   const filteredData = allData.filter((item) => {
+  //     const centerNameMatch = filters.centerName
+  //       ? item.centerName
+  //           ?.toLowerCase()
+  //           .includes(filters.centerName.toLowerCase())
+  //       : true;
 
-      const employeeNameMatch = filters.employeeName
-        ? item.employeeName
-            ?.toLowerCase()
-            .includes(filters.employeeName.toLowerCase())
-        : true;
+  //     const employeeNameMatch = filters.employeeName
+  //       ? item.employeeName
+  //           ?.toLowerCase()
+  //           .includes(filters.employeeName.toLowerCase())
+  //       : true;
 
-      const rollMatch = filters.roll
-        ? item.roll?.toLowerCase().includes(filters.roll.toLowerCase())
-        : true;
+  //     const rollMatch = filters.roll
+  //       ? item.roll?.toLowerCase().includes(filters.roll.toLowerCase())
+  //       : true;
 
-      return centerNameMatch && employeeNameMatch && rollMatch;
-    });
+  //     return centerNameMatch && employeeNameMatch && rollMatch;
+  //   });
 
-    setDatas(filteredData);
-  }, [filters, allData]);
+  //   setDatas(filteredData);
+  // }, [filters, allData]);
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: value,
-    }));
-  };
+  // const handleFilterChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFilters((prevFilters) => ({
+  //     ...prevFilters,
+  //     [name]: value,
+  //   }));
+  // };
 
-  const clearFilter = () => {
-    setFilters({
-      centerName: "",
-      employeeName: "",
-      roll: "",
-    });
-    setDatas(allData);
-  };
+  // const clearFilter = () => {
+  //   setFilters({
+  //     centerName: "",
+  //     employeeName: "",
+  //     roll: "",
+  //   });
+  //   setDatas(allData);
+  // };
 
-  useEffect(() => {
-    const filteredData = allData.filter((item) => {
-      const centerNameMatch = filters.centerName
-        ? item.centerName
-            ?.toLowerCase()
-            .includes(filters.centerName.toLowerCase())
-        : true;
+  // useEffect(() => {
+  //   const filteredData = allData.filter((item) => {
+  //     const centerNameMatch = filters.centerName
+  //       ? item.centerName
+  //           ?.toLowerCase()
+  //           .includes(filters.centerName.toLowerCase())
+  //       : true;
 
-      const employeeNameMatch = filters.employeeName
-        ? item.employeeName
-            ?.toLowerCase()
-            .includes(filters.employeeName.toLowerCase())
-        : true;
+  //     const employeeNameMatch = filters.employeeName
+  //       ? item.employeeName
+  //           ?.toLowerCase()
+  //           .includes(filters.employeeName.toLowerCase())
+  //       : true;
 
-      const rollMatch = filters.roll
-        ? item.userRole?.toLowerCase().includes(filters.roll.toLowerCase())
-        : true;
+  //     const rollMatch = filters.roll
+  //       ? item.userRole?.toLowerCase().includes(filters.roll.toLowerCase())
+  //       : true;
 
-      return centerNameMatch && employeeNameMatch && rollMatch;
-    });
+  //     return centerNameMatch && employeeNameMatch && rollMatch;
+  //   });
 
-    setDatas(filteredData);
-  }, [filters, allData]);
+  //   setDatas(filteredData);
+  // }, [filters, allData]);
 
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container-fluid my-4 center">
+    <div className="container-fluid center my-4">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -309,20 +315,20 @@ const Payroll = () => {
           Staffing
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li className="breadcrumb-item active" aria-current="page">
+        <li className="active breadcrumb-item" aria-current="page">
           Payroll
         </li>
       </ol>
       <div className="card">
         <div
-          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          className="d-flex align-items-center justify-content-between p-1 mb-3"
           style={{ background: "#f5f7f9" }}
         >
           <div className="d-flex align-items-center">
             <div className="d-flex">
-              <div className="dot active"></div>
+              <div className="active dot"></div>
             </div>
-            <span className="me-2 text-muted">
+            <span className="text-muted me-2">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
                 Payroll
@@ -330,9 +336,9 @@ const Payroll = () => {
             </span>
           </div>
         </div>
-        <div className="d-flex justify-content-between mb-3 px-2">
-          <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
+        <div className="d-flex justify-content-end mb-3 px-2">
+          {/* <div className="d-lg-flex individual_fliters">
+            <div className="form-group mb-0 mb-1 ms-2">
               <input
                 type="text"
                 className="form-control form-control-sm center_list"
@@ -343,7 +349,7 @@ const Payroll = () => {
                 onChange={handleFilterChange}
               />
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <input
                 type="text"
                 className="form-control form-control-sm center_list"
@@ -354,7 +360,7 @@ const Payroll = () => {
                 onChange={handleFilterChange}
               />
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <input
                 type="text"
                 className="form-control form-control-sm center_list"
@@ -366,16 +372,16 @@ const Payroll = () => {
               />
             </div>
 
-            <div className="form-group mb-0 ms-2 mb-1 ">
+            <div className="form-group mb-0 mb-1 ms-2">
               <button
                 type="button"
-                className="btn btn-sm btn-border"
+                className="btn btn-border btn-sm"
                 onClick={clearFilter}
               >
                 Clear
               </button>
             </div>
-          </div>
+          </div> */}
           {storedScreens?.payrollCreate && (
             <Link to="/payrolladmin/add">
               <button

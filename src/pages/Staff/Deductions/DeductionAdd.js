@@ -8,9 +8,10 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 import { format } from "date-fns";
 import fetchUserListWithoutFreelancerByCenterId from "../../List/UserListWithoutFreelancer";
 import Select from "react-select";
+import fetchAllTeachersWithIds from "../../List/TeacherList";
 
 const validationSchema = Yup.object({
-  centerId: Yup.number().required("*Center Name is required"),
+  // centerId: Yup.number().required("*Center Name is required"),
   userId: Yup.number().required("*Employee Name is required"),
   deductionName: Yup.string().required("*Select the Deduction Name"),
   deductionMonth: Yup.string().required("*Select the Deduction Month"),
@@ -20,7 +21,7 @@ const validationSchema = Yup.object({
     .positive("*Deduction Amount must be a positive value"),
 });
 
-function DeductionAdd() {
+function DeductionAdd({ selectedCenter }) {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -30,7 +31,7 @@ function DeductionAdd() {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: selectedCenter,
       userId: "",
       employeeName: "",
       deductionName: "",
@@ -89,12 +90,6 @@ function DeductionAdd() {
     formik.setFieldValue("userId", "");
     formik.setFieldValue("employeeName", "");
     setEmployeeOptions([]);
-
-    try {
-      await fetchUserName(centerId);
-    } catch (error) {
-      toast.error(error.message || "Failed to fetch employees");
-    }
   };
 
   const fetchData = async () => {
@@ -110,25 +105,33 @@ function DeductionAdd() {
     fetchData();
   }, []);
 
-  const fetchUserName = async (centerId) => {
+  const fetchUserName = async () => {
     try {
-      const userNames = await fetchUserListWithoutFreelancerByCenterId(
-        centerId
-      );
-      const formattedEmployee = userNames.map((employee) => {
-        const option = {
-          value: employee.id,
-          label: employee.userNames || "Unknown", // Fallback if userNames is missing
-        };
-        console.log("Formatted Employee Option:", option); // Debug
-        return option;
-      });
+      let empList = [];
+      const numericCenterId = Number(selectedCenter);
+      if (numericCenterId === 0) {
+        empList = await fetchAllTeachersWithIds();
+      } else {
+        empList = await fetchUserListWithoutFreelancerByCenterId(
+          selectedCenter
+        );
+      }
+      const formattedEmployee = empList.map((employee) => ({
+        value: employee.id,
+        label: employee.userNames || employee.teacherNames,
+      }));
+
       setEmployeeOptions(formattedEmployee);
-      setUserNameData(formattedEmployee);
     } catch (error) {
-      toast.error(error.message || "Failed to fetch employee names");
+      toast.error(error.message || "Failed to fetch employee list");
     }
   };
+  useEffect(() => {
+    if (selectedCenter !== undefined) {
+      fetchUserName();
+      formik.setFieldValue("centerId", selectedCenter);
+    }
+  }, [selectedCenter]);
 
   useEffect(() => {
     const currentMonth = format(new Date(), "yyyy-MM");
@@ -157,7 +160,7 @@ function DeductionAdd() {
           </Link>
           <span className="breadcrumb-separator"> </span>
         </li>
-        <li className="breadcrumb-item active" aria-current="page">
+        <li className="active breadcrumb-item" aria-current="page">
           Deduction Add
         </li>
       </ol>
@@ -171,18 +174,18 @@ function DeductionAdd() {
       >
         <div className="card">
           <div
-            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
+            className="d-flex align-items-center justify-content-between p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
             <div className="d-flex align-items-center">
               <div className="d-flex">
-                <div className="dot active"></div>
+                <div className="active dot"></div>
               </div>
-              <span className="me-2 text-muted">Add Deduction</span>
+              <span className="text-muted me-2">Add Deduction</span>
             </div>
-            <div className="my-2 pe-3 d-flex align-items-center">
+            <div className="d-flex align-items-center my-2 pe-3">
               <Link to="/deduction">
-                <button type="button" className="btn btn-sm btn-border">
+                <button type="button" className="btn btn-border btn-sm">
                   Back
                 </button>
               </Link>
@@ -193,7 +196,7 @@ function DeductionAdd() {
               >
                 {loadIndicator && (
                   <span
-                    className="spinner-border spinner-border-sm me-2"
+                    className="me-2 spinner-border spinner-border-sm"
                     aria-hidden="true"
                   ></span>
                 )}
@@ -203,7 +206,7 @@ function DeductionAdd() {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              <div className="col-md-6 col-12 mb-3">
+              <div className="col-12 col-md-6 mb-3 d-none">
                 <label className="form-label">Centre Name</label>
                 <span className="text-danger">*</span>
                 <select
@@ -230,7 +233,7 @@ function DeductionAdd() {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-3">
+              <div className="col-12 col-md-6 mb-3">
                 <label className="form-label">Employee Name</label>{" "}
                 <span className="text-danger">*</span>
                 <Select
@@ -270,7 +273,7 @@ function DeductionAdd() {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-3">
+              <div className="col-12 col-md-6 mb-3">
                 <label className="form-label">Deduction Name</label>
                 <span className="text-danger">*</span>
                 <select
@@ -294,7 +297,7 @@ function DeductionAdd() {
                     </div>
                   )}
               </div>
-              <div className="col-md-6 col-12 mb-3">
+              <div className="col-12 col-md-6 mb-3">
                 <label className="form-label">
                   Deduction Month<span className="text-danger">*</span>
                 </label>
@@ -315,7 +318,7 @@ function DeductionAdd() {
                     </div>
                   )}
               </div>
-              <div className="col-md-6 col-12 mb-3">
+              <div className="col-12 col-md-6 mb-3">
                 <label className="form-label">
                   Deduction Amount<span className="text-danger">*</span>
                 </label>
