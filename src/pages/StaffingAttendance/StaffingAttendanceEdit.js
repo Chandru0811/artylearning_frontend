@@ -36,7 +36,7 @@ function StaffingAttendanceEdit({selectedCenter}) {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: selectedCenter,
       userId: "",
       date: new Date().toISOString().split("T")[0],
       attendanceStatus: "",
@@ -182,7 +182,7 @@ function StaffingAttendanceEdit({selectedCenter}) {
     };
 
     getData();
-  }, []);
+  }, [selectedCenter]);
 
   return (
     <section className="AttendanceAdd p-3">

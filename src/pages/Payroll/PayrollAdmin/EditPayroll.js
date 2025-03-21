@@ -9,7 +9,7 @@ import api from "../../../config/URL";
 import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 import { data } from "jquery";
 
-function EditPayroll() {
+function EditPayroll({selectedCenter}) {
   const { id } = useParams();
   const [centerData, setCenterData] = useState(null);
   const [payrollData, setPayrollData] = useState(null);
@@ -398,7 +398,7 @@ function EditPayroll() {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              <div className="col-md-6 col-12 mb-3 ">
+              <div className="col-md-6 col-12 mb-3 d-none">
                 <lable className="">Centre Name</lable>
                 <span className="text-danger">*</span>
                 <input

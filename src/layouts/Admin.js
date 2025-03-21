@@ -441,7 +441,7 @@ function Admin({ handleLogout }) {
               />
 
               {/* Teacher */}
-              <Route path="/teacher" element={<Teacher />} />
+              <Route path="/teacher" element={<Teacher selectedCenter={selectedCenter}/>} />
               <Route path="/teacher/add" element={<TeacherAdd />} />
               <Route path="/teacher/edit/:staff_id" element={<TeacherEdit />} />
               <Route path="/teacher/view/:id" element={<TeacherView />} />
@@ -457,7 +457,7 @@ function Admin({ handleLogout }) {
               {/* StaffingAttendance */}
               <Route
                 path="/staffing/attendance"
-                element={<StaffingAttendance />}
+                element={<StaffingAttendance selectedCenter={selectedCenter}/>}
               />
               <Route
                 path="/staffing/attendance/add"
@@ -465,7 +465,7 @@ function Admin({ handleLogout }) {
               />
               <Route
                 path="/staffing/attendance/edit/:id"
-                element={<StaffingAttendanceEdit />}
+                element={<StaffingAttendanceEdit selectedCenter={selectedCenter}/>}
               />
               <Route
                 path="/staffing/attendance/view/:id"
@@ -473,19 +473,19 @@ function Admin({ handleLogout }) {
               />
 
               {/* {/ {/ Holiday /} /} */}
-              <Route path="/holiday" element={<Holiday />} />
+              <Route path="/holiday" element={<Holiday selectedCenter={selectedCenter}/>} />
               <Route path="/holiday/add" element={<HolidayAdd selectedCenter={selectedCenter}/>} />
               <Route path="/holiday/edit/:id" element={<HolidayEdit selectedCenter={selectedCenter}/>} />
               <Route path="/holiday/list/:id" element={<HolidayView />} />
 
               {/* {/ {/ Deduction /} /} */}
-              <Route path="/deduction" element={<Deduction />} />
-              <Route path="/deduction/add" element={<DeductionAdd />} />
-              <Route path="/deduction/edit/:id" element={<DeductionEdit />} />
+              <Route path="/deduction" element={<Deduction selectedCenter={selectedCenter}/>} />
+              <Route path="/deduction/add" element={<DeductionAdd selectedCenter={selectedCenter}/>} />
+              <Route path="/deduction/edit/:id" element={<DeductionEdit selectedCenter={selectedCenter}/>} />
               <Route path="/deduction/list/:id" element={<DeductionView />} />
 
               {/* {/ Leave Admin /} */}
-              <Route path="/leaveadmin" element={<LeaveAdmin />} />
+              <Route path="/leaveadmin" element={<LeaveAdmin selectedCenter={selectedCenter}/>} />
               <Route path="/leaveadmin/edit/:id" element={<LeaveAdminEdit />} />
               <Route path="/leaveadmin/view/:id" element={<LeaveAdminView />} />
 
@@ -496,9 +496,9 @@ function Admin({ handleLogout }) {
               <Route path="/leave/view/:id" element={<LeaveView />} />
 
               {/* {/ Payroll /} */}
-              <Route path="/payrolladmin" element={<Payroll />} />
-              <Route path="/payrolladmin/add" element={<AddPayroll />} />
-              <Route path="/payrolladmin/edit/:id" element={<EditPayroll />} />
+              <Route path="/payrolladmin" element={<Payroll selectedCenter={selectedCenter}/>} />
+              <Route path="/payrolladmin/add" element={<AddPayroll selectedCenter={selectedCenter}/>} />
+              <Route path="/payrolladmin/edit/:id" element={<EditPayroll selectedCenter={selectedCenter}/>} />
               <Route path="/payrolladmin/view/:id" element={<Viewpayroll />} />
 
               {/* {/ Payslip /} */}
@@ -531,7 +531,7 @@ function Admin({ handleLogout }) {
               <Route path="/report/assessment" element={<AssessmentReport />} />
 
               {/* staff  */}
-              <Route path="/staff" element={<Staff />} />
+              <Route path="/staff" element={<Staff selectedCenter={selectedCenter}/>} />
               <Route path="/staff/add" element={<StaffAdd />} />
               <Route path="/staff/edit/:staff_id" element={<StaffEdit />} />
               <Route path="/staff/view/:id" element={<StaffView />} />
