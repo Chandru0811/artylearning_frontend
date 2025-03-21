@@ -145,25 +145,30 @@ const Lead = ({ selectedCenter }) => {
     setLoading(true);
     let params = {};
 
+    // Use centerLocalId or a default centerId when filters are cleared, unless centerId is explicitly "0"
     const centerId =
-      !isClearFilterClicked &&
-      (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
-        ? filters.centerId || centerLocalId
-        : "";
+      filters.centerId ||
+      (centerLocalId && centerLocalId !== "undefined"
+        ? centerLocalId
+        : centerData?.[0]?.id || "");
 
+    // Only add centerId to params if it's not "0"
     if (centerId !== "" && centerId !== "0") {
       params.centerId = centerId;
     }
 
+    // Add subjectId to params if it exists
     if (filters.subjectId !== "") {
       params.subjectId = filters.subjectId;
     }
 
+    // Add leadStatus to params if it's not "ALL"
     if (filters.leadStatus !== "" && filters.leadStatus !== "ALL") {
       params.leadStatus = filters.leadStatus;
     }
 
     try {
+      // If centerId is "0", params will be empty or only contain other filters
       const response = await api.get("/getAllLeadInfos", { params });
       setDatas(response.data);
       setActiveButton(
@@ -198,7 +203,6 @@ const Lead = ({ selectedCenter }) => {
       setIsClearFilterClicked(false);
     }
   };
-
   useEffect(() => {
     const fetchData = async () => {
       await fetchCenterData(); // Fetch center data and subjects
@@ -225,12 +229,19 @@ const Lead = ({ selectedCenter }) => {
   }, [filters, selectedCenter]);
 
   const ResetFilter = () => {
+    const defaultCenterId =
+      centerLocalId && centerLocalId !== "undefined" && centerLocalId !== "0"
+        ? centerLocalId
+        : centerData.length > 0
+        ? centerData[0].id
+        : "";
     localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
     setFilters({
-      centerId: "",
+      centerId: defaultCenterId,
       subjectId: "",
       leadStatus: "",
     });
+    // getData();
     setIsClearFilterClicked(true);
   };
 
@@ -293,7 +304,7 @@ const Lead = ({ selectedCenter }) => {
                 type="button"
               >
                 <span
-                  className="text-white "
+                  className="text-white"
                   style={{
                     textDecoration: "none",
                     cursor: "default",
@@ -311,7 +322,7 @@ const Lead = ({ selectedCenter }) => {
                 type="button"
                 style={{ cursor: "default" }}
               >
-                <span className="text-white " style={{ textWrap: "nowrap" }}>
+                <span className="text-white" style={{ textWrap: "nowrap" }}>
                   Enrolled
                 </span>
               </button>
@@ -324,7 +335,7 @@ const Lead = ({ selectedCenter }) => {
                 onChange={(e) => {
                   handleStatusChange(row.original, e.target.value);
                 }}
-                className="form-control d-flex justify-content-center "
+                className="d-flex form-control justify-content-center"
                 style={{
                   padding: "0px",
                   borderRadius: "4px",
@@ -865,7 +876,7 @@ const Lead = ({ selectedCenter }) => {
   const handleMenuClose = () => setMenuAnchor(null);
   return (
     <div>
-      <div className="container-fluid my-4 center">
+      <div className="container-fluid center my-4">
         <ol
           className="breadcrumb my-3"
           style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -880,7 +891,7 @@ const Lead = ({ selectedCenter }) => {
             &nbsp;Lead Management
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
-          <li className="breadcrumb-item active" aria-current="page">
+          <li className="active breadcrumb-item" aria-current="page">
             &nbsp;Lead Listing
           </li>
         </ol>
@@ -946,14 +957,14 @@ const Lead = ({ selectedCenter }) => {
         </div>
         <div className="card">
           <div
-            className="mb-3 d-flex justify-content-between align-items-center p-1"
+            className="d-flex align-items-center justify-content-between p-1 mb-3"
             style={{ background: "#f5f7f9" }}
           >
             <div className="d-flex align-items-center">
               <div className="d-flex">
-                <div className="dot active"></div>
+                <div className="active dot"></div>
               </div>
-              <span className="me-2 text-muted">
+              <span className="text-muted me-2">
                 This database shows the list of{" "}
                 <span className="bold" style={{ color: "#287f71" }}>
                   Lead
@@ -962,8 +973,8 @@ const Lead = ({ selectedCenter }) => {
             </div>
           </div>
           <div className="d-flex justify-content-between mb-3 px-2">
-            <div className="individual_fliters d-lg-flex ">
-              <div className="form-group mb-0 ms-2 mb-1">
+            <div className="d-lg-flex individual_fliters">
+              <div className="form-group mb-0 mb-1 ms-2">
                 <input type="hidden" name="centerId" value={filters.centerId} />
                 {/* <select
                   className="form-select form-select-sm mb-2 mb-md-0 me-md-3"
@@ -1005,7 +1016,7 @@ const Lead = ({ selectedCenter }) => {
                 </select>
               </div>
 
-              <div className="form-group mb-0 ms-2 mb-1 ">
+              <div className="form-group mb-0 mb-1 ms-2">
                 <button
                   type="button"
                   className="btn btn-sm border-secondary ms-3"
@@ -1123,9 +1134,9 @@ const Lead = ({ selectedCenter }) => {
         <Modal.Body>
           <div className="text-start">
             <p>{confirmationMessage}</p>
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex align-items-center justify-content-between">
               <button
-                className="btn btn-sm btn-border bg-light text-dark"
+                className="btn btn-border btn-sm bg-light text-dark"
                 onClick={() => setShowModal(false)}
               >
                 Cancel

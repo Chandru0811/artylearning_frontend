@@ -12,8 +12,9 @@ import {
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import GlobalDelete from "../../components/common/GlobalDelete";
 
-const Teacher = () => {
+const Teacher = ({ selectedCenter }) => {
   const [filters, setFilters] = useState({
+    centerId: selectedCenter,
     teacherName: "",
     country: "",
     teacherType: "",
@@ -138,31 +139,61 @@ const Teacher = () => {
   //     setLoading(false);
   //   }
   // };
-
   const fetchData = async () => {
     try {
-      setLoading(true);
-      const filteredFilters = Object.fromEntries(
-        Object.entries(filters).filter(
-          ([key, value]) =>
-            value !== "" && value !== null && value !== undefined
-        )
-      );
-      const queryParams = new URLSearchParams(filteredFilters).toString();
-      const response = await api.get(
-        `/getAllTeachersAndFreelancers?${queryParams}`
-      );
+      const url =
+        selectedCenter === 0 || selectedCenter === "0"
+          ? `getAllTeachersAndFreelancers`
+          : `/getAllTeachersAndFreelancers?centerId=${selectedCenter}`;
+
+      const response = await api.get(url);
       setData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
       setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data ", error);
     }
   };
   useEffect(() => {
     fetchData();
-  }, [filters]);
+  }, [selectedCenter]);
+  // const fetchData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     let response;
 
+  //     if (filters.centerId === 0) {
+  //       response = await api.get("/getAllTeachersAndFreelancers");
+  //     } else {
+  //       const filteredFilters = Object.fromEntries(
+  //         Object.entries(filters).filter(
+  //           ([key, value]) =>
+  //             value !== "" && value !== null && value !== undefined
+  //         )
+  //       );
+  //       if (filteredFilters.centerId === 0) {
+  //         delete filteredFilters.centerId;
+  //       }
+  //       const queryParams = new URLSearchParams(filteredFilters).toString();
+  //       console.log("Filters:", filteredFilters);
+  //       console.log("Query Params:", queryParams);
+  //       response = await api.get(
+  //         `/getAllTeachersAndFreelancers${queryParams ? `?${queryParams}` : ""}`
+  //       );
+  //     }
+
+  //     setData(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, centerId: selectedCenter }));
+  }, [selectedCenter]);
+  useEffect(() => {
+    fetchData();
+  }, [filters]);
   const theme = createTheme({
     components: {
       MuiTableCell: {
@@ -215,6 +246,7 @@ const Teacher = () => {
 
   const clearFilter = () => {
     setFilters({
+      centerId: selectedCenter,
       teacherName: "",
       country: "",
       teacherType: "",
@@ -241,7 +273,7 @@ const Teacher = () => {
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container-fluid my-4 center">
+    <div className="container-fluid center my-4">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -256,20 +288,20 @@ const Teacher = () => {
           &nbsp;Staffing
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li className="breadcrumb-item active" aria-current="page">
+        <li className="active breadcrumb-item" aria-current="page">
           &nbsp;Teacher
         </li>
       </ol>
       <div className="card">
         <div
-          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          className="d-flex align-items-center justify-content-between p-1 mb-3"
           style={{ background: "#f5f7f9" }}
         >
           <div className="d-flex align-items-center">
             <div className="d-flex">
-              <div className="dot active"></div>
+              <div className="active dot"></div>
             </div>
-            <span className="me-2 text-muted">
+            <span className="text-muted me-2">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
                 Teacher
@@ -277,9 +309,11 @@ const Teacher = () => {
             </span>
           </div>
         </div>
-        <div className="mb-3 d-flex justify-content-between">
-          <div className="individual_fliters d-lg-flex">
-            <div className="form-group mb-0 ms-2 mb-1">
+        <div className="d-flex justify-content-between mb-3">
+          <div className="d-lg-flex individual_fliters">
+            <input type="hidden" name="centerId" value={filters.centerId} />
+
+            <div className="form-group mb-0 mb-1 ms-2">
               <input
                 type="text"
                 name="teacherName"
@@ -290,7 +324,7 @@ const Teacher = () => {
                 onChange={handleFilterChange}
               />
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <input
                 type="text"
                 name="country"
@@ -301,7 +335,7 @@ const Teacher = () => {
                 onChange={handleFilterChange}
               />
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <select
                 type="text"
                 className="form-select form-select-sm center_list"
@@ -318,7 +352,7 @@ const Teacher = () => {
                 <option value="Intern">Intern</option>
               </select>
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <select
                 type="text"
                 className="form-select form-select-sm center_list"
@@ -335,10 +369,10 @@ const Teacher = () => {
               </select>
             </div>
 
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <button
                 type="button"
-                className="btn btn-sm btn-border"
+                className="btn btn-border btn-sm"
                 onClick={clearFilter}
               >
                 Clear

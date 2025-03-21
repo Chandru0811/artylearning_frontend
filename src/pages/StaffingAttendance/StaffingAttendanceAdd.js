@@ -192,16 +192,17 @@ function StaffingAttendanceAdd({ selectedCenter }) {
       toast.error(error.message || "Failed to fetch employee list");
     }
   };
+  useEffect(() => {
+    if (selectedCenter !== undefined) {
+      fetchUserName();
+    }
+  }, [selectedCenter]);
 
   useEffect(() => {
     fetchCenterData();
   }, []);
 
-  useEffect(() => {
-    if (selectedCenter !== undefined) {
-      fetchUserName();
-    }
-  }, [selectedCenter]); // Re-run when selectedCenter changes
+ // Re-run when selectedCenter changes
 
   return (
     <section className="AttendanceAdd p-3">

@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
-const LeaveAdmin = () => {
+const LeaveAdmin = ({ selectedCenter }) => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   console.log("Leave Data:", data);
@@ -118,7 +118,12 @@ const LeaveAdmin = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get("/getAllUserLeaveRequests");
+      const url =
+        selectedCenter === 0 || selectedCenter === "0"
+          ? `getAllUserLeaveRequests`
+          : `/getAllUserLeaveRequests?centerId=${selectedCenter}`;
+
+      const response = await api.get(url);
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -129,7 +134,7 @@ const LeaveAdmin = () => {
   useEffect(() => {
     getData();
     fetchLeaveType();
-  }, []);
+  }, [selectedCenter]);
 
   const theme = createTheme({
     components: {
@@ -177,7 +182,7 @@ const LeaveAdmin = () => {
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container-fluid my-4 center">
+    <div className="container-fluid center my-4">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -192,20 +197,20 @@ const LeaveAdmin = () => {
           &nbsp;Staffing
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li className="breadcrumb-item active" aria-current="page">
+        <li className="active breadcrumb-item" aria-current="page">
           &nbsp;Leave
         </li>
       </ol>
       <div className="card">
         <div
-          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          className="d-flex align-items-center justify-content-between p-1 mb-3"
           style={{ background: "#f5f7f9" }}
         >
           <div className="d-flex align-items-center">
             <div className="d-flex">
-              <div className="dot active"></div>
+              <div className="active dot"></div>
             </div>
-            <span className="me-2 text-muted">
+            <span className="text-muted me-2">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
                 Leave

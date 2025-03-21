@@ -14,7 +14,7 @@ import api from "../../../config/URL";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
-const Holiday = () => {
+const Holiday = ({ selectedCenter }) => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   console.log("Leave Data:", data);
@@ -108,7 +108,12 @@ const Holiday = () => {
         const response = await api.get(`/getAllHolidayListByUserId/${userId}`);
         setData(response.data);
       } else {
-        const response = await api.get("/getAllUserHoliday");
+        const url =
+          selectedCenter === 0 || selectedCenter === "0"
+            ? `getAllUserHoliday`
+            : `/getAllUserHoliday?centerId=${selectedCenter}`;
+
+        const response = await api.get(url);
         setData(response.data);
       }
       setLoading(false);
@@ -119,7 +124,7 @@ const Holiday = () => {
   useEffect(() => {
     getData();
     fetchData();
-  }, []);
+  }, [selectedCenter]);
 
   const theme = createTheme({
     components: {

@@ -287,16 +287,18 @@ const Document = ({ selectedCenter }) => {
       setLoading(true);
       // Dynamically construct query parameters based on filters
       const queryParams = new URLSearchParams();
-      if (!isClearFilterClicked) {
-        // Only append centerId if it's NOT 0
-        if (filters.centerId && filters.centerId !== "0") {
-          queryParams.append("centerId", filters.centerId);
-        } else if (
-          centerLocalId &&
-          centerLocalId !== "undefined" &&
-          centerLocalId !== "0"
-        ) {
-          queryParams.append("centerId", centerLocalId);
+      if (filters.centerId !== "0") {
+        const effectiveCenterId = filters.centerId
+          ? filters.centerId
+          : centerLocalId &&
+            centerLocalId !== "undefined" &&
+            centerLocalId !== "0"
+          ? centerLocalId
+          : centerData.length > 0
+          ? centerData[0].id
+          : "";
+        if (effectiveCenterId) {
+          queryParams.append("centerId", effectiveCenterId);
         }
       }
 
@@ -306,10 +308,11 @@ const Document = ({ selectedCenter }) => {
           queryParams.append(key, filters[key]);
         }
       }
-
-      const response = await api.get(
-        `/getDocumentFolderWithCustomInfo?${queryParams.toString()}`
-      );
+      const endpoint = `/getDocumentFolderWithCustomInfo?${queryParams.toString()}`;
+      const response = await api.get(endpoint);
+      // const response = await api.get(
+      //   `/getDocumentFolderWithCustomInfo?${queryParams.toString()}`
+      // );
       setData(response.data);
     } catch (error) {
       toast.error("Error Fetching Data : ", error);
@@ -346,7 +349,7 @@ const Document = ({ selectedCenter }) => {
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container-fluid px-2 my-4 center">
+    <div className="container-fluid center my-4 px-2">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -361,20 +364,20 @@ const Document = ({ selectedCenter }) => {
           &nbsp;Document Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li className="breadcrumb-item active" aria-current="page">
+        <li className="active breadcrumb-item" aria-current="page">
           &nbsp;Document
         </li>
       </ol>
       <div className="card">
         <div
-          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          className="d-flex align-items-center justify-content-between p-1 mb-3"
           style={{ background: "#f5f7f9" }}
         >
           <div className="d-flex align-items-center">
             <div className="d-flex">
-              <div className="dot active"></div>
+              <div className="active dot"></div>
             </div>
-            <span className="me-2 text-muted">
+            <span className="text-muted me-2">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
                 Document
@@ -383,7 +386,7 @@ const Document = ({ selectedCenter }) => {
           </div>
         </div>
         <div className="mb-3">
-          <div className="individual_fliters d-lg-flex">
+          <div className="d-lg-flex individual_fliters">
             <div className="form-group mb-0 mb-1">
               <input type="hidden" name="centerId" value={filters.centerId} />
               {/* <select
@@ -401,7 +404,7 @@ const Document = ({ selectedCenter }) => {
                 ))}
               </select> */}
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <select
                 className="form-select form-select-sm center_list"
                 name="courseId"
@@ -427,7 +430,7 @@ const Document = ({ selectedCenter }) => {
                     ))}
               </select>
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <select
                 className="form-select form-select-sm center_list"
                 name="classId"
@@ -446,7 +449,7 @@ const Document = ({ selectedCenter }) => {
                   ))}
               </select>
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <input
                 type="date"
                 name="date"
@@ -456,7 +459,7 @@ const Document = ({ selectedCenter }) => {
                 style={{ width: "160px" }}
               />
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <select
                 className="form-select form-select-sm center_list"
                 name="userId"
@@ -484,8 +487,8 @@ const Document = ({ selectedCenter }) => {
             </div>
           </div>
           <div className="d-flex justify-content-between">
-            <div className="individual_fliters d-lg-flex mt-2">
-              <div className="form-group mb-0 ms-2 mb-1">
+            <div className="d-lg-flex individual_fliters mt-2">
+              <div className="form-group mb-0 mb-1 ms-2">
                 <select
                   className="form-select form-select-sm center_list"
                   name="day"
@@ -505,10 +508,10 @@ const Document = ({ selectedCenter }) => {
                   <option value="SATURDAY">Saturday</option>
                 </select>
               </div>
-              <div className="form-group mb-0 ms-2 mb-1 ">
+              <div className="form-group mb-0 mb-1 ms-2">
                 <button
                   type="button"
-                  className="btn btn-sm btn-border"
+                  className="btn btn-border btn-sm"
                   onClick={clearFilter}
                 >
                   Clear
