@@ -11,6 +11,7 @@ import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import fetchAllCentersWithStudentList from "../List/CenterAvailableStudentLidt";
 import { ImCancelCircle } from "react-icons/im";
 import Select from "react-select";
+import fetchOverAllStudentCompletionForm from "../List/StudentAllCompletedList";
 
 const invoiceItemSchema = Yup.object().shape({
   item: Yup.string().required("Item name is required"),
@@ -49,7 +50,7 @@ const validationSchema = Yup.object({
     .notRequired(),
 });
 
-export default function InvoiceAdd() {
+export default function InvoiceAdd({ selectedCenter }) {
   const [rows, setRows] = useState([{}]);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -74,7 +75,7 @@ export default function InvoiceAdd() {
 
   const formik = useFormik({
     initialValues: {
-      center: "",
+      center: selectedCenter || "",
       parent: "",
       student: "",
       course: "",
@@ -188,10 +189,40 @@ export default function InvoiceAdd() {
 
   const fetchCenterData = async () => {
     try {
-      const centerData = await fetchAllCentersWithStudentList();
-      setCenterData(centerData);
+      const response = await fetchAllCentersWithStudentList();
+      if (Array.isArray(response)) {
+        setCenterData(response);
+      } else {
+        console.error("Invalid data format:", response);
+        setCenterData([]);
+      }
     } catch (error) {
-      toast.error(error);
+      toast.error("Failed to fetch center data");
+      console.error(error);
+    }
+  };
+
+  const fetchStudent = async (centerId) => {
+    try {
+      let student = [];
+      const numericCenterId = Number(centerId);
+      if (numericCenterId === 0) {
+        student = await fetchOverAllStudentCompletionForm();
+      } else {
+        student = await fetchAllStudentListByCenter(numericCenterId);
+      }
+      if (!Array.isArray(student)) {
+        throw new Error("API did not return an array");
+      }
+      const formattedStudent = student.map((std) => ({
+        value: std.id,
+        label: std.studentNames,
+      }));
+      setStudentOptions(formattedStudent);
+      setStudentData(student);
+    } catch (error) {
+      console.error("Error fetching:", error);
+      toast.error(error.message || "Failed to fetch");
     }
   };
 
@@ -223,20 +254,6 @@ export default function InvoiceAdd() {
     }
   };
 
-  const fetchStudent = async (centerId) => {
-    try {
-      const student = await fetchAllStudentListByCenter(centerId);
-      const formattedTeacher = student.map((studentName) => ({
-        value: studentName.id,
-        label: studentName.studentNames,
-      }));
-      setStudentOptions(formattedTeacher);
-      setStudentData(student);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   const fetchTaxData = async () => {
     try {
       const response = await api.get("getAllTaxSetting");
@@ -247,22 +264,32 @@ export default function InvoiceAdd() {
   };
 
   useEffect(() => {
-    fetchCenterData();
     fetchTaxData();
   }, []);
 
+  useEffect(() => {
+    fetchCenterData();
+    if (selectedCenter === 0) {
+      formik.setFieldValue("center", "");
+    } else {
+      formik.setFieldValue("center", selectedCenter); // Set to empty string when selectedCenter is 0
+    }
+  }, [selectedCenter]);
+
   const handleCenterChange = (event) => {
+    let center = event.target.value || selectedCenter;
+    if (center === "0") {
+      center = "";
+    }
     setCourseData(null);
     setPackageData(null);
     setStudentData(null);
     setCourseOptions([]);
     setStudentOptions([]);
     setPackageOptions([]);
-
-    const center = event.target.value;
     formik.setFieldValue("center", center);
     fetchCourses(center); // Fetch courses for the selected center
-    fetchPackage(center); // Fetch courses for the selected center
+    fetchPackage(center);
     fetchStudent(center);
   };
 
@@ -271,110 +298,6 @@ export default function InvoiceAdd() {
     setSelectedStudentId(studentId); // Update selected student ID in state
     formik.setFieldValue("student", studentId); // Update Formik field value
   };
-
-  // const handlePackageChange = async (event) => {
-  //   try {
-  //     // Capture the selected packageId from the dropdown change event
-  //     const packageId = event.target.value;
-  //     console.log("Selected Package ID:", packageId);
-  //     setSelectedPackageId(packageId);
-
-  //     // Update formik value for packageId
-  //     formik.setFieldValue("packageId", packageId);
-
-  //     // Find the matching package data to set noOfLessons
-  //     const selectedPackage = packageData?.find(
-  //       (pkg) => pkg.id === parseInt(packageId)
-  //     );
-
-  //     if (selectedPackage) {
-  //       const { noOfLesson } = selectedPackage;
-  //       console.log("Setting noOfLessons to:", noOfLesson);
-  //       formik.setFieldValue("noOfLessons", noOfLesson);
-  //     } else {
-  //       console.warn("No package matched the selected packageId!");
-  //       formik.setFieldValue("noOfLessons", "");
-  //     }
-
-  //     // Fetch student details to retrieve courseId
-  //     const response1 = await api.get(
-  //       `/getAllStudentById/${formik.values.student}`
-  //     );
-  //     const studentCourseDetails =
-  //       response1?.data?.studentCourseDetailModels?.[0];
-
-  //     if (!studentCourseDetails) {
-  //       console.error("Student course details not found!");
-  //       return;
-  //     }
-
-  //     const courseId = studentCourseDetails.courseId;
-  //     let invoiceItems = [1]; // Initial invoiceItems array with placeholder value
-
-  //     if (!courseId) {
-  //       console.error("Course ID is missing!");
-  //       return;
-  //     }
-
-  //     // Fetch course fees by packageId and courseId
-  //     if (packageId || selectedPackageId) {
-  //       try {
-  //         const response2 = await api.get(
-  //           `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${
-  //             packageId || selectedPackageId
-  //           }&courseId=${courseId}`
-  //         );
-
-  //         const feeData = response2?.data || null;
-
-  //         // Handle cases when response data is null
-  //         if (!feeData) {
-  //           console.warn(
-  //             "No fee data found for the selected course and package."
-  //           );
-  //           invoiceItems[1] = {
-  //             item: "Course Fee",
-  //             itemAmount: 0,
-  //             taxType: "",
-  //             gstAmount: 0,
-  //             totalAmount: 0,
-  //           };
-  //         } else {
-  //           // Process the fee data if available
-  //           const selectedTax = taxData.find(
-  //             (tax) => parseInt(feeData.taxType) === tax.id
-  //           );
-
-  //           const weekdayFee = feeData.weekdayFee || 0;
-  //           const weekendFee = feeData.weekendFee || 0;
-  //           const days = studentCourseDetails.days;
-  //           const isWeekend = days === "SATURDAY" || days === "SUNDAY";
-  //           const gstRate = selectedTax ? selectedTax.rate : 0;
-  //           const amount = isWeekend ? weekendFee : weekdayFee || 0;
-  //           const gstAmount = (amount * gstRate) / 100 || 0;
-  //           const amountBeforeGST = amount - gstAmount || 0;
-
-  //           invoiceItems[1] = {
-  //             item: "Course Fee",
-  //             itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-  //             taxType: feeData.taxTypeId || "",
-  //             gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
-  //             totalAmount: isNaN(amount) ? 0 : amount,
-  //           };
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching course fees:", error);
-  //       }
-  //     } else {
-  //       console.error("Package ID or selected package is missing!");
-  //     }
-
-  //     // Update formik field with the updated invoice items
-  //     formik.setFieldValue("invoiceItems", invoiceItems);
-  //   } catch (error) {
-  //     console.error("Error processing package change:", error);
-  //   }
-  // };
 
   const handlePackageChange = async (event) => {
     try {
@@ -486,6 +409,18 @@ export default function InvoiceAdd() {
       console.error("Error processing package change:", error);
     }
   };
+
+  useEffect(() => {
+    fetchCenterData();
+
+    // If selectedCenter is provided, set it and fetch dependent data
+    if (selectedCenter && selectedCenter !== "0") {
+      formik.setFieldValue("center", selectedCenter);
+      fetchCourses(selectedCenter);
+      fetchPackage(selectedCenter);
+      fetchStudent(selectedCenter);
+    }
+  }, [selectedCenter]);
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -943,7 +878,7 @@ export default function InvoiceAdd() {
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li className="breadcrumb-item active" aria-current="page">
+        <li className="active breadcrumb-item" aria-current="page">
           Invoice Add
         </li>
       </ol>
@@ -957,18 +892,18 @@ export default function InvoiceAdd() {
       >
         <div className="card">
           <div
-            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            className="d-flex align-items-center justify-content-between p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
             <div className="d-flex align-items-center">
               <div className="d-flex">
-                <div className="dot active"></div>
+                <div className="active dot"></div>
               </div>
-              <span className="me-2 text-muted">Add Invoice</span>
+              <span className="text-muted me-2">Add Invoice</span>
             </div>
-            <div className="my-2 pe-3 d-flex align-items-center">
+            <div className="d-flex align-items-center my-2 pe-3">
               <Link to="/invoice">
-                <button type="button " className="btn btn-sm btn-border   ">
+                <button type="button " className="btn btn-border btn-sm">
                   Back
                 </button>
               </Link>
@@ -980,7 +915,7 @@ export default function InvoiceAdd() {
               >
                 {loadIndicator && (
                   <span
-                    className="spinner-border spinner-border-sm me-2"
+                    className="me-2 spinner-border spinner-border-sm"
                     aria-hidden="true"
                   ></span>
                 )}
@@ -990,23 +925,19 @@ export default function InvoiceAdd() {
           </div>
           <div className="container-fluid py-3">
             <div className="row mt-3">
-              <div className="col-lg-6 col-md-6 col-12 px-5">
-                <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+              <div className="col-12 col-lg-6 col-md-6 px-5">
+                <div className="d-none text-start mt-3">
+                  <lable className="">
                     Centre<span className="text-danger">*</span>
-                  </label>
-                  <br />
+                  </lable>
                   <select
-                    {...formik.getFieldProps("center")}
+                    className="form-select"
                     name="center"
-                    className={`form-select ${
-                      formik.touched.center && formik.errors.center
-                        ? "is-invalid"
-                        : ""
-                    }`}
                     onChange={handleCenterChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.center}
                   >
-                    <option selected></option>
+                    <option value={""}></option>
                     {centerData &&
                       centerData.map((center) => (
                         <option key={center.id} value={center.id}>
@@ -1021,7 +952,7 @@ export default function InvoiceAdd() {
                   )}
                 </div>
                 <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+                  <label htmlFor="" className="fw-medium mb-1">
                     Student<span className="text-danger">*</span>
                   </label>
                   <br />
@@ -1053,7 +984,7 @@ export default function InvoiceAdd() {
                   )}
                 </div>
                 <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+                  <label htmlFor="" className="fw-medium mb-1">
                     Parent<span className="text-danger">*</span>
                   </label>
                   <br />
@@ -1073,7 +1004,7 @@ export default function InvoiceAdd() {
                   )}
                 </div>
                 <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+                  <label htmlFor="" className="fw-medium mb-1">
                     Course<span className="text-danger">*</span>
                   </label>
                   <br />
@@ -1105,7 +1036,7 @@ export default function InvoiceAdd() {
                   )}
                 </div>
                 <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+                  <label htmlFor="" className="fw-medium mb-1">
                     Schedule
                   </label>
                   <br />
@@ -1133,7 +1064,7 @@ export default function InvoiceAdd() {
                   )}
                 </div>
                 <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+                  <label htmlFor="" className="fw-medium mb-1">
                     Package<span className="text-danger">*</span>
                   </label>
                   <br />
@@ -1165,13 +1096,13 @@ export default function InvoiceAdd() {
                   )}
                 </div>
                 <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+                  <label htmlFor="" className="fw-medium mb-1">
                     Remarks
                   </label>
                   <br />
                   <textarea
                     {...formik.getFieldProps("remark")}
-                    className="form-control "
+                    className="form-control"
                     type="text"
                     placeholder="Remarks"
                     style={{
@@ -1189,10 +1120,9 @@ export default function InvoiceAdd() {
                   />
                 </div>
               </div>
-
-              <div className="col-lg-6 col-md-6 col-12 px-5">
+              <div className="col-12 col-lg-6 col-md-6 px-5">
                 <div className="text-start mt-3">
-                  <label htmlFor="invoiceDate" className="mb-1 fw-medium">
+                  <label htmlFor="invoiceDate" className="fw-medium mb-1">
                     Invoice Date<span className="text-danger">*</span>
                   </label>
                   <br />
@@ -1233,9 +1163,8 @@ export default function InvoiceAdd() {
                     </div>
                   )}
                 </div>
-
                 <div className="text-start mt-3">
-                  <label htmlFor="dueDate" className="mb-1 fw-medium">
+                  <label htmlFor="dueDate" className="fw-medium mb-1">
                     Due Date<span className="text-danger">*</span>
                   </label>
                   <br />
@@ -1256,7 +1185,7 @@ export default function InvoiceAdd() {
                   )}
                 </div>
                 <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+                  <label htmlFor="" className="fw-medium mb-1">
                     Invoice Period From<span className="text-danger">*</span>
                   </label>
                   <br />
@@ -1279,7 +1208,7 @@ export default function InvoiceAdd() {
                     )}
                 </div>
                 <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+                  <label htmlFor="" className="fw-medium mb-1">
                     Invoice Period To<span className="text-danger">*</span>
                   </label>
                   <br />
@@ -1301,7 +1230,7 @@ export default function InvoiceAdd() {
                     )}
                 </div>
                 <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+                  <label htmlFor="" className="fw-medium mb-1">
                     Receipt Amount<span className="text-danger">*</span>
                   </label>
                   <br />
@@ -1327,7 +1256,7 @@ export default function InvoiceAdd() {
                     )}
                 </div>
                 <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+                  <label htmlFor="" className="fw-medium mb-1">
                     Number of Lesson
                   </label>
                   <br />
@@ -1347,9 +1276,9 @@ export default function InvoiceAdd() {
               </div>
             </div>
 
-            <div className="row mt-5 pt-5 flex-nowrap">
+            <div className="flex-nowrap row mt-5 pt-5">
               <div className="col-12">
-                <div className="table-responsive table-bordered">
+                <div className="table-bordered table-responsive">
                   <table className="table table-light table-nowrap">
                     <thead className="thead-light">
                       <tr>
@@ -1543,7 +1472,7 @@ export default function InvoiceAdd() {
                                   className="btn btn-white border-white"
                                   onClick={() => handleRowDelete(index)}
                                 >
-                                  <ImCancelCircle className="fs-6 fw-medium text-danger" />
+                                  <ImCancelCircle className="text-danger fs-6 fw-medium" />
                                 </button>
                               )}
                             </td>
@@ -1572,12 +1501,12 @@ export default function InvoiceAdd() {
                   Add Row
                 </button>
               </div>
-              <div className="col-lg-6 col-md-6 col-12"></div>
+              <div className="col-12 col-lg-6 col-md-6"></div>
 
-              <div className="col-lg-6 col-md-6 col-12">
+              <div className="col-12 col-lg-6 col-md-6">
                 <div className="">
                   <div className="text-start mt-3">
-                    <label htmlFor="" className="mb-1 fw-medium">
+                    <label htmlFor="" className="fw-medium mb-1">
                       Credit Advise Offset
                     </label>
                     <br />
@@ -1590,7 +1519,7 @@ export default function InvoiceAdd() {
                     />
                   </div>
                   <div className="text-start mt-3">
-                    <label htmlFor="" className="mb-1 fw-medium">
+                    <label htmlFor="" className="fw-medium mb-1">
                       GST Amount
                     </label>
                     <br />
@@ -1603,13 +1532,13 @@ export default function InvoiceAdd() {
                     />
                   </div>
                   <div className="text-start mt-3">
-                    <label htmlFor="" className="mb-1 fw-medium">
+                    <label htmlFor="" className="fw-medium mb-1">
                       Total Amount
                     </label>
                     <br />
                     <input
                       {...formik.getFieldProps("totalAmount")}
-                      className="form-control  "
+                      className="form-control"
                       type="text"
                       placeholder=""
                       readOnly

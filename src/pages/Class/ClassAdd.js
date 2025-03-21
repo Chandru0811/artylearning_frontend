@@ -318,7 +318,7 @@ function ClassAdd({ selectedCenter }) {
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li className="breadcrumb-item active" aria-current="page">
+        <li className="active breadcrumb-item" aria-current="page">
           &nbsp;Class Add
         </li>
       </ol>
@@ -332,18 +332,18 @@ function ClassAdd({ selectedCenter }) {
       >
         <div className="card">
           <div
-            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
+            className="d-flex align-items-center justify-content-between p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
             <div className="d-flex align-items-center">
               <div className="d-flex">
-                <div className="dot active"></div>
+                <div className="active dot"></div>
               </div>
-              <span className="me-2 text-muted">Add Class</span>
+              <span className="text-muted me-2">Add Class</span>
             </div>
-            <div className="my-2 pe-3 d-flex align-items-center">
+            <div className="d-flex align-items-center my-2 pe-3">
               <Link to="/class">
-                <button type="button " className="btn btn-sm btn-border">
+                <button type="button " className="btn btn-border btn-sm">
                   Back
                 </button>
               </Link>
@@ -355,7 +355,7 @@ function ClassAdd({ selectedCenter }) {
               >
                 {loadIndicator && (
                   <span
-                    className="spinner-border spinner-border-sm me-2"
+                    className="me-2 spinner-border spinner-border-sm"
                     aria-hidden="true"
                   ></span>
                 )}
@@ -365,7 +365,7 @@ function ClassAdd({ selectedCenter }) {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              <div className="col-md-6 col-12 mb-4 d-none">
+              <div className="col-12 col-md-6 d-none mb-4">
                 <lable className="">
                   Centre<span className="text-danger">*</span>
                 </lable>
@@ -393,7 +393,7 @@ function ClassAdd({ selectedCenter }) {
                   <div className="invalid-feedback">{formik.errors.center}</div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>
                   Course<span className="text-danger">*</span>
                 </label>
@@ -427,7 +427,7 @@ function ClassAdd({ selectedCenter }) {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>
                   Class Name<span className="text-danger">*</span>
                 </label>
@@ -447,7 +447,7 @@ function ClassAdd({ selectedCenter }) {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>
                   Duration(Hrs)<span className="text-danger">*</span>
                 </label>
@@ -482,7 +482,7 @@ function ClassAdd({ selectedCenter }) {
                     </div>
                   )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>
                   Duration(Mins)<span className="text-danger">*</span>
                 </label>
@@ -512,7 +512,7 @@ function ClassAdd({ selectedCenter }) {
                     </div>
                   )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>
                   Start Date<span className="text-danger">*</span>
                 </label>
@@ -535,7 +535,7 @@ function ClassAdd({ selectedCenter }) {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>
                   End Date<span className="text-danger">*</span>
                 </label>
@@ -558,7 +558,7 @@ function ClassAdd({ selectedCenter }) {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>
                   Day<span className="text-danger">*</span>
                 </label>
@@ -585,7 +585,7 @@ function ClassAdd({ selectedCenter }) {
                   <div className="invalid-feedback">{formik.errors.day}</div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>
                   Teacher <span className="text-danger">*</span>
                 </label>
@@ -629,7 +629,7 @@ function ClassAdd({ selectedCenter }) {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>
                   Start Time<span className="text-danger">*</span>
                 </label>
@@ -667,7 +667,7 @@ function ClassAdd({ selectedCenter }) {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>
                   End Time<span className="text-danger">*</span>
                 </label>
@@ -690,7 +690,7 @@ function ClassAdd({ selectedCenter }) {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>
                   Class Type<span className="text-danger">*</span>
                 </label>{" "}
@@ -724,12 +724,12 @@ function ClassAdd({ selectedCenter }) {
                   </label>
                 </div>
                 {formik.errors.classType && formik.touched.classType && (
-                  <div className="text-danger  " style={{ fontSize: ".875em" }}>
+                  <div className="text-danger" style={{ fontSize: ".875em" }}>
                     {formik.errors.classType}
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>Class Room</label>
                 <Select
                   options={classRoomData}
@@ -761,7 +761,7 @@ function ClassAdd({ selectedCenter }) {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-12 col-md-6 mb-4">
                 <label>Remark</label>
                 <textarea
                   name="remark"
