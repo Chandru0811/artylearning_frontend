@@ -206,34 +206,34 @@ const Invoice = ({ selectedCenter }) => {
   const getInvoiceData = async () => {
     try {
       setLoading(true);
-      // Dynamically construct query parameters based on filters
       const queryParams = new URLSearchParams();
-      if (!isClearFilterClicked) {
-        // Only append centerId if it's NOT 0
-        if (filters.centerId && filters.centerId !== "0") {
-          queryParams.append("centerId", filters.centerId);
-        } else if (
-          centerLocalId &&
-          centerLocalId !== "undefined" &&
-          centerLocalId !== "0"
-        ) {
-          queryParams.append("centerId", centerLocalId);
+
+      if (filters.centerId !== "0") {
+        const effectiveCenterId = filters.centerId
+          ? filters.centerId
+          : centerLocalId &&
+            centerLocalId !== "undefined" &&
+            centerLocalId !== "0"
+          ? centerLocalId
+          : centerData.length > 0
+          ? centerData[0].id
+          : "";
+        if (effectiveCenterId) {
+          queryParams.append("centerId", effectiveCenterId);
         }
       }
 
-      // Loop through other filters and add key-value pairs if they have a value
       for (let key in filters) {
         if (filters[key] && key !== "centerId") {
           queryParams.append(key, filters[key]);
         }
       }
 
-      const response = await api.get(
-        `/getInvoiceWithCustomInfo?${queryParams.toString()}`
-      );
+      const endpoint = `/getInvoiceWithCustomInfo?${queryParams.toString()}`;
+      const response = await api.get(endpoint);
       setData(response.data);
     } catch (error) {
-      toast.error("Error Fetching Data : ", error);
+      toast.error("Error Fetching Data: ", error);
     } finally {
       setLoading(false);
       setIsClearFilterClicked(false);
@@ -246,15 +246,22 @@ const Invoice = ({ selectedCenter }) => {
   };
 
   const clearFilters = () => {
+    const defaultCenterId =
+      centerLocalId && centerLocalId !== "undefined" && centerLocalId !== "0"
+        ? centerLocalId
+        : centerData.length > 0
+        ? centerData[0].id
+        : "";
+
     setFilters({
-      centerId: "",
+      centerId: defaultCenterId, // Retain the selected center or default to the first center
       courseId: "",
       studentId: "",
       packageId: "",
       invoiceStatus: "",
     });
     getInvoiceData();
-    setIsClearFilterClicked(true);
+    setIsClearFilterClicked(true); // Trigger data fetch with the updated filters
   };
 
   const fetchCenterData = async () => {
@@ -342,7 +349,7 @@ const Invoice = ({ selectedCenter }) => {
   };
 
   return (
-    <div className="container-fluid px-2 my-4 center">
+    <div className="container-fluid center my-4 px-2">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -357,13 +364,13 @@ const Invoice = ({ selectedCenter }) => {
           &nbsp;Invoice and Payment
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li className="breadcrumb-item active" aria-current="page">
+        <li className="active breadcrumb-item" aria-current="page">
           &nbsp;Invoice
         </li>
       </ol>
       <div className="card">
         <div
-          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          className="d-flex align-items-center justify-content-between p-1 mb-3"
           style={{ background: "#f5f7f9" }}
         >
           <span className="text-muted">
@@ -371,8 +378,8 @@ const Invoice = ({ selectedCenter }) => {
             <strong style={{ color: "#287f71" }}>Invoice</strong>
           </span>
         </div>
-        <div className="mb-3 d-flex justify-content-between">
-          <div className="individual_fliters d-lg-flex ">
+        <div className="d-flex justify-content-between mb-3">
+          <div className="d-lg-flex individual_fliters">
             <div className="form-group mb-0 mb-1">
               <input type="hidden" name="centerId" value={filters.centerId} />
               {/* <select
@@ -390,7 +397,7 @@ const Invoice = ({ selectedCenter }) => {
                 ))}
               </select> */}
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <select
                 className="form-select form-select-sm center_list"
                 style={{ width: "100%" }}
@@ -416,7 +423,7 @@ const Invoice = ({ selectedCenter }) => {
                     ))}
               </select>
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <select
                 className="form-select form-select-sm center_list"
                 style={{ width: "100%" }}
@@ -442,7 +449,7 @@ const Invoice = ({ selectedCenter }) => {
                     ))}
               </select>
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <select
                 className="form-select form-select-sm center_list"
                 style={{ width: "100%" }}
@@ -468,7 +475,7 @@ const Invoice = ({ selectedCenter }) => {
                     ))}
               </select>
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            <div className="form-group mb-0 mb-1 ms-2">
               <select
                 className="form-select form-select-sm center_list"
                 style={{ width: "100%" }}
@@ -489,7 +496,7 @@ const Invoice = ({ selectedCenter }) => {
             <div className="form-group mb-2 ms-2">
               <button
                 type="button"
-                className="btn btn-sm btn-border"
+                className="btn btn-border btn-sm"
                 onClick={clearFilters}
               >
                 Clear

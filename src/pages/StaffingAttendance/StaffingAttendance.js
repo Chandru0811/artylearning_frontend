@@ -14,7 +14,10 @@ import { toast } from "react-toastify";
 import GlobalDelete from "../../components/common/GlobalDelete";
 import fetchAllCentersWithIds from "../../pages/List/CenterList";
 
-const StaffingAttendance = () => {
+const StaffingAttendance = ({ selectedCenter }) => {
+  const [filters, setFilters] = useState({
+    centerId: selectedCenter,
+  });
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   console.log("Leave Data:", data);
@@ -174,21 +177,71 @@ const StaffingAttendance = () => {
     ],
     []
   );
-
   const getData = async () => {
     try {
-      const response = await api.get("/getAllUserAttendances");
+      const url =
+        selectedCenter === 0 || selectedCenter === "0"
+          ? `getAllUserAttendances`
+          : `/getAllUserAttendances?centerId=${selectedCenter}`;
+
+      const response = await api.get(url);
       setData(response.data);
       setLoading(false);
     } catch (error) {
-      toast.error("Error Fetching Data : ", error);
+      console.error("Error fetching data ", error);
     }
   };
   useEffect(() => {
     getData();
-    fetchData();
-  }, []);
+  }, [selectedCenter]);
+  // const getData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const filteredFilters = Object.fromEntries(
+  //       Object.entries(filters).filter(
+  //         ([key, value]) =>
+  //           value !== "" && value !== null && value !== undefined
+  //       )
+  //     );
+  //     const queryParams = new URLSearchParams(filteredFilters).toString();
+  //     const response = await api.get(`/getAllUserAttendances?${queryParams}`);
+  //     setData(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  //   // try {
+  //   //   const response = await api.get("/getAllUserAttendances");
+  //   //   setData(response.data);
+  //   //   setLoading(false);
+  //   // } catch (error) {
+  //   //   toast.error("Error Fetching Data : ", error);
+  //   // }
+  // };
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, centerId: selectedCenter }));
+  }, [selectedCenter]);
+  useEffect(() => {
+    getData();
+  }, [filters]);
+  // useEffect(() => {
+  //   getData();
+  //   fetchData();
+  // }, []);
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
+  };
 
+  const clearFilter = () => {
+    setFilters({
+      centerId: selectedCenter,
+    });
+  };
   const theme = createTheme({
     components: {
       MuiTableCell: {
@@ -234,7 +287,7 @@ const StaffingAttendance = () => {
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container-fluid my-4 center">
+    <div className="container-fluid center my-4">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -249,28 +302,29 @@ const StaffingAttendance = () => {
           &nbsp;Staffing
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li className="breadcrumb-item active" aria-current="page">
+        <li className="active breadcrumb-item" aria-current="page">
           &nbsp;Attendance
         </li>
       </ol>
       <div className="card">
         <div
-          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          className="d-flex align-items-center justify-content-between p-1 mb-3"
           style={{ background: "#f5f7f9" }}
         >
           <div className="d-flex align-items-center">
             <div className="d-flex">
-              <div className="dot active"></div>
+              <div className="active dot"></div>
             </div>
-            <span className="me-2 text-muted">
+            <span className="text-muted me-2">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
                 Attendance
               </span>
             </span>
+            <input type="hidden" name="centerId" value={filters.centerId} />
           </div>
         </div>
-        <div className="mb-3 d-flex justify-content-end">
+        <div className="d-flex justify-content-end mb-3">
           {storedScreens?.staffAttendanceCreate && (
             <Link to="/staffing/attendance/add">
               <button
