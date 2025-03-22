@@ -76,6 +76,8 @@ const Staff = ({ selectedCenter }) => {
             <span className="badge badges-Blue fw-light">Branch Admin</span>
           ) : null,
       },
+      { accessorKey: "countryName", enableHiding: true, header: "Country" },
+
       { accessorKey: "userUniqueId", enableHiding: true, header: "Staff Id" },
       {
         accessorKey: "teacherType",
@@ -141,16 +143,27 @@ const Staff = ({ selectedCenter }) => {
   );
   const fetchData = async () => {
     try {
-      const url =
+      setLoading(true);
+      // Remove empty filters and create query string
+      const filteredFilters = Object.fromEntries(
+        Object.entries(filters).filter(
+          ([_, value]) => value !== "" && value !== null && value !== undefined
+        )
+      );
+
+      const queryParams = new URLSearchParams(filteredFilters).toString();
+      const baseUrl =
         selectedCenter === 0 || selectedCenter === "0"
-          ? `getAllUserListExceptTeacher`
-          : `/getAllUserListExceptTeacher?centerId=${selectedCenter}`;
+          ? "getAllUserListExceptTeacher"
+          : "getAllUserListExceptTeacher";
+
+      const url = queryParams ? `${baseUrl}?${queryParams}` : baseUrl;
 
       const response = await api.get(url);
       setData(response.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching data ", error);
+      console.error("Error fetching data:", error);
     }
   };
   useEffect(() => {

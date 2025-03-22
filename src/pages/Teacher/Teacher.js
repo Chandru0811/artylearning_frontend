@@ -141,10 +141,22 @@ const Teacher = ({ selectedCenter }) => {
   // };
   const fetchData = async () => {
     try {
-      const url =
+      setLoading(true);
+      // Remove empty filters and create query string
+      const filteredFilters = Object.fromEntries(
+        Object.entries(filters).filter(
+          ([_, value]) => value !== "" && value !== null && value !== undefined
+        )
+      );
+      const queryParams = new URLSearchParams(filteredFilters).toString();
+
+      const baseUrl =
         selectedCenter === 0 || selectedCenter === "0"
-          ? `getAllTeachersAndFreelancers`
-          : `/getAllTeachersAndFreelancers?centerId=${selectedCenter}`;
+          ? "getAllTeachersAndFreelancers"
+          : "getAllTeachersAndFreelancers";
+      // ? `getAllTeachersAndFreelancers`
+      // : `/getAllTeachersAndFreelancers?centerId=${selectedCenter}`;
+      const url = queryParams ? `${baseUrl}?${queryParams}` : baseUrl;
 
       const response = await api.get(url);
       setData(response.data);

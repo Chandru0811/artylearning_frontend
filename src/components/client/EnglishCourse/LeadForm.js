@@ -55,13 +55,13 @@ const validationSchema = Yup.object().shape({
   recognizeAToZ: Yup.string().required("*Recognize is required"),
 });
 
-function LeadForm({Id}) {
+function LeadForm({ Id }) {
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
-  console.log("subjectData::",subjectData);
-  
+  console.log("subjectData::", subjectData);
+
   const [studentData, setStudentData] = useState(null);
-  console.log("ID:",Id);
+  console.log("ID:", Id);
 
   const formik = useFormik({
     initialValues: {
@@ -70,7 +70,7 @@ function LeadForm({Id}) {
       gender: "",
       dateOfBirth: "",
       pencilGrip: "",
-      subjectId:"",
+      subjectId: "",
       marketingSource: "",
       referBy: "",
       writeUpperAToZ: "",
@@ -88,16 +88,22 @@ function LeadForm({Id}) {
       preferredTime: [],
       preferredTimeSlot: [],
       remark: "",
-      agreeCondition:[],
+      agreeCondition: [],
       leadStatus: "NEW_WAITLIST" || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log(data);
-      const uppercase = data.writeUpperAToZ === "Yes" ? true : false;
-      const lowercase = data.writeLowerAToZ === "Yes" ? true : false;
-      const sound = data.soundOfAToZ === "Yes" ? true : false;
-      const readSentence = data.canReadSimpleSentence === "Yes" ? true : false;
+      let selectedCenterName = "";
+      centerData.forEach((center) => {
+        if (parseInt(data.centerId) === center.id) {
+          selectedCenterName = center.centerNames || "--";
+        }
+      });
+      const uppercase = data.writeUpperAToZ === "Yes";
+      const lowercase = data.writeLowerAToZ === "Yes";
+      const sound = data.soundOfAToZ === "Yes";
+      const readSentence = data.canReadSimpleSentence === "Yes";
 
       const createData = {
         ...data,
@@ -105,21 +111,68 @@ function LeadForm({Id}) {
         writeLowerAToZ: lowercase,
         soundOfAToZ: sound,
         canReadSimpleSentence: readSentence,
+        isNew: true,
       };
+
       try {
         const response = await api.post("/createLeadInfo", createData, {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
+
         if (response.status === 201) {
+          const htmlContent = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>New Lead Notification</title>
+            <style>
+              body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+              .container { width: 100%; max-width: 600px; margin: 20px auto; background: #ffffff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+              .header { background: #007bff; color: #ffffff; text-align: center; padding: 10px; font-size: 20px; border-radius: 5px 5px 0 0; }
+              .content { padding: 20px; font-size: 16px; color: #333; }
+              .footer { text-align: center; font-size: 14px; color: #777; padding: 10px; }
+              .button { display: inline-block; background: #28a745; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+            </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">New Lead Arrived</div>
+                <div class="content">
+                  <p>Dear ARTY LEARNING Team,</p>
+                  <p>A new lead has been assigned to your ${selectedCenterName} center. Please review the details and follow up promptly.</p>
+                  <p><strong>Name:</strong> ${data.studentName}</p>
+                  <p><strong>Email:</strong> ${data.fathersEmailAddress}</p>
+                  <p><strong>Phone:</strong> ${data.fathersMobileNumber}</p>
+                  <p><strong>Message:</strong> ${data.remark}</p>
+                  <p>Please follow up as soon as possible.</p>
+                  <a href="https://artylearning.com/login" class="button">View Lead</a>
+                </div>
+                <div class="footer">
+                  &copy; 2025 Your Company. All Rights Reserved.
+                </div>
+              </div>
+            </body>
+            </html>
+          `;
+
+          const formData = new FormData();
+          formData.append("from", data.fathersEmailAddress);
+          formData.append("to", data.fathersEmailAddress);
+          formData.append("htmlContent", htmlContent);
+
+          await api.post("/sendMailWithOutToken", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+
           toast.success(response.data.message);
           formik.resetForm();
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error("Error sending email: " + error.message);
       }
     },
   });
@@ -145,13 +198,13 @@ function LeadForm({Id}) {
       try {
         const response = await api.get("getAllSubjectWithoutToken");
         setSubjectData(response.data);
-  
+
         // Find matching subject by ID with type conversion
         const matchingSubject = response.data.find(
           (subject) => String(subject.id) === String(Id) // Ensure both are strings
         );
         console.log("Matching Subject:", matchingSubject);
-  
+
         // Update the subjectId field in the form
         if (matchingSubject) {
           formik.setFieldValue("subjectId", matchingSubject.id); // Set default subject ID
@@ -160,7 +213,7 @@ function LeadForm({Id}) {
         console.error("Error fetching subjects:", error);
       }
     };
-  
+
     fetchAllSubjectsList();
   }, [Id]);
   const fetchStudent = async (centerId) => {
@@ -173,7 +226,7 @@ function LeadForm({Id}) {
   };
 
   useEffect(() => {
-    formik.setFieldValue("parentMobileNumberPrefix","65")
+    formik.setFieldValue("parentMobileNumberPrefix", "65");
     fetchData();
   }, []);
 
@@ -189,7 +242,7 @@ function LeadForm({Id}) {
       >
         <div className="row headbody">
           <h1 className="form-font mb-3">Waitlist Request Form</h1>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <label for="exampleFormControlInput1" className="form-label">
               Centre / 中心 <span className="text-danger">*</span>
             </label>
@@ -201,7 +254,6 @@ function LeadForm({Id}) {
                   : ""
               }`}
               onChange={handleCenterChange}
-
             >
               <option selected>--Select--</option>
               {centerData &&
@@ -215,7 +267,7 @@ function LeadForm({Id}) {
               <div className="invalid-feedback">{formik.errors.centerId}</div>
             )}
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
                 Child's Name / 孩子名字 <span className="text-danger">*</span>
@@ -238,7 +290,7 @@ function LeadForm({Id}) {
               )}
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
                 Gender / 性别 <span className="text-danger">*</span>
@@ -269,12 +321,12 @@ function LeadForm({Id}) {
               <label className="form-check-label">Female</label>
             </div>
             {formik.errors.gender && formik.touched.gender && (
-              <div className="text-danger  " style={{ fontSize: ".875em" }}>
+              <div className="text-danger" style={{ fontSize: ".875em" }}>
                 {formik.errors.gender}
               </div>
             )}
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
                 Date of Birth / 生日 <span className="text-danger">*</span>
@@ -298,7 +350,7 @@ function LeadForm({Id}) {
               )}
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
                 Pencil Grip / 握笔姿势 <span className="text-danger">*</span>
@@ -324,7 +376,7 @@ function LeadForm({Id}) {
               )}
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
                 Subject / 课程 <span className="text-danger">*</span>
@@ -337,7 +389,9 @@ function LeadForm({Id}) {
                     : ""
                 }`}
               >
-                <option value="" selected>--Select--</option>
+                <option value="" selected>
+                  --Select--
+                </option>
                 {subjectData &&
                   subjectData.map((subject) => (
                     <option key={subject.id} value={subject.id}>
@@ -346,11 +400,13 @@ function LeadForm({Id}) {
                   ))}
               </select>
               {formik.touched.subjectId && formik.errors.subjectId && (
-                <div className="invalid-feedback">{formik.errors.subjectId}</div>
+                <div className="invalid-feedback">
+                  {formik.errors.subjectId}
+                </div>
               )}
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
                 Marketing Source / 信息来源{" "}
@@ -382,10 +438,10 @@ function LeadForm({Id}) {
                 )}
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
-                Referred by / 介绍人 
+                Referred by / 介绍人
               </label>
               <input
                 type="text"
@@ -397,7 +453,7 @@ function LeadForm({Id}) {
                 }`}
                 {...formik.getFieldProps("referBy")}
               />
-               {/* <select
+              {/* <select
                   {...formik.getFieldProps("referBy")}
                   className={`form-select ${
                     formik.touched.referBy && formik.errors.referBy
@@ -418,7 +474,7 @@ function LeadForm({Id}) {
               )}
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
                 Write A-Z (Upper Case) <span className="text-danger">*</span>
@@ -449,12 +505,12 @@ function LeadForm({Id}) {
               <label className="form-check-label">No</label>
             </div>
             {formik.errors.writeUpperAToZ && formik.touched.writeUpperAToZ && (
-              <div className="text-danger  " style={{ fontSize: ".875em" }}>
+              <div className="text-danger" style={{ fontSize: ".875em" }}>
                 {formik.errors.writeUpperAToZ}
               </div>
             )}
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
                 Write A-Z (Lower Case) <span className="text-danger">*</span>
@@ -485,12 +541,12 @@ function LeadForm({Id}) {
               <label className="form-check-label">No</label>
             </div>
             {formik.errors.writeLowerAToZ && formik.touched.writeLowerAToZ && (
-              <div className="text-danger  " style={{ fontSize: ".875em" }}>
+              <div className="text-danger" style={{ fontSize: ".875em" }}>
                 {formik.errors.writeLowerAToZ}
               </div>
             )}
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
                 Sounds of A-Z <span className="text-danger">*</span>
@@ -526,7 +582,7 @@ function LeadForm({Id}) {
               </div>
             )}
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
                 Can Read Simple Sentence / 能否读短句子
@@ -564,7 +620,7 @@ function LeadForm({Id}) {
                 </div>
               )}
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <label className="form-label">
               Parent Name / 父母姓名 <span className="text-danger">*</span>
             </label>
@@ -587,7 +643,7 @@ function LeadForm({Id}) {
                 </div>
               )}
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <label className="form-label">
               Email / 邮箱地址 <span className="text-danger">*</span>
             </label>
@@ -611,7 +667,7 @@ function LeadForm({Id}) {
                 </div>
               )}
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <label className="form-label">
               Contact Number / 联络号 <span className="text-danger">*</span>
             </label>
@@ -622,7 +678,6 @@ function LeadForm({Id}) {
               >
                 <select
                   {...formik.getFieldProps("parentMobileNumberPrefix")}
-                  
                   className="form-select"
                   aria-label="Default select example"
                   style={{ border: "none" }}
@@ -651,7 +706,7 @@ function LeadForm({Id}) {
                 )}
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <label className="form-label">
               Relation / 关系 <span className="text-danger">*</span>
             </label>
@@ -686,7 +741,7 @@ function LeadForm({Id}) {
               <div className="invalid-feedback">{formik.errors.relation}</div>
             )}
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
                 Writing / 写字方式 <span className="text-danger">*</span>
@@ -715,7 +770,7 @@ function LeadForm({Id}) {
               )}
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
                 Recognize A-Z <span className="text-danger">*</span>
@@ -745,7 +800,7 @@ function LeadForm({Id}) {
             </div>
           </div>
 
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <label className="form-label">Preferred Day / 首选日期</label>
             <div>
               <div className="form-check form-check-inline">
@@ -802,7 +857,7 @@ function LeadForm({Id}) {
               </div>
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <label className="form-label">Preferred Time Slot /首选时间</label>
             <div>
               <div className="form-check form-check-inline">
@@ -846,7 +901,7 @@ function LeadForm({Id}) {
               </div>
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             <div>
               <div className="form-check form-check-inline">
                 <input
@@ -876,7 +931,7 @@ function LeadForm({Id}) {
               </div>
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-3">
+          <div className="col-12 col-md-6 mb-3">
             {/* <label className="form-label">Preferred Time Slot /首选时间</label> */}
             <div>
               <div className="form-check form-check-inline">
@@ -946,7 +1001,9 @@ function LeadForm({Id}) {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value="agreeCondition"
-                checked={formik.values.agreeCondition.includes("agreeCondition")}
+                checked={formik.values.agreeCondition.includes(
+                  "agreeCondition"
+                )}
               />
               <label className="form-label">
                 By submitting this form, I confirm that I agree on releasing the
