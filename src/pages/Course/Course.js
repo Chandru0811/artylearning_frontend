@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 
 const Course = ({ selectedCenter }) => {
   const [filters, setFilters] = useState({
-    centerId: "",
+    centerId: selectedCenter,
     courseName: "",
     courseCode: "",
   });
@@ -156,18 +156,25 @@ const Course = ({ selectedCenter }) => {
   const getData = async () => {
     try {
       setLoading(true);
+      const filteredFilters = Object.fromEntries(
+        Object.entries(filters).filter(
+          ([_, value]) => value !== "" && value !== null && value !== undefined
+        )
+      );
       const queryParams = new URLSearchParams();
 
-      if (!isClearFilterClicked) {
-        // Only append centerId if it's NOT 0
-        if (filters.centerId && filters.centerId !== "0") {
-          queryParams.append("centerId", filters.centerId);
-        } else if (
-          centerLocalId &&
-          centerLocalId !== "undefined" &&
-          centerLocalId !== "0"
-        ) {
-          queryParams.append("centerId", centerLocalId);
+      if (filteredFilters.centerId !== "0") {
+        const effectiveCenterId = filteredFilters.centerId
+          ? filteredFilters.centerId
+          : centerLocalId &&
+            centerLocalId !== "undefined" &&
+            centerLocalId !== "0"
+          ? centerLocalId
+          : centerData.length > 0
+          ? centerData[0].id
+          : "";
+        if (effectiveCenterId) {
+          queryParams.append("centerId", effectiveCenterId);
         }
       }
 
@@ -177,13 +184,15 @@ const Course = ({ selectedCenter }) => {
           queryParams.append(key, filters[key]);
         }
       }
-
-      const response = await api.get(`/getCourseWithCustomInfo?${queryParams}`);
+      const endpoint = `/getCourseWithCustomInfo?${queryParams.toString()}`;
+      const response = await api.get(endpoint);
+      // const response = await api.get(`/getCourseWithCustomInfo?${queryParams}`);
       setData(response.data);
+      setLoading(false);
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
     } finally {
-      setLoading(false);
+      // setLoading(false);
       setIsClearFilterClicked(false);
     }
   };
@@ -277,17 +286,21 @@ const Course = ({ selectedCenter }) => {
     };
     fetchData();
   }, [selectedCenter]);
-
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, centerId: selectedCenter }));
+  }, [selectedCenter]);
   useEffect(() => {
     getData();
-  }, [filters, selectedCenter]);
+  }, [filters]);
 
   const clearFilter = () => {
-    setFilters({
-      centerId: "",
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      centerId: selectedCenter,
       courseName: "",
       courseCode: "",
-    });
+    }));
+    getData();
     setIsClearFilterClicked(true);
   };
 
