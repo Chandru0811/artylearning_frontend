@@ -82,65 +82,6 @@ const Lead = ({ selectedCenter }) => {
       toast.error(error);
     }
   };
-
-  const handleStatusChange = async (row, status) => {
-    setSelectedRow(row);
-    let message = "Are you sure want to change the lead status?";
-    if (status === "DROP") {
-      message = "Are you sure want to drop this lead?";
-      setConfirmationMessage(message);
-      setShowModal(true);
-    } else if (status === "KIV") {
-      message = "Are you sure want to KIV this lead?";
-      setConfirmationMessage(message);
-      setShowModal(true);
-    } else if (status === "NEW_WAITLIST") {
-      message = "Are you sure want to make this lead New/Waitlist?";
-      console.log("object", selectedRow);
-      setConfirmationMessage(message);
-      setShowModal(true);
-    } else if (status === "WAITING_FOR_PAYMENT") {
-      message = "Are you sure want to mark this lead as Waiting For Payment?";
-      setConfirmationMessage(message);
-      setShowModal(true);
-    } else if (status === "ARRANGING_ASSESSMENT") {
-      console.log("object", selectedRow);
-      handleShow();
-    } else if (status === "CONFIRMED") {
-      navigate(`/student/add?LeadId=${row.id}&LeadStatus=CONFIRMED`);
-    } else if (status === "Do_Assessment") {
-      navigate(`/lead/lead/assessment/${row.id}`);
-    } else if (status === "EDIT_DO_ASSESSMENT") {
-      navigate(`/lead/lead/assessment/${row.id}?mode=edit`);
-    } else if (status === "ENROLLED") {
-      navigate(`/student/add?LeadId=${row.id}&LeadStatus=ENROLLED`);
-    } else if (status === "Assessment_Edit") {
-      handleEditShowDialog();
-    }
-
-    setNewStatus(status);
-    setSelectedId(row.id);
-  };
-
-  const handleFormSubmit = async () => {
-    try {
-      const response = await api.put(`/updateLeadInfo/${selectedId}`, {
-        leadStatus: newStatus,
-      });
-
-      if (response.status === 200) {
-        toast.success("Lead Status Updated");
-        setShowModal(false);
-        ResetFilter();
-        getData();
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.error(error.message || "An error occurred");
-    }
-  };
-
   const getData = async () => {
     setLoading(true);
     let params = {};
@@ -203,6 +144,65 @@ const Lead = ({ selectedCenter }) => {
       setIsClearFilterClicked(false);
     }
   };
+
+  const handleStatusChange = async (row, status) => {
+    setSelectedRow(row);
+    let message = "Are you sure want to change the lead status?";
+    if (status === "DROP") {
+      message = "Are you sure want to drop this lead?";
+      setConfirmationMessage(message);
+      setShowModal(true);
+    } else if (status === "KIV") {
+      message = "Are you sure want to KIV this lead?";
+      setConfirmationMessage(message);
+      setShowModal(true);
+    } else if (status === "NEW_WAITLIST") {
+      message = "Are you sure want to make this lead New/Waitlist?";
+      console.log("object", selectedRow);
+      setConfirmationMessage(message);
+      setShowModal(true);
+    } else if (status === "WAITING_FOR_PAYMENT") {
+      message = "Are you sure want to mark this lead as Waiting For Payment?";
+      setConfirmationMessage(message);
+      setShowModal(true);
+    } else if (status === "ARRANGING_ASSESSMENT") {
+      console.log("object", selectedRow);
+      handleShow();
+    } else if (status === "CONFIRMED") {
+      navigate(`/student/add?LeadId=${row.id}&LeadStatus=CONFIRMED`);
+    } else if (status === "Do_Assessment") {
+      navigate(`/lead/lead/assessment/${row.id}`);
+    } else if (status === "EDIT_DO_ASSESSMENT") {
+      navigate(`/lead/lead/assessment/${row.id}?mode=edit`);
+    } else if (status === "ENROLLED") {
+      navigate(`/student/add?LeadId=${row.id}&LeadStatus=ENROLLED`);
+    } else if (status === "Assessment_Edit") {
+      handleEditShowDialog();
+    }
+
+    setNewStatus(status);
+    setSelectedId(row.id);
+  };
+
+  const handleFormSubmit = async () => {
+    try {
+      const response = await api.put(`/updateLeadInfo/${selectedId}`, {
+        leadStatus: newStatus,
+      });
+
+      if (response.status === 200) {
+        toast.success("Lead Status Updated");
+        setShowModal(false);
+        ResetFilter();
+        getData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error.message || "An error occurred");
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       await fetchCenterData(); // Fetch center data and subjects
@@ -225,8 +225,11 @@ const Lead = ({ selectedCenter }) => {
   }, [selectedCenter]);
 
   useEffect(() => {
-    getData();
-  }, [filters, selectedCenter]);
+    if (centerData) {
+      // Ensure centerData is available before fetching
+      getData();
+    }
+  }, [filters]);
 
   const ResetFilter = () => {
     const defaultCenterId =
@@ -976,24 +979,6 @@ const Lead = ({ selectedCenter }) => {
             <div className="d-lg-flex individual_fliters">
               <div className="form-group mb-0 mb-1 ms-2">
                 <input type="hidden" name="centerId" value={filters.centerId} />
-                {/* <select
-                  className="form-select form-select-sm mb-2 mb-md-0 me-md-3"
-                  name="centerId"
-                  value={filters.centerId}
-                  onChange={(e) =>
-                    setFilters((pre) => ({ ...pre, centerId: e.target.value }))
-                  }
-                >
-                  <option value="" disabled selected>
-                    Select Centre
-                  </option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id} >
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select> */}
               </div>
               <div className="form-group mb-0 mb-1">
                 <select
