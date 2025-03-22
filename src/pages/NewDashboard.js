@@ -3,14 +3,17 @@ import ApexCharts from "react-apexcharts";
 import api from "../config/URL";
 import { toast } from "react-toastify";
 
-function NewDashboard({ selectedCenter }) {
+function NewDashboard() {
   const [datas, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const centerLocalId = localStorage.getItem("selectedCenterId");
 
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`getOverAllSmsRevenueReport?centerId=${selectedCenter}`);
+      // Set centerId to 0 if centerLocalId is undefined or null
+      const effectiveCenterId = centerLocalId && centerLocalId !== "undefined" ? centerLocalId : "0";
+      const response = await api.get(`getOverAllSmsRevenueReport?centerId=${effectiveCenterId}`);
       setData(response.data);
     } catch (e) {
       toast.error("Error Fetching Dashboard Data");
@@ -208,14 +211,14 @@ function NewDashboard({ selectedCenter }) {
               datas?.revenueGrowthByMonth.map((data, index) => (
                 <div className="col-md-3 mb-3">
                   <div
-                    className="card shadow-sm border-0"
+                    className="card border-0 shadow-sm"
                     style={{ borderRadius: "10px" }}
                   >
                     <div className="card-body">
                       <h6 className="card-title text-secondary">
                         {data.title}
                       </h6>
-                      <h5 className="card-text fw-bold text-dark">
+                      <h5 className="card-text text-dark fw-bold">
                         {index === datas.revenueGrowthByMonth.length - 1
                           ? `$ ${data.current}`
                           : data.current}
@@ -261,12 +264,12 @@ function NewDashboard({ selectedCenter }) {
           <div className="row">
             <div className="col-md-8 mb-4">
               <div
-                className="card shadow-sm p-3 h-100 shadow-sm border-0"
+                className="card border-0 h-100 p-3 shadow-sm"
                 style={{ borderRadius: "10px" }}
               >
                 <div className="d-flex justify-content-between">
                   <h6 className="card-title">Leads Trend</h6>
-                  <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
+                  <i className="fa-ellipsis-h fas"></i> {/* Triple dot icon */}
                 </div>
                 {!loading && lineChartSeries && lineChartSeries.length > 0 && (
                   <ApexCharts
@@ -280,7 +283,7 @@ function NewDashboard({ selectedCenter }) {
             </div>
             <div className="col-md-4 mb-4">
               <div
-                className="card shadow-sm p-3 h-100 shadow-sm border-0"
+                className="card border-0 h-100 p-3 shadow-sm"
                 style={{
                   borderRadius: "10px",
                   maxHeight: "270px",
@@ -296,7 +299,7 @@ function NewDashboard({ selectedCenter }) {
                       <div key={index}>
                         <div className="d-flex justify-content-between">
                           <p
-                            className="text-secondary m-1"
+                            className="m-1 text-secondary"
                             style={{ fontSize: "14px" }}
                           >
                             {center.centerName}
@@ -309,7 +312,7 @@ function NewDashboard({ selectedCenter }) {
                           </span>
                         </div>
                         <div
-                          className="progress mb-3"
+                          className="mb-3 progress"
                           style={{ height: "7px" }}
                         >
                           <div
@@ -331,9 +334,9 @@ function NewDashboard({ selectedCenter }) {
               </div>
             </div>
 
-            <div className="col-md-8 col-12 mb-4">
+            <div className="col-12 col-md-8 mb-4">
               <div
-                className="card shadow-sm p-3 h-100 border-0"
+                className="card border-0 h-100 p-3 shadow-sm"
                 style={{ borderRadius: "10px" }}
               >
                 <div className="d-flex justify-content-between">
@@ -349,12 +352,12 @@ function NewDashboard({ selectedCenter }) {
             </div>
             <div className="col-md-4 mb-4">
               <div
-                className="card shadow-sm p-3 h-100 shadow-sm border-0"
+                className="card border-0 h-100 p-3 shadow-sm"
                 style={{ borderRadius: "10px" }}
               >
                 <div className="d-flex justify-content-between">
                   <h6 className="card-title">Total Capacity</h6>
-                  <i className="fas fa-ellipsis-h"></i>
+                  <i className="fa-ellipsis-h fas"></i>
                 </div>
                 <ApexCharts
                   options={gaugeChartOptions}
